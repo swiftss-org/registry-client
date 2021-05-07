@@ -1,0 +1,766 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard should match snapshot 1`] = `
+<DocumentFragment>
+  .emotion-0 {
+  display: grid;
+  grid-template-columns: 0px 1fr;
+  grid-template-rows: 0fr;
+  grid-template-areas: 'header header' 'sidebar main' 'sidebar main';
+  height: 100vh;
+}
+
+.emotion-1 {
+  width: 100%;
+  grid-area: header;
+}
+
+.emotion-2 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  background-color: white;
+  color: black;
+  height: 62px;
+  padding: 0 1rem;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.15);
+}
+
+.emotion-3 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+
+.emotion-4 {
+  cursor: pointer;
+  margin: 1.5rem 0px 1.5rem 0.25rem;
+}
+
+.emotion-5 {
+  padding: 0.125rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.emotion-6 {
+  fill: #c8cade;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.emotion-6 path {
+  fill: #c8cade;
+}
+
+.emotion-7 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background-color: transparent;
+  margin: 1rem 1.5rem 1rem 1rem;
+  border-radius: 0.25rem;
+  max-width: 400px;
+}
+
+.emotion-9 {
+  margin: auto;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  cursor: default;
+}
+
+.emotion-10 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  margin: 0 1rem;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+}
+
+.emotion-11 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+
+.emotion-12 {
+  position: relative;
+  display: inline-block;
+}
+
+.emotion-13 {
+  font-size: 0.875rem;
+  color: #000;
+  background-color: #fefefe;
+  padding: 0.5rem 1rem;
+  height: 2.25rem;
+  opacity: 1;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 150ms linear;
+  transition: background-color 150ms linear;
+}
+
+.emotion-13:hover {
+  background-color: #e5e5e5;
+}
+
+.emotion-13:active {
+  background-color: #cbcbcb;
+}
+
+.emotion-14 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-15 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.emotion-16 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 100%;
+  background: #676767;
+  overflow: hidden;
+  position: relative;
+  font-size: 0.8125rem;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  line-height: 1;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.emotion-16 img {
+  border-radius: 100%;
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-18 {
+  fill: #fff;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.emotion-18 path {
+  fill: #fff;
+}
+
+.emotion-19 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.emotion-22 {
+  fill: #000;
+  width: 1rem;
+  height: 1rem;
+}
+
+.emotion-22 path {
+  fill: #000;
+}
+
+.emotion-23 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  grid-area: sidebar;
+  background-color: white;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: auto;
+  width: 0px;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  margin-right: 20px;
+}
+
+.emotion-23>div {
+  -webkit-box-shadow: rgb(0 0 0 / 15%) -4px 3px 20px 0px;
+  box-shadow: rgb(0 0 0 / 15%) -4px 3px 20px 0px;
+}
+
+.emotion-24 {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  width: 0rem;
+  background-color: white;
+  overflow: hidden;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  height: 100%;
+  min-height: 100%;
+  z-index: 100;
+  position: absolute;
+  border-right: 0.0625rem solid #e7e7e7;
+}
+
+.emotion-25 {
+  -webkit-transition: all 10.2s ease-in-out;
+  -moz-transition: all 10.2s ease-in-out;
+  -ms-transition: all 10.2s ease-in-out;
+  -o-transition: all 10.2s ease-in-out;
+  -webkit-transition: all 10.2s ease-in-out;
+  transition: all 10.2s ease-in-out;
+  width: 100%;
+  background-color: white;
+  height: 100%;
+  padding: 1.5rem 0;
+  box-sizing: border-box;
+}
+
+.emotion-25 .menu-item-text,
+.emotion-25 .submenu-item-text {
+  opacity: 0;
+  width: 1rem;
+  white-space: nowrap;
+}
+
+.emotion-25 #submenu-item-link {
+  padding-left: 2.5rem;
+}
+
+.emotion-26 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 2.75rem;
+  color: black;
+  cursor: default;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0 1rem;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.emotion-26:hover {
+  background-color: #f3f3f3;
+}
+
+.emotion-27 {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+.emotion-27 path {
+  background-color: #676767;
+}
+
+.emotion-29 {
+  fill: black;
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.emotion-29 path {
+  fill: black;
+}
+
+.emotion-30 {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.emotion-32 {
+  fill: black;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.emotion-32 path {
+  fill: black;
+}
+
+.emotion-33 {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  font-weight: initial;
+}
+
+.emotion-42 {
+  grid-area: main;
+  padding: 1rem 48px;
+  background-color: #f3f3f3;
+}
+
+<div
+    class="emotion-0"
+  >
+    <header
+      class="emotion-1"
+    >
+      <div
+        aria-label="Top Application Banner"
+        class="emotion-2"
+        role="banner"
+      >
+        <div
+          class="emotion-3"
+        >
+          <div
+            class="emotion-4"
+            data-testid="menu-handler"
+          >
+            <span
+              class="emotion-5"
+            >
+              <svg
+                class="emotion-6"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 16v2H3v-2h18zm0-5v2H3v-2h18zm0-5v2H3V6h18z"
+                  fill="none"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
+          <div
+            class="emotion-7"
+          >
+            <div
+              class="emotion-7"
+            >
+              <div
+                class="emotion-9"
+              >
+                <strong>
+                  LOGO
+                </strong>
+                PLACEHOLDER
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="emotion-10"
+        />
+        <div
+          class="emotion-11"
+        >
+          <div
+            role="button"
+          >
+            <div
+              class="emotion-12"
+              data-testid="userMenu"
+            >
+              <button
+                class="emotion-13"
+                data-testid="button"
+              >
+                <span
+                  class="emotion-14"
+                >
+                  <span
+                    class="emotion-15"
+                  >
+                    <div
+                      class="emotion-16"
+                    >
+                      <span
+                        class="emotion-5"
+                      >
+                        <svg
+                          class="emotion-18"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4m0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </span>
+                  <span
+                    class="emotion-19"
+                  >
+                    <span>
+                      User
+                    </span>
+                  </span>
+                  <span
+                    class="emotion-15"
+                  >
+                    <span
+                      class="emotion-5"
+                    >
+                      <svg
+                        class="emotion-22"
+                        viewBox="0 -3 13 14"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.5 7.864L.136 1.5 1.55.086l4.95 4.95 4.95-4.95L12.864 1.5z"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <aside
+      class="emotion-23"
+    >
+      <div
+        class="emotion-24"
+      >
+        <div
+          class="emotion-25"
+        >
+          <a
+            class="emotion-26"
+            data-testid="/landing-page"
+            href="/landing-page"
+          >
+            <div
+              class="emotion-27"
+            >
+              <span
+                class="emotion-5"
+              >
+                <svg
+                  class="emotion-29"
+                  viewBox="0 0 6 9"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M.5 7.086V1.914a1 1 0 0 1 1.707-.707l2.586 2.586a1 1 0 0 1 0 1.414L2.207 7.793A1 1 0 0 1 .5 7.086z"
+                    fill="#121212"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+            <div
+              class="emotion-30"
+            >
+              <span
+                class="emotion-5"
+              >
+                <svg
+                  class="emotion-32"
+                  viewBox="0 0 25 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21.193 6.667L12.7 15.16l-3.356-3.348-1.132 1.132 4.488 4.488L22.332 7.8l-1.139-1.133zm-4.537 0l-5.09 5.09L12.7 12.89l5.09-5.089-1.133-1.133zm-12.99 6.278l4.489 4.488 1.132-1.132-4.48-4.488-1.14 1.132z"
+                    fill="none"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+            <span
+              class="menu-item-text emotion-33"
+            >
+              Menu Item
+            </span>
+          </a>
+          <a
+            class="emotion-26"
+            data-testid="/demo-page"
+            href="/demo-page"
+          >
+            <div
+              class="emotion-27"
+            >
+              <span
+                class="emotion-5"
+              >
+                <svg
+                  class="emotion-29"
+                  viewBox="0 0 6 9"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M.5 7.086V1.914a1 1 0 0 1 1.707-.707l2.586 2.586a1 1 0 0 1 0 1.414L2.207 7.793A1 1 0 0 1 .5 7.086z"
+                    fill="#121212"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+            <div
+              class="emotion-30"
+            >
+              <span
+                class="emotion-5"
+              >
+                <svg
+                  class="emotion-32"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    d="M13.75 13.75c.963 0 1.75.787 1.75 1.75v2.625h-7V15.5c0-.963.788-1.75 1.75-1.75h3.5zm3.5-4.375c.962 0 1.75.787 1.75 1.75v2.625h-2.743a3.06 3.06 0 0 0-1.587-1.155c.242-.439.393-.935.393-1.47 0-.65-.208-1.253-.557-1.75h2.744zm-7.757 0a3.047 3.047 0 0 0-.555 1.75c0 .535.15 1.031.392 1.47a3.058 3.058 0 0 0-1.587 1.155H5v-2.625c0-.963.787-1.75 1.75-1.75h2.743zm2.507 0a1.75 1.75 0 1 1 0 3.5 1.75 1.75 0 0 1 0-3.5zM15.5 5a1.75 1.75 0 1 1 0 3.5 1.75 1.75 0 0 1 0-3.5zm-7 0a1.75 1.75 0 1 1 0 3.5 1.75 1.75 0 0 1 0-3.5z"
+                    fill="#000"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+            <span
+              class="menu-item-text emotion-33"
+            >
+              Demo page
+            </span>
+          </a>
+        </div>
+      </div>
+    </aside>
+    <main
+      class="emotion-42"
+    />
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,402 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HelloPage should match snapshot 1`] = `
+<DocumentFragment>
+  .emotion-0 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.emotion-1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  list-style: none;
+  padding: 1rem 0;
+}
+
+.emotion-1>li {
+  padding: 1rem 0;
+  margin: auto;
+}
+
+.emotion-2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  cursor: default;
+  color: #cfcfcf;
+}
+
+.emotion-2 button {
+  height: auto;
+  background-color: white;
+  padding: 0.5rem;
+}
+
+.emotion-2 button:focus {
+  outline: none;
+  background-color: #e7e7e7;
+}
+
+.emotion-2 button>span {
+  margin-left: 0;
+}
+
+.emotion-2>div>div>div {
+  top: 3rem;
+  box-shadow: #363636 0px 0px 1rem;
+}
+
+.emotion-3 {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.5rem;
+}
+
+.emotion-3:hover {
+  color: #494949;
+}
+
+.emotion-4 {
+  margin: auto 0.5rem;
+  color: #cfcfcf;
+  cursor: default;
+}
+
+.emotion-5 {
+  padding: 0.125rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.emotion-6 {
+  fill: lightGray400;
+  width: 1rem;
+  height: 1rem;
+}
+
+.emotion-6 path {
+  fill: lightGray400;
+}
+
+.emotion-7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+}
+
+.emotion-8 {
+  padding: 0.125rem;
+  margin-top: 0.0625rem;
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  border-radius: 3rem;
+  background-color: #e7e7e7;
+}
+
+.emotion-10 {
+  fill: lightGray700;
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+.emotion-10 path {
+  fill: lightGray700;
+}
+
+.emotion-19 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  cursor: default;
+  color: #494949;
+}
+
+.emotion-19 button {
+  height: auto;
+  background-color: white;
+  padding: 0.5rem;
+}
+
+.emotion-19 button:focus {
+  outline: none;
+  background-color: #e7e7e7;
+}
+
+.emotion-19 button>span {
+  margin-left: 0;
+}
+
+.emotion-19>div>div>div {
+  top: 3rem;
+  box-shadow: #363636 0px 0px 1rem;
+}
+
+.emotion-20 {
+  position: relative;
+  display: inline-block;
+}
+
+.emotion-21 {
+  font-size: 1rem;
+  color: #fff;
+  background-color: #232d7d;
+  padding: 0.5rem 1rem;
+  height: 2.875rem;
+  opacity: 1;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  -webkit-transition: background-color 150ms linear;
+  transition: background-color 150ms linear;
+}
+
+.emotion-21:hover {
+  background-color: #181f55;
+}
+
+.emotion-21:active {
+  background-color: #0d102d;
+}
+
+.emotion-22 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-23 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.emotion-24 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.emotion-26 {
+  fill: #fff;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.emotion-26 path {
+  fill: #fff;
+}
+
+<div
+    class="emotion-0"
+  >
+    <ol
+      aria-label="Breadcrumb"
+      class="emotion-1"
+    >
+      <li>
+        <div
+          class="emotion-2"
+        >
+          <a
+            class="emotion-3"
+            href="/first-level"
+          >
+            First Level
+          </a>
+          <span
+            class="emotion-4"
+          >
+            <span
+              class="emotion-5"
+            >
+              <svg
+                class="emotion-6"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.278 11.5L9.5 3.722 8.086 5.136l6.364 6.365-6.364 6.363L9.5 19.278z"
+                  fill-rule="nonzero"
+                />
+              </svg>
+            </span>
+          </span>
+        </div>
+      </li>
+      <li
+        role="listitem"
+        style="margin: auto;"
+      >
+        <div
+          class="emotion-7"
+        >
+          <span
+            class="emotion-8"
+          >
+            <span
+              class="emotion-5"
+            >
+              <svg
+                class="emotion-10"
+                viewBox="0 0 16 16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 10.8a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm0-4.2a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm0-4.2a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z"
+                  fill="none"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+          </span>
+          <span
+            class="emotion-4"
+          >
+            <span
+              class="emotion-5"
+            >
+              <svg
+                class="emotion-6"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.278 11.5L9.5 3.722 8.086 5.136l6.364 6.365-6.364 6.363L9.5 19.278z"
+                  fill-rule="nonzero"
+                />
+              </svg>
+            </span>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div
+          class="emotion-2"
+        >
+          <a
+            class="emotion-3"
+            href="/forth-level"
+          >
+            Forth Level
+          </a>
+          <span
+            class="emotion-4"
+          >
+            <span
+              class="emotion-5"
+            >
+              <svg
+                class="emotion-6"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.278 11.5L9.5 3.722 8.086 5.136l6.364 6.365-6.364 6.363L9.5 19.278z"
+                  fill-rule="nonzero"
+                />
+              </svg>
+            </span>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div
+          class="emotion-19"
+        >
+          <div
+            role="button"
+          >
+            <div
+              class="emotion-20"
+            >
+              <button
+                class="emotion-21"
+                data-testid="button"
+              >
+                <span
+                  class="emotion-22"
+                >
+                  <span
+                    class="emotion-23"
+                  >
+                    <span>
+                      Fifth Level
+                    </span>
+                  </span>
+                  <span
+                    class="emotion-24"
+                  >
+                    <span
+                      class="emotion-5"
+                    >
+                      <svg
+                        class="emotion-26"
+                        viewBox="0 -3 13 14"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.5 7.864L.136 1.5 1.55.086l4.95 4.95 4.95-4.95L12.864 1.5z"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+    <div>
+      Hello Orfium
+    </div>
+  </div>
+</DocumentFragment>
+`;
