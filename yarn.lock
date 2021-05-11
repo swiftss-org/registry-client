@@ -2508,10 +2508,10 @@
   dependencies:
     mkdirp "^1.0.4"
 
-"@orfium/ictinus@^2.41.0":
-  version "2.41.0"
-  resolved "https://registry.yarnpkg.com/@orfium/ictinus/-/ictinus-2.41.0.tgz#134a453ae160ad11071e7a330e35730f2beef6e1"
-  integrity sha512-hdXFHiyYxHwHplZWyoqYRdwTZl2oFNU/AucnB6i/H3g1lQERmfjjcPlXuy5UbnPYkBM0KCH6+DQ4tDIgY+nqnQ==
+"@orfium/ictinus@^2.41.1":
+  version "2.41.1"
+  resolved "https://registry.yarnpkg.com/@orfium/ictinus/-/ictinus-2.41.1.tgz#560f482b1c7e371d740a7e2333104b84db5a3f48"
+  integrity sha512-dLAqMwZTh87l5Dy0O2NMg30x9mIzIiQRFNoKmL4wS0N9pGuB8cp7C/TymIisBujqeUZlqbFKnbFJVwHYQs1UTg==
   dependencies:
     "@emotion/core" "^10.0.35"
     dayjs "^1.8.34"
