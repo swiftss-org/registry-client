@@ -1,7 +1,25 @@
 import styled from '@emotion/styled';
-import { flexCenter } from '@orfium/ictinus/dist/theme/functions';
+
+import { flex } from '../../theme/functions';
 
 export const PageWrapper = styled.div`
-  ${flexCenter};
+  ${flex};
   flex-direction: column;
+  padding: 30px;
+`;
+
+export const TextContainer = styled.div`
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+`;
+
+export const Title = styled.span`
+  font-size: 24px;
+  font-weight: 700;
+`;
+
+export const Subtitle = styled.span`
+  font-size: 16px;
+  font-weight: 400;
 `;

@@ -1,11 +1,14 @@
 import React from 'react';
 
-import { PageWrapper } from './Login.style';
+import { PageWrapper, Subtitle, TextContainer, Title } from './Login.style';
 
 const Login: React.FC = () => {
   return (
     <PageWrapper>
-      <div>Hello Login Orfium</div>
+      <TextContainer>
+        <Title>Welcome back!</Title>
+        <Subtitle>Please sign in</Subtitle>
+      </TextContainer>
     </PageWrapper>
   );
 };
