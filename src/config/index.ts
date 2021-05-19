@@ -11,7 +11,7 @@ export const pageOptions: PageOption[] = [
   {
     title: 'Demo page',
     url: () => '/demo-page',
-    component: lazy(() => import('pages/HelloPage/HelloPage')),
+    component: lazy(() => import('pages/Layout/Layout')),
     visible: true,
     iconName: 'entities',
   },
