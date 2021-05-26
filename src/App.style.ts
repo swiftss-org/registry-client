@@ -11,3 +11,14 @@ export const AppWrapper = styled.div`
   position: relative;
   overflow: hidden;
 `;
+
+export const TopBar = styled.div`
+  width: 100%;
+  position: sticky;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: black;
+  font-weight: 700;
+  border-bottom: 1px black solid;
+`;

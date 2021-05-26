@@ -12,6 +12,7 @@ export const TextContainer = styled.div`
   display: flex;
   align-items: start;
   flex-direction: column;
+  margin-top: 100px;
 `;
 
 export const Title = styled.span`
@@ -22,4 +23,5 @@ export const Title = styled.span`
 export const Subtitle = styled.span`
   font-size: 16px;
   font-weight: 400;
+  margin-top: 8px;
 `;
