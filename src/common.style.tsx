@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { grid } from '@orfium/ictinus/dist/theme/functions';
 import { flex } from './theme/functions';
+import { css } from '@emotion/react';
 
 export const PageWrapper = styled.div`
   ${flex};
@@ -63,4 +64,28 @@ export const RadioText = styled.span`
   display: inline-flex;
   align-items: center;
   margin-left: 8px;
+`;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const scrollBar = css`
+  scrollbar-color: #888 transparent;
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
