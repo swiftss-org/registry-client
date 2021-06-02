@@ -1,5 +1,12 @@
 import styled from '@emotion/styled';
 import { grid } from '@orfium/ictinus/dist/theme/functions';
+import { flex } from './theme/functions';
+
+export const PageWrapper = styled.div`
+  ${flex};
+  flex-direction: column;
+  padding: 18px;
+`;
 
 export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean }>`
   && * {
@@ -35,14 +42,14 @@ export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean
 
 export const FieldsContainer = styled.div<{ withMargin?: boolean }>`
   ${grid};
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   column-gap: 38px;
   row-gap: 24px;
   margin-bottom: ${(props) => (props.withMargin ? '24px' : null)};
 `;
 
 export const LongFieldWrapper = styled.div`
-  grid-column: 1 / 4;
+  grid-column: 1 / 3;
 `;
 
 export const FieldWrapper = styled.div`

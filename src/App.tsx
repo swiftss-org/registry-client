@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import theme from 'theme/globals';
 import { AppWrapper, TopBar } from './App.style';
 import Routes from './routing/Routes';
+import { PageWrapper } from './common.style';
 
 const queryClient = new QueryClient();
 
@@ -48,7 +49,9 @@ const App: React.FC = () => {
                 },
               ]}
             />
-            <Routes />
+            <PageWrapper>
+              <Routes />
+            </PageWrapper>
           </AppWrapper>
         </Router>
       </QueryClientProvider>

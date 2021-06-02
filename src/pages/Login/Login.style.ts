@@ -1,13 +1,5 @@
 import styled from '@emotion/styled';
 
-import { flex } from '../../theme/functions';
-
-export const PageWrapper = styled.div`
-  ${flex};
-  flex-direction: column;
-  padding: 30px;
-`;
-
 export const TextContainer = styled.div`
   display: flex;
   align-items: start;
