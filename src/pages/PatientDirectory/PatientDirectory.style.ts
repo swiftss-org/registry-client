@@ -20,6 +20,28 @@ export const Line = styled.div`
 `;
 
 export const PatientsList = styled.div`
+  // for Firefox
+  scrollbar-width: thin;
+
+  // for Chrome
+  ::-webkit-scrollbar {
+    width: 8px;
+    background: transparent !important;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme.utils.getColor('coolGray', 400)};
+    border-radius: 32px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${(props) => props.theme.utils.getColor('coolGray', 500)};
+  }
+
   overflow-y: auto;
   margin-bottom: 56px;
   padding: 18px;
