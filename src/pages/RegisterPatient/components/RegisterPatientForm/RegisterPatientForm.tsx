@@ -1,32 +1,42 @@
 /** @jsxImportSource @emotion/react */
-import { FieldsContainer, FieldWrapper, LongFieldWrapper } from '../../../../common.style';
+import React, { ChangeEvent } from 'react';
 import { Field } from 'react-final-form';
-import { Button, TextField } from '@orfium/ictinus';
-import React from 'react';
-import { FormHeadingContainer, FormSectionHeading } from './RegisterPatientForm.style';
-import { ButtonsContainer } from '../../RegisterPatient.style';
-import { ButtonContainer } from '../../../Login/components/LoginForm/LoginForm.style';
+import { Radio, RadioGroup, Select, TextField } from '@orfium/ictinus';
+import { omit } from 'lodash';
+
+import {
+  FieldsContainer,
+  FieldWrapper,
+  LongFieldWrapper,
+  RadioText,
+} from '../../../../common.style';
+import {
+  FormContainer,
+  FormHeadingContainer,
+  FormSectionHeading,
+} from './RegisterPatientForm.style';
 
 const RegisterPatientForm = () => {
   return (
-    <>
+    <FormContainer>
       <FormHeadingContainer>
         <FormSectionHeading>Hospital Details</FormSectionHeading>
         <FieldsContainer withMargin>
           <LongFieldWrapper>
             <FieldWrapper>
-              <Field name="email" parse={(value) => value}>
-                {(props) => {
-                  return (
-                    <TextField
-                      id="email"
-                      label="Email"
-                      styleType="outlined"
-                      size="md"
-                      {...props.input}
-                    />
-                  );
-                }}
+              <Field name="center">
+                {(props) => (
+                  <Select
+                    label="Center"
+                    styleType="outlined"
+                    size="md"
+                    required
+                    hintMsg={props.meta.error}
+                    options={[{ label: 'Hospital Number 1', value: 1 }]}
+                    {...omit(props.input, ['onFocus'])}
+                    handleSelectedOption={props.input.onChange}
+                  />
+                )}
               </Field>
             </FieldWrapper>
           </LongFieldWrapper>
@@ -42,7 +52,7 @@ const RegisterPatientForm = () => {
                   return (
                     <TextField
                       id="name"
-                      label="Name"
+                      label="Name *"
                       styleType="outlined"
                       size="md"
                       {...props.input}
@@ -57,12 +67,12 @@ const RegisterPatientForm = () => {
       <FieldsContainer withMargin>
         <LongFieldWrapper>
           <FieldWrapper>
-            <Field name="name" parse={(value) => value}>
+            <Field name="hospitalId" parse={(value) => value}>
               {(props) => {
                 return (
                   <TextField
-                    id="name"
-                    label="Name"
+                    id="hospital_id"
+                    label="Patient Hospital ID *"
                     styleType="outlined"
                     size="md"
                     {...props.input}
@@ -76,50 +86,12 @@ const RegisterPatientForm = () => {
       <FieldsContainer withMargin>
         <LongFieldWrapper>
           <FieldWrapper>
-            <Field name="name" parse={(value) => value}>
+            <Field name="nationalId" parse={(value) => value}>
               {(props) => {
                 return (
                   <TextField
-                    id="name"
-                    label="Name"
-                    styleType="outlined"
-                    size="md"
-                    {...props.input}
-                  />
-                );
-              }}
-            </Field>
-          </FieldWrapper>
-        </LongFieldWrapper>
-      </FieldsContainer>{' '}
-      <FieldsContainer withMargin>
-        <LongFieldWrapper>
-          <FieldWrapper>
-            <Field name="name" parse={(value) => value}>
-              {(props) => {
-                return (
-                  <TextField
-                    id="name"
-                    label="Name"
-                    styleType="outlined"
-                    size="md"
-                    {...props.input}
-                  />
-                );
-              }}
-            </Field>
-          </FieldWrapper>
-        </LongFieldWrapper>
-      </FieldsContainer>{' '}
-      <FieldsContainer withMargin>
-        <LongFieldWrapper>
-          <FieldWrapper>
-            <Field name="name" parse={(value) => value}>
-              {(props) => {
-                return (
-                  <TextField
-                    id="name"
-                    label="Name"
+                    id="national_id"
+                    label="National ID"
                     styleType="outlined"
                     size="md"
                     {...props.input}
@@ -132,38 +104,107 @@ const RegisterPatientForm = () => {
       </FieldsContainer>
       <FieldsContainer withMargin>
         <FieldWrapper>
-          <Field name="name" parse={(value) => value}>
+          <Field name="yearOfBirth" parse={(value) => value}>
             {(props) => {
               return (
-                <TextField id="name" label="Name" styleType="outlined" size="md" {...props.input} />
+                <TextField
+                  id="year_of_birth"
+                  label="Year Of Birth *"
+                  styleType="outlined"
+                  size="md"
+                  {...props.input}
+                />
               );
             }}
           </Field>
         </FieldWrapper>
         <FieldWrapper>
-          <Field name="name" parse={(value) => value}>
+          <Field name="age" parse={(value) => value}>
             {(props) => {
               return (
-                <TextField id="name" label="Name" styleType="outlined" size="md" {...props.input} />
+                <TextField id="age" label="Age *" styleType="outlined" size="md" {...props.input} />
               );
             }}
           </Field>
         </FieldWrapper>
       </FieldsContainer>
-      <ButtonsContainer>
-        <ButtonContainer>
-          <Button color={'neutralBlack-700'} size="lg" onClick={() => 'll'}>
-            Save
-          </Button>
-        </ButtonContainer>
-
-        <ButtonContainer>
-          <Button color={'neutralBlack-700'} filled={false} size="lg" onClick={() => 'll'}>
-            Cancel
-          </Button>
-        </ButtonContainer>
-      </ButtonsContainer>
-    </>
+      <FormHeadingContainer>
+        <FormSectionHeading>Gender</FormSectionHeading>
+        <FieldsContainer withMargin>
+          <RadioGroup
+            name="gender"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              console.log(e.target.value);
+            }}
+          >
+            <div>
+              <Radio value="male" />
+              <RadioText>Male</RadioText>
+            </div>
+            <div>
+              <Radio value="female" />
+              <RadioText>Female</RadioText>
+            </div>
+          </RadioGroup>
+        </FieldsContainer>
+      </FormHeadingContainer>
+      <FormHeadingContainer>
+        <FormSectionHeading>Contact Details</FormSectionHeading>
+        <FieldsContainer>
+          <LongFieldWrapper>
+            <FieldWrapper>
+              <Field name="phone1" parse={(value) => value}>
+                {(props) => {
+                  return (
+                    <TextField
+                      id="phone1"
+                      label="Phone #1"
+                      styleType="outlined"
+                      size="md"
+                      {...props.input}
+                    />
+                  );
+                }}
+              </Field>
+            </FieldWrapper>
+          </LongFieldWrapper>
+          <LongFieldWrapper>
+            <FieldWrapper>
+              <Field name="phone2" parse={(value) => value}>
+                {(props) => {
+                  return (
+                    <TextField
+                      id="phone2"
+                      label="Phone #2"
+                      styleType="outlined"
+                      size="md"
+                      {...props.input}
+                    />
+                  );
+                }}
+              </Field>
+            </FieldWrapper>
+          </LongFieldWrapper>
+          <LongFieldWrapper>
+            <FieldWrapper>
+              <Field name="address" parse={(value) => value}>
+                {(props) => {
+                  return (
+                    <TextField
+                      id="address"
+                      label="Address"
+                      styleType="outlined"
+                      size="md"
+                      {...props.input}
+                    />
+                  );
+                }}
+              </Field>
+            </FieldWrapper>
+          </LongFieldWrapper>
+        </FieldsContainer>
+      </FormHeadingContainer>
+    </FormContainer>
   );
 };
 

@@ -5,7 +5,8 @@ import { flex } from './theme/functions';
 export const PageWrapper = styled.div`
   ${flex};
   flex-direction: column;
-  padding: 18px;
+  height: calc(100vh);
+  width: 100%;
 `;
 
 export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean }>`
@@ -55,4 +56,11 @@ export const LongFieldWrapper = styled.div`
 export const FieldWrapper = styled.div`
   width: 100%;
   box-sizing: border-box;
+`;
+
+export const RadioText = styled.span`
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
 `;
