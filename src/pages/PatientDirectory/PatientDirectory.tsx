@@ -16,12 +16,14 @@ const PatientDirectory: React.FC = () => {
         />
       </SearchWrapper>
 
-      {Patients.map((patient, index) => (
-        <>
-          <PatientCard key={'patient' + index} {...patient} />
-          <Line />
-        </>
-      ))}
+      <div>
+        {Patients.map((patient, index) => (
+          <>
+            <PatientCard key={'patient' + index} {...patient} />
+            <Line />
+          </>
+        ))}
+      </div>
     </PatientDirectoryContainer>
   );
 };
