@@ -1,7 +1,12 @@
 import React from 'react';
 import { TextField } from '@orfium/ictinus';
 
-import { PatientDirectoryContainer, SearchWrapper, Line } from './PatientDirectory.style';
+import {
+  PatientDirectoryContainer,
+  SearchWrapper,
+  Line,
+  PatientsList,
+} from './PatientDirectory.style';
 import PatientCard from './components/PatientCard';
 import { Patients } from './constants';
 
@@ -16,14 +21,14 @@ const PatientDirectory: React.FC = () => {
         />
       </SearchWrapper>
 
-      <div>
+      <PatientsList>
         {Patients.map((patient, index) => (
           <>
             <PatientCard key={'patient' + index} {...patient} />
             <Line />
           </>
         ))}
-      </div>
+      </PatientsList>
     </PatientDirectoryContainer>
   );
 };

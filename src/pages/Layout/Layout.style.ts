@@ -32,8 +32,8 @@ export const Main = styled.main`
     background: ${(props) => props.theme.utils.getColor('coolGray', 500)};
   }
 
-  overflow-y: scroll;
-  overflow-x: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   ${flex}
 `;
