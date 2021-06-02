@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField } from '@orfium/ictinus';
+import { TextField, Select } from '@orfium/ictinus';
 
 import {
   PatientDirectoryContainer,
@@ -18,6 +18,13 @@ const PatientDirectory: React.FC = () => {
           type={'outlined'}
           placeholder={'Search (Name , ID, Patient Hospital ID ...)'}
           leftIcon={'search'}
+        />
+        <Select
+          label="Center"
+          styleType="outlined"
+          size="sm"
+          required
+          options={[{ label: 'Hospital Number 1', value: 1 }]}
         />
       </SearchWrapper>
 
