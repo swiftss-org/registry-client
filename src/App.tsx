@@ -41,6 +41,13 @@ const App: React.FC = () => {
                   options: [],
                 },
                 {
+                  name: 'Register Patient',
+                  visible: true,
+                  url: '/patients/register',
+                  iconName: 'info',
+                  options: [],
+                },
+                {
                   name: 'My Account',
                   visible: true,
                   url: '/account',
