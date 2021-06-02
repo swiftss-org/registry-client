@@ -9,6 +9,9 @@ export const PatientDirectoryContainer = styled.div`
 
 export const SearchWrapper = styled.div`
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
   & > div > div {
     background: ${(props) => props.theme.utils.getColor('lightGray', 100)};
@@ -24,5 +27,5 @@ export const PatientsList = styled.div`
   ${scrollBar};
   overflow-y: auto;
   margin-bottom: 56px;
-  padding: 18px;
+  padding: 0px 18px 18px 18px;
 `;
