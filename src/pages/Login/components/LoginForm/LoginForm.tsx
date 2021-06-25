@@ -5,21 +5,14 @@ import { Button, CheckBox, TextField } from '@orfium/ictinus';
 
 import { CheckBoxContainer, FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
 import { ButtonContainer, FormBottom, FormContainer } from './LoginForm.style';
-
-export interface LoginFormType {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
+import { useSignIn } from '../../../../hooks/api/userHooks';
+import { LoginFormType } from '../../../../models/apiTypes';
 
 const SignIn: React.FC = () => {
-  // const history = useHistory();
-
-  // const { mutate, isLoading } = useSignin();
+  const { mutate } = useSignIn();
 
   const handleSubmit = (form: LoginFormType) => {
-    // mutate(form);
-    console.log(form);
+    mutate(form);
   };
 
   return (
