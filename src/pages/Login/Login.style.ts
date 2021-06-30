@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
 export const TextContainer = styled.div`
-  display: flex;
   align-items: start;
+  display: flex;
   flex-direction: column;
   margin-top: 100px;
 `;

@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Subtitle, TextContainer, Title } from './Login.style';
 import LoginForm from './components/LoginForm';
+import { Subtitle, TextContainer, Title } from './Login.style';
 
 const Login: React.FC = () => {
   return (

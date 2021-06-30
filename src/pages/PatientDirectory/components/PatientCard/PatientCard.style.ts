@@ -1,31 +1,31 @@
 import styled from '@emotion/styled';
 
 export const CardContainer = styled.div`
-  padding: 16px 0px 17px 4px;
   display: flex;
   flex-direction: column;
   gap: 21px;
+  padding: 16px 0px 17px 4px;
 `;
 
 export const Info = styled.div`
-  font-size: 14px;
   color: ${(props) => props.theme.utils.getColor('darkGray', 600)};
+  font-size: 14px;
 `;
 
 export const ChipWrapper = styled.div`
   & > div {
     color: ${(props) => props.theme.utils.getColor('lightGray', 600)};
+    font-size: 12px;
     font-weight: 500;
     white-space: nowrap;
-    font-size: 12px;
   }
 `;
 
 export const Header = styled.div`
-  display: flex;
   align-items: center;
-  justify-content: space-between;
+  display: flex;
   gap: 15px;
+  justify-content: space-between;
 `;
 
 export const Footer = styled.div`
@@ -35,8 +35,8 @@ export const Footer = styled.div`
 
 export const CardLabel = styled.div`
   color: ${(props) => props.theme.utils.getColor('lightGray', 400)};
-  font-weight: 500;
   font-size: 11px;
+  font-weight: 500;
 `;
 
 export const CardValue = styled.div`
@@ -51,11 +51,11 @@ export const CardItemContainer = styled.div`
 `;
 
 export const ViewMore = styled.div`
-  font-size: 12px;
-  font-weight: 500;
-  display: flex;
   align-items: center;
   color: #0047ff;
+  display: flex;
+  font-size: 12px;
+  font-weight: 500;
 `;
 
 export const CardItemsContainer = styled.div`

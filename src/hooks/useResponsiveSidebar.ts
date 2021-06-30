@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import useBreakpoints from '@orfium/ictinus/dist/hooks/useBreakpoints';
 
 export const useResponsiveLayout = () => {

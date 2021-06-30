@@ -1,14 +1,15 @@
 import React from 'react';
+
 import { TextField, Select } from '@orfium/ictinus';
 
+import PatientCard from './components/PatientCard';
+import { Patients } from './constants';
 import {
   PatientDirectoryContainer,
   SearchWrapper,
   Line,
   PatientsList,
 } from './PatientDirectory.style';
-import PatientCard from './components/PatientCard';
-import { Patients } from './constants';
 
 const PatientDirectory: React.FC = () => {
   return (

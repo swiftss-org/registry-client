@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
-import { AxiosError } from 'axios';
-
-import { LoginFormType, LoginResponse } from '../../models/apiTypes';
-import userAPI from '../../api/userAPI';
-import { setAxiosToken } from '../../api/axiosInstances';
 import { __TOKEN__ } from 'utils/constants';
+
+import { setAxiosToken } from '../../api/axiosInstances';
+import userAPI from '../../api/userAPI';
+import { LoginFormType, LoginResponse } from '../../models/apiTypes';
+import urls from '../../routing/urls';
 import { setUserStorageItem } from '../../utils/storage';
 
-import urls from '../../routing/urls';
 
 export const useSignIn = () => {
   const history = useHistory();

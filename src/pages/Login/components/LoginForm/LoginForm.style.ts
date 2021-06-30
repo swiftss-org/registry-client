@@ -19,9 +19,9 @@ export const ButtonContainer = styled.div`
     width: 100%;
 
     span {
-      justify-content: center;
-      font-weight: 700;
       font-size: 16px;
+      font-weight: 700;
+      justify-content: center;
     }
   }
 `;

@@ -1,7 +1,8 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { grid } from '@orfium/ictinus/dist/theme/functions';
+
 import { flex } from './theme/functions';
-import { css } from '@emotion/react';
 
 export const PageWrapper = styled.div`
   ${flex};
@@ -44,10 +45,10 @@ export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean
 
 export const FieldsContainer = styled.div<{ withMargin?: boolean }>`
   ${grid};
-  grid-template-columns: 1fr 1fr;
   column-gap: 38px;
-  row-gap: 24px;
+  grid-template-columns: 1fr 1fr;
   margin-bottom: ${(props) => (props.withMargin ? '24px' : null)};
+  row-gap: 24px;
 `;
 
 export const LongFieldWrapper = styled.div`
@@ -55,15 +56,15 @@ export const LongFieldWrapper = styled.div`
 `;
 
 export const FieldWrapper = styled.div`
-  width: 100%;
   box-sizing: border-box;
+  width: 100%;
 `;
 
 export const RadioText = styled.span`
-  min-height: 48px;
-  display: inline-flex;
   align-items: center;
+  display: inline-flex;
   margin-left: 8px;
+  min-height: 48px;
 `;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
