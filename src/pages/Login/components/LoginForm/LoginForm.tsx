@@ -84,7 +84,7 @@ const SignIn: React.FC = () => {
             </FormBottom>
 
             <ButtonContainer>
-              <Button color={'neutralBlack-700'} filled size="lg" onClick={handleSubmit}>
+              <Button color={'neutralBlack-700'} filled size="lg" buttonType="submit">
                 Sign In
               </Button>
             </ButtonContainer>

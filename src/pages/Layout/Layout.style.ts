@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { flexCenter } from '@orfium/ictinus/dist/theme/functions';
 
-
 import { scrollBar } from '../../common.style';
 import { ResponsiveProps } from '../types';
 import { flex } from 'theme/functions';
@@ -14,7 +13,6 @@ const getWidth = ({
   isLargeDesktop,
   isXLargeDesktop,
 }: ResponsiveProps) => {
-  console.log(isSmallDesktop, isMediumDesktop, isLargeDesktop, isXLargeDesktop);
   return isSmallDesktop || isMediumDesktop || isLargeDesktop || isXLargeDesktop
     ? SIDEBAR_WIDTH_COLLAPSED
     : 0;
@@ -30,7 +28,7 @@ export const Main = styled.main`
   ${scrollBar};
 
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 
   ${flex}
 `;
