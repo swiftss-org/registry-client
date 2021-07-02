@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { Field, Form } from 'react-final-form';
-import { Button, CheckBox, TextField } from '@orfium/ictinus';
 
+import { Button, CheckBox, TextField } from '@orfium/ictinus';
 import { CheckBoxContainer, FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
-import { ButtonContainer, FormBottom, FormContainer } from './LoginForm.style';
+import { Field, Form } from 'react-final-form';
+
 import { useSignIn } from '../../../../hooks/api/userHooks';
 import { LoginFormType } from '../../../../models/apiTypes';
+import { ButtonContainer, FormBottom, FormContainer } from './LoginForm.style';
 
 const SignIn: React.FC = () => {
   const { mutate } = useSignIn();

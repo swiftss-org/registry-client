@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { Form } from 'react-final-form';
-import { LoginFormType } from '../../models/apiTypes';
 
-import { FormHeading, ButtonsContainer } from './RegisterPatient.style';
-import RegisterPatientForm from './components/RegisterPatientForm';
-import { ButtonContainer } from '../Login/components/LoginForm/LoginForm.style';
 import { Button } from '@orfium/ictinus';
+import { Form } from 'react-final-form';
+
+import { LoginFormType } from '../../models/apiTypes';
+import { ButtonContainer } from '../Login/components/LoginForm/LoginForm.style';
+import RegisterPatientForm from './components/RegisterPatientForm';
+import { FormHeading, ButtonsContainer } from './RegisterPatient.style';
 
 const RegisterPatient = () => {
   const handleSubmit = (form: LoginFormType) => {

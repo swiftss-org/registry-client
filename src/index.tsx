@@ -1,11 +1,12 @@
 import React from 'react';
+
 import ReactDOM from 'react-dom';
 
 import './index.css';
-import App from './App';
 import { setAxiosToken } from './api/axiosInstances';
-import { getUserStorageItem } from './utils/storage';
+import App from './App';
 import { __TOKEN__ } from './utils/constants';
+import { getUserStorageItem } from './utils/storage';
 
 const token = getUserStorageItem(__TOKEN__);
 if (token) {

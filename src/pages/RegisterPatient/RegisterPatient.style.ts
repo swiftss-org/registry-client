@@ -3,16 +3,16 @@ import styled from '@emotion/styled';
 export const FormHeading = styled.span`
   font-size: 14px;
   font-weight: 700;
-  padding: 18px;
   margin-bottom: 12px;
+  padding: 18px;
 `;
 export const ButtonsContainer = styled.div`
-  position: sticky;
-  padding: 15px;
-  height: 130px;
   background-color: white;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  bottom: 0;
+  height: 130px;
+  padding: 15px;
+  position: sticky;
 `;

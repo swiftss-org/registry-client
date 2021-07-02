@@ -1,11 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+
 import { ThemeProvider } from '@orfium/ictinus';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import theme from 'theme/globals';
+
 import { AppWrapper } from './App.style';
 import Routes from './routing/Routes';
+import theme from 'theme/globals';
 
 const queryClient = new QueryClient();
 

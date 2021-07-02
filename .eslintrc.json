@@ -1,7 +1,16 @@
 {
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
-  "plugins": ["react", "@typescript-eslint", "react-hooks"],
-
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks",
+    "import",
+    "better-styled-components"
+  ],
   "env": {
     "node": true,
     "browser": true,
@@ -10,11 +19,54 @@
     "es6": true
   },
   "rules": {
+    "better-styled-components/sort-declarations-alphabetically": 2,
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          [
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object"
+          ]
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "src/**",
+            "group": "internal"
+          },
+          {
+            "pattern": "theme/**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "react"
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
     "@typescript-eslint/naming-convention": [
       "error",
       {
         "selector": "typeLike",
-        "format": ["PascalCase", "UPPER_CASE"]
+        "format": [
+          "PascalCase",
+          "UPPER_CASE"
+        ]
       }
     ],
     "react-hooks/rules-of-hooks": "error",
@@ -23,6 +75,7 @@
     "no-unused-expressions": "off",
     "@typescript-eslint/no-unused-expressions": "error",
     "no-unused-vars": "off",
+    "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/no-unused-vars": [
       "error",
       {

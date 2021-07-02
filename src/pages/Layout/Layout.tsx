@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Header, Main, MainContainer, SideNav } from './Layout.style';
 import { Drawer, IconButton } from '@orfium/ictinus';
+
 import { TopBar } from '../../App.style';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
+import { Header, Main, MainContainer, SideNav } from './Layout.style';
 
 interface Props {
   /** Component to load */
