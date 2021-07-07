@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Chip, Icon } from '@orfium/ictinus';
-import { Patient } from 'pages/PatientDirectory/types';
+import { PatientAPI } from 'models/apiTypes';
 
 import {
   CardContainer,
@@ -16,16 +16,17 @@ import {
   ViewMore,
 } from './PatientCard.style';
 
-const PatientCard: React.FC<Patient> = ({ name, gender, age, hospital, patientHospitalId, id }) => {
+const PatientCard: React.FC<PatientAPI> = ({ full_name, gender, age, national_id, hospitals }) => {
   return (
-    <CardContainer>
+    <CardContainer key={'patient' + full_name}>
       <Header>
         <Info>
-          {name} , {gender} , {age}
+          {full_name} , {gender} , {age}
         </Info>
         <ChipWrapper>
           <Chip styleType={'filled'} size={'sm'} fill={'lightGray'} shade={300}>
-            {hospital}
+            {/** TODO: change this! */}
+            {hospitals[0].name}
           </Chip>
         </ChipWrapper>
       </Header>
@@ -33,11 +34,12 @@ const PatientCard: React.FC<Patient> = ({ name, gender, age, hospital, patientHo
         <CardItemsContainer>
           <CardItemContainer>
             <CardLabel>Patient Hospital ID</CardLabel>
-            <CardValue>{patientHospitalId}</CardValue>
+            {/** TODO: change this! */}
+            <CardValue>{hospitals[0].patient_hospital_id}</CardValue>
           </CardItemContainer>
           <CardItemContainer>
             <CardLabel>ID</CardLabel>
-            <CardValue>{id}</CardValue>
+            <CardValue>{national_id}</CardValue>
           </CardItemContainer>
         </CardItemsContainer>
         <ViewMore onClick={() => console.log('view more')}>
