@@ -11,7 +11,8 @@ export const PatientDirectoryContainer = styled.div`
 export const SearchWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+  max-width: 38.75rem;
   padding: 18px;
 
   & > div > div {
