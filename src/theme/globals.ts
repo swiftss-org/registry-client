@@ -27,7 +27,7 @@ const defaultTheme: Theme = {
   defaultBackgroundColor: colors.white,
   defaultFontSize: '12px',
   colors: {
-    branded1: colors.black,
+    branded1: '#eef5fb',
     white: colors.white,
     black: colors.black,
     lightGray: colors.lightGray,
