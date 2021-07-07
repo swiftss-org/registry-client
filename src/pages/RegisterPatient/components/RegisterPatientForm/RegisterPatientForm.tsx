@@ -173,11 +173,12 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   }}
                 >
                   <div>
-                    <Radio value="male" />
+                    <Radio value="Male" />
+
                     <RadioText>Male</RadioText>
                   </div>
                   <div>
-                    <Radio value="female" />
+                    <Radio value="Female" />
                     <RadioText>Female</RadioText>
                   </div>
                 </RadioGroup>

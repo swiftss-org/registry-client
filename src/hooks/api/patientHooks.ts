@@ -4,15 +4,15 @@ import { useMutation, useQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
-import { HospitalsResponse, RegisterPatientPayload } from '../../models/apiTypes';
+import { HospitalsResponse, PaginationParams, RegisterPatientPayload } from '../../models/apiTypes';
 import { RegisterPatientFormType } from '../../pages/RegisterPatient/types';
 import urls from '../../routing/urls';
 
-export const useGetHospitals = () => {
+export const useGetHospitals = (params?: PaginationParams) => {
   return useQuery<HospitalsResponse, AxiosError, HospitalsResponse>(
     ReactQueryKeys.HospitalsQuery,
     async () => {
-      const { request } = patientsAPI.single.getHospitals();
+      const { request } = patientsAPI.single.getHospitals(params);
       const data = await request();
 
       return data;

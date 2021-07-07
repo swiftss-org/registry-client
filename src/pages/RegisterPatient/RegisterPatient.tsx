@@ -11,7 +11,7 @@ import { FormHeading, ButtonsContainer } from './RegisterPatient.style';
 import { RegisterPatientFormType } from './types';
 
 const RegisterPatient = () => {
-  const { data: hospitals } = useGetHospitals();
+  const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
   const { mutate, isLoading } = useRegisterPatient();
 
   const handleSubmit = (form: RegisterPatientFormType) => {
