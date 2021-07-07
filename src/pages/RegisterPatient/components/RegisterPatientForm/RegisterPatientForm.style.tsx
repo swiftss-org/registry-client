@@ -16,7 +16,7 @@ export const FormHeadingContainer = styled.div`
 
 export const FormContainer = styled.div`
   flex-grow: 1;
-  margin-bottom: 120px;
+  height: 100%;
   overflow-y: auto;
   padding: 18px;
 
