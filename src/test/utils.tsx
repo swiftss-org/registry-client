@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
-import { render } from '@testing-library/react';
+
 import { ThemeProvider as OrfiumThemeProvider } from '@orfium/ictinus';
+import { render } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import cookies from 'utils/cookies';
+
 import { __TOKEN__ } from '../utils/constants';
 export const LOGIN_TOKEN_MOCK = 'test-token';
 

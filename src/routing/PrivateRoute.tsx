@@ -1,11 +1,12 @@
 import React from 'react';
+
+import Layout from 'pages/Layout/Layout';
 import { Redirect, Route } from 'react-router-dom';
 
-import cookies from '../utils/cookies';
 import { __TOKEN__ } from '../utils/constants';
-import urls from './urls';
+import cookies from '../utils/cookies';
 import { CustomRouteProps } from './types';
-import Layout from 'pages/Layout/Layout';
+import urls from './urls';
 
 const PrivateRoute: React.FC<CustomRouteProps> = ({ component: Component, ...rest }) => {
   const token = cookies.get(__TOKEN__);

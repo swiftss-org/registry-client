@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const express = require('express');
 const path = require('path');
-const serverPort = process.env.PORT || 3000;
+
+const express = require('express');
+const serverPort = process.env.PORT || 3001;
 const environment = process.env.NODE_ENV || 'development';
 
 // construct a mini server

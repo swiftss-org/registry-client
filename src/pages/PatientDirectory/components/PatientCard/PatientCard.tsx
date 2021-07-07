@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Chip, Icon } from '@orfium/ictinus';
+import { Patient } from 'pages/PatientDirectory/types';
 
 import {
   CardContainer,
@@ -13,7 +15,6 @@ import {
   CardValue,
   ViewMore,
 } from './PatientCard.style';
-import { Patient } from 'pages/PatientDirectory/types';
 
 const PatientCard: React.FC<Patient> = ({ name, gender, age, hospital, patientHospitalId, id }) => {
   return (

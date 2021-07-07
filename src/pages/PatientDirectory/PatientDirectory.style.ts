@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+
 import { scrollBar } from '../../common.style';
 
 export const PatientDirectoryContainer = styled.div`
@@ -8,10 +9,10 @@ export const PatientDirectoryContainer = styled.div`
 `;
 
 export const SearchWrapper = styled.div`
-  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 18px;
 
   & > div > div {
     background: ${(props) => props.theme.utils.getColor('lightGray', 100)};
@@ -19,13 +20,13 @@ export const SearchWrapper = styled.div`
 `;
 
 export const Line = styled.div`
-  height: 0px;
   border-top: 1px solid #f2f2f2;
+  height: 0px;
 `;
 
 export const PatientsList = styled.div`
   ${scrollBar};
-  overflow-y: auto;
   margin-bottom: 56px;
+  overflow-y: auto;
   padding: 0px 18px 18px 18px;
 `;

@@ -1,25 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { Field, Form } from 'react-final-form';
-import { Button, CheckBox, TextField } from '@orfium/ictinus';
 
+import { Button, CheckBox, TextField } from '@orfium/ictinus';
 import { CheckBoxContainer, FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
+import { Field, Form } from 'react-final-form';
+
+import { useSignIn } from '../../../../hooks/api/userHooks';
+import { LoginFormType } from '../../../../models/apiTypes';
 import { ButtonContainer, FormBottom, FormContainer } from './LoginForm.style';
 
-export interface LoginFormType {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
-
 const SignIn: React.FC = () => {
-  // const history = useHistory();
-
-  // const { mutate, isLoading } = useSignin();
+  const { mutate } = useSignIn();
 
   const handleSubmit = (form: LoginFormType) => {
-    // mutate(form);
-    console.log(form);
+    mutate(form);
   };
 
   return (
@@ -90,7 +84,7 @@ const SignIn: React.FC = () => {
             </FormBottom>
 
             <ButtonContainer>
-              <Button color={'neutralBlack-700'} filled size="lg" onClick={handleSubmit}>
+              <Button color={'neutralBlack-700'} filled size="lg" buttonType="submit">
                 Sign In
               </Button>
             </ButtonContainer>

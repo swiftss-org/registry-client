@@ -1,38 +1,57 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { Form } from 'react-final-form';
-import { Button } from '@orfium/ictinus';
 
-import { FormHeading, ButtonsContainer } from './RegisterPatient.style';
-import { LoginFormType } from '../Login/components/LoginForm/LoginForm';
-import RegisterPatientForm from './components/RegisterPatientForm';
+import { Button } from '@orfium/ictinus';
+import { Form } from 'react-final-form';
+
+import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
 import { ButtonContainer } from '../Login/components/LoginForm/LoginForm.style';
+import RegisterPatientForm from './components/RegisterPatientForm';
+import { FormHeading, ButtonsContainer } from './RegisterPatient.style';
+import { RegisterPatientFormType } from './types';
 
 const RegisterPatient = () => {
-  const handleSubmit = (form: LoginFormType) => {
-    // mutate(form);
-    console.log(form);
+  const { data: hospitals } = useGetHospitals();
+  const { mutate, isLoading } = useRegisterPatient();
+
+  const handleSubmit = (form: RegisterPatientFormType) => {
+    mutate(form);
   };
 
   return (
     <>
       <FormHeading>Fill in Patient Details</FormHeading>
       <Form initialValues={{ rememberMe: false }} onSubmit={handleSubmit}>
-        {({ handleSubmit }) => (
+        {({ handleSubmit, values, form }) => (
           <form
             onSubmit={handleSubmit}
-            css={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh)' }}
+            css={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: 'calc(100vh)',
+              overflow: 'hidden',
+            }}
           >
-            <RegisterPatientForm />
+            <RegisterPatientForm values={values} hospitals={hospitals?.results ?? []} />
             <ButtonsContainer>
               <ButtonContainer>
-                <Button color={'neutralBlack-700'} size="lg" onClick={() => 'll'}>
+                <Button
+                  disabled={isLoading}
+                  buttonType="submit"
+                  color={'neutralBlack-700'}
+                  size="lg"
+                >
                   Save
                 </Button>
               </ButtonContainer>
 
               <ButtonContainer>
-                <Button color={'neutralBlack-700'} filled={false} size="lg" onClick={() => 'll'}>
+                <Button
+                  color={'neutralBlack-700'}
+                  filled={false}
+                  size="lg"
+                  onClick={() => form.reset()}
+                >
                   Cancel
                 </Button>
               </ButtonContainer>

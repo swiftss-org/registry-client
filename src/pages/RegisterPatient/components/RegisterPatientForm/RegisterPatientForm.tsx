@@ -1,8 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React, { ChangeEvent } from 'react';
-import { Field } from 'react-final-form';
+
 import { Radio, RadioGroup, Select, TextField } from '@orfium/ictinus';
 import { omit } from 'lodash';
+import { Field } from 'react-final-form';
+import { OnBlur } from 'react-final-form-listeners';
 
 import {
   FieldsContainer,
@@ -10,13 +12,21 @@ import {
   LongFieldWrapper,
   RadioText,
 } from '../../../../common.style';
+import { HospitalsAPI } from '../../../../models/apiTypes';
+import { RegisterPatientFormType } from '../../types';
+import { getHospitalOptions } from '../../utils';
 import {
   FormContainer,
   FormHeadingContainer,
   FormSectionHeading,
 } from './RegisterPatientForm.style';
 
-const RegisterPatientForm = () => {
+type Props = {
+  values: RegisterPatientFormType;
+  hospitals: HospitalsAPI[];
+};
+
+const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
   return (
     <FormContainer>
       <FormHeadingContainer>
@@ -32,7 +42,7 @@ const RegisterPatientForm = () => {
                     size="md"
                     required
                     hintMsg={props.meta.error}
-                    options={[{ label: 'Hospital Number 1', value: 1 }]}
+                    options={getHospitalOptions(hospitals)}
                     {...omit(props.input, ['onFocus'])}
                     handleSelectedOption={props.input.onChange}
                   />
@@ -52,7 +62,8 @@ const RegisterPatientForm = () => {
                   return (
                     <TextField
                       id="name"
-                      label="Name *"
+                      label="Name"
+                      required
                       styleType="outlined"
                       size="md"
                       {...props.input}
@@ -72,7 +83,8 @@ const RegisterPatientForm = () => {
                 return (
                   <TextField
                     id="hospital_id"
-                    label="Patient Hospital ID *"
+                    label="Patient Hospital ID"
+                    required
                     styleType="outlined"
                     size="md"
                     {...props.input}
@@ -103,14 +115,26 @@ const RegisterPatientForm = () => {
         </LongFieldWrapper>
       </FieldsContainer>
       <FieldsContainer withMargin>
+        <Field name="age">
+          {({ input: { onChange } }) => (
+            <OnBlur name="yearOfBirth">
+              {() => {
+                const age = new Date().getFullYear() - values.yearOfBirth;
+                onChange(age < 150 ? age : '');
+              }}
+            </OnBlur>
+          )}
+        </Field>
         <FieldWrapper>
           <Field name="yearOfBirth" parse={(value) => value}>
             {(props) => {
               return (
                 <TextField
                   id="year_of_birth"
-                  label="Year Of Birth *"
+                  label="Year Of Birth"
+                  required
                   styleType="outlined"
+                  type="number"
                   size="md"
                   {...props.input}
                 />
@@ -122,7 +146,15 @@ const RegisterPatientForm = () => {
           <Field name="age" parse={(value) => value}>
             {(props) => {
               return (
-                <TextField id="age" label="Age *" styleType="outlined" size="md" {...props.input} />
+                <TextField
+                  disabled
+                  id="age"
+                  label="Age"
+                  type="number"
+                  styleType="outlined"
+                  size="md"
+                  {...props.input}
+                />
               );
             }}
           </Field>
@@ -131,21 +163,27 @@ const RegisterPatientForm = () => {
       <FormHeadingContainer>
         <FormSectionHeading>Gender</FormSectionHeading>
         <FieldsContainer withMargin>
-          <RadioGroup
-            name="gender"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              console.log(e.target.value);
+          <Field name="gender">
+            {({ input: { onChange } }) => {
+              return (
+                <RadioGroup
+                  name="gender"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    onChange(e.target.value);
+                  }}
+                >
+                  <div>
+                    <Radio value="male" />
+                    <RadioText>Male</RadioText>
+                  </div>
+                  <div>
+                    <Radio value="female" />
+                    <RadioText>Female</RadioText>
+                  </div>
+                </RadioGroup>
+              );
             }}
-          >
-            <div>
-              <Radio value="male" />
-              <RadioText>Male</RadioText>
-            </div>
-            <div>
-              <Radio value="female" />
-              <RadioText>Female</RadioText>
-            </div>
-          </RadioGroup>
+          </Field>
         </FieldsContainer>
       </FormHeadingContainer>
       <FormHeadingContainer>
@@ -158,6 +196,7 @@ const RegisterPatientForm = () => {
                   return (
                     <TextField
                       id="phone1"
+                      type="tel"
                       label="Phone #1"
                       styleType="outlined"
                       size="md"
@@ -175,6 +214,7 @@ const RegisterPatientForm = () => {
                   return (
                     <TextField
                       id="phone2"
+                      type="tel"
                       label="Phone #2"
                       styleType="outlined"
                       size="md"

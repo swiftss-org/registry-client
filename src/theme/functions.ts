@@ -5,18 +5,18 @@ import { css } from '@emotion/react';
 
 /* adds a "..." after the line of the text exceeds the width of the component*/
 export const lineEllipsis = css`
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 //https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/
 export const breakWord = css`
-  overflow-wrap: break-word;
-  word-wrap: break-word;
   -ms-word-break: break-all;
-  word-break: break-all;
+  overflow-wrap: break-word;
   word-break: break-word;
+  word-break: break-all;
+  word-wrap: break-word;
 `;
 
 export const flex = css`
@@ -29,18 +29,18 @@ export const flex = css`
 /* centers flex content */
 export const flexCenter = css`
   ${flex};
-  -webkit-align-items: center;
   -moz-box-align: center;
   -ms-flex-align: center;
+  -webkit-align-items: center;
   align-items: center;
   justify-content: center;
 `;
 
 export const flexCenterVertical = css`
   ${flex};
-  -webkit-align-items: center;
   -moz-box-align: center;
   -ms-flex-align: center;
+  -webkit-align-items: center;
   align-items: center;
 `;
 
