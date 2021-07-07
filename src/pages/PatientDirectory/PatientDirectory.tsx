@@ -1,9 +1,11 @@
 import React from 'react';
 
 import { TextField, Select } from '@orfium/ictinus';
+import { SelectOption } from '@orfium/ictinus/dist/components/Select/Select';
+import { useGetHospitals, useGetPatients } from 'hooks/api/patientHooks';
+import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 
 import PatientCard from './components/PatientCard';
-import { Patients } from './constants';
 import {
   PatientDirectoryContainer,
   SearchWrapper,
@@ -12,6 +14,19 @@ import {
 } from './PatientDirectory.style';
 
 const PatientDirectory: React.FC = () => {
+  /** TODO: debounce search */
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [hospitalId, setHospitalId] = React.useState<number>();
+
+  const { data: patients } = useGetPatients({
+    offset: 0,
+    limit: 100,
+    search_term: searchTerm,
+    hospital_id: hospitalId,
+  });
+
+  const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
+
   return (
     <PatientDirectoryContainer>
       <SearchWrapper>
@@ -19,24 +34,33 @@ const PatientDirectory: React.FC = () => {
           type={'outlined'}
           placeholder={'Search (Name , ID, Patient Hospital ID ...)'}
           leftIcon={'search'}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchTerm(event.target.value)
+          }
+          value={searchTerm}
         />
         <Select
           label="Center"
           styleType="outlined"
           size="sm"
           required
-          options={[{ label: 'Hospital Number 1', value: 1 }]}
+          options={getHospitalOptions(hospitals?.results || [])}
+          handleSelectedOption={(option: SelectOption) =>
+            setHospitalId(parseInt(option.value.toString()))
+          }
         />
       </SearchWrapper>
 
-      <PatientsList>
-        {Patients.map((patient, index) => (
-          <>
-            <PatientCard key={'patient' + index} {...patient} />
-            <Line />
-          </>
-        ))}
-      </PatientsList>
+      {patients && (
+        <PatientsList>
+          {patients.results.map((patient) => (
+            <>
+              <PatientCard {...patient} />
+              <Line key={'patient_line_' + patient.full_name} />
+            </>
+          ))}
+        </PatientsList>
+      )}
     </PatientDirectoryContainer>
   );
 };

@@ -48,3 +48,26 @@ export interface RegisterPatientPayload {
   address: string;
   hospital_id: number;
 }
+
+export interface PatientsPayload extends PaginationParams {
+  hospital_id?: number;
+  search_term?: string;
+}
+
+export type PatientAPI = {
+  full_name: string;
+  national_id: string;
+  age: number;
+  day_of_birth: string;
+  month_of_birth: string;
+  year_of_birth: string;
+  gender: 'Male' | 'Female';
+  phone_1: string;
+  phone_2: string;
+  address: string;
+  hospitals: HospitalsAPI[];
+};
+
+export interface PatientsResponse extends PaginationResponse, PaginationParams {
+  results: PatientAPI[];
+}
