@@ -3,10 +3,10 @@ module.exports = {
   plugins: [
     '@babel/plugin-proposal-optional-chaining',
     [
-      'emotion',
+      '@emotion',
       {
         sourceMap: false,
-        autoLabel: process.env.NODE_ENV !== 'production',
+        autoLabel: process.env.NODE_ENV !== 'production' ? 'always' : undefined,
         labelFormat: '[filename]_[local]',
         cssPropOptimization: true,
       },

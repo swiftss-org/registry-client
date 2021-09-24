@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AppWrapper } from './App.style';
 import Routes from './routing/Routes';
-import theme from 'theme/globals';
+import { themeOverride } from './theme/globals';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, refetchOnReconnect: false } },
@@ -14,15 +14,15 @@ const queryClient = new QueryClient({
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={{ palette: { branded1: theme.colors.branded1 } }}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={themeOverride}>
         <Router>
           <AppWrapper>
             <Routes />
           </AppWrapper>
         </Router>
-      </QueryClientProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 

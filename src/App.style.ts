@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 
-import theme from 'theme/globals';
+import { appTheme } from './theme/globals';
 
 export const AppWrapper = styled.div`
-  background-color: ${theme.defaultBackgroundColor};
-  color: ${theme.defaultTextColor};
-  font-family: ${theme.fontFamily};
+  background-color: white;
+  color: black;
+  font-family: ${appTheme.fontFamily};
   height: calc(100vh);
   overflow: hidden;
   position: relative;

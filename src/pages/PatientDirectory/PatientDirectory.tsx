@@ -54,10 +54,10 @@ const PatientDirectory: React.FC = () => {
       {patients && (
         <PatientsList>
           {patients.results.map((patient) => (
-            <>
+            <div key={`patient_${patient.national_id}_${patient.hospitals[0].id}`}>
               <PatientCard {...patient} />
               <Line key={'patient_line_' + patient.full_name} />
-            </>
+            </div>
           ))}
         </PatientsList>
       )}
