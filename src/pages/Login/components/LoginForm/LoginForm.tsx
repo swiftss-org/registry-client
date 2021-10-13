@@ -3,10 +3,10 @@ import React from 'react';
 
 import { Button, CheckBox, TextField } from '@orfium/ictinus';
 import { CheckBoxContainer, FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
+import { useSignIn } from 'hooks/api/userHooks';
+import { LoginFormType } from 'models/apiTypes';
 import { Field, Form } from 'react-final-form';
 
-import { useSignIn } from '../../../../hooks/api/userHooks';
-import { LoginFormType } from '../../../../models/apiTypes';
 import { ButtonContainer, FormBottom, FormContainer } from './LoginForm.style';
 
 const SignIn: React.FC = () => {
@@ -20,7 +20,7 @@ const SignIn: React.FC = () => {
     <FormContainer>
       <Form initialValues={{ rememberMe: false }} onSubmit={handleSubmit}>
         {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <form style={{ height: '100%' }} onSubmit={handleSubmit}>
             <FieldsContainer withMargin>
               <LongFieldWrapper>
                 <FieldWrapper>
@@ -69,7 +69,7 @@ const SignIn: React.FC = () => {
               <Field name="rememberMe">
                 {(props) => {
                   return (
-                    <CheckBoxContainer checked={props.input.value}>
+                    <CheckBoxContainer>
                       <CheckBox
                         {...props.input}
                         filled={true}
@@ -84,7 +84,7 @@ const SignIn: React.FC = () => {
             </FormBottom>
 
             <ButtonContainer>
-              <Button color={'neutralBlack-700'} filled size="lg" buttonType="submit">
+              <Button block color={'blue-500'} filled size="lg" buttonType="submit">
                 Sign In
               </Button>
             </ButtonContainer>
