@@ -1,6 +1,8 @@
-import { HospitalsAPI, SelectOption } from '../../models/apiTypes';
+import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
 
-export const getHospitalOptions = (hospitals: HospitalsAPI[]): SelectOption[] => {
+import { HospitalsAPI } from '../../models/apiTypes';
+
+export const getHospitalOptions = (hospitals: HospitalsAPI[]): FilterOption[] => {
   return hospitals.map((hospital) => ({
     label: hospital.name,
     value: hospital.id,

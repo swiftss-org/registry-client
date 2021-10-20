@@ -1,22 +1,27 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/** @jsxImportSource @emotion/react */
+import React, { useState } from 'react';
 
-import { TextField, Select } from '@orfium/ictinus';
-import { SelectOption } from '@orfium/ictinus/dist/components/Select/Select';
+import { IconButton, Filter } from '@orfium/ictinus';
+import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
 import { useGetHospitals, useGetPatients } from 'hooks/api/patientHooks';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
+import { useHistory } from 'react-router';
+import urls from 'routing/urls';
 
 import PatientCard from './components/PatientCard';
 import {
   PatientDirectoryContainer,
-  SearchWrapper,
-  Line,
   PatientsList,
+  IconButtonWrapper,
+  Title,
+  OptionsWrapper,
 } from './PatientDirectory.style';
 
 const PatientDirectory: React.FC = () => {
   /** TODO: debounce search */
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
-  const [hospitalId, setHospitalId] = React.useState<number>();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [hospitalId, setHospitalId] = useState<number>();
 
   const { data: patients } = useGetPatients({
     offset: 0,
@@ -27,9 +32,14 @@ const PatientDirectory: React.FC = () => {
 
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
 
+  const history = useHistory();
+
+  const filterOptions = getHospitalOptions(hospitals?.results || []);
+  const [selectedOption, setSelectedOption] = useState(filterOptions?.[0]?.value);
+
   return (
     <PatientDirectoryContainer>
-      <SearchWrapper>
+      {/* <SearchWrapper>
         <TextField
           type={'outlined'}
           placeholder={'Search (Name , ID, Patient Hospital ID ...)'}
@@ -39,28 +49,44 @@ const PatientDirectory: React.FC = () => {
           }
           value={searchTerm}
         />
-        <Select
+      </SearchWrapper> */}
+      <Title>Patients directory</Title>
+      <OptionsWrapper>
+        <Filter
           label="Center"
-          styleType="outlined"
-          size="sm"
-          required
-          options={getHospitalOptions(hospitals?.results || [])}
-          handleSelectedOption={(option: SelectOption) =>
-            setHospitalId(parseInt(option.value.toString()))
-          }
+          items={filterOptions}
+          defaultValue={filterOptions.length > 0 ? filterOptions[0] : { label: '', value: '' }}
+          selectedItem={filterOptions.find((option) => option.value === selectedOption)}
+          onSelect={(option: FilterOption) => {
+            setSelectedOption(option.value);
+            setHospitalId(parseInt(option.value.toString()));
+          }}
+          styleType="transparent"
+          buttonType="secondary"
         />
-      </SearchWrapper>
+      </OptionsWrapper>
 
       {patients && (
         <PatientsList>
           {patients.results.map((patient) => (
-            <div key={`patient_${patient.national_id}_${patient.hospitals[0].id}`}>
+            <div
+              key={`patient_${patient.national_id}_${patient.hospitals[0]?.id}`}
+              css={{ marginBottom: '8px' }}
+            >
               <PatientCard {...patient} />
-              <Line key={'patient_line_' + patient.full_name} />
             </div>
           ))}
         </PatientsList>
       )}
+      <IconButtonWrapper>
+        <IconButton
+          name="plus"
+          color={'blue-400'}
+          filled
+          iconSize={24}
+          onClick={() => history.push(urls.register())}
+        />
+      </IconButtonWrapper>
     </PatientDirectoryContainer>
   );
 };

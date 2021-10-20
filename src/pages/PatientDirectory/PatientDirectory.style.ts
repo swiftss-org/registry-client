@@ -8,21 +8,11 @@ export const PatientDirectoryContainer = styled.div`
   height: calc(100vh);
 `;
 
-export const SearchWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 38.75rem;
-  padding: 18px;
-
-  & > div > div {
-    background: ${(props) => props.theme.utils.getColor('lightGray', 100)};
-  }
-`;
-
-export const Line = styled.div`
-  border-top: 1px solid #f2f2f2;
-  height: 0px;
+export const Title = styled.div`
+  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  font-size: 24px;
+  font-weight: 700;
+  padding: 16px;
 `;
 
 export const PatientsList = styled.div`
@@ -30,4 +20,21 @@ export const PatientsList = styled.div`
   margin-bottom: 56px;
   overflow-y: auto;
   padding: 0px 18px 18px 18px;
+`;
+
+export const IconButtonWrapper = styled.div`
+  bottom: 2%;
+  position: fixed;
+  right: 4%;
+
+  svg,
+  path {
+    fill: white !important;
+  }
+`;
+
+export const OptionsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
 `;
