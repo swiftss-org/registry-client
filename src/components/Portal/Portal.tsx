@@ -20,12 +20,6 @@ interface Props {
 
 const handlePortalOverflow = (overflowType: 'hidden' | 'unset') => {
   document.body.style.overflow = overflowType;
-
-  // if (overflowType === 'hidden') {
-  //   document.body.style.marginRight = '16px';
-  // } else {
-  //   document.body.style.marginRight = 'unset';
-  // }
 };
 
 const Portal: FC<Props> = ({ baseComponent: Component, children, onDidMount, title, onClose }) => {

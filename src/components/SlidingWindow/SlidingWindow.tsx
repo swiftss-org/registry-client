@@ -18,7 +18,6 @@ interface Props {
 }
 
 const SlidingWindow: FC<Props> = ({ children, title, handleClosePortal }) => {
-  //TODO: Fix animation issue during route change or window refocus (spotted in QA process of feat/ULS-444)
   const { ref: slideRef } = useAnimationClass('sliding-window-animation');
   const { ref: fadeRef } = useAnimationClass('overlay-fade-animation');
 

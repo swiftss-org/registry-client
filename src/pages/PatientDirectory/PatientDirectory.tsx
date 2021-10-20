@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { IconButton, Filter } from '@orfium/ictinus';
 import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
@@ -37,6 +37,12 @@ const PatientDirectory: React.FC = () => {
   const [showSortingOptions, setshowSortingOptions] = useState(false);
 
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
+
+  useEffect(() => {
+    if (hospitals) {
+      setHospitalId(hospitals?.results[0].id);
+    }
+  }, [hospitals]);
 
   const history = useHistory();
 
@@ -81,6 +87,7 @@ const PatientDirectory: React.FC = () => {
             color={'blue-400'}
             filled
             iconSize={24}
+            size={'lg'}
             onClick={() => history.push(urls.register())}
           />
         </IconButtonWrapper>

@@ -78,11 +78,11 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
       <FieldsContainer withMargin>
         <LongFieldWrapper>
           <FieldWrapper>
-            <Field name="hospitalId" parse={(value) => value}>
+            <Field name="patientHospitalId" parse={(value) => value}>
               {(props) => {
                 return (
                   <TextField
-                    id="hospital_id"
+                    id="patient_hospital_id"
                     label="Patient Hospital ID"
                     required
                     styleType="outlined"
