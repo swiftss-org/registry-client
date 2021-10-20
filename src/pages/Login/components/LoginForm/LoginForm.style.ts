@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { flexCenter } from '@orfium/ictinus/dist/theme/functions';
 
 export const FormContainer = styled.div`
+  height: 100%;
   margin-top: 10px;
 `;
 
@@ -12,16 +13,8 @@ export const FormBottom = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  width: 100%;
-
-  && button {
-    text-align: center;
-    width: 100%;
-
-    span {
-      font-size: 16px;
-      font-weight: 700;
-      justify-content: center;
-    }
-  }
+  bottom: 32px;
+  left: 32px;
+  position: fixed;
+  right: 32px;
 `;

@@ -37,11 +37,3 @@ export const IdValue = styled.div`
   font-size: 14px;
   font-weight: 700;
 `;
-
-export const ChipWrapper = styled.div`
-  & > div {
-    font-size: 10px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-`;

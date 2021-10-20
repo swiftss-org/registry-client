@@ -12,34 +12,10 @@ export const PageWrapper = styled.div`
 `;
 
 export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean }>`
-  && * {
-    color: black;
-  }
-
-  //checked checkbox color
-  label:after {
-    box-shadow: 2px 0 0 black, 4px 0 0 black, 4px -2px 0 black, 4px -4px 0 black, 4px -6px 0 black,
-      4px -8px 0 black, 4px -10px 0 black !important;
-    background-color: black !important;
-  }
-
-  label:before {
-    box-shadow: inset 0px 0px 0px 0.125rem
-      ${(props) =>
-        props.checked
-          ? props.theme.utils.getColor('lightGray', 400)
-          : props.theme.utils.getColor('lightGray', 400)} !important;
-    background-color: ${(props) =>
-      props.checked ? props.theme.utils.getColor('lightGray', 400) : 'inherit'} !important;
-  }
-
-  span {
-    color: white;
-    white-space: pre-line;
-  }
+  margin-left: -12px;
 
   svg path {
-    fill: black;
+    fill: white;
   }
 `;
 

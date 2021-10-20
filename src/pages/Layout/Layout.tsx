@@ -2,9 +2,9 @@
 import React from 'react';
 
 import { Drawer, IconButton } from '@orfium/ictinus';
+import { TopBar } from 'App.style';
+import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
 
-import { TopBar } from '../../App.style';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import { Header, Main, MainContainer, SideNav } from './Layout.style';
 
 interface Props {

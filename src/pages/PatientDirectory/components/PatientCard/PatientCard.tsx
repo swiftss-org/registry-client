@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { useTheme, Icon, Chip } from '@orfium/ictinus';
-// import { isEmpty } from 'lodash';
+import { useTheme, Icon } from '@orfium/ictinus';
 import { PatientAPI } from 'models/apiTypes';
 
-import { CardContainer, ChipWrapper, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
+import { CardContainer, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PatientCard: React.FC<PatientAPI> = ({ full_name, gender, age, national_id, hospitals }) => {
   const theme = useTheme();
   return (
@@ -28,11 +27,6 @@ const PatientCard: React.FC<PatientAPI> = ({ full_name, gender, age, national_id
         <IdLabel>National ID:</IdLabel>
         <IdValue>{national_id}</IdValue>
       </div>
-      {/* <ChipWrapper>
-        <Chip styleType={'filled'} size={'sm'} fill={'cyan'} shade={100}>
-          {hospitals[0].name}
-        </Chip>
-      </ChipWrapper> */}
     </CardContainer>
   );
 };

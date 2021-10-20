@@ -19,7 +19,7 @@ export const PatientsList = styled.div`
   ${scrollBar};
   margin-bottom: 56px;
   overflow-y: auto;
-  padding: 0px 18px 18px 18px;
+  padding: 0px 16px 18px 16px;
 `;
 
 export const IconButtonWrapper = styled.div`
@@ -34,7 +34,8 @@ export const IconButtonWrapper = styled.div`
 `;
 
 export const OptionsWrapper = styled.div`
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin: 0 20px 8px 16px;
 `;

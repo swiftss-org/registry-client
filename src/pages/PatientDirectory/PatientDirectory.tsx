@@ -1,15 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 
 import { IconButton, Filter } from '@orfium/ictinus';
 import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
+import { ReactComponent as SortIcon } from 'assets/PatientDirectory/sortIcon.svg';
 import { useGetHospitals, useGetPatients } from 'hooks/api/patientHooks';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useHistory } from 'react-router';
 import urls from 'routing/urls';
 
 import PatientCard from './components/PatientCard';
+import SortingOptions from './components/SortingOptions';
 import {
   PatientDirectoryContainer,
   PatientsList,
@@ -17,11 +18,14 @@ import {
   Title,
   OptionsWrapper,
 } from './PatientDirectory.style';
+import { SortingOptionsType } from './types';
 
 const PatientDirectory: React.FC = () => {
-  /** TODO: debounce search */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [hospitalId, setHospitalId] = useState<number>();
+
+  const [sortingOption, setSortingOption] = useState<SortingOptionsType>('name');
 
   const { data: patients } = useGetPatients({
     offset: 0,
@@ -29,6 +33,8 @@ const PatientDirectory: React.FC = () => {
     search_term: searchTerm,
     hospital_id: hospitalId,
   });
+
+  const [showSortingOptions, setshowSortingOptions] = useState(false);
 
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
 
@@ -38,56 +44,57 @@ const PatientDirectory: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState(filterOptions?.[0]?.value);
 
   return (
-    <PatientDirectoryContainer>
-      {/* <SearchWrapper>
-        <TextField
-          type={'outlined'}
-          placeholder={'Search (Name , ID, Patient Hospital ID ...)'}
-          leftIcon={'search'}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setSearchTerm(event.target.value)
-          }
-          value={searchTerm}
-        />
-      </SearchWrapper> */}
-      <Title>Patients directory</Title>
-      <OptionsWrapper>
-        <Filter
-          label="Center"
-          items={filterOptions}
-          defaultValue={filterOptions.length > 0 ? filterOptions[0] : { label: '', value: '' }}
-          selectedItem={filterOptions.find((option) => option.value === selectedOption)}
-          onSelect={(option: FilterOption) => {
-            setSelectedOption(option.value);
-            setHospitalId(parseInt(option.value.toString()));
-          }}
-          styleType="transparent"
-          buttonType="secondary"
-        />
-      </OptionsWrapper>
+    <>
+      <PatientDirectoryContainer>
+        <Title>Patients directory</Title>
+        <OptionsWrapper>
+          <Filter
+            label="Center"
+            items={filterOptions}
+            defaultValue={filterOptions.length > 0 ? filterOptions[0] : { label: '', value: '' }}
+            selectedItem={filterOptions.find((option) => option.value === selectedOption)}
+            onSelect={(option: FilterOption) => {
+              setSelectedOption(option.value);
+              setHospitalId(parseInt(option.value.toString()));
+            }}
+            styleType="transparent"
+            buttonType="primary"
+          />
+          <SortIcon onClick={() => setshowSortingOptions(!showSortingOptions)} />
+        </OptionsWrapper>
 
-      {patients && (
-        <PatientsList>
-          {patients.results.map((patient) => (
-            <div
-              key={`patient_${patient.national_id}_${patient.hospitals[0]?.id}`}
-              css={{ marginBottom: '8px' }}
-            >
-              <PatientCard {...patient} />
-            </div>
-          ))}
-        </PatientsList>
-      )}
-      <IconButtonWrapper>
-        <IconButton
-          name="plus"
-          color={'blue-400'}
-          filled
-          iconSize={24}
-          onClick={() => history.push(urls.register())}
+        {patients && (
+          <PatientsList>
+            {patients.results.map((patient) => (
+              <div
+                key={`patient_${patient.national_id}_${patient.hospitals[0]?.id}`}
+                css={{ marginBottom: '8px' }}
+              >
+                <PatientCard {...patient} />
+              </div>
+            ))}
+          </PatientsList>
+        )}
+        <IconButtonWrapper>
+          <IconButton
+            name="plus"
+            color={'blue-400'}
+            filled
+            iconSize={24}
+            onClick={() => history.push(urls.register())}
+          />
+        </IconButtonWrapper>
+      </PatientDirectoryContainer>
+
+      {showSortingOptions && (
+        <SortingOptions
+          title={'Sort by options:'}
+          sortingOption={sortingOption}
+          onSortingOptionChange={(option: SortingOptionsType) => setSortingOption(option)}
+          onClose={() => setshowSortingOptions(false)}
         />
-      </IconButtonWrapper>
-    </PatientDirectoryContainer>
+      )}
+    </>
   );
 };
 
