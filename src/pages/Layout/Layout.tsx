@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Drawer, IconButton } from '@orfium/ictinus';
+import { IconButton } from '@orfium/ictinus';
 import { TopBar } from 'App.style';
 import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
 
+import Drawer from '../../components/Drawer';
 import { Header, Main, MainContainer, SideNav } from './Layout.style';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
   component?: React.FC;
 }
 
-const Layout: React.FC<Props> = (props: Props) => {
+const Layout: React.FC<Props> = ({ component: Component }) => {
   const { responsiveProps, expanded, setExpanded } = useResponsiveLayout();
 
   return (
@@ -39,27 +40,24 @@ const Layout: React.FC<Props> = (props: Props) => {
               name: 'Patient Directory',
               visible: true,
               url: '/patients',
-              iconName: 'info',
               options: [],
             },
             {
               name: 'Register Patient',
               visible: true,
               url: '/patients/register',
-              iconName: 'info',
               options: [],
             },
             {
               name: 'My Account',
               visible: true,
               url: '/account',
-              iconName: 'info',
               options: [],
             },
           ]}
         />
       </SideNav>
-      <Main css={{ flexDirection: 'column' }}>{props.component && <props.component />}</Main>
+      <Main css={{ flexDirection: 'column' }}>{Component && <Component />}</Main>
     </MainContainer>
   );
 };
