@@ -60,6 +60,11 @@ export const HeaderText = styled.span`
   position: absolute;
 `;
 
+export const UserContainer = styled.div`
+  display: flex;
+  gap: ${rem(8)};
+`;
+
 export const Footer = styled.div`
   border-top: 1px solid ${(props) => props.theme.utils.getColor('lightGray', 200)};
   bottom: ${rem(16)};

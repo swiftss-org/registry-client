@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
 import useLocationToGetCurrentMenuItem from '@orfium/ictinus/dist/hooks/useLocationToGetCurrentMenuItem';
-import SwiftSSLogo from 'assets/swiftss-logo.png';
-import TSALogo from 'assets/tsa-logo.png';
 import { useHistory } from 'react-router-dom';
 
 import { useIsLoggedIn } from '../../../hooks/useIsLoggedIn';
@@ -10,10 +8,6 @@ import { Props } from '../Drawer';
 import MenuItem from './MenuItem/MenuItem';
 import {
   Container,
-  Header,
-  HeaderText,
-  Footer,
-  FooterText,
   PlaceholderContainer,
   PlaceholderText,
   PlaceholderLink,
@@ -29,12 +23,6 @@ const Navigation: React.FC<NavigationProps> = ({ menuItems, expanded }) => {
 
   return (
     <Container expanded={expanded}>
-      <Header>
-        <HeaderText>
-          Tanzania <br />
-          NMHP Registry
-        </HeaderText>
-      </Header>
       {isLoggedIn ? (
         menuItems.map(
           (menuItem) =>
@@ -57,16 +45,6 @@ const Navigation: React.FC<NavigationProps> = ({ menuItems, expanded }) => {
           </PlaceholderLink>
         </PlaceholderContainer>
       )}
-      <Footer>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <img width={44} src={SwiftSSLogo} />
-          <img width={52} src={TSALogo} />
-        </div>
-
-        <FooterText>
-          The Tanzania Mesh Hernia Project Registry is a joint project between Swiftss and the TSA.
-        </FooterText>
-      </Footer>
     </Container>
   );
 };
