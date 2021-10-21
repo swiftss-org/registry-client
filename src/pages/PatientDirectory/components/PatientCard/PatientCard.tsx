@@ -20,7 +20,7 @@ const PatientCard: React.FC<PatientAPI> = ({ full_name, gender, age, national_id
       </Subtitle>
       <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
         <IdLabel>Patient Hospital ID:</IdLabel>
-        <IdValue>{hospitals[0]?.patient_hospital_id}</IdValue>
+        <IdValue>{hospitals?.[0]?.patient_hospital_id}</IdValue>
       </div>
       <div css={{ display: 'flex', justifyContent: 'space-between' }}>
         <IdLabel>National ID:</IdLabel>
