@@ -73,7 +73,7 @@ const PatientDirectory: React.FC = () => {
           <PatientsList>
             {patients.results.map((patient) => (
               <div
-                key={`patient_${patient.national_id}_${patient.hospitals[0]?.id}`}
+                key={`patient_${patient.national_id}_${patient.hospitals?.[0]?.id}`}
                 css={{ marginBottom: '8px' }}
               >
                 <PatientCard {...patient} />
