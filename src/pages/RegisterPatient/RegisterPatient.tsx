@@ -59,6 +59,15 @@ const RegisterPatient = () => {
           </form>
         )}
       </Form>
+      {/*<ConfirmationModal*/}
+      {/*  onClose={() => {}}*/}
+      {/*  title={'Cancel new addition?'}*/}
+      {/*  subtitle={*/}
+      {/*    'Are you sure you want to cancel adding a new patient? All information you’ve entered will be lost!'*/}
+      {/*  }*/}
+      {/*  buttonText={'Yes, cancel new addition'}*/}
+      {/*  onClick={() => history.push('/patients')}*/}
+      {/*/>*/}
     </>
   );
 };
