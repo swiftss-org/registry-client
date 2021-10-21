@@ -26,7 +26,7 @@ export const ComponentContainer = styled.div`
   height: 100%;
   overflow-y: auto;
   position: fixed;
-  top: 40%;
+  top: 35%;
   width: 100%;
   z-index: 16;
 `;

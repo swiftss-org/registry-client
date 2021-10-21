@@ -27,6 +27,10 @@ export const IconButtonWrapper = styled.div`
   position: fixed;
   right: 4%;
 
+  button {
+    box-shadow: ${(props) => props.theme.elevation['02']};
+  }
+
   svg,
   path {
     fill: white !important;

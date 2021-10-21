@@ -6,7 +6,6 @@ import { PatientAPI } from 'models/apiTypes';
 
 import { CardContainer, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PatientCard: React.FC<PatientAPI> = ({ full_name, gender, age, national_id, hospitals }) => {
   const theme = useTheme();
   return (
