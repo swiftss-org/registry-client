@@ -34,7 +34,6 @@ export const useGetHospitals = (params?: PaginationParams) => {
 };
 
 export const useGetPatients = (params?: PatientsPayload) => {
-  console.log(params?.search_term);
   return useQuery<PatientsResponse, AxiosError, PatientsResponse>(
     [
       ReactQueryKeys.PatientsQuery,

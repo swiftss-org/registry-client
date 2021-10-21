@@ -19,7 +19,6 @@ export const useSignIn = () => {
 
   return useMutation<LoginResponse, AxiosError, LoginFormType>(
     (params) => {
-      console.log(params);
       const { request } = userAPI.single.signIn({
         username: params.username,
         password: params.password,
