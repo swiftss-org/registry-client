@@ -1,20 +1,30 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useState } from 'react';
 
 import { IconButton } from '@orfium/ictinus';
 import { TopBar } from 'App.style';
 import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
+import { debounce } from 'lodash';
+import { useHistory } from 'react-router';
 
 import Drawer from '../../components/Drawer';
+import SearchField from '../../components/SearchField';
 import { Header, Main, MainContainer, SideNav } from './Layout.style';
 
 interface Props {
   /** Component to load */
-  component?: React.FC;
+  component?: React.FC<{ searchTerm?: string }>;
 }
 
 const Layout: React.FC<Props> = ({ component: Component }) => {
   const { responsiveProps, expanded, setExpanded } = useResponsiveLayout();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const history = useHistory();
+
+  const handleSearchTerm = (term: string) => {
+    setSearchTerm(term);
+  };
 
   return (
     <MainContainer {...responsiveProps}>
@@ -28,7 +38,12 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
             type="primary"
             onClick={() => setExpanded((prevState) => !prevState)}
           />
-          <span>Tanzanian MHP Registry</span>
+          {history.location.pathname === '/patients' && (
+            <SearchField
+              placeholder={'Search by name, gender, patient ID...'}
+              onSearch={debounce(handleSearchTerm, 200)}
+            />
+          )}
         </TopBar>
       </Header>
       <SideNav>
@@ -57,7 +72,9 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
           ]}
         />
       </SideNav>
-      <Main css={{ flexDirection: 'column' }}>{Component && <Component />}</Main>
+      <Main css={{ flexDirection: 'column' }}>
+        {Component && <Component searchTerm={searchTerm} />}
+      </Main>
     </MainContainer>
   );
 };

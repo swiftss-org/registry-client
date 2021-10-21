@@ -20,9 +20,7 @@ import {
 } from './PatientDirectory.style';
 import { SortingOptionsType } from './types';
 
-const PatientDirectory: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [searchTerm, setSearchTerm] = useState<string>('');
+const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const [hospitalId, setHospitalId] = useState<number>();
 
   const [sortingOption, setSortingOption] = useState<SortingOptionsType>('name');
