@@ -8,13 +8,13 @@ export const appTheme = {
   },
   colors: {
     primary: 'white',
-    secondary: '#eef5fb',
+    secondary: '#0d629e',
   },
 };
 
 export const themeOverride = {
   palette: {
-    primary: '#eef5fb',
+    primary: '#0d629e',
   },
   overrides: { tooltip: { background: { color: 'darkGray', shade: '500' } } },
 };
