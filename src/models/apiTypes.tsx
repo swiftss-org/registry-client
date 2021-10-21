@@ -15,15 +15,16 @@ export type SelectOption = {
 };
 
 export interface LoginFormType {
-  email: string;
+  username: string;
   password: string;
   rememberMe: boolean;
 }
 
 export interface LoginResponse {
-  username: string;
-  password: string;
   token?: string;
+  user: {
+    email: string;
+  };
 }
 
 export type HospitalsAPI = {

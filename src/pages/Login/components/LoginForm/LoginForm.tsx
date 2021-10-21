@@ -24,11 +24,11 @@ const SignIn: React.FC = () => {
             <FieldsContainer withMargin>
               <LongFieldWrapper>
                 <FieldWrapper>
-                  <Field name="email" parse={(value) => value}>
+                  <Field name="username" parse={(value) => value}>
                     {(props) => {
                       return (
                         <TextField
-                          id="email"
+                          id="username"
                           label="Email"
                           styleType="outlined"
                           size="md"

@@ -9,7 +9,7 @@ import { useNotifications } from 'providers/Notifications/NotificationProvider';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import urls from 'routing/urls';
-import { __TOKEN__ } from 'utils/constants';
+import { __EMAIL__, __TOKEN__ } from 'utils/constants';
 import { setUserStorageItem } from 'utils/storage';
 
 export const useSignIn = () => {
@@ -20,8 +20,9 @@ export const useSignIn = () => {
   return useMutation<LoginResponse, AxiosError, LoginFormType>(
     (params) => {
       const { request } = userAPI.single.signIn({
-        username: params.email,
+        username: params.username,
         password: params.password,
+        rememberMe: params.rememberMe,
       });
       return request();
     },
@@ -29,6 +30,7 @@ export const useSignIn = () => {
       onSuccess: async (data, variables) => {
         notificationDispatch(resetNotifications());
         setUserStorageItem(__TOKEN__, data?.token ?? '', !variables.rememberMe);
+        setUserStorageItem(__EMAIL__, data?.user.email ?? '');
         setAxiosToken(data?.token ?? '');
 
         history.replace(urls.patients());
