@@ -1,14 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Button } from '@orfium/ictinus';
+import { Button, Icon } from '@orfium/ictinus';
+import { ButtonContainer, PageTitle, PageWrapper } from 'common.style';
 import { Form } from 'react-final-form';
+import { useHistory } from 'react-router';
+import urls from 'routing/urls';
 
 import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
-import { ButtonContainer } from '../Login/components/LoginForm/LoginForm.style';
 import RegisterPatientForm from './components/RegisterPatientForm';
-import { FormHeading, ButtonsContainer } from './RegisterPatient.style';
 import { RegisterPatientFormType } from './types';
+
+const REQUIRED_FIELD_MSG = 'This field is required';
 
 const RegisterPatient = () => {
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
@@ -18,11 +21,53 @@ const RegisterPatient = () => {
     mutate(form);
   };
 
+  const history = useHistory();
+
+  const formValidation = (values: RegisterPatientFormType) => {
+    const errors = {} || {
+      hospital: '',
+      firstName: '',
+      lastName: '',
+      yearOfBirth: '',
+      patientHospitalId: '',
+    };
+
+    if (!values.hospital && typeof values.hospital !== 'object') {
+      errors.hospital = REQUIRED_FIELD_MSG;
+    }
+
+    if (!values.firstName?.trim()) {
+      errors.firstName = REQUIRED_FIELD_MSG;
+    }
+
+    if (!values.lastName?.trim()) {
+      errors.lastName = REQUIRED_FIELD_MSG;
+    }
+
+    if (!values.yearOfBirth) {
+      errors.yearOfBirth = REQUIRED_FIELD_MSG;
+    }
+
+    if (!values.patientHospitalId?.trim()) {
+      errors.patientHospitalId = REQUIRED_FIELD_MSG;
+    }
+
+    return errors;
+  };
+
   return (
-    <>
-      <FormHeading>Fill in Patient Details</FormHeading>
-      <Form initialValues={{ rememberMe: false }} onSubmit={handleSubmit}>
-        {({ handleSubmit, values, form }) => (
+    <PageWrapper>
+      <PageTitle>
+        <Icon
+          name="fatArrowLeft"
+          size={24}
+          color={'lightGray-700'}
+          onClick={() => history.push(urls.patients())}
+        />
+        Add new patient
+      </PageTitle>
+      <Form initialValues={{ rememberMe: false }} onSubmit={handleSubmit} validate={formValidation}>
+        {({ handleSubmit, values, valid, submitting }) => (
           <form
             onSubmit={handleSubmit}
             css={{
@@ -33,33 +78,22 @@ const RegisterPatient = () => {
             }}
           >
             <RegisterPatientForm values={values} hospitals={hospitals?.results ?? []} />
-            <ButtonsContainer>
-              <ButtonContainer>
-                <Button
-                  disabled={isLoading}
-                  buttonType="submit"
-                  color={'neutralBlack-700'}
-                  size="lg"
-                >
-                  Save
-                </Button>
-              </ButtonContainer>
 
-              <ButtonContainer>
-                <Button
-                  color={'neutralBlack-700'}
-                  filled={false}
-                  size="lg"
-                  onClick={() => form.reset()}
-                >
-                  Cancel
-                </Button>
-              </ButtonContainer>
-            </ButtonsContainer>
+            <ButtonContainer>
+              <Button
+                color={'blue-500'}
+                buttonType="submit"
+                disabled={isLoading || !valid || submitting}
+                block
+                size="md"
+              >
+                Add new patient
+              </Button>
+            </ButtonContainer>
           </form>
         )}
       </Form>
-    </>
+    </PageWrapper>
   );
 };
 

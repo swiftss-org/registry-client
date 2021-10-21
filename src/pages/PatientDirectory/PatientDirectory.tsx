@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { IconButton, Filter } from '@orfium/ictinus';
 import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
 import { ReactComponent as SortIcon } from 'assets/PatientDirectory/sortIcon.svg';
+import { PageWrapper, PageTitle } from 'common.style';
 import { useGetHospitals, useGetPatients } from 'hooks/api/patientHooks';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useHistory } from 'react-router';
@@ -11,13 +12,7 @@ import urls from 'routing/urls';
 
 import PatientCard from './components/PatientCard';
 import SortingOptions from './components/SortingOptions';
-import {
-  PatientDirectoryContainer,
-  PatientsList,
-  IconButtonWrapper,
-  Title,
-  OptionsWrapper,
-} from './PatientDirectory.style';
+import { PatientsList, IconButtonWrapper, OptionsWrapper } from './PatientDirectory.style';
 import { SortingOptionsType } from './types';
 
 const PatientDirectory: React.FC = () => {
@@ -51,8 +46,8 @@ const PatientDirectory: React.FC = () => {
 
   return (
     <>
-      <PatientDirectoryContainer>
-        <Title>Patients directory</Title>
+      <PageWrapper>
+        <PageTitle>Patients directory</PageTitle>
         <OptionsWrapper>
           <Filter
             label="Center"
@@ -88,10 +83,10 @@ const PatientDirectory: React.FC = () => {
             filled
             iconSize={24}
             size={'lg'}
-            onClick={() => history.push(urls.register())}
+            onClick={() => history.push(urls.registerPatient())}
           />
         </IconButtonWrapper>
-      </PatientDirectoryContainer>
+      </PageWrapper>
 
       {showSortingOptions && (
         <SortingOptions
