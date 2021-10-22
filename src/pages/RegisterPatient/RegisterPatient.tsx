@@ -11,8 +11,7 @@ import urls from 'routing/urls';
 import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
 import RegisterPatientForm from './components/RegisterPatientForm';
 import { RegisterPatientFormType } from './types';
-
-const REQUIRED_FIELD_MSG = 'This field is required';
+import { formValidation } from './utils';
 
 const RegisterPatient: React.FC = () => {
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
@@ -26,38 +25,6 @@ const RegisterPatient: React.FC = () => {
   const [showWarningModal, setShowWarningModal] = useState(false);
 
   const history = useHistory();
-
-  const formValidation = (values: RegisterPatientFormType) => {
-    const errors = {} || {
-      hospital: '',
-      firstName: '',
-      lastName: '',
-      yearOfBirth: '',
-      patientHospitalId: '',
-    };
-
-    if (!values.hospital && typeof values.hospital !== 'object') {
-      errors.hospital = REQUIRED_FIELD_MSG;
-    }
-
-    if (!values.firstName?.trim()) {
-      errors.firstName = REQUIRED_FIELD_MSG;
-    }
-
-    if (!values.lastName?.trim()) {
-      errors.lastName = REQUIRED_FIELD_MSG;
-    }
-
-    if (!values.yearOfBirth) {
-      errors.yearOfBirth = REQUIRED_FIELD_MSG;
-    }
-
-    if (!values.patientHospitalId?.trim()) {
-      errors.patientHospitalId = REQUIRED_FIELD_MSG;
-    }
-
-    return errors;
-  };
 
   return (
     <>
