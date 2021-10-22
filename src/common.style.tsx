@@ -21,10 +21,10 @@ export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean
 
 export const FieldsContainer = styled.div<{ withMargin?: boolean }>`
   ${grid};
-  column-gap: 38px;
+  column-gap: 8px;
   grid-template-columns: 1fr 1fr;
   margin-bottom: ${(props) => (props.withMargin ? '24px' : null)};
-  row-gap: 24px;
+  row-gap: 8px;
 `;
 
 export const LongFieldWrapper = styled.div`
@@ -65,4 +65,29 @@ export const scrollBar = css`
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+`;
+
+export const PageTitle = styled.div`
+  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  display: flex;
+  font-size: 24px;
+  font-weight: 700;
+  gap: 16px;
+  padding: 16px;
+`;
+
+export const SectionTitle = styled.div`
+  color: ${(props) => props.theme.utils.getColor('blue', 500)};
+  font-size: 18px;
+  font-weight: 500;
+`;
+
+export const ButtonContainer = styled.div`
+  background: ${(props) => props.theme.utils.getColor('lightCoolGray', 400)};
+  border-top: 1px solid ${(props) => props.theme.utils.getColor('lightGray', 200)};
+  bottom: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  position: fixed;
+  width: 100%;
 `;

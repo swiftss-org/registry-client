@@ -64,16 +64,16 @@ export const useRegisterPatient = () => {
   return useMutation<RegisterPatientPayload, AxiosError, RegisterPatientFormType>(
     (params) => {
       const { request } = patientsAPI.single.registerPatient({
-        full_name: params.name,
-        address: params.address,
-        age: params.age,
-        patient_hospital_id: params.patientHospitalId,
+        hospital_id: params.hospital.value,
+        full_name: `${params.firstName} ${params.lastName}`,
         year_of_birth: params.yearOfBirth,
+        age: params.age,
+        national_id: params.nationalId,
+        patient_hospital_id: params.patientHospitalId,
+        gender: params.gender,
+        address: params.address,
         phone_1: params.phone1,
         phone_2: params.phone2,
-        hospital_id: params.center.value,
-        national_id: params.nationalId,
-        gender: params.gender,
       });
       return request();
     },

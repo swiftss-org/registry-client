@@ -55,6 +55,10 @@ export const Header = styled.header`
     flex: 1;
     justify-content: flex-end;
   }
+
+  & > div {
+    border-bottom: none;
+  }
 `;
 
 export const SideNav = styled.aside`

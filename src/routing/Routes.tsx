@@ -12,7 +12,7 @@ import urls from './urls';
 const Routes: React.FC = () => (
   <Switch>
     <PublicRoute exact path={urls.login()} component={Login} />
-    <PrivateRoute exact path={urls.register()} component={RegisterPatient} />
+    <PrivateRoute exact path={urls.registerPatient()} component={RegisterPatient} />
     <PrivateRoute exact path={[urls.patients()]} component={PatientDirectory} />
     <Redirect to={urls.patients()} />
   </Switch>

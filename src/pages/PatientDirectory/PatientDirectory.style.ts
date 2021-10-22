@@ -2,18 +2,7 @@ import styled from '@emotion/styled';
 
 import { scrollBar } from '../../common.style';
 
-export const PatientDirectoryContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh);
-`;
 
-export const Title = styled.div`
-  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
-  font-size: 24px;
-  font-weight: 700;
-  padding: 16px;
-`;
 
 export const PatientsList = styled.div`
   ${scrollBar};

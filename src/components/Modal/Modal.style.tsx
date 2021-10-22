@@ -26,7 +26,7 @@ export const Wrapper = styled.div`
 export const ComponentContainer = styled.div`
   align-items: center;
   background-color: white;
-  border-radius: ${rem(16)};
+  border-radius: ${rem(4)};
   display: flex;
   flex-direction: column;
   gap: ${rem(18)};
