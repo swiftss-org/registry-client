@@ -1,15 +1,21 @@
 import styled from '@emotion/styled';
+import { transition } from '@orfium/ictinus/dist/theme/functions';
 
 export const CardContainer = styled.div`
   border: 1px solid ${(props) => props.theme.utils.getColor('blue', 200)};
   border-radius: 4px;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   padding: 16px;
+  ${transition(0.1)}
+
+  :hover {
+    background: ${(props) => props.theme.utils.getColor('lightCoolGray', 300)};
+  }
 
   &:active {
     background: ${(props) => props.theme.utils.getColor('lightCoolGray', 400)};
-    transition: 0.2s all ease;
   }
 `;
 

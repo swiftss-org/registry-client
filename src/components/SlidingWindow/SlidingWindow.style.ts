@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100vw;
-  z-index: 15;
+  z-index: 150;
 
   :before {
     background-color: ${(props) => props.theme.utils.getColor('blue', 700)};
