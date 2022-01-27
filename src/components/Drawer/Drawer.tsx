@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Icon, useBreakpoints } from '@orfium/ictinus';
+import { Button, useBreakpoints } from '@orfium/ictinus';
+import { useHistory } from 'react-router-dom';
 
 import SwiftSSLogo from '../../assets/swiftss-logo.png';
 import TSALogo from '../../assets/tsa-logo.png';
 import { useIsLoggedIn } from '../../hooks/useIsLoggedIn';
-import { __EMAIL__ } from '../../utils/constants';
-import { getUserStorageItem } from '../../utils/storage';
+import { clearUserStorage } from '../../utils/storage';
 import { Container } from './Drawer.style';
 import Navigation from './Navigation/Navigation';
 import {
@@ -31,6 +31,12 @@ const Drawer: React.FC<Props> = (props) => {
   const breakpoints = useBreakpoints();
   const isSmallDesktop = breakpoints.des1200 && !breakpoints.des1440;
   const { isLoggedIn } = useIsLoggedIn();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    clearUserStorage();
+    history.push('/');
+  };
 
   return (
     <Container
@@ -41,10 +47,23 @@ const Drawer: React.FC<Props> = (props) => {
       onMouseLeave={() => isSmallDesktop && props.setExpanded(false)}
     >
       <Header>
+        {/*{isLoggedIn && (*/}
+        {/*  <UserContainer>*/}
+        {/*    <Icon name={'account'} />*/}
+        {/*    {getUserStorageItem(__EMAIL__)}*/}
+        {/*  </UserContainer>*/}
+        {/*)}*/}
         {isLoggedIn && (
           <UserContainer>
-            <Icon name={'account'} />
-            {getUserStorageItem(__EMAIL__)}
+            <Button
+              transparent
+              filled={false}
+              buttonType={'button'}
+              color={'lightGray-100'}
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </Button>
           </UserContainer>
         )}
         <HeaderText>
@@ -53,6 +72,7 @@ const Drawer: React.FC<Props> = (props) => {
         </HeaderText>
       </Header>
       <Navigation {...props} />
+
       <Footer>
         <div style={{ display: 'flex', gap: '12px' }}>
           <img width={44} src={SwiftSSLogo} />

@@ -63,6 +63,7 @@ export const HeaderText = styled.span`
 export const UserContainer = styled.div`
   display: flex;
   gap: ${rem(8)};
+  justify-content: end;
 `;
 
 export const Footer = styled.div`
