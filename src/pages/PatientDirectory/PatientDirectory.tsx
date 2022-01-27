@@ -18,13 +18,14 @@ import { SortingOptionsType } from './types';
 const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const [hospitalId, setHospitalId] = useState<number>();
 
-  const [sortingOption, setSortingOption] = useState<SortingOptionsType>('name');
+  const [sortingOption, setSortingOption] = useState<SortingOptionsType>('full_name');
 
   const { data: patients } = useGetPatients({
     offset: 0,
     limit: 100,
     search_term: searchTerm,
     hospital_id: hospitalId,
+    ordering: sortingOption,
   });
 
   const [showSortingOptions, setshowSortingOptions] = useState(false);

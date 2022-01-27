@@ -1,6 +1,7 @@
 export interface PaginationParams {
   offset?: number; // Number of results to return per page
   limit?: number; // The initial index from which to return the results
+  ordering?: string; // Sorting option
 }
 
 export interface PaginationResponse {

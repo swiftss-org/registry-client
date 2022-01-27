@@ -41,6 +41,7 @@ export const useGetPatients = (params?: PatientsPayload) => {
       params?.limit,
       params?.offset,
       params?.search_term,
+      params?.ordering,
     ],
     async () => {
       const { request } = patientsAPI.single.getPatients(params);
