@@ -16,9 +16,8 @@ const PatientCard: React.FC<Props> = ({
   hospital_mappings,
   selectedHospital,
 }) => {
-  console.log(selectedHospital);
-  console.log(hospital_mappings);
   const theme = useTheme();
+
   return (
     <CardContainer key={'patient_' + national_id}>
       <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
