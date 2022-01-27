@@ -19,9 +19,7 @@ export const useGetHospitals = (params?: PaginationParams) => {
     ReactQueryKeys.HospitalsQuery,
     async () => {
       const { request } = patientsAPI.single.getHospitals(params);
-      const data = await request();
-
-      return data;
+      return await request();
     },
     {
       onError: (errors) => {
@@ -44,10 +42,11 @@ export const useGetPatients = (params?: PatientsPayload) => {
       params?.ordering,
     ],
     async () => {
+      if (params?.hospital_id === undefined) {
+        return undefined;
+      }
       const { request } = patientsAPI.single.getPatients(params);
-      const data = await request();
-
-      return data;
+      return await request();
     },
     {
       onError: (errors) => {

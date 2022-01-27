@@ -6,7 +6,18 @@ import { PatientAPI } from 'models/apiTypes';
 
 import { CardContainer, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
 
-const PatientCard: React.FC<PatientAPI> = ({ full_name, gender, age, national_id, hospitals }) => {
+type Props = PatientAPI & { selectedHospital?: number };
+
+const PatientCard: React.FC<Props> = ({
+  full_name,
+  gender,
+  age,
+  national_id,
+  hospital_mappings,
+  selectedHospital,
+}) => {
+  console.log(selectedHospital);
+  console.log(hospital_mappings);
   const theme = useTheme();
   return (
     <CardContainer key={'patient_' + national_id}>
@@ -20,7 +31,12 @@ const PatientCard: React.FC<PatientAPI> = ({ full_name, gender, age, national_id
       </Subtitle>
       <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
         <IdLabel>Patient Hospital ID:</IdLabel>
-        <IdValue>{hospitals?.[0]?.patient_hospital_id}</IdValue>
+        <IdValue>
+          {
+            hospital_mappings.find((hospital) => hospital?.hospital_id === selectedHospital)
+              ?.patient_hospital_id
+          }
+        </IdValue>
       </div>
       <div css={{ display: 'flex', justifyContent: 'space-between' }}>
         <IdLabel>National ID:</IdLabel>

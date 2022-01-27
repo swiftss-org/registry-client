@@ -7,8 +7,8 @@ const REQUIRED_FIELD_MSG = 'This field is required';
 
 export const getHospitalOptions = (hospitals: HospitalsAPI[]): FilterOption[] => {
   return hospitals.map((hospital) => ({
-    label: hospital.name,
-    value: hospital.id,
+    label: hospital?.name ?? '',
+    value: hospital?.id,
   }));
 };
 

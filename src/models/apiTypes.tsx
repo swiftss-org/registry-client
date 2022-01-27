@@ -30,9 +30,10 @@ export interface LoginResponse {
 
 export type HospitalsAPI = {
   id: number;
-  name: string;
-  address: string;
-  patient_hospital_id: number;
+  hospital_id?: number;
+  name?: string;
+  address?: string;
+  patient_hospital_id?: number;
 };
 
 export interface HospitalsResponse extends PaginationResponse, PaginationParams {
@@ -68,7 +69,7 @@ export type PatientAPI = {
   phone_1: string;
   phone_2: string;
   address: string;
-  hospitals: HospitalsAPI[];
+  hospital_mappings: HospitalsAPI[];
 };
 
 export interface PatientsResponse extends PaginationResponse, PaginationParams {

@@ -28,20 +28,21 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
     ordering: sortingOption,
   });
 
-  const [showSortingOptions, setshowSortingOptions] = useState(false);
+  const [showSortingOptions, setShowSortingOptions] = useState(false);
 
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
 
   useEffect(() => {
     if (hospitals) {
       setHospitalId(hospitals?.results[0].id);
+      setSelectedOption(hospitals?.results[0].id);
     }
   }, [hospitals]);
 
   const history = useHistory();
 
   const filterOptions = getHospitalOptions(hospitals?.results || []);
-  const [selectedOption, setSelectedOption] = useState(filterOptions?.[0]?.value);
+  const [selectedOption, setSelectedOption] = useState<number>();
 
   return (
     <>
@@ -51,26 +52,26 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           <Filter
             label="Center"
             items={filterOptions}
-            defaultValue={filterOptions.length > 0 ? filterOptions[0] : { label: '', value: '' }}
+            defaultValue={filterOptions.length > 0 ? filterOptions[0] : { label: '', value: -1 }}
             selectedItem={filterOptions.find((option) => option.value === selectedOption)}
             onSelect={(option: FilterOption) => {
-              setSelectedOption(option.value);
+              setSelectedOption(option.value as number);
               setHospitalId(parseInt(option.value.toString()));
             }}
             styleType="transparent"
             buttonType="primary"
           />
-          <SortIcon onClick={() => setshowSortingOptions(!showSortingOptions)} />
+          <SortIcon onClick={() => setShowSortingOptions(!showSortingOptions)} />
         </OptionsWrapper>
 
         {patients && (
           <PatientsList>
             {patients.results.map((patient) => (
               <div
-                key={`patient_${patient.national_id}_${patient.hospitals?.[0]?.id}`}
+                key={`patient_${patient.national_id}_${selectedOption}`}
                 css={{ marginBottom: '8px' }}
               >
-                <PatientCard {...patient} />
+                <PatientCard {...patient} selectedHospital={selectedOption} />
               </div>
             ))}
           </PatientsList>
@@ -92,7 +93,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           title={'Sort by options:'}
           sortingOption={sortingOption}
           onSortingOptionChange={(option: SortingOptionsType) => setSortingOption(option)}
-          onClose={() => setshowSortingOptions(false)}
+          onClose={() => setShowSortingOptions(false)}
         />
       )}
     </>
