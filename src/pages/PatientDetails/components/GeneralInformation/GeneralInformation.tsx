@@ -22,11 +22,11 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         locked
         label="Full Name"
         styleType="outlined"
-        size="sm"
+        size="md"
         value={patient?.full_name}
       />
 
-      <TextField locked label="Gender" styleType="outlined" size="sm" value={patient?.gender} />
+      <TextField locked label="Gender" styleType="outlined" size="md" value={patient?.gender} />
       <FieldsContainer>
         <TextField
           locked
@@ -34,7 +34,7 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
           label="Year Of Birth"
           styleType="outlined"
           type="number"
-          size="sm"
+          size="md"
           value={patient?.year_of_birth}
         />
         <TextField
@@ -43,7 +43,7 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
           label="Age"
           type="number"
           styleType="outlined"
-          size="sm"
+          size="md"
           value={patient?.age}
         />
       </FieldsContainer>
@@ -51,7 +51,7 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         id="national_id"
         label="National ID"
         styleType="outlined"
-        size="sm"
+        size="md"
         locked
         value={patient?.national_id}
       />
@@ -59,16 +59,16 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         id="hospital"
         label="Hospital"
         styleType="outlined"
-        size="sm"
+        size="md"
         locked
         value={hospital?.name}
       />
       <TextField
         id="patient_hospital_id"
         label="Patient Hospital ID"
-        required
         styleType="outlined"
-        size="sm"
+        size="md"
+        locked
         value={hospitalPatientID}
       />
     </Container>
