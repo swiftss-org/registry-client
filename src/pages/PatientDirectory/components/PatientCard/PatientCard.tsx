@@ -3,6 +3,7 @@ import React from 'react';
 
 import { useTheme, Icon } from '@orfium/ictinus';
 import { PatientAPI } from 'models/apiTypes';
+import { useHistory } from 'react-router-dom';
 
 import { CardContainer, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
 
@@ -13,13 +14,19 @@ const PatientCard: React.FC<Props> = ({
   gender,
   age,
   national_id,
+  id,
   hospital_mappings,
   selectedHospital,
 }) => {
   const theme = useTheme();
+  const history = useHistory();
+
+  const handleClick = () => {
+    history.push(`/patients/${selectedHospital}/${id}`);
+  };
 
   return (
-    <CardContainer key={'patient_' + national_id}>
+    <CardContainer key={'patient_' + national_id} onClick={handleClick}>
       <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
         <Icon name="user" color={theme.utils.getColor('blue', 400)} size={24} />
         <Icon name="fatArrowRight" color={theme.utils.getColor('cyan', 200)} size={24} />

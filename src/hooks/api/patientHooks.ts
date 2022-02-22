@@ -5,8 +5,10 @@ import { useHistory } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
+  HospitalsAPI,
   HospitalsResponse,
   PaginationParams,
+  PatientAPI,
   PatientsPayload,
   PatientsResponse,
   RegisterPatientPayload,
@@ -19,6 +21,23 @@ export const useGetHospitals = (params?: PaginationParams) => {
     ReactQueryKeys.HospitalsQuery,
     async () => {
       const { request } = patientsAPI.single.getHospitals(params);
+      return await request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
+
+      retry: false,
+    }
+  );
+};
+
+export const useGetHospital = (id: string) => {
+  return useQuery<HospitalsAPI, AxiosError, HospitalsAPI>(
+    [ReactQueryKeys.HospitalsQuery, id],
+    async () => {
+      const { request } = patientsAPI.single.getHospital(id);
       return await request();
     },
     {
@@ -53,6 +72,22 @@ export const useGetPatients = (params?: PatientsPayload) => {
         console.log(errors);
       },
 
+      retry: false,
+    }
+  );
+};
+
+export const useGetPatient = (id: string) => {
+  return useQuery<PatientAPI, AxiosError, PatientAPI>(
+    [ReactQueryKeys.PatientsQuery, id],
+    async () => {
+      const { request } = patientsAPI.single.getPatient(id);
+      return await request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
       retry: false,
     }
   );

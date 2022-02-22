@@ -36,6 +36,8 @@ export type HospitalsAPI = {
   patient_hospital_id?: number;
 };
 
+// export type EpisodesAPI = {};
+
 export interface HospitalsResponse extends PaginationResponse, PaginationParams {
   results: HospitalsAPI[];
 }
@@ -59,6 +61,7 @@ export interface PatientsPayload extends PaginationParams {
 }
 
 export type PatientAPI = {
+  id: number; // DB ID
   full_name: string;
   national_id: string;
   age: number;
@@ -70,6 +73,7 @@ export type PatientAPI = {
   phone_2: string;
   address: string;
   hospital_mappings: HospitalsAPI[];
+  // episodes: EpisodesAPI[];
 };
 
 export interface PatientsResponse extends PaginationResponse, PaginationParams {
