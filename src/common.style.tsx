@@ -76,6 +76,15 @@ export const PageTitle = styled.div`
   padding: 16px;
 `;
 
+export const PageSubtitle = styled.div`
+  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  display: flex;
+  font-size: 18px;
+  font-weight: 400;
+  gap: 16px;
+  padding: 16px;
+`;
+
 export const SectionTitle = styled.div`
   color: ${(props) => props.theme.utils.getColor('blue', 500)};
   font-size: 18px;

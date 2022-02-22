@@ -36,7 +36,36 @@ export type HospitalsAPI = {
   patient_hospital_id?: number;
 };
 
-// export type EpisodesAPI = {};
+export type EpisodesAPI = {
+  episode_type: string;
+  cepod: string;
+  side: string;
+  occurence: string;
+  type: string;
+  complexity: string;
+  mesh_type: string;
+  diathermy_used: boolean;
+  comments?: string;
+  anaesthetic_type: string;
+  surgeons: SurgeonsAPI[];
+};
+
+export type RegisterEpisodePayload = {
+  hospital_id: number;
+  patient_id: number;
+  surgery_date: string;
+  episode_type: string;
+  cepod: string;
+  side: string;
+  occurence: string;
+  type: string;
+  complexity: string;
+  mesh_type: string;
+  diathermy_used: boolean;
+  comments?: string;
+  anaesthetic_type: string;
+  surgeon_ids: number[];
+};
 
 export interface HospitalsResponse extends PaginationResponse, PaginationParams {
   results: HospitalsAPI[];
@@ -73,9 +102,20 @@ export type PatientAPI = {
   phone_2: string;
   address: string;
   hospital_mappings: HospitalsAPI[];
-  // episodes: EpisodesAPI[];
+  episodes: EpisodesAPI[];
 };
 
 export interface PatientsResponse extends PaginationResponse, PaginationParams {
   results: PatientAPI[];
+}
+
+export type SurgeonsAPI = {
+  id: number;
+  user: {
+    email: string;
+  };
+  level: string;
+};
+export interface SurgeonsResponse extends PaginationResponse, PaginationParams {
+  results: SurgeonsAPI[];
 }

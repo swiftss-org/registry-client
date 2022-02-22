@@ -57,7 +57,14 @@ const PatientDetails: React.FC = () => {
         )}
       </ComponentWrapper>
       <ButtonContainer>
-        <Button color={'blue-500'} buttonType="button" disabled={isLoading} block size="md">
+        <Button
+          color={'blue-500'}
+          buttonType="button"
+          disabled={isLoading}
+          block
+          size="md"
+          onClick={() => history.push(`${history.location.pathname}/add-episode`)}
+        >
           Register new episode
         </Button>
       </ButtonContainer>

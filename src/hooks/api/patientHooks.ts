@@ -11,8 +11,11 @@ import {
   PatientAPI,
   PatientsPayload,
   PatientsResponse,
+  RegisterEpisodePayload,
   RegisterPatientPayload,
+  SurgeonsResponse,
 } from '../../models/apiTypes';
+import { RegisterEpisodeFormType } from '../../pages/RegisterEpisode/types';
 import { RegisterPatientFormType } from '../../pages/RegisterPatient/types';
 import urls from '../../routing/urls';
 
@@ -77,6 +80,22 @@ export const useGetPatients = (params?: PatientsPayload) => {
   );
 };
 
+export const useGetSurgeons = (params?: PaginationParams) => {
+  return useQuery<SurgeonsResponse, AxiosError, SurgeonsResponse>(
+    [ReactQueryKeys.SurgeonsQuery, params?.limit, params?.offset, params?.ordering],
+    async () => {
+      const { request } = patientsAPI.single.getSurgeons(params);
+      return await request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
+      retry: false,
+    }
+  );
+};
+
 export const useGetPatient = (id: string) => {
   return useQuery<PatientAPI, AxiosError, PatientAPI>(
     [ReactQueryKeys.PatientsQuery, id],
@@ -115,6 +134,47 @@ export const useRegisterPatient = () => {
     {
       onSuccess: () => {
         history.replace(urls.patients());
+      },
+      onError: (errors) => {
+        console.log(errors);
+      },
+    }
+  );
+};
+
+export const useRegisterEpisode = (
+  hospitalID?: string,
+  patientID?: string,
+  episodeType = 'Inguinal Mesh Hernia Repair'
+) => {
+  const history = useHistory();
+
+  return useMutation<RegisterEpisodePayload, AxiosError, RegisterEpisodeFormType>(
+    (params) => {
+      const payload = {
+        hospital_id: params?.hospital?.value,
+        patient_id: parseInt(patientID ?? '0'),
+        anaesthetic_type: params?.anaestheticType?.label,
+        diathermy_used: params?.diathermyUsed?.label === 'True',
+        surgeon_ids: params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
+        comments: params?.comments,
+        mesh_type: params?.meshType?.label,
+        episode_type: episodeType,
+        type: params.type?.label,
+        cepod: params.cepod?.label,
+        complexity: params?.complexity?.label,
+        occurence: params?.occurence?.label,
+        side: params?.side?.label,
+        surgery_date: params?.surgeryDate,
+      };
+
+      const { request } = patientsAPI.single.registerEpisode(payload);
+
+      return request();
+    },
+    {
+      onSuccess: () => {
+        history.replace(`${urls.patients()}/${hospitalID}/${patientID}`);
       },
       onError: (errors) => {
         console.log(errors);

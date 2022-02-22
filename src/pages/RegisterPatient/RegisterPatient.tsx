@@ -44,11 +44,7 @@ const RegisterPatient: React.FC = () => {
           />
           Add new patient
         </PageTitle>
-        <Form
-          initialValues={{ rememberMe: false }}
-          onSubmit={handleSubmit}
-          validate={formValidation}
-        >
+        <Form onSubmit={handleSubmit} validate={formValidation}>
           {({ handleSubmit, values, valid, submitting, dirty }) => {
             if (dirty) {
               setIsFormDirty(true);
