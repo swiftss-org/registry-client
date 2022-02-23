@@ -127,3 +127,26 @@ export const FOLLOW_UP_PAIN_OPTIONS: SelectOption[] = [
     label: 'Severe',
   },
 ];
+
+export const EPISODE_TYPE_OPTIONS: SelectOption[] = [
+  {
+    value: 0,
+    label: 'Inguinal Mesh Hernia Repair',
+  },
+  {
+    value: 1,
+    label: 'Incisional Mesh Hernia Repair',
+  },
+  {
+    value: 2,
+    label: 'Femoral Mesh Hernia Repair',
+  },
+  {
+    value: 3,
+    label: 'Hiatus Mesh Hernia Repair',
+  },
+  {
+    value: 4,
+    label: 'Umbilical/Periumbilicial Mesh Hernia Repair',
+  },
+];

@@ -18,6 +18,7 @@ import {
   OCCURRENCE_OPTIONS,
   SIDE_OPTIONS,
   TYPE_OPTIONS,
+  EPISODE_TYPE_OPTIONS,
 } from '../../constants';
 import { RegisterEpisodeFormType } from '../../types';
 import { getHospitalOptions, getSurgeonOptions } from '../../utils';
@@ -127,6 +128,33 @@ const RegisterEpisodeForm: React.FC<Props> = ({
       </FormHeadingContainer>
       <FormHeadingContainer>
         <SectionTitle>Episode Details</SectionTitle>
+        <FieldWrapper>
+          <Field name="episodeType">
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+
+              return (
+                <SelectWrapper>
+                  <Select
+                    id="episode_type"
+                    label="Episode Type"
+                    styleType="outlined"
+                    size="md"
+                    required
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    options={EPISODE_TYPE_OPTIONS}
+                    {...omit(props.input, ['onFocus'])}
+                    selectedOption={EPISODE_TYPE_OPTIONS.find(
+                      (option) => option.value === props.input.value.value
+                    )}
+                    handleSelectedOption={props.input.onChange}
+                  />
+                </SelectWrapper>
+              );
+            }}
+          </Field>
+        </FieldWrapper>
         <FieldWrapper>
           <Field name="cepod">
             {(props) => {

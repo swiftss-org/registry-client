@@ -3,6 +3,7 @@ import { SelectOption } from '../../models/apiTypes';
 export type RegisterEpisodeFormType = {
   hospital: SelectOption;
   patientHospitalId: number;
+  episodeType: SelectOption;
   surgeryDate: string;
   cepod: SelectOption;
   side: SelectOption;

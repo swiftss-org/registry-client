@@ -167,11 +167,7 @@ export const useRegisterPatient = () => {
   );
 };
 
-export const useRegisterEpisode = (
-  hospitalID?: string,
-  patientID?: string,
-  episodeType = 'Inguinal Mesh Hernia Repair'
-) => {
+export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
   const history = useHistory();
 
   return useMutation<RegisterEpisodePayload, AxiosError, RegisterEpisodeFormType>(
@@ -184,7 +180,7 @@ export const useRegisterEpisode = (
         surgeon_ids: params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
         comments: params?.comments,
         mesh_type: params?.meshType?.label,
-        episode_type: episodeType,
+        episode_type: params?.episodeType.label,
         type: params.type?.label,
         cepod: params.cepod?.label,
         complexity: params?.complexity?.label,
