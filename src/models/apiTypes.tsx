@@ -38,6 +38,7 @@ export type HospitalsAPI = {
 
 export type EpisodesAPI = {
   episode_type: string;
+  id: number;
   cepod: string;
   surgery_date: string;
   side: string;

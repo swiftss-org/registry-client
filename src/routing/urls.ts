@@ -3,6 +3,7 @@ const urls = {
   login: () => '/login',
   patients: () => '/patients',
   registerPatient: () => '/patients/register',
+  episodes: () => '/episodes',
 };
 
 export default urls;

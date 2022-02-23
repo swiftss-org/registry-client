@@ -5,6 +5,7 @@ import PatientDirectory from 'pages/PatientDirectory';
 import RegisterPatient from 'pages/RegisterPatient';
 import { Redirect, Switch } from 'react-router-dom';
 
+import EpisodeDetails from '../pages/EpisodeDetails';
 import PatientDetails from '../pages/PatientDetails';
 import RegisterEpisode from '../pages/RegisterEpisode';
 import PrivateRoute from './PrivateRoute';
@@ -15,6 +16,11 @@ const Routes: React.FC = () => (
   <Switch>
     <PublicRoute exact path={urls.login()} component={Login} />
     <PrivateRoute exact path={urls.registerPatient()} component={RegisterPatient} />
+    <PrivateRoute
+      exact
+      path={`${urls.patients()}/:hospitalID/:patientID${urls.episodes()}/:episodeID`}
+      component={EpisodeDetails}
+    />
     <PrivateRoute
       exact
       path={`${urls.patients()}/:hospitalID/:patientID/add-episode`}

@@ -18,8 +18,13 @@ const EpisodeList: React.FC<Props> = ({ patient }) => {
     <Container>
       {patient?.episodes
         .sort((a, b) => (new Date(a.surgery_date) <= new Date(b.surgery_date) ? 1 : -1))
-        .map((episode) => (
-          <EpisodeCard date={episode.surgery_date} type={episode.episode_type} />
+        .map((episode, index) => (
+          <EpisodeCard
+            key={`${episode.episode_type}_${episode.surgery_date}_${index}`}
+            episodeID={episode.id}
+            date={episode.surgery_date}
+            type={episode.episode_type}
+          />
         ))}
     </Container>
   );
