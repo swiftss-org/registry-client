@@ -75,6 +75,7 @@ const FollowUps: FC<{
                           id="date"
                           locked={!canSubmit}
                           type={'date'}
+                          label={'Date'}
                           required={canSubmit}
                           styleType="outlined"
                           size="md"

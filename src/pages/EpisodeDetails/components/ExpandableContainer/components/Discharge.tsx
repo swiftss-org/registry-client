@@ -53,6 +53,7 @@ const Discharge: FC<{
                         <TextField
                           id="date"
                           locked={!canSubmit}
+                          label={'Date'}
                           type={'date'}
                           required={canSubmit}
                           styleType="outlined"
