@@ -113,6 +113,8 @@ export type SurgeonsAPI = {
   id: number;
   user: {
     email: string;
+    first_name: string;
+    last_name: string;
   };
   level: string;
 };

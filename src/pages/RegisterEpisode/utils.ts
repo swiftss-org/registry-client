@@ -14,7 +14,7 @@ export const getHospitalOptions = (hospitals: HospitalsAPI[]): FilterOption[] =>
 
 export const getSurgeonOptions = (surgeons: SurgeonsAPI[]): SelectOption[] => {
   return surgeons.map((surgeon) => ({
-    label: surgeon?.user.email ?? '',
+    label: `${surgeon?.user.first_name} ${surgeon.user.last_name}` ?? '',
     value: surgeon?.id,
   }));
 };
