@@ -8,6 +8,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import { ButtonContainer, PageTitle, PageWrapper } from '../../common.style';
 import { Tabs } from '../../components/Tabs';
 import urls from '../../routing/urls';
+import EpisodeList from './components/EpisodeList';
 import GeneralInformation from './components/GeneralInformation';
 import { ComponentWrapper } from './PatientDetails.style';
 
@@ -53,7 +54,7 @@ const PatientDetails: React.FC = () => {
         {activeTab === 'info' ? (
           <GeneralInformation patient={patient} hospital={hospital} />
         ) : (
-          <div>Episodes</div>
+          <EpisodeList patient={patient} />
         )}
       </ComponentWrapper>
       <ButtonContainer>
