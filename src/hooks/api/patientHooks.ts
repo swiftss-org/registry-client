@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
+  DischargeAPI,
+  DischargeForm,
   EpisodesAPI,
   HospitalMappingPayload,
   HospitalsAPI,
@@ -175,7 +177,7 @@ export const useRegisterEpisode = (
         hospital_id: params?.hospital?.value,
         patient_id: parseInt(patientID ?? '0'),
         anaesthetic_type: params?.anaestheticType?.label,
-        diathermy_used: params?.diathermyUsed?.label === 'True',
+        diathermy_used: params?.diathermyUsed?.label === 'Yes',
         surgeon_ids: params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
         comments: params?.comments,
         mesh_type: params?.meshType?.label,
@@ -247,6 +249,28 @@ export const useGetEpisodeFollowUps = (id: string) => {
         console.log(errors);
       },
       retry: false,
+    }
+  );
+};
+
+export const useDischarge = (episodeID: string) => {
+  return useMutation<DischargeAPI, AxiosError, DischargeForm>(
+    (params) => {
+      const payload = {
+        episode_id: parseInt(episodeID),
+        date: params?.date,
+        aware_of_mesh: params?.aware_of_mesh.label === 'Yes',
+        infection: params?.infection.label === 'Yes',
+      };
+
+      const { request } = patientsAPI.single.dischargePatient(payload);
+
+      return request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
     }
   );
 };

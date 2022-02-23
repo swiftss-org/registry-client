@@ -5,11 +5,7 @@ import { Icon } from '@orfium/ictinus';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { PageTitle } from '../../common.style';
-import {
-  useGetEpisode,
-  useGetEpisodeDischarge,
-  useGetEpisodeFollowUps,
-} from '../../hooks/api/patientHooks';
+import { useGetEpisode, useGetEpisodeDischarge } from '../../hooks/api/patientHooks';
 import urls from '../../routing/urls';
 import {
   Heading,
@@ -30,12 +26,8 @@ const EpisodeDetails: React.FC = () => {
   const { hospitalID, patientID, episodeID } = match.params;
 
   const { data: episode } = useGetEpisode(episodeID);
-  const { data: followUps } = useGetEpisodeFollowUps(episodeID);
+  // const { data: followUps } = useGetEpisodeFollowUps(episodeID);
   const { data: discharge } = useGetEpisodeDischarge(episodeID);
-
-  console.log('episode: ', episode);
-  console.log('follow ups: ', followUps);
-  console.log('discharge: ', discharge);
 
   return (
     <PageWrapper>
@@ -61,7 +53,7 @@ const EpisodeDetails: React.FC = () => {
           <ExpandableContainer title={'Surgery'} component={Surgery} episode={episode} />
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/*// @ts-ignore*/}
-          <ExpandableContainer title={'Discharge'} component={Discharge} />
+          <ExpandableContainer title={'Discharge'} component={Discharge} discharge={discharge} />
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/*// @ts-ignore*/}
           <ExpandableContainer title={'Follow Up'} component={FollowUps} />

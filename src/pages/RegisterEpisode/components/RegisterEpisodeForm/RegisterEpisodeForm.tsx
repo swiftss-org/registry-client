@@ -13,7 +13,7 @@ import {
   ANAESTHETIC_TYPE_OPTIONS,
   CEPOD_OPTIONS,
   COMPLEXITY_OPTIONS,
-  DIATHERMY_USED_OPTIONS,
+  BOOLEAN_OPTIONS,
   MESH_TYPE_OPTIONS,
   OCCURRENCE_OPTIONS,
   SIDE_OPTIONS,
@@ -354,9 +354,9 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     required
                     status={hasError ? 'error' : 'hint'}
                     hintMsg={hasError ? props.meta.error : undefined}
-                    options={DIATHERMY_USED_OPTIONS}
+                    options={BOOLEAN_OPTIONS}
                     {...omit(props.input, ['onFocus'])}
-                    selectedOption={DIATHERMY_USED_OPTIONS.find(
+                    selectedOption={BOOLEAN_OPTIONS.find(
                       (option) => option.value === props.input.value.value
                     )}
                     handleSelectedOption={props.input.onChange}

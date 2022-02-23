@@ -94,13 +94,13 @@ export const ANAESTHETIC_TYPE_OPTIONS: SelectOption[] = [
     label: 'General Anaesthetic',
   },
 ];
-export const DIATHERMY_USED_OPTIONS: SelectOption[] = [
+export const BOOLEAN_OPTIONS: SelectOption[] = [
   {
     value: 0,
-    label: 'True',
+    label: 'Yes',
   },
   {
     value: 1,
-    label: 'False',
+    label: 'No',
   },
 ];

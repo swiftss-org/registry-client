@@ -89,6 +89,13 @@ export type DischargePayload = {
   infection: boolean;
 };
 
+export type DischargeForm = {
+  episode_id: number;
+  date: string;
+  aware_of_mesh: SelectOption;
+  infection: SelectOption;
+};
+
 export type RegisterEpisodePayload = {
   hospital_id: number;
   patient_id: number;

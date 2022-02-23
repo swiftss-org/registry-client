@@ -15,7 +15,7 @@ const ExpandableContainer: FC<{
   title: string;
   episode?: EpisodesAPI;
   discharge?: DischargeAPI;
-}> = ({ component: Component, title, episode }) => {
+}> = ({ component: Component, title, episode, discharge }) => {
   const [toggle, setToggle] = useState(false);
   const {
     utils: { getColor },
@@ -37,7 +37,7 @@ const ExpandableContainer: FC<{
       </Header>
 
       <div onClick={(e: any) => e.stopPropagation()}>
-        <Component isOpen={toggle} episode={episode} />
+        <Component isOpen={toggle} episode={episode} discharge={discharge} />
       </div>
     </ListItem>
   );
