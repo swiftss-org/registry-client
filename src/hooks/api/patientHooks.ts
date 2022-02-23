@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
+  HospitalMappingPayload,
   HospitalsAPI,
   HospitalsResponse,
   PaginationParams,
@@ -108,6 +109,24 @@ export const useGetPatient = (id: string) => {
         console.log(errors);
       },
       retry: false,
+    }
+  );
+};
+
+export const useCreateHospitalMapping = () => {
+  return useMutation<PatientAPI, AxiosError, HospitalMappingPayload>(
+    async ({ patient_id, hospital_id, patient_hospital_id }) => {
+      const { request } = patientsAPI.single.createHospitalMapping({
+        patient_hospital_id,
+        patient_id,
+        hospital_id,
+      });
+      return await request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
     }
   );
 };

@@ -2,6 +2,7 @@
 import React, { useMemo } from 'react';
 
 import { Icon, Select, TextArea, TextField } from '@orfium/ictinus';
+import { SelectOption } from '@orfium/ictinus/dist/components/Select/Select';
 import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
@@ -34,6 +35,8 @@ type Props = {
   surgeons: SurgeonsAPI[];
   hospitals: HospitalsAPI[];
   addField: (fieldName: string, value: any) => void;
+  setIsNewHospital: (isNewHospital: boolean) => void;
+  isNewHospital: boolean;
 };
 
 const EMPTY_ARRAY = [{}];
@@ -44,6 +47,8 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   hospitals,
   patient,
   selectedHospital,
+  setIsNewHospital,
+  isNewHospital,
 }) => {
   const hospitalOptions = useMemo(() => getHospitalOptions(hospitals), [hospitals]);
   const surgeonOptions = useMemo(() => getSurgeonOptions(surgeons), [surgeons]);
@@ -51,13 +56,6 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   const defaultHospital = useMemo(
     () => ({ value: selectedHospital?.id, label: selectedHospital?.name }),
     [selectedHospital?.id, selectedHospital?.name]
-  );
-
-  const hospitalPatientID = useMemo(
-    () =>
-      patient?.hospital_mappings.find((value) => value.hospital_id === selectedHospital?.id)
-        ?.patient_hospital_id,
-    [patient?.hospital_mappings, selectedHospital?.id]
   );
 
   return (
@@ -68,6 +66,20 @@ const RegisterEpisodeForm: React.FC<Props> = ({
           <Field name="hospital" initialValue={defaultHospital}>
             {(props) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+
+              const handleSelectHospital = (option: SelectOption) => {
+                props.input.onChange(option);
+
+                if (
+                  patient?.hospital_mappings.find(
+                    (mapping) => mapping.hospital_id === option.value
+                  ) === undefined
+                ) {
+                  setIsNewHospital(true);
+                } else {
+                  setIsNewHospital(false);
+                }
+              };
 
               return (
                 <SelectWrapper>
@@ -84,34 +96,34 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     selectedOption={hospitalOptions.find(
                       (option) => option.value === props.input.value.value
                     )}
-                    handleSelectedOption={(option) => {
-                      props.input.onChange(option);
-                    }}
+                    handleSelectedOption={handleSelectHospital}
                   />
                 </SelectWrapper>
               );
             }}
           </Field>
         </FieldWrapper>
-        <FieldWrapper>
-          <Field name="patientHospitalId" initialValue={hospitalPatientID} parse={(value) => value}>
-            {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
-              return (
-                <TextField
-                  id="patient_hospital_id"
-                  label="Patient Hospital ID"
-                  required
-                  styleType="outlined"
-                  size="md"
-                  status={hasError ? 'error' : 'hint'}
-                  hintMsg={hasError ? props.meta.error : undefined}
-                  {...props.input}
-                />
-              );
-            }}
-          </Field>
-        </FieldWrapper>
+        {isNewHospital && (
+          <FieldWrapper>
+            <Field name="patientHospitalId" parse={(value) => value}>
+              {(props) => {
+                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                return (
+                  <TextField
+                    id="patient_hospital_id"
+                    label="Patient Hospital ID"
+                    required
+                    styleType="outlined"
+                    size="md"
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    {...props.input}
+                  />
+                );
+              }}
+            </Field>
+          </FieldWrapper>
+        )}
       </FormHeadingContainer>
       <FormHeadingContainer>
         <SectionTitle>Episode Details</SectionTitle>

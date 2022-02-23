@@ -11,6 +11,7 @@ import { useRouteMatch } from 'react-router-dom';
 import urls from 'routing/urls';
 
 import {
+  useCreateHospitalMapping,
   useGetHospital,
   useGetHospitals,
   useGetPatient,
@@ -25,12 +26,14 @@ const RegisterEpisode: React.FC = () => {
   const match = useRouteMatch<{ hospitalID?: string; patientID?: string }>();
   const { hospitalID, patientID } = match.params;
 
+  const [isNewHospital, setIsNewHospital] = useState(false);
+
   const { data: hospitals, isLoading: isHospitalsLoading } = useGetHospitals({
     offset: 0,
     limit: 100,
   });
   const { data: patient, isLoading: isPatientLoading } = useGetPatient(patientID ?? '');
-  const { data: hospital, isLoading: isHospitalLoading } = useGetHospital(hospitalID ?? '');
+  const { data: selectedHospital, isLoading: isHospitalLoading } = useGetHospital(hospitalID ?? '');
   const { data: surgeons, isLoading: isSurgeonsLoading } = useGetSurgeons({
     offset: 0,
     limit: 100,
@@ -39,10 +42,23 @@ const RegisterEpisode: React.FC = () => {
   const isLoading =
     isHospitalLoading || isHospitalsLoading || isSurgeonsLoading || isPatientLoading;
 
-  const { mutate, isLoading: isSubmitLoading } = useRegisterEpisode(hospitalID, patientID);
+  const { mutate: registerEpisode, isLoading: isSubmitLoading } = useRegisterEpisode(
+    hospitalID,
+    patientID
+  );
+
+  const { mutateAsync: createMapping } = useCreateHospitalMapping();
 
   const handleSubmit = (form: RegisterEpisodeFormType) => {
-    mutate(form);
+    if (isNewHospital) {
+      createMapping({
+        patient_id: parseInt(patientID ?? ''),
+        hospital_id: form.hospital.value,
+        patient_hospital_id: form.patientHospitalId.toString(),
+      }).then(() => registerEpisode(form));
+    } else {
+      registerEpisode(form);
+    }
   };
 
   const [isFormDirty, setIsFormDirty] = useState(false);
@@ -103,14 +119,16 @@ const RegisterEpisode: React.FC = () => {
                   overflow: 'hidden',
                 }}
               >
-                {patient && surgeons && hospitals && hospital && (
+                {patient && surgeons && hospitals && selectedHospital && (
                   <RegisterEpisodeForm
                     values={values}
                     surgeons={surgeons?.results ?? []}
                     patient={patient}
-                    selectedHospital={hospital}
+                    selectedHospital={selectedHospital}
                     hospitals={hospitals?.results ?? []}
                     addField={push}
+                    setIsNewHospital={setIsNewHospital}
+                    isNewHospital={isNewHospital}
                   />
                 )}
                 <ButtonContainer>

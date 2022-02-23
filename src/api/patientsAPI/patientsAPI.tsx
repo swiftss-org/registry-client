@@ -4,6 +4,7 @@ import {
   PatientsPayload,
   PaginationParams,
   RegisterEpisodePayload,
+  HospitalMappingPayload,
 } from '../../models/apiTypes';
 import { METHODS, request } from '../axiosInstances';
 
@@ -18,4 +19,6 @@ export default {
     request(METHODS.POST, '/patients/', { params }),
   registerEpisode: (params: RegisterEpisodePayload) =>
     request(METHODS.POST, '/episodes/', { params }),
+  createHospitalMapping: (params: HospitalMappingPayload) =>
+    request(METHODS.POST, '/patient-hospital-mappings/', { params }),
 };

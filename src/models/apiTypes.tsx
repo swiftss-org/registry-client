@@ -119,3 +119,9 @@ export type SurgeonsAPI = {
 export interface SurgeonsResponse extends PaginationResponse, PaginationParams {
   results: SurgeonsAPI[];
 }
+
+export type HospitalMappingPayload = {
+  patient_id: number;
+  hospital_id: number;
+  patient_hospital_id: string;
+};
