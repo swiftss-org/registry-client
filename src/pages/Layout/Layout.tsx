@@ -1,19 +1,30 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Drawer, IconButton } from '@orfium/ictinus';
+import { IconButton } from '@orfium/ictinus';
+import { TopBar } from 'App.style';
+import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
+import { debounce } from 'lodash';
+import { useHistory } from 'react-router';
 
-import { TopBar } from '../../App.style';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
+import Drawer from '../../components/Drawer';
+import SearchField from '../../components/SearchField';
 import { Header, Main, MainContainer, SideNav } from './Layout.style';
 
 interface Props {
   /** Component to load */
-  component?: React.FC;
+  component?: React.FC<{ searchTerm?: string }>;
 }
 
-const Layout: React.FC<Props> = (props: Props) => {
+const Layout: React.FC<Props> = ({ component: Component }) => {
   const { responsiveProps, expanded, setExpanded } = useResponsiveLayout();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const history = useHistory();
+
+  const handleSearchTerm = (term: string) => {
+    setSearchTerm(term);
+  };
 
   return (
     <MainContainer {...responsiveProps}>
@@ -27,7 +38,12 @@ const Layout: React.FC<Props> = (props: Props) => {
             type="primary"
             onClick={() => setExpanded((prevState) => !prevState)}
           />
-          <span>Tanzanian MHP Registry</span>
+          {history.location.pathname === '/patients' && (
+            <SearchField
+              placeholder={'Search by name, gender, patient ID...'}
+              onSearch={debounce(handleSearchTerm, 200)}
+            />
+          )}
         </TopBar>
       </Header>
       <SideNav>
@@ -39,27 +55,26 @@ const Layout: React.FC<Props> = (props: Props) => {
               name: 'Patient Directory',
               visible: true,
               url: '/patients',
-              iconName: 'info',
               options: [],
             },
             {
               name: 'Register Patient',
               visible: true,
               url: '/patients/register',
-              iconName: 'info',
               options: [],
             },
             {
               name: 'My Account',
               visible: true,
               url: '/account',
-              iconName: 'info',
               options: [],
             },
           ]}
         />
       </SideNav>
-      <Main css={{ flexDirection: 'column' }}>{props.component && <props.component />}</Main>
+      <Main css={{ flexDirection: 'column' }}>
+        {Component && <Component searchTerm={searchTerm} />}
+      </Main>
     </MainContainer>
   );
 };

@@ -1,9 +1,10 @@
 import { SelectOption } from '../../models/apiTypes';
 
 export type RegisterPatientFormType = {
-  center: SelectOption;
-  name: string;
-  hospitalId: number;
+  hospital: SelectOption;
+  firstName: string;
+  lastName: string;
+  patientHospitalId: string;
   nationalId: string;
   yearOfBirth: number;
   age: number;

@@ -10,10 +10,15 @@ export const TextContainer = styled.div`
 export const Title = styled.span`
   font-size: 24px;
   font-weight: 700;
+  margin-bottom: 8px;
 `;
 
 export const Subtitle = styled.span`
   font-size: 16px;
   font-weight: 400;
-  margin-top: 8px;
+  margin-bottom: 24px;
+`;
+
+export const Wrapper = styled.div`
+  padding: 32px;
 `;

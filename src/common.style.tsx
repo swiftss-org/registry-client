@@ -12,43 +12,19 @@ export const PageWrapper = styled.div`
 `;
 
 export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean }>`
-  && * {
-    color: black;
-  }
-
-  //checked checkbox color
-  label:after {
-    box-shadow: 2px 0 0 black, 4px 0 0 black, 4px -2px 0 black, 4px -4px 0 black, 4px -6px 0 black,
-      4px -8px 0 black, 4px -10px 0 black !important;
-    background-color: black !important;
-  }
-
-  label:before {
-    box-shadow: inset 0px 0px 0px 0.125rem
-      ${(props) =>
-        props.checked
-          ? props.theme.utils.getColor('lightGray', 400)
-          : props.theme.utils.getColor('lightGray', 400)} !important;
-    background-color: ${(props) =>
-      props.checked ? props.theme.utils.getColor('lightGray', 400) : 'inherit'} !important;
-  }
-
-  span {
-    color: white;
-    white-space: pre-line;
-  }
+  margin-left: -12px;
 
   svg path {
-    fill: black;
+    fill: white;
   }
 `;
 
 export const FieldsContainer = styled.div<{ withMargin?: boolean }>`
   ${grid};
-  column-gap: 38px;
+  column-gap: 8px;
   grid-template-columns: 1fr 1fr;
   margin-bottom: ${(props) => (props.withMargin ? '24px' : null)};
-  row-gap: 24px;
+  row-gap: 8px;
 `;
 
 export const LongFieldWrapper = styled.div`
@@ -89,4 +65,38 @@ export const scrollBar = css`
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+`;
+
+export const PageTitle = styled.div`
+  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  display: flex;
+  font-size: 24px;
+  font-weight: 700;
+  gap: 16px;
+  padding: 16px;
+`;
+
+export const PageSubtitle = styled.div`
+  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  display: flex;
+  font-size: 18px;
+  font-weight: 400;
+  gap: 16px;
+  padding: 16px;
+`;
+
+export const SectionTitle = styled.div`
+  color: ${(props) => props.theme.utils.getColor('blue', 500)};
+  font-size: 18px;
+  font-weight: 500;
+`;
+
+export const ButtonContainer = styled.div`
+  background: ${(props) => props.theme.utils.getColor('lightCoolGray', 400)};
+  border-top: 1px solid ${(props) => props.theme.utils.getColor('lightGray', 200)};
+  bottom: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  position: fixed;
+  width: 100%;
 `;

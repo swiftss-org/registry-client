@@ -2,31 +2,33 @@ import styled from '@emotion/styled';
 
 import { scrollBar } from '../../common.style';
 
-export const PatientDirectoryContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh);
-`;
 
-export const SearchWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 18px;
-
-  & > div > div {
-    background: ${(props) => props.theme.utils.getColor('lightGray', 100)};
-  }
-`;
-
-export const Line = styled.div`
-  border-top: 1px solid #f2f2f2;
-  height: 0px;
-`;
 
 export const PatientsList = styled.div`
   ${scrollBar};
   margin-bottom: 56px;
   overflow-y: auto;
-  padding: 0px 18px 18px 18px;
+  padding: 0px 16px 18px 16px;
+`;
+
+export const IconButtonWrapper = styled.div`
+  bottom: 2%;
+  position: fixed;
+  right: 4%;
+
+  button {
+    box-shadow: ${(props) => props.theme.elevation['02']};
+  }
+
+  svg,
+  path {
+    fill: white !important;
+  }
+`;
+
+export const OptionsWrapper = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 20px 8px 16px;
 `;

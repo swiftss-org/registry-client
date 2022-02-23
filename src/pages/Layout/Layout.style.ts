@@ -34,6 +34,7 @@ export const Main = styled.main`
 `;
 
 export const MainContainer = styled.div<ResponsiveProps>`
+  background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
   display: grid;
   grid-template-areas:
     'header header'
@@ -54,8 +55,16 @@ export const Header = styled.header`
     flex: 1;
     justify-content: flex-end;
   }
+
+  & > div {
+    border-bottom: none;
+  }
 `;
 
 export const SideNav = styled.aside`
   grid-area: sidebar;
+
+  & > div {
+    border-right: none;
+  }
 `;

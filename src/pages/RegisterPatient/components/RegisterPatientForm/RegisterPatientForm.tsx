@@ -11,15 +11,12 @@ import {
   FieldWrapper,
   LongFieldWrapper,
   RadioText,
+  SectionTitle,
 } from '../../../../common.style';
 import { HospitalsAPI } from '../../../../models/apiTypes';
 import { RegisterPatientFormType } from '../../types';
 import { getHospitalOptions } from '../../utils';
-import {
-  FormContainer,
-  FormHeadingContainer,
-  FormSectionHeading,
-} from './RegisterPatientForm.style';
+import { FormContainer, FormHeadingContainer, SelectWrapper } from './RegisterPatientForm.style';
 
 type Props = {
   values: RegisterPatientFormType;
@@ -30,112 +27,47 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
   return (
     <FormContainer>
       <FormHeadingContainer>
-        <FormSectionHeading>Hospital Details</FormSectionHeading>
-        <FieldsContainer withMargin>
-          <LongFieldWrapper>
-            <FieldWrapper>
-              <Field name="center">
-                {(props) => (
+        <SectionTitle>Hospital Details</SectionTitle>
+        <FieldWrapper>
+          <Field name="hospital">
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+
+              return (
+                <SelectWrapper>
                   <Select
-                    label="Center"
+                    id="hospital"
+                    label="Hospital"
                     styleType="outlined"
-                    size="md"
+                    size="sm"
                     required
-                    hintMsg={props.meta.error}
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
                     options={getHospitalOptions(hospitals)}
                     {...omit(props.input, ['onFocus'])}
                     handleSelectedOption={props.input.onChange}
                   />
-                )}
-              </Field>
-            </FieldWrapper>
-          </LongFieldWrapper>
-        </FieldsContainer>
+                </SelectWrapper>
+              );
+            }}
+          </Field>
+        </FieldWrapper>
       </FormHeadingContainer>
       <FormHeadingContainer>
-        <FormSectionHeading>Personal Details</FormSectionHeading>
-        <FieldsContainer withMargin>
-          <LongFieldWrapper>
-            <FieldWrapper>
-              <Field name="name" parse={(value) => value}>
-                {(props) => {
-                  return (
-                    <TextField
-                      id="name"
-                      label="Name"
-                      required
-                      styleType="outlined"
-                      size="md"
-                      {...props.input}
-                    />
-                  );
-                }}
-              </Field>
-            </FieldWrapper>
-          </LongFieldWrapper>
-        </FieldsContainer>
-      </FormHeadingContainer>
-      <FieldsContainer withMargin>
-        <LongFieldWrapper>
-          <FieldWrapper>
-            <Field name="hospitalId" parse={(value) => value}>
-              {(props) => {
-                return (
-                  <TextField
-                    id="hospital_id"
-                    label="Patient Hospital ID"
-                    required
-                    styleType="outlined"
-                    size="md"
-                    {...props.input}
-                  />
-                );
-              }}
-            </Field>
-          </FieldWrapper>
-        </LongFieldWrapper>
-      </FieldsContainer>
-      <FieldsContainer withMargin>
-        <LongFieldWrapper>
-          <FieldWrapper>
-            <Field name="nationalId" parse={(value) => value}>
-              {(props) => {
-                return (
-                  <TextField
-                    id="national_id"
-                    label="National ID"
-                    styleType="outlined"
-                    size="md"
-                    {...props.input}
-                  />
-                );
-              }}
-            </Field>
-          </FieldWrapper>
-        </LongFieldWrapper>
-      </FieldsContainer>
-      <FieldsContainer withMargin>
-        <Field name="age">
-          {({ input: { onChange } }) => (
-            <OnBlur name="yearOfBirth">
-              {() => {
-                const age = new Date().getFullYear() - values.yearOfBirth;
-                onChange(age < 150 ? age : '');
-              }}
-            </OnBlur>
-          )}
-        </Field>
+        <SectionTitle>Personal Details</SectionTitle>
         <FieldWrapper>
-          <Field name="yearOfBirth" parse={(value) => value}>
+          <Field name="firstName" parse={(value) => value}>
             {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
               return (
                 <TextField
-                  id="year_of_birth"
-                  label="Year Of Birth"
+                  id="first_name"
+                  label="First Name"
                   required
                   styleType="outlined"
-                  type="number"
-                  size="md"
+                  size="sm"
+                  status={hasError ? 'error' : 'hint'}
+                  hintMsg={hasError ? props.meta.error : undefined}
                   {...props.input}
                 />
               );
@@ -143,26 +75,112 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
         </FieldWrapper>
         <FieldWrapper>
-          <Field name="age" parse={(value) => value}>
+          <Field name="lastName" parse={(value) => value}>
             {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
               return (
                 <TextField
-                  disabled
-                  id="age"
-                  label="Age"
-                  type="number"
+                  id="last_name"
+                  label="Last Name"
+                  required
                   styleType="outlined"
-                  size="md"
+                  size="sm"
+                  status={hasError ? 'error' : 'hint'}
+                  hintMsg={hasError ? props.meta.error : undefined}
                   {...props.input}
                 />
               );
             }}
           </Field>
         </FieldWrapper>
-      </FieldsContainer>
+        <FieldsContainer>
+          <Field name="age">
+            {({ input: { onChange } }) => (
+              <OnBlur name="yearOfBirth">
+                {() => {
+                  const age = new Date().getFullYear() - values.yearOfBirth;
+                  onChange(age < 150 ? age : '');
+                }}
+              </OnBlur>
+            )}
+          </Field>
+          <FieldWrapper>
+            <Field name="yearOfBirth" parse={(value) => value}>
+              {(props) => {
+                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                return (
+                  <TextField
+                    id="year_of_birth"
+                    label="Year Of Birth"
+                    required
+                    styleType="outlined"
+                    type="number"
+                    size="sm"
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    {...props.input}
+                  />
+                );
+              }}
+            </Field>
+          </FieldWrapper>
+          <FieldWrapper>
+            <Field name="age" parse={(value) => value}>
+              {(props) => {
+                return (
+                  <TextField
+                    disabled
+                    id="age"
+                    label="Age"
+                    type="number"
+                    styleType="outlined"
+                    size="sm"
+                    {...props.input}
+                  />
+                );
+              }}
+            </Field>
+          </FieldWrapper>
+        </FieldsContainer>
+        <FieldWrapper>
+          <Field name="nationalId" parse={(value) => value}>
+            {(props) => {
+              return (
+                <TextField
+                  id="national_id"
+                  label="National ID"
+                  styleType="outlined"
+                  size="sm"
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
+        </FieldWrapper>
+        <FieldWrapper>
+          <Field name="patientHospitalId" parse={(value) => value}>
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              return (
+                <TextField
+                  id="patient_hospital_id"
+                  label="Patient Hospital ID"
+                  required
+                  styleType="outlined"
+                  size="sm"
+                  status={hasError ? 'error' : 'hint'}
+                  hintMsg={hasError ? props.meta.error : undefined}
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
+        </FieldWrapper>
+      </FormHeadingContainer>
+
       <FormHeadingContainer>
-        <FormSectionHeading>Gender</FormSectionHeading>
-        <FieldsContainer withMargin>
+        <SectionTitle>Gender</SectionTitle>
+        <FieldsContainer>
           <Field name="gender">
             {({ input: { onChange } }) => {
               return (
@@ -173,11 +191,12 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   }}
                 >
                   <div>
-                    <Radio value="male" />
+                    <Radio value="Male" />
+
                     <RadioText>Male</RadioText>
                   </div>
                   <div>
-                    <Radio value="female" />
+                    <Radio value="Female" />
                     <RadioText>Female</RadioText>
                   </div>
                 </RadioGroup>
@@ -186,63 +205,58 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
         </FieldsContainer>
       </FormHeadingContainer>
+
       <FormHeadingContainer>
-        <FormSectionHeading>Contact Details</FormSectionHeading>
-        <FieldsContainer>
-          <LongFieldWrapper>
-            <FieldWrapper>
-              <Field name="phone1" parse={(value) => value}>
-                {(props) => {
-                  return (
-                    <TextField
-                      id="phone1"
-                      type="tel"
-                      label="Phone #1"
-                      styleType="outlined"
-                      size="md"
-                      {...props.input}
-                    />
-                  );
-                }}
-              </Field>
-            </FieldWrapper>
-          </LongFieldWrapper>
-          <LongFieldWrapper>
-            <FieldWrapper>
-              <Field name="phone2" parse={(value) => value}>
-                {(props) => {
-                  return (
-                    <TextField
-                      id="phone2"
-                      type="tel"
-                      label="Phone #2"
-                      styleType="outlined"
-                      size="md"
-                      {...props.input}
-                    />
-                  );
-                }}
-              </Field>
-            </FieldWrapper>
-          </LongFieldWrapper>
-          <LongFieldWrapper>
-            <FieldWrapper>
-              <Field name="address" parse={(value) => value}>
-                {(props) => {
-                  return (
-                    <TextField
-                      id="address"
-                      label="Address"
-                      styleType="outlined"
-                      size="md"
-                      {...props.input}
-                    />
-                  );
-                }}
-              </Field>
-            </FieldWrapper>
-          </LongFieldWrapper>
-        </FieldsContainer>
+        <SectionTitle>Contact details:</SectionTitle>
+        <LongFieldWrapper>
+          <FieldWrapper>
+            <Field name="phone1" parse={(value) => value}>
+              {(props) => {
+                return (
+                  <TextField
+                    id="phone1"
+                    type="tel"
+                    label="Phone #1"
+                    styleType="outlined"
+                    size="sm"
+                    {...props.input}
+                  />
+                );
+              }}
+            </Field>
+          </FieldWrapper>
+        </LongFieldWrapper>
+        <FieldWrapper>
+          <Field name="phone2" parse={(value) => value}>
+            {(props) => {
+              return (
+                <TextField
+                  id="phone2"
+                  type="tel"
+                  label="Phone #2"
+                  styleType="outlined"
+                  size="sm"
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
+        </FieldWrapper>
+        <FieldWrapper>
+          <Field name="address" parse={(value) => value}>
+            {(props) => {
+              return (
+                <TextField
+                  id="address"
+                  label="Address"
+                  styleType="outlined"
+                  size="sm"
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
+        </FieldWrapper>
       </FormHeadingContainer>
     </FormContainer>
   );

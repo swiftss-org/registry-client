@@ -1,50 +1,53 @@
+/** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Chip, Icon } from '@orfium/ictinus';
-import { Patient } from 'pages/PatientDirectory/types';
+import { useTheme, Icon } from '@orfium/ictinus';
+import { PatientAPI } from 'models/apiTypes';
+import { useHistory } from 'react-router-dom';
 
-import {
-  CardContainer,
-  Info,
-  ChipWrapper,
-  Header,
-  Footer,
-  CardItemsContainer,
-  CardItemContainer,
-  CardLabel,
-  CardValue,
-  ViewMore,
-} from './PatientCard.style';
+import { CardContainer, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
 
-const PatientCard: React.FC<Patient> = ({ name, gender, age, hospital, patientHospitalId, id }) => {
+type Props = PatientAPI & { selectedHospital?: number };
+
+const PatientCard: React.FC<Props> = ({
+  full_name,
+  gender,
+  age,
+  national_id,
+  id,
+  hospital_mappings,
+  selectedHospital,
+}) => {
+  const theme = useTheme();
+  const history = useHistory();
+
+  const handleClick = () => {
+    history.push(`/patients/${selectedHospital}/${id}`);
+  };
+
   return (
-    <CardContainer>
-      <Header>
-        <Info>
-          {name} , {gender} , {age}
-        </Info>
-        <ChipWrapper>
-          <Chip styleType={'filled'} size={'sm'} fill={'lightGray'} shade={300}>
-            {hospital}
-          </Chip>
-        </ChipWrapper>
-      </Header>
-      <Footer>
-        <CardItemsContainer>
-          <CardItemContainer>
-            <CardLabel>Patient Hospital ID</CardLabel>
-            <CardValue>{patientHospitalId}</CardValue>
-          </CardItemContainer>
-          <CardItemContainer>
-            <CardLabel>ID</CardLabel>
-            <CardValue>{id}</CardValue>
-          </CardItemContainer>
-        </CardItemsContainer>
-        <ViewMore onClick={() => console.log('view more')}>
-          <div>VIEW</div>
-          <Icon name="chevronLargeRight" color={'#0047FF'} />
-        </ViewMore>
-      </Footer>
+    <CardContainer key={'patient_' + national_id} onClick={handleClick}>
+      <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+        <Icon name="user" color={theme.utils.getColor('blue', 400)} size={24} />
+        <Icon name="fatArrowRight" color={theme.utils.getColor('cyan', 200)} size={24} />
+      </div>
+      <Title>{full_name}</Title>
+      <Subtitle>
+        {gender}, {age}
+      </Subtitle>
+      <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+        <IdLabel>Patient Hospital ID:</IdLabel>
+        <IdValue>
+          {
+            hospital_mappings.find((hospital) => hospital?.hospital_id === selectedHospital)
+              ?.patient_hospital_id
+          }
+        </IdValue>
+      </div>
+      <div css={{ display: 'flex', justifyContent: 'space-between' }}>
+        <IdLabel>National ID:</IdLabel>
+        <IdValue>{national_id}</IdValue>
+      </div>
     </CardContainer>
   );
 };
