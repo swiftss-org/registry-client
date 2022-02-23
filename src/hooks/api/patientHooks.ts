@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
+  EpisodesAPI,
   HospitalMappingPayload,
   HospitalsAPI,
   HospitalsResponse,
@@ -198,6 +199,54 @@ export const useRegisterEpisode = (
       onError: (errors) => {
         console.log(errors);
       },
+    }
+  );
+};
+
+export const useGetEpisode = (id: string) => {
+  return useQuery<EpisodesAPI, AxiosError, EpisodesAPI>(
+    [ReactQueryKeys.EpisodesQuery, id],
+    async () => {
+      const { request } = patientsAPI.single.getEpisode(id);
+      return await request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
+      retry: false,
+    }
+  );
+};
+
+export const useGetEpisodeDischarge = (id: string) => {
+  return useQuery<EpisodesAPI, AxiosError, EpisodesAPI>(
+    [ReactQueryKeys.EpisodesQuery, id, 'discharge'],
+    async () => {
+      const { request } = patientsAPI.single.getEpisodeDischarge(id);
+      return await request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
+      retry: false,
+    }
+  );
+};
+
+export const useGetEpisodeFollowUps = (id: string) => {
+  return useQuery<EpisodesAPI, AxiosError, EpisodesAPI>(
+    [ReactQueryKeys.EpisodesQuery, id, 'follow-up'],
+    async () => {
+      const { request } = patientsAPI.single.getEpisodeFollowUps(id);
+      return await request();
+    },
+    {
+      onError: (errors) => {
+        console.log(errors);
+      },
+      retry: false,
     }
   );
 };

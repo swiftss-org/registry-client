@@ -52,6 +52,43 @@ export type EpisodesAPI = {
   surgeons: SurgeonsAPI[];
 };
 
+export type FollowUpAPI = {
+  id: number;
+  episode: EpisodesAPI;
+  pain_severity: string;
+  date: string;
+  attendees: SurgeonsAPI[];
+  mesh_awareness: boolean;
+  seroma: boolean;
+  infection: boolean;
+  numbness: boolean;
+};
+
+export type FollowUpPayload = {
+  pain_severity: string;
+  date: string;
+  attendee_ids: number[];
+  mesh_awareness: boolean;
+  seroma: boolean;
+  infection: boolean;
+  numbness: boolean;
+};
+
+export type DischargeAPI = {
+  id: number;
+  episode: EpisodesAPI;
+  date: string;
+  aware_of_mesh: boolean;
+  infection: boolean;
+};
+
+export type DischargePayload = {
+  episode_id: number;
+  date: string;
+  aware_of_mesh: boolean;
+  infection: boolean;
+};
+
 export type RegisterEpisodePayload = {
   hospital_id: number;
   patient_id: number;

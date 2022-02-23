@@ -16,6 +16,7 @@ export const TextWrapper = styled.div`
   ${flex};
   flex-direction: column;
   gap: 4px;
+  margin-bottom: 16px;
 `;
 
 export const Heading = styled.div`
