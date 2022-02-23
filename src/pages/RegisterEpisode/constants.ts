@@ -104,3 +104,26 @@ export const BOOLEAN_OPTIONS: SelectOption[] = [
     label: 'No',
   },
 ];
+
+export const FOLLOW_UP_PAIN_OPTIONS: SelectOption[] = [
+  {
+    value: 0,
+    label: 'No Pain',
+  },
+  {
+    value: 1,
+    label: 'Minimal',
+  },
+  {
+    value: 2,
+    label: 'Mild',
+  },
+  {
+    value: 3,
+    label: 'Moderate',
+  },
+  {
+    value: 4,
+    label: 'Severe',
+  },
+];

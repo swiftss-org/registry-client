@@ -92,7 +92,7 @@ const RegisterEpisode: React.FC = () => {
           mutators={{
             ...arrayMutators,
           }}
-          validate={formValidation}
+          validate={(values) => formValidation(values, isNewHospital)}
           onSubmit={handleSubmit}
         >
           {({

@@ -39,7 +39,7 @@ type Props = {
   isNewHospital: boolean;
 };
 
-const EMPTY_ARRAY = [{}];
+export const EMPTY_ARRAY = [{}];
 
 const RegisterEpisodeForm: React.FC<Props> = ({
   addField,
@@ -112,7 +112,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                   <TextField
                     id="patient_hospital_id"
                     label="Patient Hospital ID"
-                    required
+                    required={isNewHospital}
                     styleType="outlined"
                     size="md"
                     status={hasError ? 'error' : 'hint'}

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 
 import { Icon, useTheme } from '@orfium/ictinus';
 
-import { DischargeAPI, EpisodesAPI } from '../../../../models/apiTypes';
+import { DischargeAPI, EpisodesAPI, FollowUpAPI } from '../../../../models/apiTypes';
 import { Header, ListItem } from './style';
 
 const ExpandableContainer: FC<{
@@ -11,11 +11,14 @@ const ExpandableContainer: FC<{
     onClick?: () => void;
     episode?: EpisodesAPI;
     discharge?: DischargeAPI;
+    followUp?: FollowUpAPI;
   }>;
   title: string;
   episode?: EpisodesAPI;
   discharge?: DischargeAPI;
-}> = ({ component: Component, title, episode, discharge }) => {
+  followUp?: FollowUpAPI;
+  isDone?: boolean;
+}> = ({ component: Component, title, episode, discharge, followUp, isDone = false }) => {
   const [toggle, setToggle] = useState(false);
   const {
     utils: { getColor },
@@ -29,7 +32,11 @@ const ExpandableContainer: FC<{
       }}
     >
       <Header isOpen={toggle}>
-        {title}
+        <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+          {title}{' '}
+          {isDone && !toggle && <Icon name={'checkmark'} size={20} color={'green'} variant={400} />}
+        </div>
+
         <Icon
           name={toggle ? 'chevronLargeUp' : 'chevronLargeDown'}
           color={getColor('lightGray', 500)}
@@ -37,7 +44,7 @@ const ExpandableContainer: FC<{
       </Header>
 
       <div onClick={(e: any) => e.stopPropagation()}>
-        <Component isOpen={toggle} episode={episode} discharge={discharge} />
+        <Component isOpen={toggle} episode={episode} discharge={discharge} followUp={followUp} />
       </div>
     </ListItem>
   );

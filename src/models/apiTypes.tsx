@@ -74,6 +74,19 @@ export type FollowUpPayload = {
   numbness: boolean;
 };
 
+export type FollowUpForm = {
+  pain_severity: SelectOption;
+  date: string;
+  attendees: {
+    label: string;
+    value: number;
+  }[];
+  mesh_awareness: SelectOption;
+  seroma: SelectOption;
+  infection: SelectOption;
+  numbness: SelectOption;
+};
+
 export type DischargeAPI = {
   id: number;
   episode: EpisodesAPI;

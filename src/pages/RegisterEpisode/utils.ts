@@ -19,7 +19,7 @@ export const getSurgeonOptions = (surgeons: SurgeonsAPI[]): SelectOption[] => {
   }));
 };
 
-export const formValidation = (values: RegisterEpisodeFormType) => {
+export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: boolean) => {
   const errors = {} || {
     hospital: '',
     firstName: '',
@@ -42,7 +42,7 @@ export const formValidation = (values: RegisterEpisodeFormType) => {
     errors.hospital = REQUIRED_FIELD_MSG;
   }
 
-  if (!values.patientHospitalId) {
+  if (isNewHospital && !values.patientHospitalId) {
     errors.patientHospitalId = REQUIRED_FIELD_MSG;
   }
 

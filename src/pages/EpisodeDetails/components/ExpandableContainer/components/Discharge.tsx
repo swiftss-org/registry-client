@@ -69,9 +69,15 @@ const Discharge: FC<{
                 <FieldWrapper>
                   <Field
                     name="aware_of_mesh"
-                    initialValue={BOOLEAN_OPTIONS.find((option) =>
-                      discharge?.aware_of_mesh ? option.label === 'Yes' : option.label === 'No'
-                    )}
+                    initialValue={
+                      discharge?.aware_of_mesh !== undefined
+                        ? BOOLEAN_OPTIONS.find((option) =>
+                            discharge?.aware_of_mesh
+                              ? option.label === 'Yes'
+                              : option.label === 'No'
+                          )
+                        : undefined
+                    }
                   >
                     {(props) => {
                       const hasError =
@@ -104,9 +110,13 @@ const Discharge: FC<{
                 <FieldWrapper>
                   <Field
                     name="infection"
-                    initialValue={BOOLEAN_OPTIONS.find((option) =>
-                      discharge?.infection ? option.label === 'Yes' : option.label === 'No'
-                    )}
+                    initialValue={
+                      discharge?.infection !== undefined
+                        ? BOOLEAN_OPTIONS.find((option) =>
+                            discharge?.infection ? option.label === 'Yes' : option.label === 'No'
+                          )
+                        : undefined
+                    }
                   >
                     {(props) => {
                       const hasError =

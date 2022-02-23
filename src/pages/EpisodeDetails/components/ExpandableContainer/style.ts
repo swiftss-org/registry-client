@@ -29,6 +29,9 @@ export const ListItem = styled.li<{ isOpen: boolean }>`
     overflow: auto;
     ${transition(0.2)};
   }
+  section[aria-expanded='false'] {
+    ${transition(0.2)};
+  }
 `;
 
 export const Header = styled.header<{
@@ -43,6 +46,8 @@ export const Header = styled.header<{
 
     transform: rotate(${({ isOpen }) => (isOpen ? `180deg` : 0)});
   }
+
+  ${transition(0.2)};
 
   margin-bottom: ${({ isOpen }) => (isOpen ? '20px' : '0')};
   padding: ${({ isOpen }) => (isOpen ? '1px' : '0')};

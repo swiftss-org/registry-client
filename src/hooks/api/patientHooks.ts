@@ -8,6 +8,9 @@ import {
   DischargeAPI,
   DischargeForm,
   EpisodesAPI,
+  FollowUpAPI,
+  FollowUpForm,
+  FollowUpPayload,
   HospitalMappingPayload,
   HospitalsAPI,
   HospitalsResponse,
@@ -222,7 +225,7 @@ export const useGetEpisode = (id: string) => {
 };
 
 export const useGetEpisodeDischarge = (id: string) => {
-  return useQuery<EpisodesAPI, AxiosError, EpisodesAPI>(
+  return useQuery<DischargeAPI, AxiosError, DischargeAPI>(
     [ReactQueryKeys.EpisodesQuery, id, 'discharge'],
     async () => {
       const { request } = patientsAPI.single.getEpisodeDischarge(id);
@@ -238,7 +241,7 @@ export const useGetEpisodeDischarge = (id: string) => {
 };
 
 export const useGetEpisodeFollowUps = (id: string) => {
-  return useQuery<EpisodesAPI, AxiosError, EpisodesAPI>(
+  return useQuery<FollowUpAPI, AxiosError, FollowUpAPI[]>(
     [ReactQueryKeys.EpisodesQuery, id, 'follow-up'],
     async () => {
       const { request } = patientsAPI.single.getEpisodeFollowUps(id);
@@ -268,6 +271,38 @@ export const useDischarge = (episodeID: string) => {
       return request();
     },
     {
+      onSuccess: () => {
+        window.location.reload();
+      },
+      onError: (errors) => {
+        console.log(errors);
+      },
+    }
+  );
+};
+
+export const useFollowUp = (episodeID: string) => {
+  return useMutation<FollowUpPayload, AxiosError, FollowUpForm>(
+    (params) => {
+      const payload = {
+        episode_id: parseInt(episodeID),
+        date: params?.date,
+        attendee_ids: params?.attendees?.map((attendee) => attendee?.value) ?? ['1'],
+        mesh_awareness: params?.mesh_awareness.label === 'Yes',
+        seroma: params?.seroma.label === 'Yes',
+        infection: params?.infection.label === 'Yes',
+        numbness: params?.numbness.label === 'Yes',
+        pain_severity: params?.pain_severity.label,
+      };
+
+      const { request } = patientsAPI.single.followUpPatient(payload);
+
+      return request();
+    },
+    {
+      onSuccess: () => {
+        window.location.reload();
+      },
       onError: (errors) => {
         console.log(errors);
       },

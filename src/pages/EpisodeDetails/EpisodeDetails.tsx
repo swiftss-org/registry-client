@@ -5,7 +5,11 @@ import { Icon } from '@orfium/ictinus';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { PageTitle } from '../../common.style';
-import { useGetEpisode, useGetEpisodeDischarge } from '../../hooks/api/patientHooks';
+import {
+  useGetEpisode,
+  useGetEpisodeDischarge,
+  useGetEpisodeFollowUps,
+} from '../../hooks/api/patientHooks';
 import urls from '../../routing/urls';
 import {
   Heading,
@@ -18,15 +22,13 @@ import FollowUps from './components/ExpandableContainer/components/FollowUps';
 import Surgery from './components/ExpandableContainer/components/Surgery';
 import { Container, PageWrapper } from './EpisodeDetails.style';
 
-// type Props = {};
-
 const EpisodeDetails: React.FC = () => {
   const history = useHistory();
   const match = useRouteMatch<{ hospitalID: string; patientID: string; episodeID: string }>();
   const { hospitalID, patientID, episodeID } = match.params;
 
   const { data: episode } = useGetEpisode(episodeID);
-  // const { data: followUps } = useGetEpisodeFollowUps(episodeID);
+  const { data: followUps } = useGetEpisodeFollowUps(episodeID);
   const { data: discharge } = useGetEpisodeDischarge(episodeID);
 
   return (
@@ -50,13 +52,34 @@ const EpisodeDetails: React.FC = () => {
           </TextWrapper>
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/*// @ts-ignore*/}
-          <ExpandableContainer title={'Surgery'} component={Surgery} episode={episode} />
+          <ExpandableContainer isDone title={'Surgery'} component={Surgery} episode={episode} />
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/*// @ts-ignore*/}
-          <ExpandableContainer title={'Discharge'} component={Discharge} discharge={discharge} />
+          <ExpandableContainer
+            isDone={discharge?.infection !== undefined}
+            title={'Discharge'}
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            /*// @ts-ignore*/
+            component={Discharge}
+            discharge={discharge}
+          />
+
+          {followUps?.map((followUp, index) => (
+            <ExpandableContainer
+              key={`follow_up_${index}`}
+              title={'Follow Up'}
+              isDone
+              /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+              /*// @ts-ignore*/
+              component={FollowUps}
+              /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+              /*// @ts-ignore*/
+              followUp={followUp}
+            />
+          ))}
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/*// @ts-ignore*/}
-          <ExpandableContainer title={'Follow Up'} component={FollowUps} />
+          <ExpandableContainer isDone={false} title={'Follow Up'} component={FollowUps} />
         </Container>
       )}
     </PageWrapper>
