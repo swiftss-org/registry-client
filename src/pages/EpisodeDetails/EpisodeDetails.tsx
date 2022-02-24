@@ -10,6 +10,7 @@ import {
   useGetEpisodeDischarge,
   useGetEpisodeFollowUps,
 } from '../../hooks/api/patientHooks';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import urls from '../../routing/urls';
 import {
   Heading,
@@ -23,6 +24,7 @@ import Surgery from './components/ExpandableContainer/components/Surgery';
 import { Container, PageWrapper } from './EpisodeDetails.style';
 
 const EpisodeDetails: React.FC = () => {
+  const { isDesktop } = useResponsiveLayout();
   const history = useHistory();
   const match = useRouteMatch<{ hospitalID: string; patientID: string; episodeID: string }>();
   const { hospitalID, patientID, episodeID } = match.params;
@@ -32,7 +34,7 @@ const EpisodeDetails: React.FC = () => {
   const { data: discharge } = useGetEpisodeDischarge(episodeID);
 
   return (
-    <PageWrapper>
+    <PageWrapper isDesktop={isDesktop}>
       <PageTitle>
         <Icon
           name="fatArrowLeft"

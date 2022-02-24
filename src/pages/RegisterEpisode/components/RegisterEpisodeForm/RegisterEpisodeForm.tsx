@@ -8,6 +8,7 @@ import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
 import { FieldWrapper, SectionTitle } from '../../../../common.style';
+import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI, PatientAPI, SurgeonsAPI } from '../../../../models/apiTypes';
 import {
   ANAESTHETIC_TYPE_OPTIONS,
@@ -51,6 +52,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   setIsNewHospital,
   isNewHospital,
 }) => {
+  const { isDesktop } = useResponsiveLayout();
   const hospitalOptions = useMemo(() => getHospitalOptions(hospitals), [hospitals]);
   const surgeonOptions = useMemo(() => getSurgeonOptions(surgeons), [surgeons]);
 
@@ -60,7 +62,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   );
 
   return (
-    <FormContainer>
+    <FormContainer isDesktop={isDesktop}>
       <FormHeadingContainer>
         <SectionTitle>Hospital Details</SectionTitle>
         <FieldWrapper>

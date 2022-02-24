@@ -43,11 +43,14 @@ const Drawer: React.FC<Props> = (props) => {
     props.setExpanded(false);
   };
 
+  const isDesktop =
+    breakpoints.des1200 || breakpoints.des1440 || breakpoints.des1366 || breakpoints.des1920;
+
   return (
     <Container
       expanded={props.expanded}
-      isDesktop={breakpoints.des1200}
-      isSmallDesktop={!breakpoints.des1440}
+      isDesktop={isDesktop}
+      isSmallDesktop={isSmallDesktop}
       onMouseEnter={() => isSmallDesktop && props.setExpanded(true)}
       onMouseLeave={() => isSmallDesktop && props.setExpanded(false)}
     >

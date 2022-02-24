@@ -13,6 +13,7 @@ import {
   RadioText,
   SectionTitle,
 } from '../../../../common.style';
+import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI } from '../../../../models/apiTypes';
 import { RegisterPatientFormType } from '../../types';
 import { getHospitalOptions } from '../../utils';
@@ -24,8 +25,9 @@ type Props = {
 };
 
 const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
+  const { isDesktop } = useResponsiveLayout();
   return (
-    <FormContainer>
+    <FormContainer isDesktop={isDesktop}>
       <FormHeadingContainer>
         <SectionTitle>Hospital Details</SectionTitle>
         <FieldWrapper>

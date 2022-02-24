@@ -10,12 +10,14 @@ import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useHistory } from 'react-router';
 import urls from 'routing/urls';
 
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import PatientCard from './components/PatientCard';
 import SortingOptions from './components/SortingOptions';
 import { PatientsList, IconButtonWrapper, OptionsWrapper } from './PatientDirectory.style';
 import { SortingOptionsType } from './types';
 
 const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
+  const { isDesktop } = useResponsiveLayout();
   const [hospitalId, setHospitalId] = useState<number>();
 
   const [sortingOption, setSortingOption] = useState<SortingOptionsType>('full_name');
@@ -46,7 +48,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
 
   return (
     <>
-      <PageWrapper>
+      <PageWrapper isDesktop={isDesktop}>
         <PageTitle>Patients directory</PageTitle>
         <OptionsWrapper>
           <Filter

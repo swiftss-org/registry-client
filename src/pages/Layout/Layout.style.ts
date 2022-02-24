@@ -23,17 +23,25 @@ export const PageWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const Main = styled.main`
-  grid-area: main;
+export const Main = styled.main<{ isDesktop: boolean }>`
   ${scrollBar};
 
+  grid-area: main;
   overflow-x: hidden;
-  overflow-y: hidden;
 
-  ${flex}
+  ${flex};
+
+  ${({ isDesktop }) =>
+    isDesktop &&
+    `
+      align-items: center;
+      
+    `}
+
+  overflow-y: hidden;
 `;
 
-export const MainContainer = styled.div<ResponsiveProps>`
+export const MainContainer = styled.div<ResponsiveProps & { isDesktop: boolean }>`
   background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
   display: grid;
   grid-template-areas:
@@ -42,7 +50,7 @@ export const MainContainer = styled.div<ResponsiveProps>`
     'sidebar main';
   grid-template-columns: ${getWidth}px 1fr;
   grid-template-rows: 0fr;
-  height: 100vh;
+  height: ${({ isDesktop }) => (isDesktop ? '100%' : '100vh')};
   transition: all 0.5s ease-in-out 0s;
 `;
 

@@ -29,7 +29,7 @@ const SignIn: React.FC = () => {
                       return (
                         <TextField
                           id="username"
-                          label="Email"
+                          label="Username"
                           styleType="outlined"
                           size="md"
                           {...props.input}

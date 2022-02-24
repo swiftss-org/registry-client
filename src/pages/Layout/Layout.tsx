@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ component: Component }) => {
-  const { responsiveProps, expanded, setExpanded } = useResponsiveLayout();
+  const { responsiveProps, expanded, setExpanded, isDesktop } = useResponsiveLayout();
   const [searchTerm, setSearchTerm] = useState('');
 
   const history = useHistory();
@@ -27,7 +27,7 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
   };
 
   return (
-    <MainContainer {...responsiveProps}>
+    <MainContainer {...responsiveProps} isDesktop={isDesktop}>
       <Header>
         <TopBar>
           <IconButton
@@ -72,7 +72,7 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
           ]}
         />
       </SideNav>
-      <Main css={{ flexDirection: 'column' }}>
+      <Main isDesktop={isDesktop} css={{ flexDirection: 'column' }}>
         {Component && <Component searchTerm={searchTerm} />}
       </Main>
     </MainContainer>
