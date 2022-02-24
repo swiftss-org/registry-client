@@ -94,7 +94,10 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         <SortingOptions
           title={'Sort by options:'}
           sortingOption={sortingOption}
-          onSortingOptionChange={(option: SortingOptionsType) => setSortingOption(option)}
+          onSortingOptionChange={(option: SortingOptionsType) => {
+            setSortingOption(option);
+            setShowSortingOptions(false);
+          }}
           onClose={() => setShowSortingOptions(false)}
         />
       )}
