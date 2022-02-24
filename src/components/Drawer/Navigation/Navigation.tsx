@@ -15,7 +15,7 @@ import {
 
 type NavigationProps = Props;
 
-const Navigation: React.FC<NavigationProps> = ({ menuItems, expanded }) => {
+const Navigation: React.FC<NavigationProps> = ({ menuItems, expanded, handleClick }) => {
   const [, setOpenMenuItems] = useState<string[]>([]);
   const [currentMenuItem] = useLocationToGetCurrentMenuItem(menuItems, setOpenMenuItems);
   const { isLoggedIn } = useIsLoggedIn();
@@ -28,6 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({ menuItems, expanded }) => {
           (menuItem) =>
             menuItem.visible && (
               <MenuItem
+                handleClick={handleClick}
                 key={menuItem.url}
                 isCurrent={currentMenuItem === menuItem.url}
                 {...menuItem}

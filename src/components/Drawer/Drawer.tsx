@@ -25,6 +25,7 @@ export type Props = {
   setExpanded: (v: boolean) => void;
   /** The menu items to be displayed in the drawer */
   menuItems: MenuItem[];
+  handleClick?: () => void;
 };
 
 const Drawer: React.FC<Props> = (props) => {
@@ -36,6 +37,10 @@ const Drawer: React.FC<Props> = (props) => {
   const handleLogout = () => {
     clearUserStorage();
     history.push('/');
+  };
+
+  const handleClick = () => {
+    props.setExpanded(false);
   };
 
   return (
@@ -71,7 +76,7 @@ const Drawer: React.FC<Props> = (props) => {
           NMHP Registry
         </HeaderText>
       </Header>
-      <Navigation {...props} />
+      <Navigation handleClick={handleClick} {...props} />
 
       <Footer>
         <div style={{ display: 'flex', gap: '12px' }}>

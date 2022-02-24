@@ -63,12 +63,12 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
               url: '/patients/register',
               options: [],
             },
-            {
-              name: 'My Account',
-              visible: true,
-              url: '/account',
-              options: [],
-            },
+            // {
+            //   name: 'My Account',
+            //   visible: true,
+            //   url: '/account',
+            //   options: [],
+            // },
           ]}
         />
       </SideNav>
