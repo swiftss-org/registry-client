@@ -8,7 +8,7 @@
   "private": true,
   "dependencies": {
     "@emotion/jest": "^11.2.1",
-    "@emotion/react": "^11.4.1",
+    "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.3.0",
     "@orfium/ictinus": "^3.14.1",
     "@testing-library/jest-dom": "^5.11.9",
