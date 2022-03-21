@@ -145,7 +145,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </FieldWrapper>
         </FieldsContainer>
         <FieldWrapper>
-          <Field name="nationalId" parse={(value) => value}>
+          <Field name="nationalId" parse={(value) => parseInt(value.replace(/[^0-9]+/g, ''))}>
             {(props) => {
               return (
                 <TextField
@@ -160,7 +160,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
         </FieldWrapper>
         <FieldWrapper>
-          <Field name="patientHospitalId" parse={(value) => value}>
+          <Field
+            name="patientHospitalId"
+            parse={(value) => parseInt(value.replace(/[^0-9]+/g, ''))}
+          >
             {(props) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
               return (
@@ -212,12 +215,11 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <SectionTitle>Contact details:</SectionTitle>
         <LongFieldWrapper>
           <FieldWrapper>
-            <Field name="phone1" parse={(value) => value}>
+            <Field name="phone1" parse={(value: string) => parseInt(value.replace(/[^0-9]+/g, ''))}>
               {(props) => {
                 return (
                   <TextField
                     id="phone1"
-                    type="tel"
                     label="Phone #1"
                     styleType="outlined"
                     size="sm"
@@ -229,12 +231,11 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </FieldWrapper>
         </LongFieldWrapper>
         <FieldWrapper>
-          <Field name="phone2" parse={(value) => value}>
+          <Field name="phone2" parse={(value) => parseInt(value.replace(/[^0-9]+/g, ''))}>
             {(props) => {
               return (
                 <TextField
                   id="phone2"
-                  type="tel"
                   label="Phone #2"
                   styleType="outlined"
                   size="sm"

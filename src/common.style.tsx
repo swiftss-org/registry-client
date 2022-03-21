@@ -42,6 +42,18 @@ export const LongFieldWrapper = styled.div`
 export const FieldWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
 `;
 
 export const RadioText = styled.span`

@@ -132,14 +132,14 @@ export interface HospitalsResponse extends PaginationResponse, PaginationParams 
 
 export interface RegisterPatientPayload {
   full_name: string;
-  national_id: string;
-  patient_hospital_id: string;
+  national_id: number;
+  patient_hospital_id: number;
   age: number;
   year_of_birth: number;
   hospital_id: number;
   gender: string;
-  phone_1: string;
-  phone_2: string;
+  phone_1: number;
+  phone_2: number;
   address: string;
 }
 

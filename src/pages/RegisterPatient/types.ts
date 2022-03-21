@@ -4,12 +4,12 @@ export type RegisterPatientFormType = {
   hospital: SelectOption;
   firstName: string;
   lastName: string;
-  patientHospitalId: string;
-  nationalId: string;
+  patientHospitalId: number;
+  nationalId: number;
   yearOfBirth: number;
   age: number;
   gender: 'male' | 'female';
-  phone1: string;
-  phone2: string;
+  phone1: number;
+  phone2: number;
   address: string;
 };
