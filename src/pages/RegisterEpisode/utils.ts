@@ -58,27 +58,39 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
   if (!values.surgeryDate?.trim()) {
     errors.surgeryDate = REQUIRED_FIELD_MSG;
   }
+
+  if (new Date(values.surgeryDate?.trim()) > new Date()) {
+    errors.surgeryDate = 'Surgery date cannot be set in the future.';
+  }
+
   if (!values.occurence && typeof values.occurence !== 'object') {
     errors.occurence = REQUIRED_FIELD_MSG;
   }
+
   if (!values.type && typeof values.type !== 'object') {
     errors.type = REQUIRED_FIELD_MSG;
   }
+
   if (!values.size && typeof values.size !== 'object') {
     errors.size = REQUIRED_FIELD_MSG;
   }
+
   if (!values.complexity && typeof values.complexity !== 'object') {
     errors.complexity = REQUIRED_FIELD_MSG;
   }
+
   if (!values.meshType && typeof values.meshType !== 'object') {
     errors.meshType = REQUIRED_FIELD_MSG;
   }
+
   if (!values.anaestheticType && typeof values.anaestheticType !== 'object') {
     errors.anaestheticType = REQUIRED_FIELD_MSG;
   }
+
   if (!values.diathermyUsed && typeof values.diathermyUsed !== 'object') {
     errors.diathermyUsed = REQUIRED_FIELD_MSG;
   }
+
   if (values.surgeons?.length === 0) {
     errors.surgeons = REQUIRED_FIELD_MSG;
   }
