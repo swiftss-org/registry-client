@@ -13,10 +13,14 @@ export const CEPOD_OPTIONS: SelectOption[] = [
 export const SIDE_OPTIONS: SelectOption[] = [
   {
     value: 0,
-    label: 'Left',
+    label: 'Not Applicable',
   },
   {
     value: 1,
+    label: 'Left',
+  },
+  {
+    value: 2,
     label: 'Right',
   },
 ];
@@ -37,14 +41,18 @@ export const OCCURRENCE_OPTIONS: SelectOption[] = [
 export const TYPE_OPTIONS: SelectOption[] = [
   {
     value: 0,
-    label: 'Direct',
+    label: 'Not Applicable',
   },
   {
     value: 1,
-    label: 'Indirect',
+    label: 'Direct',
   },
   {
     value: 2,
+    label: 'Indirect',
+  },
+  {
+    value: 3,
     label: 'Pantaloon',
   },
 ];
