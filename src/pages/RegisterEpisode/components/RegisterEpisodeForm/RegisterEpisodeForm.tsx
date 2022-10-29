@@ -18,6 +18,7 @@ import {
   OCCURRENCE_OPTIONS,
   SIDE_OPTIONS,
   TYPE_OPTIONS,
+  SIZE_OPTIONS,
   EPISODE_TYPE_OPTIONS,
 } from '../../constants';
 import { RegisterEpisodeFormType } from '../../types';
@@ -262,6 +263,33 @@ const RegisterEpisodeForm: React.FC<Props> = ({
             }}
           </Field>
         </FieldWrapper>
+        <FieldWrapper>
+          <Field name="size">
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+
+              return (
+                <SelectWrapper>
+                  <Select
+                    id="size"
+                    label="Size"
+                    styleType="outlined"
+                    size="md"
+                    required
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    options={SIZE_OPTIONS}
+                    {...omit(props.input, ['onFocus'])}
+                    selectedOption={SIZE_OPTIONS.find(
+                      (option) => option.value === props.input.value.value
+                    )}
+                    handleSelectedOption={props.input.onChange}
+                  />
+                </SelectWrapper>
+              );
+            }}
+          </Field>
+        </FieldWrapper>        
         <FieldWrapper>
           <Field name="complexity">
             {(props) => {

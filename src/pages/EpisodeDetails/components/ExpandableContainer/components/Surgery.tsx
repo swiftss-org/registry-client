@@ -27,6 +27,13 @@ const Surgery: FC<{
         <TextField locked label="Type" styleType="outlined" size="md" value={episode.type} />
         <TextField
           locked
+          label="Size"
+          styleType="outlined"
+          size="md"
+          value={episode.size}
+        />
+        <TextField
+          locked
           label="Complexity"
           styleType="outlined"
           size="md"

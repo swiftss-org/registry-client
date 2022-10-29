@@ -44,6 +44,7 @@ export type EpisodesAPI = {
   side: string;
   occurence: string;
   type: string;
+  size: string;
   complexity: string;
   mesh_type: string;
   diathermy_used: boolean;
@@ -118,6 +119,7 @@ export type RegisterEpisodePayload = {
   side: string;
   occurence: string;
   type: string;
+  size: string;
   complexity: string;
   mesh_type: string;
   diathermy_used: boolean;

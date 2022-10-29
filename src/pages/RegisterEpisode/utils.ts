@@ -32,6 +32,7 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
     surgeryDate: '',
     occurence: '',
     type: '',
+    size: '',
     complexity: '',
     meshType: '',
     anaestheticType: '',
@@ -62,6 +63,9 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
   }
   if (!values.type && typeof values.type !== 'object') {
     errors.type = REQUIRED_FIELD_MSG;
+  }
+  if (!values.size && typeof values.size !== 'object') {
+    errors.size = REQUIRED_FIELD_MSG;
   }
   if (!values.complexity && typeof values.complexity !== 'object') {
     errors.complexity = REQUIRED_FIELD_MSG;

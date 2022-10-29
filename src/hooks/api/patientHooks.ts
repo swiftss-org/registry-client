@@ -182,6 +182,7 @@ export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
         mesh_type: params?.meshType?.label,
         episode_type: params?.episodeType.label,
         type: params.type?.label,
+        size: params.size?.label,
         cepod: params.cepod?.label,
         complexity: params?.complexity?.label,
         occurence: params?.occurence?.label,

@@ -56,6 +56,32 @@ export const TYPE_OPTIONS: SelectOption[] = [
     label: 'Pantaloon',
   },
 ];
+export const SIZE_OPTIONS: SelectOption[] = [
+  {
+    value: 0,
+    label: 'Very Small (<1 finger breadth)',
+  },
+  {
+    value: 1,
+    label: 'Small (1-2 finger breadths)',
+  },
+  {
+    value: 2,
+    label: 'Medium (2-3 finger breadths)',
+  },
+  {
+    value: 3,
+    label: 'Large (3-4 finger breadths)',
+  },
+  {
+    value: 4,
+    label: 'Very Large (>4 finger breadths)',
+  },
+  {
+    value: 5,
+    label: 'Massive (extends beyond midpoint of thigh)',
+  },  
+];
 export const COMPLEXITY_OPTIONS: SelectOption[] = [
   {
     value: 0,
