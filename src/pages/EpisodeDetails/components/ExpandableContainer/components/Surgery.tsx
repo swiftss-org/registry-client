@@ -63,6 +63,20 @@ const Surgery: FC<{
           size="md"
           value={episode.diathermy_used ? 'Yes' : 'No'}
         />
+        <TextField
+          locked
+          label="Prophylactic antibiotics given?"
+          styleType="outlined"
+          size="md"
+          value={episode.antibiotic_used ? 'Yes' : 'No'}
+        />
+        <TextField
+          locked
+          label="Prophylactic antibiotics type"
+          styleType="outlined"
+          size="md"
+          value={episode.antibiotic_type}
+        />        
         {episode.surgeons.map((surgeon, index) => (
           <TextField
             key={`surgeon_${index}`}

@@ -177,6 +177,8 @@ export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
         patient_id: parseInt(patientID ?? '0'),
         anaesthetic_type: params?.anaestheticType?.label,
         diathermy_used: params?.diathermyUsed?.label === 'Yes',
+        antibiotic_used: params?.antibioticUsed?.label === 'Yes',
+        antibiotic_type: params?.antibioticType,
         surgeon_ids: params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
         comments: params?.comments,
         mesh_type: params?.meshType?.label,

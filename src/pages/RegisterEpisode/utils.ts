@@ -37,6 +37,8 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
     meshType: '',
     anaestheticType: '',
     diathermyUsed: '',
+    antibioticUsed: '',
+    antibioticType: '',
   };
 
   if (!values.hospital && typeof values.hospital !== 'object') {
@@ -91,6 +93,15 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
     errors.diathermyUsed = REQUIRED_FIELD_MSG;
   }
 
+  if (!values.antibioticUsed && typeof values.antibioticUsed !== 'object') {
+    errors.antibioticUsed = REQUIRED_FIELD_MSG;
+  }
+  else if (values.antibioticUsed.value == 0 && (!values.antibioticType || values.antibioticType.trim().length == 0)) {
+    const errorMessage = 'If antibiotics have been used you must record the type';
+    errors.antibioticUsed = errorMessage;
+    errors.antibioticType = errorMessage
+  }
+  
   if (values.surgeons?.length === 0) {
     errors.surgeons = REQUIRED_FIELD_MSG;
   }

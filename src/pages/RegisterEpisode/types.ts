@@ -14,6 +14,8 @@ export type RegisterEpisodeFormType = {
   meshType: SelectOption;
   anaestheticType: SelectOption;
   diathermyUsed: SelectOption;
+  antibioticUsed: SelectOption;
+  antibioticType: string;
   surgeons: {
     label: string;
     value: number;

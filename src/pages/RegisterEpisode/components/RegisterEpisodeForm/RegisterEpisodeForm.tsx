@@ -421,6 +421,47 @@ const RegisterEpisodeForm: React.FC<Props> = ({
               );
             }}
           </Field>
+          </FieldWrapper>
+          <FieldWrapper>
+          <Field name="antibioticUsed">
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+
+              return (
+                <SelectWrapper>
+                  <Select
+                    id="antibiotic_used"
+                    label="Prophylactic antibiotics given?"
+                    styleType="outlined"
+                    size="md"
+                    required
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    options={BOOLEAN_OPTIONS}
+                    {...omit(props.input, ['onFocus'])}
+                    selectedOption={BOOLEAN_OPTIONS.find(
+                      (option) => option.value === props.input.value.value
+                    )}
+                    handleSelectedOption={props.input.onChange}
+                  />
+                </SelectWrapper>
+              );
+            }}
+          </Field>          
+        </FieldWrapper>
+        <FieldWrapper>
+          <Field name="antibioticType">
+            {(props) => {
+              return (
+                <TextArea
+                  id="antibioticType"
+                  placeholder="Prophylactic antibiotics type"
+                  styleType="outlined"
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
         </FieldWrapper>
         <FieldArray name={'surgeons'} initialValue={EMPTY_ARRAY}>
           {({ fields }) =>
