@@ -15,7 +15,7 @@ const Surgery: FC<{
     <InternalContainer isOpen={isOpen} aria-expanded={isOpen}>
       <Heading>Episode details:</Heading>
       <FieldContainer>
-        <TextField locked label="Cepod" styleType="outlined" size="md" value={episode.cepod} />
+        <TextField locked label="CEPOD" styleType="outlined" size="md" value={episode.cepod} />
         <TextField locked label="Side" styleType="outlined" size="md" value={episode.side} />
         <TextField
           locked

@@ -164,7 +164,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                 <SelectWrapper>
                   <Select
                     id="cepod"
-                    label="Cepod"
+                    label="CEPOD"
                     styleType="outlined"
                     size="md"
                     required
