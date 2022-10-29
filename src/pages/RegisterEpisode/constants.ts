@@ -143,10 +143,6 @@ export const EPISODE_TYPE_OPTIONS: SelectOption[] = [
   },
   {
     value: 3,
-    label: 'Hiatus Mesh Hernia Repair',
-  },
-  {
-    value: 4,
     label: 'Umbilical/Periumbilicial Mesh Hernia Repair',
   },
 ];
