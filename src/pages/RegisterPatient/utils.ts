@@ -37,7 +37,7 @@ export const formValidation = (values: RegisterPatientFormType) => {
     errors.yearOfBirth = REQUIRED_FIELD_MSG;
   }
 
-  if (!values.patientHospitalId?.trim()) {
+  if (!values.patientHospitalId) {
     errors.patientHospitalId = REQUIRED_FIELD_MSG;
   }
 

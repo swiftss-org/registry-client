@@ -13,6 +13,7 @@ import {
   RadioText,
   SectionTitle,
 } from '../../../../common.style';
+import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI } from '../../../../models/apiTypes';
 import { RegisterPatientFormType } from '../../types';
 import { getHospitalOptions } from '../../utils';
@@ -24,8 +25,14 @@ type Props = {
 };
 
 const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
+  const { isDesktop } = useResponsiveLayout();
+
+  const parseOnlyNumbers = (value: string) => {
+    return value.replace(/[^0-9]+/g, '');
+  };
+
   return (
-    <FormContainer>
+    <FormContainer isDesktop={isDesktop}>
       <FormHeadingContainer>
         <SectionTitle>Hospital Details</SectionTitle>
         <FieldWrapper>
@@ -143,7 +150,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </FieldWrapper>
         </FieldsContainer>
         <FieldWrapper>
-          <Field name="nationalId" parse={(value) => value}>
+          <Field name="nationalId" parse={parseOnlyNumbers}>
             {(props) => {
               return (
                 <TextField
@@ -151,6 +158,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   label="National ID"
                   styleType="outlined"
                   size="sm"
+                  maxLength={20}
                   {...props.input}
                 />
               );
@@ -158,7 +166,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
         </FieldWrapper>
         <FieldWrapper>
-          <Field name="patientHospitalId" parse={(value) => value}>
+          <Field name="patientHospitalId" parse={parseOnlyNumbers}>
             {(props) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
               return (
@@ -168,6 +176,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   required
                   styleType="outlined"
                   size="sm"
+                  maxLength={20}
                   status={hasError ? 'error' : 'hint'}
                   hintMsg={hasError ? props.meta.error : undefined}
                   {...props.input}
@@ -210,15 +219,15 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <SectionTitle>Contact details:</SectionTitle>
         <LongFieldWrapper>
           <FieldWrapper>
-            <Field name="phone1" parse={(value) => value}>
+            <Field name="phone1" parse={parseOnlyNumbers}>
               {(props) => {
                 return (
                   <TextField
                     id="phone1"
-                    type="tel"
                     label="Phone #1"
                     styleType="outlined"
                     size="sm"
+                    maxLength={20}
                     {...props.input}
                   />
                 );
@@ -227,15 +236,15 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </FieldWrapper>
         </LongFieldWrapper>
         <FieldWrapper>
-          <Field name="phone2" parse={(value) => value}>
+          <Field name="phone2" parse={parseOnlyNumbers}>
             {(props) => {
               return (
                 <TextField
                   id="phone2"
-                  type="tel"
                   label="Phone #2"
                   styleType="outlined"
                   size="sm"
+                  maxLength={20}
                   {...props.input}
                 />
               );

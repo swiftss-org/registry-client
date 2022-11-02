@@ -7,6 +7,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { ButtonContainer, PageTitle, PageWrapper } from '../../common.style';
 import { Tabs } from '../../components/Tabs';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import urls from '../../routing/urls';
 import EpisodeList from './components/EpisodeList';
 import GeneralInformation from './components/GeneralInformation';
@@ -18,6 +19,8 @@ const tabs = [
 ];
 
 const PatientDetails: React.FC = () => {
+  const { isDesktop } = useResponsiveLayout();
+
   const match = useRouteMatch<{ hospitalID?: string; patientID?: string }>();
   const [activeTab, setActiveTab] = useState('info');
   const history = useHistory();
@@ -30,7 +33,7 @@ const PatientDetails: React.FC = () => {
   const isLoading = isHospitalLoading || isPatientLoading;
 
   return (
-    <PageWrapper>
+    <PageWrapper isDesktop={isDesktop}>
       <PageTitle>
         <Icon
           name="fatArrowLeft"
@@ -57,7 +60,7 @@ const PatientDetails: React.FC = () => {
           <EpisodeList patient={patient} />
         )}
       </ComponentWrapper>
-      <ButtonContainer>
+      <ButtonContainer isDesktop={isDesktop}>
         <Button
           color={'blue-500'}
           buttonType="button"

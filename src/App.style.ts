@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 import { appTheme } from './theme/globals';
 
-export const AppWrapper = styled.div`
+export const AppWrapper = styled.div<{ isDesktop: boolean }>`
   background-color: white;
   color: black;
   font-family: ${appTheme.fontFamily};

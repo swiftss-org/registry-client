@@ -16,7 +16,6 @@ export const Container = styled.div<{
   min-height: 100%;
   overflow: hidden;
   position: ${(props) => (props.isSmallDesktop ? 'absolute' : 'relative')};
-  width: ${(props) =>
-    props.expanded ? rem('308px') : props.isDesktop ? rem('112px') : rem('0px')};
+  width: ${(props) => (props.expanded ? rem('308px') : rem('0px'))};
   z-index: 100;
 `;

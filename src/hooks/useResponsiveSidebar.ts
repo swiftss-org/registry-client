@@ -6,6 +6,9 @@ export const useResponsiveLayout = () => {
   const [expanded, setExpanded] = useState(false);
   const breakpoints = useBreakpoints();
 
+  const isDesktop =
+    breakpoints.des1200 || breakpoints.des1440 || breakpoints.des1366 || breakpoints.des1920;
+
   useEffect(() => {
     setExpanded(breakpoints.des1440 && !breakpoints.des1920);
   }, [breakpoints]);
@@ -24,6 +27,7 @@ export const useResponsiveLayout = () => {
   return {
     responsiveProps,
     expanded,
+    isDesktop,
     setExpanded,
     toggle,
   };

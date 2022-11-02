@@ -44,9 +44,12 @@ export type EpisodesAPI = {
   side: string;
   occurence: string;
   type: string;
+  size: string;
   complexity: string;
   mesh_type: string;
   diathermy_used: boolean;
+  antibiotic_used: boolean;
+  antibiotic_type?: string;
   comments?: string;
   anaesthetic_type: string;
   surgeons: SurgeonsAPI[];
@@ -118,9 +121,12 @@ export type RegisterEpisodePayload = {
   side: string;
   occurence: string;
   type: string;
+  size: string;
   complexity: string;
   mesh_type: string;
   diathermy_used: boolean;
+  antibiotic_used: boolean;
+  antibiotic_type?: string;
   comments?: string;
   anaesthetic_type: string;
   surgeon_ids: number[];
@@ -132,14 +138,14 @@ export interface HospitalsResponse extends PaginationResponse, PaginationParams 
 
 export interface RegisterPatientPayload {
   full_name: string;
-  national_id: string;
-  patient_hospital_id: string;
+  national_id: number;
+  patient_hospital_id: number;
   age: number;
   year_of_birth: number;
   hospital_id: number;
   gender: string;
-  phone_1: string;
-  phone_2: string;
+  phone_1: number;
+  phone_2: number;
   address: string;
 }
 

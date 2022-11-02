@@ -25,6 +25,7 @@ export type Props = {
   setExpanded: (v: boolean) => void;
   /** The menu items to be displayed in the drawer */
   menuItems: MenuItem[];
+  handleClick?: () => void;
 };
 
 const Drawer: React.FC<Props> = (props) => {
@@ -38,11 +39,18 @@ const Drawer: React.FC<Props> = (props) => {
     history.push('/');
   };
 
+  const handleClick = () => {
+    props.setExpanded(false);
+  };
+
+  const isDesktop =
+    breakpoints.des1200 || breakpoints.des1440 || breakpoints.des1366 || breakpoints.des1920;
+
   return (
     <Container
       expanded={props.expanded}
-      isDesktop={breakpoints.des1200}
-      isSmallDesktop={!breakpoints.des1440}
+      isDesktop={isDesktop}
+      isSmallDesktop={isSmallDesktop}
       onMouseEnter={() => isSmallDesktop && props.setExpanded(true)}
       onMouseLeave={() => isSmallDesktop && props.setExpanded(false)}
     >
@@ -71,7 +79,7 @@ const Drawer: React.FC<Props> = (props) => {
           NMHP Registry
         </HeaderText>
       </Header>
-      <Navigation {...props} />
+      <Navigation handleClick={handleClick} {...props} />
 
       <Footer>
         <div style={{ display: 'flex', gap: '12px' }}>

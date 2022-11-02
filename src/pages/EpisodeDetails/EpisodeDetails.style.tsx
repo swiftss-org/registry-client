@@ -7,9 +7,16 @@ export const Container = styled.div`
   padding: ${({ theme }) => theme.spacing.md};
 `;
 
-export const PageWrapper = styled.div`
+export const PageWrapper = styled.div<{ isDesktop: boolean }>`
   ${flex};
   flex-direction: column;
   height: 100%;
-  width: 100%;
+  width: ${({ isDesktop }) => (isDesktop ? '50%' : '100%')};
+
+  ${({ isDesktop }) =>
+    isDesktop &&
+    `
+      justify-content: flex-start;
+      
+    `}
 `;

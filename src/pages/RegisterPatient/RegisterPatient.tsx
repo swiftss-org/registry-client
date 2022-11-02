@@ -9,11 +9,13 @@ import { useHistory } from 'react-router';
 import urls from 'routing/urls';
 
 import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import RegisterPatientForm from './components/RegisterPatientForm';
 import { RegisterPatientFormType } from './types';
 import { formValidation } from './utils';
 
 const RegisterPatient: React.FC = () => {
+  const { isDesktop } = useResponsiveLayout();
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
   const { mutate, isLoading } = useRegisterPatient();
 
@@ -28,7 +30,7 @@ const RegisterPatient: React.FC = () => {
 
   return (
     <>
-      <PageWrapper>
+      <PageWrapper isDesktop={isDesktop}>
         <PageTitle>
           <Icon
             name="fatArrowLeft"
@@ -56,12 +58,12 @@ const RegisterPatient: React.FC = () => {
                 css={{
                   display: 'flex',
                   flexDirection: 'column',
-                  height: 'calc(100vh)',
+                  height: isDesktop ? '100%' : 'calc(100vh)',
                   overflow: 'hidden',
                 }}
               >
                 <RegisterPatientForm values={values} hospitals={hospitals?.results ?? []} />
-                <ButtonContainer>
+                <ButtonContainer isDesktop={isDesktop}>
                   <Button
                     color={'blue-500'}
                     buttonType="submit"

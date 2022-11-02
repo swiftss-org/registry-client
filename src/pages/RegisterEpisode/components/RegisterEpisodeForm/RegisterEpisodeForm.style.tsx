@@ -10,10 +10,10 @@ export const FormHeadingContainer = styled.div`
   row-gap: 12px;
 `;
 
-export const FormContainer = styled.div`
+export const FormContainer = styled.div<{ isDesktop: boolean }>`
   flex-grow: 1;
   height: 100%;
-  margin-bottom: 137px;
+  margin-bottom: ${({ isDesktop }) => (isDesktop ? '0' : '137px')};
   overflow-y: auto;
   padding: 18px;
 

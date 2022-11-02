@@ -4,11 +4,19 @@ import { grid } from '@orfium/ictinus/dist/theme/functions';
 
 import { flex } from './theme/functions';
 
-export const PageWrapper = styled.div`
+export const PageWrapper = styled.div<{ isDesktop: boolean }>`
   ${flex};
   flex-direction: column;
-  height: calc(100vh);
-  width: 100%;
+  height: ${({ isDesktop }) => (isDesktop ? '100%' : 'calc(100vh)')};
+  justify-content: center;
+  width: ${({ isDesktop }) => (isDesktop ? '50%' : '100%')};
+
+  ${({ isDesktop }) =>
+    isDesktop &&
+    `
+      justify-content: flex-start;
+      
+    `}
 `;
 
 export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean }>`
@@ -34,6 +42,18 @@ export const LongFieldWrapper = styled.div`
 export const FieldWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
 `;
 
 export const RadioText = styled.span`
@@ -91,12 +111,12 @@ export const SectionTitle = styled.div`
   font-weight: 500;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<{ isDesktop: boolean }>`
   background: ${(props) => props.theme.utils.getColor('lightCoolGray', 400)};
   border-top: 1px solid ${(props) => props.theme.utils.getColor('lightGray', 200)};
   bottom: 0;
   box-sizing: border-box;
   padding: 16px;
-  position: fixed;
+  position: ${({ isDesktop }) => (isDesktop ? 'relative' : 'fixed')};
   width: 100%;
 `;

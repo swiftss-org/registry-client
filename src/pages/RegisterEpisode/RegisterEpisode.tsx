@@ -18,11 +18,13 @@ import {
   useGetSurgeons,
   useRegisterEpisode,
 } from '../../hooks/api/patientHooks';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import RegisterEpisodeForm from './components/RegisterEpisodeForm';
 import { RegisterEpisodeFormType } from './types';
 import { formValidation } from './utils';
 
 const RegisterEpisode: React.FC = () => {
+  const { isDesktop } = useResponsiveLayout();
   const match = useRouteMatch<{ hospitalID?: string; patientID?: string }>();
   const { hospitalID, patientID } = match.params;
 
@@ -68,7 +70,7 @@ const RegisterEpisode: React.FC = () => {
 
   return (
     <>
-      <PageWrapper>
+      <PageWrapper isDesktop={isDesktop}>
         <PageTitle>
           <Icon
             name="fatArrowLeft"
@@ -115,7 +117,7 @@ const RegisterEpisode: React.FC = () => {
                 css={{
                   display: 'flex',
                   flexDirection: 'column',
-                  height: 'calc(100vh)',
+                  height: isDesktop ? '100%' : 'calc(100vh)',
                   overflow: 'hidden',
                 }}
               >
@@ -131,7 +133,7 @@ const RegisterEpisode: React.FC = () => {
                     isNewHospital={isNewHospital}
                   />
                 )}
-                <ButtonContainer>
+                <ButtonContainer isDesktop={isDesktop}>
                   <Button
                     color={'blue-500'}
                     buttonType="button"

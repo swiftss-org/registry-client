@@ -8,6 +8,7 @@ import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
 import { FieldWrapper, SectionTitle } from '../../../../common.style';
+import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI, PatientAPI, SurgeonsAPI } from '../../../../models/apiTypes';
 import {
   ANAESTHETIC_TYPE_OPTIONS,
@@ -18,6 +19,7 @@ import {
   OCCURRENCE_OPTIONS,
   SIDE_OPTIONS,
   TYPE_OPTIONS,
+  SIZE_OPTIONS,
   EPISODE_TYPE_OPTIONS,
 } from '../../constants';
 import { RegisterEpisodeFormType } from '../../types';
@@ -51,6 +53,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   setIsNewHospital,
   isNewHospital,
 }) => {
+  const { isDesktop } = useResponsiveLayout();
   const hospitalOptions = useMemo(() => getHospitalOptions(hospitals), [hospitals]);
   const surgeonOptions = useMemo(() => getSurgeonOptions(surgeons), [surgeons]);
 
@@ -60,7 +63,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   );
 
   return (
-    <FormContainer>
+    <FormContainer isDesktop={isDesktop}>
       <FormHeadingContainer>
         <SectionTitle>Hospital Details</SectionTitle>
         <FieldWrapper>
@@ -164,7 +167,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                 <SelectWrapper>
                   <Select
                     id="cepod"
-                    label="Cepod"
+                    label="CEPOD"
                     styleType="outlined"
                     size="md"
                     required
@@ -262,6 +265,33 @@ const RegisterEpisodeForm: React.FC<Props> = ({
             }}
           </Field>
         </FieldWrapper>
+        <FieldWrapper>
+          <Field name="size">
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+
+              return (
+                <SelectWrapper>
+                  <Select
+                    id="size"
+                    label="Size"
+                    styleType="outlined"
+                    size="md"
+                    required
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    options={SIZE_OPTIONS}
+                    {...omit(props.input, ['onFocus'])}
+                    selectedOption={SIZE_OPTIONS.find(
+                      (option) => option.value === props.input.value.value
+                    )}
+                    handleSelectedOption={props.input.onChange}
+                  />
+                </SelectWrapper>
+              );
+            }}
+          </Field>
+        </FieldWrapper>        
         <FieldWrapper>
           <Field name="complexity">
             {(props) => {
@@ -390,6 +420,47 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     handleSelectedOption={props.input.onChange}
                   />
                 </SelectWrapper>
+              );
+            }}
+          </Field>
+          </FieldWrapper>
+          <FieldWrapper>
+          <Field name="antibioticUsed">
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+
+              return (
+                <SelectWrapper>
+                  <Select
+                    id="antibiotic_used"
+                    label="Prophylactic antibiotics given?"
+                    styleType="outlined"
+                    size="md"
+                    required
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    options={BOOLEAN_OPTIONS}
+                    {...omit(props.input, ['onFocus'])}
+                    selectedOption={BOOLEAN_OPTIONS.find(
+                      (option) => option.value === props.input.value.value
+                    )}
+                    handleSelectedOption={props.input.onChange}
+                  />
+                </SelectWrapper>
+              );
+            }}
+          </Field>          
+        </FieldWrapper>
+        <FieldWrapper>
+          <Field name="antibioticType">
+            {(props) => {
+              return (
+                <TextArea
+                  id="antibioticType"
+                  placeholder="Prophylactic antibiotics type"
+                  styleType="outlined"
+                  {...props.input}
+                />
               );
             }}
           </Field>

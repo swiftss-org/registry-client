@@ -15,7 +15,7 @@ const Surgery: FC<{
     <InternalContainer isOpen={isOpen} aria-expanded={isOpen}>
       <Heading>Episode details:</Heading>
       <FieldContainer>
-        <TextField locked label="Cepod" styleType="outlined" size="md" value={episode.cepod} />
+        <TextField locked label="CEPOD" styleType="outlined" size="md" value={episode.cepod} />
         <TextField locked label="Side" styleType="outlined" size="md" value={episode.side} />
         <TextField
           locked
@@ -25,6 +25,13 @@ const Surgery: FC<{
           value={episode.occurence}
         />
         <TextField locked label="Type" styleType="outlined" size="md" value={episode.type} />
+        <TextField
+          locked
+          label="Size"
+          styleType="outlined"
+          size="md"
+          value={episode.size}
+        />
         <TextField
           locked
           label="Complexity"
@@ -56,6 +63,20 @@ const Surgery: FC<{
           size="md"
           value={episode.diathermy_used ? 'Yes' : 'No'}
         />
+        <TextField
+          locked
+          label="Prophylactic antibiotics given?"
+          styleType="outlined"
+          size="md"
+          value={episode.antibiotic_used ? 'Yes' : 'No'}
+        />
+        <TextField
+          locked
+          label="Prophylactic antibiotics type"
+          styleType="outlined"
+          size="md"
+          value={episode.antibiotic_type}
+        />        
         {episode.surgeons.map((surgeon, index) => (
           <TextField
             key={`surgeon_${index}`}

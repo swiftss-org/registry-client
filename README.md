@@ -21,6 +21,14 @@ You can run the app in development mode. Open [http://localhost:3000](http://loc
 
 `yarn start`
 
+> __Note:__ If you are using Node v17+ you may get `error:03000086:digital envelope routines::initialization error` error when running `yarn start`. If so please follow the instructions on https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported to resolve. 
+
 You can run the test runner in the interactive watch mode.
 
 `yarn test`
+
+### Running against a local instance of the registry-api
+You can run against a different registry-api backend by changing  `BASE_URL` in `src/api/axiosInstances.ts`. For example to run against a local development instance this should be set to:
+~~~
+const BASE_URL = 'http://localhost:8000/api';
+~~~
