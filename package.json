@@ -41,6 +41,7 @@
   "scripts": {
     "start:prod": "node --max_old_space_size=460 server.js",
     "start": "react-app-rewired start",
+    "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
