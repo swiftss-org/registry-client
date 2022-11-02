@@ -9,10 +9,13 @@ export type RegisterEpisodeFormType = {
   side: SelectOption;
   occurence: SelectOption;
   type: SelectOption;
+  size: SelectOption;
   complexity: SelectOption;
   meshType: SelectOption;
   anaestheticType: SelectOption;
   diathermyUsed: SelectOption;
+  antibioticUsed: SelectOption;
+  antibioticType: string;
   surgeons: {
     label: string;
     value: number;

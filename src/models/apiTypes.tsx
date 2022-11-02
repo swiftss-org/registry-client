@@ -44,9 +44,12 @@ export type EpisodesAPI = {
   side: string;
   occurence: string;
   type: string;
+  size: string;
   complexity: string;
   mesh_type: string;
   diathermy_used: boolean;
+  antibiotic_used: boolean;
+  antibiotic_type?: string;
   comments?: string;
   anaesthetic_type: string;
   surgeons: SurgeonsAPI[];
@@ -118,9 +121,12 @@ export type RegisterEpisodePayload = {
   side: string;
   occurence: string;
   type: string;
+  size: string;
   complexity: string;
   mesh_type: string;
   diathermy_used: boolean;
+  antibiotic_used: boolean;
+  antibiotic_type?: string;
   comments?: string;
   anaesthetic_type: string;
   surgeon_ids: number[];
