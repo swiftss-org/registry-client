@@ -43,7 +43,7 @@ jobs:
       - run: yarn test --passWithNoTests
 
   deploy:
-    name: Deploy 🚀
+    name: Release 🚀
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
     needs:
@@ -51,24 +51,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2.3.5
-
-      - name: Push to Staging 🛠
-        if: github.ref == 'refs/heads/staging'
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_STG_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          dontuseforce: false
-
-      - name: Push to Production 🛠
-        if: github.ref == 'refs/heads/master'
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_PROD_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          dontuseforce: false
 
       - name: Release 📌
         if: "github.event_name == 'push'"
