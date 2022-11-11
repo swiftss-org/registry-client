@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout 📥
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v3.1.0
 
       - name: Get yarn cache 📦
         id: yarn-cache
@@ -50,7 +50,7 @@ jobs:
       - test
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v3.1.0
 
       - name: Release 📌
         if: "github.event_name == 'push'"
