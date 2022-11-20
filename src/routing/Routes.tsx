@@ -3,6 +3,7 @@ import React from 'react';
 import Login from 'pages/Login';
 import PatientDirectory from 'pages/PatientDirectory';
 import RegisterPatient from 'pages/RegisterPatient';
+import Settings from 'pages/Settings';
 import { Redirect, Switch } from 'react-router-dom';
 
 import EpisodeDetails from '../pages/EpisodeDetails';
@@ -15,6 +16,7 @@ import urls from './urls';
 const Routes: React.FC = () => (
   <Switch>
     <PublicRoute exact path={urls.login()} component={Login} />
+    <PrivateRoute exact path={urls.settings()} component={Settings} />
     <PrivateRoute exact path={urls.registerPatient()} component={RegisterPatient} />
     <PrivateRoute
       exact

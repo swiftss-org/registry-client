@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import SwiftSSLogo from '../../assets/swiftss-logo.png';
 import TSALogo from '../../assets/tsa-logo.png';
 import { useIsLoggedIn } from '../../hooks/useIsLoggedIn';
+import urls from "../../routing/urls";
 import { clearUserStorage } from '../../utils/storage';
 import { Container } from './Drawer.style';
 import Navigation from './Navigation/Navigation';
@@ -39,6 +40,10 @@ const Drawer: React.FC<Props> = (props) => {
     history.push('/');
   };
 
+  const handleSettings = () => {
+    history.push(urls.settings());
+  };
+
   const handleClick = () => {
     props.setExpanded(false);
   };
@@ -63,6 +68,15 @@ const Drawer: React.FC<Props> = (props) => {
         {/*)}*/}
         {isLoggedIn && (
           <UserContainer>
+            <Button
+              transparent
+              filled={false}
+              buttonType={'button'}
+              color={'lightGray-100'}
+              onClick={() => handleSettings()}
+            >
+              Settings
+            </Button>
             <Button
               transparent
               filled={false}
