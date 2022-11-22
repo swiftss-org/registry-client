@@ -6,16 +6,26 @@ import { FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
 import { useChangePassword } from 'hooks/api/userHooks';
 import { ChangePasswordFormType } from 'models/apiTypes';
 import { Field, Form } from 'react-final-form';
+import { useHistory } from 'react-router-dom';
 
+import { useSetNotification } from '../../../../hooks/useSetNotification';
 import { ButtonContainer } from '../../../Login/components/LoginForm/LoginForm.style';
 
 const ChangePasswordForm: React.FC = () => {
   const { mutateAsync, isLoading } = useChangePassword();
 
+  const setNotification = useSetNotification();
+
+  const history = useHistory();
+
   const handleSubmit = (form: ChangePasswordFormType) => {
     return new Promise((resolve) => {
       mutateAsync(form)
-        .then(() => resolve(true))
+        .then(() => {
+          setNotification('Password changed successfully', 'success', true, true);
+          history.push('/');
+          resolve(true);
+        })
         .catch((error) => {
           resolve(error.errors);
         });

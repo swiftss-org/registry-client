@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 
 import { Button, Icon } from '@orfium/ictinus';
+import { IconWrapper } from 'App.style';
 import { useGetHospital, useGetPatient } from 'hooks/api/patientHooks';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -35,14 +36,16 @@ const PatientDetails: React.FC = () => {
   return (
     <PageWrapper isDesktop={isDesktop}>
       <PageTitle>
-        <Icon
-          name="fatArrowLeft"
-          size={24}
-          color={'lightGray-700'}
-          onClick={() => {
-            history.push(urls.patients());
-          }}
-        />
+        <IconWrapper>
+          <Icon
+            name="fatArrowLeft"
+            size={24}
+            color={'lightGray-700'}
+            onClick={() => {
+              history.push(urls.patients());
+            }}
+          />
+        </IconWrapper>
         Patient Details
       </PageTitle>
       <Tabs
