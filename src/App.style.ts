@@ -22,3 +22,8 @@ export const TopBar = styled.div`
   position: sticky;
   width: 100%;
 `;
+
+export const IconWrapper = styled.div`
+  cursor: pointer;
+  z-index: 10;
+`;
