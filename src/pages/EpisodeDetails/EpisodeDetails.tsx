@@ -2,6 +2,7 @@
 import React from 'react';
 
 import { Icon } from '@orfium/ictinus';
+import { IconWrapper } from 'App.style';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { PageTitle } from '../../common.style';
@@ -36,14 +37,16 @@ const EpisodeDetails: React.FC = () => {
   return (
     <PageWrapper isDesktop={isDesktop}>
       <PageTitle>
-        <Icon
-          name="fatArrowLeft"
-          size={24}
-          color={'lightGray-700'}
-          onClick={() => {
-            history.replace(`${urls.patients()}/${hospitalID}/${patientID}`);
-          }}
-        />
+        <IconWrapper>
+          <Icon
+            name="fatArrowLeft"
+            size={24}
+            color={'lightGray-700'}
+            onClick={() => {
+              history.replace(`${urls.patients()}/${hospitalID}/${patientID}`);
+            }}
+          />
+        </IconWrapper>
         Episode Details
       </PageTitle>
       {episode && (

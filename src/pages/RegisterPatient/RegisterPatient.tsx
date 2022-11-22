@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 
 import { Button, Icon } from '@orfium/ictinus';
+import { IconWrapper } from 'App.style';
 import { ButtonContainer, PageTitle, PageWrapper } from 'common.style';
 import ConfirmationModal from 'components/ConfirmationModal';
 import { Form } from 'react-final-form';
@@ -32,18 +33,20 @@ const RegisterPatient: React.FC = () => {
     <>
       <PageWrapper isDesktop={isDesktop}>
         <PageTitle>
-          <Icon
-            name="fatArrowLeft"
-            size={24}
-            color={'lightGray-700'}
-            onClick={() => {
-              if (isFormDirty) {
-                setShowWarningModal(true);
-              } else {
-                history.push(urls.patients());
-              }
-            }}
-          />
+          <IconWrapper>
+            <Icon
+              name="fatArrowLeft"
+              size={24}
+              color={'lightGray-700'}
+              onClick={() => {
+                if (isFormDirty) {
+                  setShowWarningModal(true);
+                } else {
+                  history.push(urls.patients());
+                }
+              }}
+            />
+          </IconWrapper>
           Add new patient
         </PageTitle>
         <Form onSubmit={handleSubmit} validate={formValidation}>

@@ -10,6 +10,7 @@ import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useHistory } from 'react-router';
 import urls from 'routing/urls';
 
+import Notifications from '../../components/Notifications';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import PatientCard from './components/PatientCard';
 import SortingOptions from './components/SortingOptions';
@@ -49,6 +50,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
   return (
     <>
       <PageWrapper isDesktop={isDesktop}>
+        <Notifications />
         <PageTitle>Patients directory</PageTitle>
         <OptionsWrapper>
           <Filter

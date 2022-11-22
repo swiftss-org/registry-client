@@ -28,6 +28,16 @@ export interface LoginResponse {
   };
 }
 
+export interface ChangePasswordFormType {
+  old_password: string;
+  new_password1: string;
+  new_password2: string;
+}
+
+export interface ChangePasswordResponse {
+  token?: string;
+}
+
 export type HospitalsAPI = {
   id: number;
   hospital_id?: number;

@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import SwiftSSLogo from '../../assets/swiftss-logo.png';
 import TSALogo from '../../assets/tsa-logo.png';
 import { useIsLoggedIn } from '../../hooks/useIsLoggedIn';
+import urls from '../../routing/urls';
 import { clearUserStorage } from '../../utils/storage';
 import { Container } from './Drawer.style';
 import Navigation from './Navigation/Navigation';
@@ -39,6 +40,11 @@ const Drawer: React.FC<Props> = (props) => {
     history.push('/');
   };
 
+  const handleSettings = () => {
+    handleClick();
+    history.push(urls.settings());
+  };
+
   const handleClick = () => {
     props.setExpanded(false);
   };
@@ -55,12 +61,6 @@ const Drawer: React.FC<Props> = (props) => {
       onMouseLeave={() => isSmallDesktop && props.setExpanded(false)}
     >
       <Header>
-        {/*{isLoggedIn && (*/}
-        {/*  <UserContainer>*/}
-        {/*    <Icon name={'account'} />*/}
-        {/*    {getUserStorageItem(__EMAIL__)}*/}
-        {/*  </UserContainer>*/}
-        {/*)}*/}
         {isLoggedIn && (
           <UserContainer>
             <Button
@@ -68,7 +68,16 @@ const Drawer: React.FC<Props> = (props) => {
               filled={false}
               buttonType={'button'}
               color={'lightGray-100'}
-              onClick={() => handleLogout()}
+              onClick={handleSettings}
+            >
+              Settings
+            </Button>
+            <Button
+              transparent
+              filled={false}
+              buttonType={'button'}
+              color={'lightGray-100'}
+              onClick={handleLogout}
             >
               Logout
             </Button>
