@@ -82,6 +82,24 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
         </FieldWrapper>
         <FieldWrapper>
+          <Field name="middleName" parse={(value) => value}>
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              return (
+                <TextField
+                  id="first_name"
+                  label="Middle Name"
+                  styleType="outlined"
+                  size="sm"
+                  status={hasError ? 'error' : 'hint'}
+                  hintMsg={hasError ? props.meta.error : undefined}
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
+        </FieldWrapper>
+        <FieldWrapper>
           <Field name="lastName" parse={(value) => value}>
             {(props) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;

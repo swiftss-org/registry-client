@@ -144,7 +144,7 @@ export const useRegisterPatient = () => {
     (params) => {
       const { request } = patientsAPI.single.registerPatient({
         hospital_id: params.hospital.value,
-        full_name: `${params.firstName} ${params.lastName}`,
+        full_name: `${params.firstName}${params.middleName ? " " + params.middleName : ""} ${params.lastName}`,
         year_of_birth: params.yearOfBirth,
         age: params.age,
         national_id: params.nationalId,
