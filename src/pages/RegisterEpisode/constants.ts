@@ -110,11 +110,11 @@ export const MESH_TYPE_OPTIONS: SelectOption[] = [
     label: 'KCMC Generic Mesh',
   },
   {
-    value: 1,
+    value: 2,
     label: 'Commercial Mesh',
   },
   {
-    value: 1,
+    value: 3,
     label: 'Hernia International Mesh'
   }
 ];
@@ -128,7 +128,7 @@ export const ANAESTHETIC_TYPE_OPTIONS: SelectOption[] = [
     label: 'Spinal Anaesthetic',
   },
   {
-    value: 1,
+    value: 2,
     label: 'General Anaesthetic',
   },
 ];
