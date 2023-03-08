@@ -146,6 +146,8 @@ export const useRegisterPatient = () => {
         hospital_id: params.hospital.value,
         full_name: `${params.firstName}${params.middleName ? " " + params.middleName : ""} ${params.lastName}`,
         year_of_birth: params.yearOfBirth,
+        month_of_birth: params.monthOfBirth,
+        day_of_birth: params.dayOfBirth,
         age: params.age,
         national_id: params.nationalId,
         patient_hospital_id: params.patientHospitalId,

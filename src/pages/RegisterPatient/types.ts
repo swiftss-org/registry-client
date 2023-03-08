@@ -8,6 +8,8 @@ export type RegisterPatientFormType = {
   patientHospitalId: number;
   nationalId: number;
   yearOfBirth: number;
+  monthOfBirth: number;
+  dayOfBirth: number;
   age: number;
   gender: 'male' | 'female';
   phone1: number;

@@ -152,6 +152,8 @@ export interface RegisterPatientPayload {
   patient_hospital_id: number;
   age: number;
   year_of_birth: number;
+  month_of_birth: number;
+  day_of_birth: number;
   hospital_id: number;
   gender: string;
   phone_1: number;
