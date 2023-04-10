@@ -98,7 +98,13 @@ const RegisterEpisode: React.FC = () => {
             ...arrayMutators,
           }}
           validate={(values) => formValidation(values, isNewHospital)}
-          onSubmit={handleSubmit}
+          onSubmit={(values) => {
+            const newValues = {
+              ...values,
+              antibioticType: values.antibioticType ? values.antibioticType.join(',') : undefined,
+            };
+            handleSubmit(newValues);
+          }}
         >
           {({
             handleSubmit,
