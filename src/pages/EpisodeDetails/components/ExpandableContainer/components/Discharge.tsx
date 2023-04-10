@@ -1,13 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import React, { FC } from 'react';
 
-import { Button, Select, TextField } from '@orfium/ictinus';
+import { Button, Select, TextArea, TextField } from '@orfium/ictinus';
 import { omit } from 'lodash';
 import { Field, Form } from 'react-final-form';
 import { useRouteMatch } from 'react-router-dom';
 
+import { CheckBoxWrapper } from '../../../../../common.style';
+import Checkbox from '../../../../../components/FormElements/Checkbox';
 import { useDischarge } from '../../../../../hooks/api/patientHooks';
-import { DischargeAPI, DischargeForm } from '../../../../../models/apiTypes';
+import { DischargeAPI, SelectOption } from '../../../../../models/apiTypes';
 import {
   FormHeadingContainer,
   SelectWrapper,
@@ -15,6 +17,14 @@ import {
 import { BOOLEAN_OPTIONS } from '../../../../RegisterEpisode/constants';
 import { InternalContainer } from '../style';
 import { FieldWrapper } from './style';
+
+const POST_OPERATIVE_COMPLICATIONS = [
+  { label: 'Bleeding' },
+  { label: 'Haematoma' },
+  { label: 'Urinary Retention' },
+  { label: 'Return to theatre' },
+  { label: 'Death' },
+];
 
 const Discharge: FC<{
   isOpen: boolean;
@@ -24,7 +34,14 @@ const Discharge: FC<{
   const { episodeID } = match.params;
   const { mutate, isLoading } = useDischarge(episodeID);
 
-  const handleSubmit = (form: DischargeForm) => {
+  const handleSubmit = (form: {
+    date: string;
+    aware_of_mesh: SelectOption;
+    infection: string;
+    episode_id: number;
+    comments?: string;
+    discharge_duration?: string;
+  }) => {
     mutate(form);
   };
 
@@ -32,8 +49,22 @@ const Discharge: FC<{
 
   return (
     <InternalContainer isOpen={isOpen} aria-expanded={isOpen}>
-      <Form onSubmit={handleSubmit}>
-        {({ handleSubmit }) => {
+      <Form
+        onSubmit={(values) => {
+          const newValues = {
+            ...values,
+            infection: (values.infection ? values.infection.join(',') : 'none') as string,
+          };
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          handleSubmit(newValues);
+        }}
+        initialValues={{
+          ...discharge,
+          infection: discharge && discharge.infection ? discharge.infection?.split(',') : undefined,
+        }}
+      >
+        {({ handleSubmit, values }) => {
           return (
             <form
               onSubmit={handleSubmit}
@@ -89,7 +120,7 @@ const Discharge: FC<{
                           <Select
                             locked={!canSubmit}
                             id="aware_of_mesh"
-                            label="Mesh"
+                            label="Antibiotics given on discharge"
                             styleType="outlined"
                             size="md"
                             required={canSubmit}
@@ -97,9 +128,17 @@ const Discharge: FC<{
                             hintMsg={hasError ? props.meta.error : undefined}
                             options={BOOLEAN_OPTIONS}
                             {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
+                            selectedOption={
+                              discharge?.aware_of_mesh !== undefined
+                                ? BOOLEAN_OPTIONS.find((option) =>
+                                    discharge?.aware_of_mesh
+                                      ? option.label === 'Yes'
+                                      : option.label === 'No'
+                                  )
+                                : BOOLEAN_OPTIONS.find(
+                                    (option) => option.value === props.input.value.value
+                                  )
+                            }
                             handleSelectedOption={props.input.onChange}
                           />
                         </SelectWrapper>
@@ -108,40 +147,68 @@ const Discharge: FC<{
                   </Field>
                 </FieldWrapper>
 
+                {values?.aware_of_mesh?.value === 0 && (
+                  <FieldWrapper>
+                    <Field
+                      name="discharge_duration"
+                      initialValue={discharge?.discharge_duration}
+                      parse={(value) => value}
+                    >
+                      {(props) => {
+                        const hasError =
+                          props.meta.touched && props.meta.invalid && !props.meta.active;
+                        return (
+                          <TextField
+                            id="discharge_duration"
+                            locked={!canSubmit}
+                            label={'Duration (days)'}
+                            required={canSubmit}
+                            styleType="outlined"
+                            size="md"
+                            status={hasError ? 'error' : 'hint'}
+                            hintMsg={hasError ? props.meta.error : undefined}
+                            {...props.input}
+                          />
+                        );
+                      }}
+                    </Field>
+                  </FieldWrapper>
+                )}
+
                 <FieldWrapper>
-                  <Field
-                    name="infection"
-                    initialValue={
-                      discharge?.infection !== undefined
-                        ? BOOLEAN_OPTIONS.find((option) =>
-                            discharge?.infection ? option.label === 'Yes' : option.label === 'No'
-                          )
-                        : undefined
-                    }
-                  >
+                  <label>Infection</label>
+                  <CheckBoxWrapper>
+                    {POST_OPERATIVE_COMPLICATIONS.map((option) => (
+                      <div key={option.label}>
+                        <Field
+                          name={`infection`}
+                          type="checkbox"
+                          value={option.label}
+                          label={option.label}
+                          component={Checkbox}
+                          disabled={!canSubmit}
+                        />
+                      </div>
+                    ))}
+                  </CheckBoxWrapper>
+                </FieldWrapper>
+
+                <FieldWrapper>
+                  <label>Comments</label>
+                  <Field name="comments" initialValue={discharge?.comments}>
                     {(props) => {
                       const hasError =
                         props.meta.touched && props.meta.invalid && !props.meta.active;
-
                       return (
-                        <SelectWrapper>
-                          <Select
-                            id="infection"
-                            label="Infection"
-                            styleType="outlined"
-                            size="md"
-                            locked={!canSubmit}
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
-                        </SelectWrapper>
+                        <TextArea
+                          id="comments"
+                          required={canSubmit}
+                          styleType="outlined"
+                          status={hasError ? 'error' : 'hint'}
+                          hintMsg={hasError ? props.meta.error : undefined}
+                          disabled={!canSubmit}
+                          {...props.input}
+                        />
                       );
                     }}
                   </Field>

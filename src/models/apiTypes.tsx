@@ -75,6 +75,8 @@ export type FollowUpAPI = {
   seroma: boolean;
   infection: boolean;
   numbness: boolean;
+  further_surgery_need: boolean;
+  surgery_comments_box?: string;
 };
 
 export type FollowUpPayload = {
@@ -98,6 +100,8 @@ export type FollowUpForm = {
   seroma: SelectOption;
   infection: SelectOption;
   numbness: SelectOption;
+  further_surgery_need: SelectOption;
+  surgery_comments_box?: string;
 };
 
 export type DischargeAPI = {
@@ -105,21 +109,25 @@ export type DischargeAPI = {
   episode: EpisodesAPI;
   date: string;
   aware_of_mesh: boolean;
-  infection: boolean;
+  infection: string;
+  discharge_duration?: string;
+  comments?: string;
 };
 
 export type DischargePayload = {
   episode_id: number;
   date: string;
   aware_of_mesh: boolean;
-  infection: boolean;
+  infection: string;
 };
 
 export type DischargeForm = {
   episode_id: number;
   date: string;
+  discharge_duration?: string;
   aware_of_mesh: SelectOption;
-  infection: SelectOption;
+  infection?: string;
+  comments?: string;
 };
 
 export type RegisterEpisodePayload = {
