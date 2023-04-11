@@ -144,7 +144,9 @@ export const useRegisterPatient = () => {
     (params) => {
       const { request } = patientsAPI.single.registerPatient({
         hospital_id: params.hospital.value,
-        full_name: `${params.firstName}${params.middleName ? " " + params.middleName : ""} ${params.lastName}`,
+        full_name: `${params.firstName}${params.middleName ? ' ' + params.middleName : ''} ${
+          params.lastName
+        }`,
         year_of_birth: params.yearOfBirth,
         month_of_birth: params.monthOfBirth,
         day_of_birth: params.dayOfBirth,
@@ -263,8 +265,10 @@ export const useDischarge = (episodeID: string) => {
       const payload = {
         episode_id: parseInt(episodeID),
         date: params?.date,
+        discharge_duration: params?.discharge_duration,
         aware_of_mesh: params?.aware_of_mesh.label === 'Yes',
-        infection: params?.infection.label === 'Yes',
+        comments: params?.comments,
+        infection: params?.infection || '',
       };
 
       const { request } = patientsAPI.single.dischargePatient(payload);
@@ -294,6 +298,8 @@ export const useFollowUp = (episodeID: string) => {
         infection: params?.infection.label === 'Yes',
         numbness: params?.numbness.label === 'Yes',
         pain_severity: params?.pain_severity.label,
+        further_surgery_need: params?.further_surgery_need.label === 'Yes',
+        surgery_comments_box: params?.surgery_comments_box,
       };
 
       const { request } = patientsAPI.single.followUpPatient(payload);
