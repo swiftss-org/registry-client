@@ -176,7 +176,7 @@ const Discharge: FC<{
                 )}
 
                 <FieldWrapper>
-                  <label>Infection</label>
+                  <label>Post-operative complications</label>
                   <CheckBoxWrapper>
                     {POST_OPERATIVE_COMPLICATIONS.map((option) => (
                       <div key={option.label}>
