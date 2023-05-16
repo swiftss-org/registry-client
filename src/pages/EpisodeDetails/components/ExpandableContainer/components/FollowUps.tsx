@@ -54,7 +54,6 @@ const FollowUps: FC<{
           form: {
             mutators: { push: addField },
           },
-          values,
         }) => {
           return (
             <form
@@ -382,31 +381,26 @@ const FollowUps: FC<{
                     }}
                   </Field>
                 </FieldWrapper>
-                {values?.further_surgery_need?.value === 0 && (
-                  <FieldWrapper>
-                    <label>Comments</label>
-                    <Field
-                      name="surgery_comments_box"
-                      initialValue={followUp?.surgery_comments_box}
-                    >
-                      {(props) => {
-                        const hasError =
-                          props.meta.touched && props.meta.invalid && !props.meta.active;
-                        return (
-                          <TextArea
-                            id="surgery_comments_box"
-                            required={canSubmit}
-                            styleType="outlined"
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            disabled={!canSubmit}
-                            {...props.input}
-                          />
-                        );
-                      }}
-                    </Field>
-                  </FieldWrapper>
-                )}
+                <FieldWrapper>
+                  <label>Comments</label>
+                  <Field name="surgery_comments_box" initialValue={followUp?.surgery_comments_box}>
+                    {(props) => {
+                      const hasError =
+                        props.meta.touched && props.meta.invalid && !props.meta.active;
+                      return (
+                        <TextArea
+                          id="surgery_comments_box"
+                          required={canSubmit}
+                          styleType="outlined"
+                          status={hasError ? 'error' : 'hint'}
+                          hintMsg={hasError ? props.meta.error : undefined}
+                          disabled={!canSubmit}
+                          {...props.input}
+                        />
+                      );
+                    }}
+                  </Field>
+                </FieldWrapper>
                 <Button
                   color={'blue-200'}
                   buttonType="button"
