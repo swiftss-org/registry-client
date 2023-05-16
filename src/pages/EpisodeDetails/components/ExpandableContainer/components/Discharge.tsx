@@ -24,6 +24,7 @@ const POST_OPERATIVE_COMPLICATIONS = [
   { label: 'Urinary Retention' },
   { label: 'Return to theatre' },
   { label: 'Death' },
+  { label: 'None' },
 ];
 
 const Discharge: FC<{
@@ -45,7 +46,7 @@ const Discharge: FC<{
     mutate(form);
   };
 
-  const canSubmit = discharge?.infection === undefined;
+  const canSubmit = discharge?.infection == undefined;
 
   return (
     <InternalContainer isOpen={isOpen} aria-expanded={isOpen}>
@@ -186,6 +187,7 @@ const Discharge: FC<{
                           value={option.label}
                           label={option.label}
                           component={Checkbox}
+                          required={canSubmit}
                           disabled={!canSubmit}
                         />
                       </div>
@@ -218,7 +220,7 @@ const Discharge: FC<{
                   color={'blue-200'}
                   buttonType="button"
                   onClick={handleSubmit}
-                  disabled={isLoading || !canSubmit}
+                  disabled={isLoading || !canSubmit || !values.infection}
                   block
                   size="md"
                 >
