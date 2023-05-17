@@ -15,7 +15,7 @@ export const PageWrapper = styled.div<{ isDesktop: boolean }>`
     isDesktop &&
     `
       justify-content: flex-start;
-      
+
     `}
 `;
 
@@ -25,6 +25,12 @@ export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean
   svg path {
     fill: white;
   }
+`;
+export const CheckBoxWrapper = styled.div<{ error?: boolean; checked?: boolean }>`
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  position: relative;
 `;
 
 export const FieldsContainer = styled.div<{ withMargin?: boolean }>`

@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import React, { useMemo } from 'react';
 
-import { Icon, Select, TextArea, TextField } from '@orfium/ictinus';
+import { Icon, Select, TextField } from '@orfium/ictinus';
 import { SelectOption } from '@orfium/ictinus/dist/components/Select/Select';
+import { CheckBoxWrapper, FieldWrapper, SectionTitle } from 'common.style';
+import Checkbox from 'components/FormElements/Checkbox';
 import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
-import { FieldWrapper, SectionTitle } from '../../../../common.style';
 import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI, PatientAPI, SurgeonsAPI } from '../../../../models/apiTypes';
 import {
@@ -44,6 +45,14 @@ type Props = {
 
 export const EMPTY_ARRAY = [{}];
 
+const PROPHYLACTIC_OPTIONS = [
+  { label: 'IV at start / before surgery' },
+  { label: '+24hrs Post Op IV' },
+  { label: '+24hrs Post Op Oral' },
+  { label: '+48hrs Post Op IV' },
+  { label: '+48hrs Post Op Oral' },
+];
+
 const RegisterEpisodeForm: React.FC<Props> = ({
   addField,
   surgeons,
@@ -52,6 +61,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   selectedHospital,
   setIsNewHospital,
   isNewHospital,
+  values,
 }) => {
   const { isDesktop } = useResponsiveLayout();
   const hospitalOptions = useMemo(() => getHospitalOptions(hospitals), [hospitals]);
@@ -291,7 +301,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
               );
             }}
           </Field>
-        </FieldWrapper>        
+        </FieldWrapper>
         <FieldWrapper>
           <Field name="complexity">
             {(props) => {
@@ -423,8 +433,8 @@ const RegisterEpisodeForm: React.FC<Props> = ({
               );
             }}
           </Field>
-          </FieldWrapper>
-          <FieldWrapper>
+        </FieldWrapper>
+        <FieldWrapper>
           <Field name="antibioticUsed">
             {(props) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
@@ -449,22 +459,23 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                 </SelectWrapper>
               );
             }}
-          </Field>          
-        </FieldWrapper>
-        <FieldWrapper>
-          <Field name="antibioticType">
-            {(props) => {
-              return (
-                <TextArea
-                  id="antibioticType"
-                  placeholder="Prophylactic antibiotics type"
-                  styleType="outlined"
-                  {...props.input}
-                />
-              );
-            }}
           </Field>
         </FieldWrapper>
+        {values?.antibioticUsed?.value === 0 && (
+          <CheckBoxWrapper>
+            {PROPHYLACTIC_OPTIONS.map((option) => (
+              <div key={option.label}>
+                <Field
+                  name={`antibioticType`}
+                  type="checkbox"
+                  value={option.label}
+                  label={option.label}
+                  component={Checkbox}
+                />
+              </div>
+            ))}
+          </CheckBoxWrapper>
+        )}
         <FieldArray name={'surgeons'} initialValue={EMPTY_ARRAY}>
           {({ fields }) =>
             fields.map((name, index) => (
@@ -506,20 +517,20 @@ const RegisterEpisodeForm: React.FC<Props> = ({
             ))
           }
         </FieldArray>
-        <FieldWrapper>
-          <Field name="comments">
-            {(props) => {
-              return (
-                <TextArea
-                  id="comments"
-                  placeholder="Comments"
-                  styleType="outlined"
-                  {...props.input}
-                />
-              );
-            }}
-          </Field>
-        </FieldWrapper>
+        {/*<FieldWrapper>*/}
+        {/*  <Field name="comments">*/}
+        {/*    {(props) => {*/}
+        {/*      return (*/}
+        {/*        <TextArea*/}
+        {/*          id="comments"*/}
+        {/*          placeholder="Comments"*/}
+        {/*          styleType="outlined"*/}
+        {/*          {...props.input}*/}
+        {/*        />*/}
+        {/*      );*/}
+        {/*    }}*/}
+        {/*  </Field>*/}
+        {/*</FieldWrapper>*/}
       </FormHeadingContainer>
     </FormContainer>
   );

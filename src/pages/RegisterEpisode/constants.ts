@@ -89,11 +89,11 @@ export const COMPLEXITY_OPTIONS: SelectOption[] = [
   },
   {
     value: 1,
-    label: 'Incarcerated',
+    label: 'Irreducible',
   },
   {
     value: 2,
-    label: 'Obstructed',
+    label: 'With bowel obstruction',
   },
   {
     value: 3,
@@ -110,9 +110,13 @@ export const MESH_TYPE_OPTIONS: SelectOption[] = [
     label: 'KCMC Generic Mesh',
   },
   {
-    value: 1,
+    value: 2,
     label: 'Commercial Mesh',
   },
+  {
+    value: 3,
+    label: 'Hernia International Mesh'
+  }
 ];
 export const ANAESTHETIC_TYPE_OPTIONS: SelectOption[] = [
   {
@@ -124,7 +128,7 @@ export const ANAESTHETIC_TYPE_OPTIONS: SelectOption[] = [
     label: 'Spinal Anaesthetic',
   },
   {
-    value: 1,
+    value: 2,
     label: 'General Anaesthetic',
   },
 ];

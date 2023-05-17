@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { FC, useMemo } from 'react';
 
-import { Button, Icon, Select, TextField } from '@orfium/ictinus';
+import { Button, Icon, Select, TextArea, TextField } from '@orfium/ictinus';
 import arrayMutators from 'final-form-arrays';
 import { omit } from 'lodash';
 import { Field, Form } from 'react-final-form';
@@ -200,7 +200,7 @@ const FollowUps: FC<{
                         <SelectWrapper>
                           <Select
                             id="mesh_awareness"
-                            label="Mesh"
+                            label="Mesh Awareness"
                             styleType="outlined"
                             size="md"
                             locked={!canSubmit}
@@ -329,6 +329,74 @@ const FollowUps: FC<{
                             handleSelectedOption={props.input.onChange}
                           />
                         </SelectWrapper>
+                      );
+                    }}
+                  </Field>
+                </FieldWrapper>
+                <FieldWrapper>
+                  <Field
+                    name="further_surgery_need"
+                    initialValue={
+                      followUp?.further_surgery_need !== undefined
+                        ? BOOLEAN_OPTIONS.find((option) =>
+                            followUp?.further_surgery_need
+                              ? option.label === 'Yes'
+                              : option.label === 'No'
+                          )
+                        : undefined
+                    }
+                  >
+                    {(props) => {
+                      const hasError =
+                        props.meta.touched && props.meta.invalid && !props.meta.active;
+
+                      return (
+                        <SelectWrapper>
+                          <Select
+                            locked={!canSubmit}
+                            id="further_surgery_need"
+                            label="Need further surgery?"
+                            styleType="outlined"
+                            size="md"
+                            required={canSubmit}
+                            status={hasError ? 'error' : 'hint'}
+                            hintMsg={hasError ? props.meta.error : undefined}
+                            options={BOOLEAN_OPTIONS}
+                            {...omit(props.input, ['onFocus'])}
+                            selectedOption={
+                              followUp?.further_surgery_need !== undefined
+                                ? BOOLEAN_OPTIONS.find((option) =>
+                                    followUp?.further_surgery_need
+                                      ? option.label === 'Yes'
+                                      : option.label === 'No'
+                                  )
+                                : BOOLEAN_OPTIONS.find(
+                                    (option) => option.value === props.input.value.value
+                                  )
+                            }
+                            handleSelectedOption={props.input.onChange}
+                          />
+                        </SelectWrapper>
+                      );
+                    }}
+                  </Field>
+                </FieldWrapper>
+                <FieldWrapper>
+                  <label>Comments</label>
+                  <Field name="surgery_comments_box" initialValue={followUp?.surgery_comments_box}>
+                    {(props) => {
+                      const hasError =
+                        props.meta.touched && props.meta.invalid && !props.meta.active;
+                      return (
+                        <TextArea
+                          id="surgery_comments_box"
+                          required={canSubmit}
+                          styleType="outlined"
+                          status={hasError ? 'error' : 'hint'}
+                          hintMsg={hasError ? props.meta.error : undefined}
+                          disabled={!canSubmit}
+                          {...props.input}
+                        />
                       );
                     }}
                   </Field>

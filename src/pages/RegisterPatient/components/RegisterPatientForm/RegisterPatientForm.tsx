@@ -17,7 +17,7 @@ import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI } from '../../../../models/apiTypes';
 import { RegisterPatientFormType } from '../../types';
 import { getHospitalOptions } from '../../utils';
-import { FormContainer, FormHeadingContainer, SelectWrapper } from './RegisterPatientForm.style';
+import { FormContainer, FormHeadingContainer, SelectWrapper, BirthdayFieldsContainer } from './RegisterPatientForm.style';
 
 type Props = {
   values: RegisterPatientFormType;
@@ -82,6 +82,24 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
         </FieldWrapper>
         <FieldWrapper>
+          <Field name="middleName" parse={(value) => value}>
+            {(props) => {
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              return (
+                <TextField
+                  id="first_name"
+                  label="Middle Name"
+                  styleType="outlined"
+                  size="sm"
+                  status={hasError ? 'error' : 'hint'}
+                  hintMsg={hasError ? props.meta.error : undefined}
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
+        </FieldWrapper>
+        <FieldWrapper>
           <Field name="lastName" parse={(value) => value}>
             {(props) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
@@ -100,7 +118,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
             }}
           </Field>
         </FieldWrapper>
-        <FieldsContainer>
+        <BirthdayFieldsContainer>
           <Field name="age">
             {({ input: { onChange } }) => (
               <OnBlur name="yearOfBirth">
@@ -132,6 +150,44 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
             </Field>
           </FieldWrapper>
           <FieldWrapper>
+            <Field name="monthOfBirth" parse={(value) => value}>
+              {(props) => {
+                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                return (
+                  <TextField
+                    id="month_of_birth"
+                    label="Month Of Birth"
+                    styleType="outlined"
+                    type="number"
+                    size="sm"
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    {...props.input}
+                  />
+                );
+              }}
+            </Field>
+          </FieldWrapper>
+          <FieldWrapper>
+            <Field name="dayOfBirth" parse={(value) => value}>
+              {(props) => {
+                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                return (
+                  <TextField
+                    id="day_of_birth"
+                    label="Day Of Birth"
+                    styleType="outlined"
+                    type="number"
+                    size="sm"
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
+                    {...props.input}
+                  />
+                );
+              }}
+            </Field>
+          </FieldWrapper>
+          <FieldWrapper>
             <Field name="age" parse={(value) => value}>
               {(props) => {
                 return (
@@ -148,7 +204,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               }}
             </Field>
           </FieldWrapper>
-        </FieldsContainer>
+        </BirthdayFieldsContainer>
         <FieldWrapper>
           <Field name="nationalId" parse={parseOnlyNumbers}>
             {(props) => {
