@@ -21,7 +21,9 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
   const { isDesktop } = useResponsiveLayout();
   const [hospitalId, setHospitalId] = useState<number>();
 
-  const [sortingOption, setSortingOption] = useState<SortingOptionsType>('full_name');
+  const [sortingOption, setSortingOption] = useState<SortingOptionsType>(
+    (localStorage.getItem('sortingOption') as SortingOptionsType) || '-created_at'
+  );
 
   const { data: patients } = useGetPatients({
     offset: 0,
@@ -41,6 +43,12 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
       setSelectedOption(hospitals?.results[0].id);
     }
   }, [hospitals]);
+
+  useEffect(() => {
+    if (sortingOption) {
+      localStorage.setItem('sortingOption', sortingOption);
+    }
+  }, [sortingOption]);
 
   const history = useHistory();
 
