@@ -71,6 +71,22 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         locked
         value={hospitalPatientID}
       />
+      <TextField
+        id="patient_phone_number_1"
+        label="Patient Phone number 1"
+        styleType="outlined"
+        size="md"
+        locked
+        value={patient?.phone_1}
+      />
+      <TextField
+        id="patient_phone_number_2"
+        label="Patient Phone number 2"
+        styleType="outlined"
+        size="md"
+        locked
+        value={patient?.phone_2}
+      />
     </Container>
   );
 };
