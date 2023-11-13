@@ -31,6 +31,10 @@ export const CheckBoxWrapper = styled.div<{ error?: boolean; checked?: boolean }
   flex-direction: row;
   margin-top: 10px;
   position: relative;
+
+  @media (max-width: 768px) {
+  display: block;
+  }
 `;
 
 export const FieldsContainer = styled.div<{ withMargin?: boolean }>`
