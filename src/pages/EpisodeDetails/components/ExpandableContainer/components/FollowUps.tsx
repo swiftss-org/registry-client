@@ -355,7 +355,7 @@ const FollowUps: FC<{
                           <Select
                             locked={!canSubmit}
                             id="further_surgery_need"
-                            label="Need further surgery?"
+                            label="Need for further surgery?"
                             styleType="outlined"
                             size="md"
                             required={canSubmit}
