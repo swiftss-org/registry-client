@@ -19,6 +19,16 @@ export const getSurgeonOptions = (surgeons: SurgeonsAPI[]): SelectOption[] => {
   }));
 };
 
+export const getSurgeonOptionsSorted = (surgeons: SurgeonsAPI[]): SelectOption[] => {
+  const options: SelectOption[] = surgeons.map((surgeon) => ({
+    label: `${surgeon?.user.first_name} ${surgeon?.user.last_name}` ?? '',
+    value: surgeon?.id,
+  }));
+  // Sort the options by label
+  options.sort((a, b) => a.label.localeCompare(b.label));
+  return options;
+};
+
 export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: boolean) => {
   const errors = {} || {
     hospital: '',

@@ -17,7 +17,7 @@ import {
   SelectWrapper,
 } from '../../../../RegisterEpisode/components/RegisterEpisodeForm/RegisterEpisodeForm.style';
 import { BOOLEAN_OPTIONS, FOLLOW_UP_PAIN_OPTIONS } from '../../../../RegisterEpisode/constants';
-import { getSurgeonOptions } from '../../../../RegisterEpisode/utils';
+import { getSurgeonOptionsSorted } from '../../../../RegisterEpisode/utils';
 import { InternalContainer } from '../style';
 import { FieldWrapper } from './style';
 
@@ -34,7 +34,7 @@ const FollowUps: FC<{
     limit: 100,
   });
 
-  const surgeonOptions = useMemo(() => getSurgeonOptions(surgeons?.results ?? []), [surgeons]);
+  const surgeonOptions = useMemo(() => getSurgeonOptionsSorted(surgeons?.results ?? []), [surgeons]);
 
   const handleSubmit = (form: FollowUpForm) => {
     mutate(form);
@@ -103,7 +103,7 @@ const FollowUps: FC<{
                                     <Select
                                       id="id"
                                       label="Surgeon"
-                                      isSearchable={false}
+                                      isSearchable={true}
                                       styleType="outlined"
                                       size="md"
                                       locked={!canSubmit}
@@ -355,7 +355,7 @@ const FollowUps: FC<{
                           <Select
                             locked={!canSubmit}
                             id="further_surgery_need"
-                            label="Need further surgery?"
+                            label="Need for further surgery?"
                             styleType="outlined"
                             size="md"
                             required={canSubmit}

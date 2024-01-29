@@ -24,7 +24,7 @@ import {
   EPISODE_TYPE_OPTIONS,
 } from '../../constants';
 import { RegisterEpisodeFormType } from '../../types';
-import { getHospitalOptions, getSurgeonOptions } from '../../utils';
+import {getHospitalOptions, getSurgeonOptionsSorted} from '../../utils';
 import {
   ArrayContainer,
   FormContainer,
@@ -65,7 +65,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 }) => {
   const { isDesktop } = useResponsiveLayout();
   const hospitalOptions = useMemo(() => getHospitalOptions(hospitals), [hospitals]);
-  const surgeonOptions = useMemo(() => getSurgeonOptions(surgeons), [surgeons]);
+  const surgeonOptions = useMemo(() => getSurgeonOptionsSorted(surgeons), [surgeons]);
 
   const defaultHospital = useMemo(
     () => ({ value: selectedHospital?.id, label: selectedHospital?.name }),
@@ -489,7 +489,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                         <Select
                           id="id"
                           label="Surgeon"
-                          isSearchable={false}
+                          isSearchable={true}
                           styleType="outlined"
                           size="md"
                           required
