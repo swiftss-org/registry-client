@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useMemo } from 'react';
 
-import { Icon, Select, TextField } from '@orfium/ictinus';
+import { Icon, Select, TextField, TextArea } from '@orfium/ictinus';
 import { SelectOption } from '@orfium/ictinus/dist/components/Select/Select';
 import { CheckBoxWrapper, FieldWrapper, SectionTitle } from 'common.style';
 import Checkbox from 'components/FormElements/Checkbox';
@@ -517,20 +517,20 @@ const RegisterEpisodeForm: React.FC<Props> = ({
             ))
           }
         </FieldArray>
-        {/*<FieldWrapper>*/}
-        {/*  <Field name="comments">*/}
-        {/*    {(props) => {*/}
-        {/*      return (*/}
-        {/*        <TextArea*/}
-        {/*          id="comments"*/}
-        {/*          placeholder="Comments"*/}
-        {/*          styleType="outlined"*/}
-        {/*          {...props.input}*/}
-        {/*        />*/}
-        {/*      );*/}
-        {/*    }}*/}
-        {/*  </Field>*/}
-        {/*</FieldWrapper>*/}
+        <FieldWrapper>
+          <Field name="comments">
+            {(props) => {
+              return (
+                <TextArea
+                  id="comments"
+                  placeholder="Comments"
+                  styleType="outlined"
+                  {...props.input}
+                />
+              );
+            }}
+          </Field>
+        </FieldWrapper>
       </FormHeadingContainer>
     </FormContainer>
   );
