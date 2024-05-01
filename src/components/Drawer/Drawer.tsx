@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { Button, useBreakpoints } from '@orfium/ictinus';
-import GHLogo from 'assets/gh-logo.png'
-import SLLogo from 'assets/sl-logo.png';
-import SwiftSSLogo from 'assets/swiftss-logo.png';
-import TSALogoLocal from 'assets/tsa-logo-local.png';
-import TSALogoTest from 'assets/tsa-logo-test.png';
-import TSALogo from 'assets/tsa-logo.png';
 import { useHistory } from 'react-router-dom';
 
+import GHLogo from '../../assets/gh-logo.png'
+import SLLogo from '../../assets/sl-logo.png';
+import SwiftSSLogo from '../../assets/swiftss-logo.png';
+import TSALogoLocal from '../../assets/tsa-logo-local.png';
+import TSALogoTest from '../../assets/tsa-logo-test.png';
+import TSALogo from '../../assets/tsa-logo.png';
 import { useIsLoggedIn } from '../../hooks/useIsLoggedIn';
 import urls from '../../routing/urls';
 import { clearUserStorage } from '../../utils/storage';
