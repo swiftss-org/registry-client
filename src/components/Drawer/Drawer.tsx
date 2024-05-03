@@ -34,6 +34,7 @@ export type Props = {
 };
 
 let SiteLogo: string;
+// If domain is not recognised, default to Tanzania
 SiteLogo = TSALogo;
 if (window.location.hostname === 'tmh-registry-client.herokuapp.com') {
   // Tanzania
@@ -87,15 +88,15 @@ const Drawer: React.FC<Props> = (props) => {
       // Ghana
       return (
         <div>The Affordable Mesh Hernia Surgery Initiative is a collaboration between SWIFTSS and
-          the Ghanaian AMHSI working group. For more information visit
-          <a href="https://swiftss.org/">www.swiftss.org</a>.</div>
+          the Ghanaian AMHSI working group. For more information
+          visit <a href="https://swiftss.org/">www.swiftss.org</a>.</div>
       );
     } else if (window.location.hostname === 'tmh-registry-client-sl.herokuapp.com') {
       // Sierra Leone
       return (
         <div>The Affordable Mesh Hernia Surgery Initiative is a collaboration between SWIFTSS and
-          the Sierra Leone AMHSI working group.  For more information visit
-          <a href="https://swiftss.org/">www.swiftss.org</a>.</div>
+          the Sierra Leone AMHSI working group.  For more information
+          visit <a href="https://swiftss.org/">www.swiftss.org</a>.</div>
       );
     } else if (window.location.hostname === 'tmh-registry-client-staging.herokuapp.com') {
       // Staging site
@@ -109,9 +110,10 @@ const Drawer: React.FC<Props> = (props) => {
       return (
         <div>The Tanzania National Mesh Hernia Project is an original collaboration between SWIFTSS
           and the TSA (and the forerunner of the Affordable Mesh Hernia Surgery Initiative). For
-          more information visit <a href="https://swiftss.org/">www.swiftss.org</a>. LOCALHOST</div>
+          more information visit <a href="https://swiftss.org/">www.swiftss.org</a>.</div>
       )
     } else {
+      // If domain is not recognised, default to Tanzania
       return (
         <div>The Tanzania National Mesh Hernia Project is an original collaboration between SWIFTSS
           and the TSA (and the forerunner of the Affordable Mesh Hernia Surgery Initiative). For
@@ -126,44 +128,49 @@ const Drawer: React.FC<Props> = (props) => {
     if (window.location.hostname === 'tmh-registry-client.herokuapp.com') {
       // Tanzania
       return (
-        <div>Tanzania National <br />
-          Mesh Hernia Project <br />
+        <div>Tanzania National<br />
+          Mesh Hernia Project<br />
           eRegistry</div>
       );
     } else if (window.location.hostname === 'tmh-registry-client-gh-6a64e51863f6.herokuapp.com') {
       // Ghana
       return (
-        <div>AMHSI Ghana <br />
+        <div>Ghana Affordable<br />
+          Mesh Hernia Project<br />
           eRegistry</div>
       );
     } else if (window.location.hostname === 'tmh-registry-client-sl.herokuapp.com') {
       // Sierra Leone
       return (
-        <div>AMHSI Sierra Leone <br />
+        <div>Sierra Leone Affordable<br />
+          Mesh Hernia Project<br />
           eRegistry</div>
       );
     } else if (window.location.hostname === 'tmh-registry-client-staging.herokuapp.com') {
       // Staging site
       return (
-        <div>AMHSI <br />
-          TEST SITE</div>
+        <div>Affordable Mesh<br />
+          Hernia Initiative<br />
+          eRegistry TEST SITE</div>
       );
     } else if (window.location.hostname === 'localhost') {
       // Localhost
       return (
-        <div>eRegistry <br />
-          LOCALHOST SITE</div>
+        <div>Tanzania National<br />
+          Mesh Hernia Project<br />
+          eRegistry</div>
       )
     } else {
+      // If domain is not recognised, default to Tanzania
       return (
-        <div>Tanzania National <br />
-          Mesh Hernia Project <br />
+        <div>Tanzania National<br />
+          Mesh Hernia Project<br />
           eRegistry</div>
       );
     }
   };
 
-  const headerText= getLocalisedHeaderText();
+  const headerText = getLocalisedHeaderText();
 
   return (
     <Container

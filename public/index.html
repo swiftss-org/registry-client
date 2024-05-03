@@ -28,7 +28,8 @@
     <script>
       window.onload = function() {
         var domain = window.location.hostname;
-        var title = "eRegistry";
+        // If domain is not recognised, default to Tanzania
+        var title = "eRegistry Tz";
         if (window.location.hostname === 'tmh-registry-client.herokuapp.com') {
           // Tanzania
           title = "eRegistry Tz";
