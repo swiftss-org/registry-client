@@ -150,7 +150,7 @@ const Drawer: React.FC<Props> = (props) => {
       // Staging site
       return (
         <div>Affordable Mesh<br />
-          Hernia Initiative<br />
+          Hernia Surgery Initiative<br />
           eRegistry TEST SITE</div>
       );
     } else if (window.location.hostname === 'localhost') {
