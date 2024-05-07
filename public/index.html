@@ -24,7 +24,31 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>TMH Registry</title>
+    <title>eRegistry</title>
+    <script>
+      window.onload = function() {
+        var domain = window.location.hostname;
+        // If domain is not recognised, default to Tanzania
+        var title = "eRegistry Tz";
+        if (window.location.hostname === 'tmh-registry-client.herokuapp.com') {
+          // Tanzania
+          title = "eRegistry Tz";
+        } else if (window.location.hostname === 'tmh-registry-client-gh-6a64e51863f6.herokuapp.com') {
+          // Ghana
+          title = "eRegistry Gh";
+        } else if (window.location.hostname === 'tmh-registry-client-sl.herokuapp.com') {
+          // Sierra Leone
+          title = "eRegistry SL";
+        } else if (window.location.hostname === 'tmh-registry-client-staging.herokuapp.com') {
+          // Staging site
+          title = "eRegistry TEST SITE";
+        } else if (window.location.hostname === 'localhost') {
+          // Localhost
+          title = "eRegistry LOCALHOST";
+        }
+        document.title = title;
+      };
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
