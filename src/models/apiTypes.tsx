@@ -75,7 +75,6 @@ export type FollowUpAPI = {
   seroma: boolean;
   infection: boolean;
   numbness: boolean;
-  recurrence: boolean;
   further_surgery_need: boolean;
   surgery_comments_box?: string;
 };
@@ -88,7 +87,6 @@ export type FollowUpPayload = {
   seroma: boolean;
   infection: boolean;
   numbness: boolean;
-  recurrence: boolean;
 };
 
 export type FollowUpForm = {
@@ -102,7 +100,6 @@ export type FollowUpForm = {
   seroma: SelectOption;
   infection: SelectOption;
   numbness: SelectOption;
-  recurrence: SelectOption;
   further_surgery_need: SelectOption;
   surgery_comments_box?: string;
 };

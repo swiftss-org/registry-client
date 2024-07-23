@@ -335,44 +335,6 @@ const FollowUps: FC<{
                 </FieldWrapper>
                 <FieldWrapper>
                   <Field
-                    name="recurrence"
-                    initialValue={
-                      followUp?.recurrence !== undefined
-                        ? BOOLEAN_OPTIONS.find((option) =>
-                            followUp?.recurrence ? option.label === 'Yes' : option.label === 'No'
-                          )
-                        : undefined
-                    }
-                  >
-                    {(props) => {
-                      const hasError =
-                        props.meta.touched && props.meta.invalid && !props.meta.active;
-
-                      return (
-                        <SelectWrapper>
-                          <Select
-                            locked={!canSubmit}
-                            id="recurrence"
-                            label="Recurrence"
-                            styleType="outlined"
-                            size="md"
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
-                        </SelectWrapper>
-                      );
-                    }}
-                  </Field>
-                </FieldWrapper>
-                <FieldWrapper>
-                  <Field
                     name="further_surgery_need"
                     initialValue={
                       followUp?.further_surgery_need !== undefined
