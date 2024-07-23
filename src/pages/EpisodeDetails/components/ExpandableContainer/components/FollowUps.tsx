@@ -337,7 +337,7 @@ const FollowUps: FC<{
                   <Field
                     name="recurrence"
                     initialValue={
-                      followUp?.recurrence !== undefined
+                      followUp?.recurrence != null
                         ? BOOLEAN_OPTIONS.find((option) =>
                             followUp?.recurrence ? option.label === 'Yes' : option.label === 'No'
                           )
