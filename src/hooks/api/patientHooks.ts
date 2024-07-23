@@ -297,7 +297,6 @@ export const useFollowUp = (episodeID: string) => {
         seroma: params?.seroma.label === 'Yes',
         infection: params?.infection.label === 'Yes',
         numbness: params?.numbness.label === 'Yes',
-        recurrence: params?.recurrence.label === 'Yes',
         pain_severity: params?.pain_severity.label,
         further_surgery_need: params?.further_surgery_need.label === 'Yes',
         surgery_comments_box: params?.surgery_comments_box,
