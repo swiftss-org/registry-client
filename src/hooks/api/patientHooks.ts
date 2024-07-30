@@ -17,7 +17,7 @@ import {
   PaginationParams,
   PatientAPI,
   PatientsPayload,
-  PatientsResponse,
+  PatientsResponse, PreferredHospital,
   RegisterEpisodePayload,
   RegisterPatientPayload,
   SurgeonsResponse,
@@ -38,6 +38,22 @@ export const useGetHospitals = (params?: PaginationParams) => {
         console.log(errors);
       },
 
+      retry: false,
+    }
+  );
+};
+
+export const useGetPreferredHospital = () => {
+  return useQuery<PreferredHospital, AxiosError, PreferredHospital>(
+    ReactQueryKeys.PreferredHospitalQuery,
+    async () => {
+      const { request }  = patientsAPI.single.getPreferredHospital();
+      return await request();
+    },
+    {
+      onError: (error) => {
+        console.error("Error fetching preferred hospital:", error);
+      },
       retry: false,
     }
   );

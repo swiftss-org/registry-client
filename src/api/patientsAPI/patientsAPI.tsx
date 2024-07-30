@@ -28,4 +28,5 @@ export default {
     request(METHODS.POST, '/patient-hospital-mappings/', { params }),
   dischargePatient: (params: DischargePayload) => request(METHODS.POST, `/discharges/`, { params }),
   followUpPatient: (params: FollowUpPayload) => request(METHODS.POST, `/follow-ups/`, { params }),
+  getPreferredHospital: () => request(METHODS.GET, '/preferred-hospital/retrieve_for_current_user/', {}),
 };
