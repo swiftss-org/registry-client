@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { IconButton, Filter } from '@orfium/ictinus';
 import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
 import { ReactComponent as SortIcon } from 'assets/PatientDirectory/sortIcon.svg';
 import { PageWrapper, PageTitle } from 'common.style';
-import { useGetHospitals, useGetPatients } from 'hooks/api/patientHooks';
+import { useGetHospitals, useGetPatients, useGetPreferredHospital } from 'hooks/api/patientHooks';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useHistory } from 'react-router';
 import urls from 'routing/urls';
@@ -20,7 +20,6 @@ import { SortingOptionsType } from './types';
 const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { isDesktop } = useResponsiveLayout();
   const [hospitalId, setHospitalId] = useState<number>();
-
   const [sortingOption, setSortingOption] = useState<SortingOptionsType>(
     (localStorage.getItem('sortingOption') as SortingOptionsType) || '-created_at'
   );
@@ -37,12 +36,22 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
 
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
 
+  const { data: preferredHospital } = useGetPreferredHospital();
+
+  const isFirstLoad = useRef(true);
+
   useEffect(() => {
-    if (hospitals) {
-      setHospitalId(hospitals?.results[0].id);
-      setSelectedOption(hospitals?.results[0].id);
+    if (hospitals && isFirstLoad.current) {
+      if (preferredHospital && preferredHospital.hospital) {
+        setHospitalId(preferredHospital.hospital.id);
+        setSelectedOption(preferredHospital.hospital.id);
+        isFirstLoad.current = false;
+      } else {
+        setHospitalId(hospitals?.results[0].id);
+        setSelectedOption(hospitals?.results[0].id);
+      }
     }
-  }, [hospitals]);
+  }, [hospitals, preferredHospital]);
 
   useEffect(() => {
     if (sortingOption) {

@@ -215,3 +215,9 @@ export type HospitalMappingPayload = {
   hospital_id: number;
   patient_hospital_id: string;
 };
+
+export interface PreferredHospital {
+  hospital: {
+    id: number;
+  };
+}
