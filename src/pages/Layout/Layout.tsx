@@ -63,6 +63,12 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
               url: '/patients/register',
               options: [],
             },
+            {
+              name: 'Dashboard',
+              visible: true,
+              url: '/patients/landing',
+              options: [],
+            },
             // {
             //   name: 'My Account',
             //   visible: true,
