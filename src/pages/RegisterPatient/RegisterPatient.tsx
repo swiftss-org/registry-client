@@ -50,7 +50,7 @@ const RegisterPatient: React.FC = () => {
           Add new patient
         </PageTitle>
         <Form onSubmit={handleSubmit} validate={formValidation}>
-          {({ handleSubmit, values, valid, submitting, dirty }) => {
+          {({ handleSubmit, values, submitting, dirty }) => {
             if (dirty) {
               setIsFormDirty(true);
             }
@@ -70,7 +70,7 @@ const RegisterPatient: React.FC = () => {
                   <Button
                     color={'blue-500'}
                     buttonType="submit"
-                    disabled={isLoading || !valid || submitting}
+                    disabled={isLoading || submitting}
                     block
                     size="md"
                   >

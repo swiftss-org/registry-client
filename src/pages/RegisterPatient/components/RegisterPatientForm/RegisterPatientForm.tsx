@@ -268,6 +268,24 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               );
             }}
           </Field>
+          <Field name="gender">
+            {(props) => {
+                          const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                          return (
+                            <TextField
+                              id="gender"
+                              label="Gender"
+                              styleType="outlined"
+                              disabled
+                              size="sm"
+                              maxLength={20}
+                              status={hasError ? 'error' : 'hint'}
+                              hintMsg={hasError ? props.meta.error : undefined}
+                              {...props.input}
+                            />
+                          );
+                        }}
+          </Field>
         </FieldsContainer>
       </FormHeadingContainer>
 
@@ -277,13 +295,17 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           <FieldWrapper>
             <Field name="phone1" parse={parseOnlyNumbers}>
               {(props) => {
+                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
                 return (
                   <TextField
                     id="phone1"
                     label="Phone #1"
                     styleType="outlined"
+                    required
                     size="sm"
                     maxLength={20}
+                    status={hasError ? 'error' : 'hint'}
+                    hintMsg={hasError ? props.meta.error : undefined}
                     {...props.input}
                   />
                 );

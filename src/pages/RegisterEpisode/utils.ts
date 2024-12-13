@@ -37,6 +37,7 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
     yearOfBirth: '',
     patientHospitalId: '',
     surgeons: '',
+    episodeType: '',
     cepod: '',
     side: '',
     surgeryDate: '',
@@ -59,6 +60,10 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
     errors.patientHospitalId = REQUIRED_FIELD_MSG;
   }
 
+  if (!values.episodeType && typeof values.episodeType !== 'object') {
+    errors.episodeType = REQUIRED_FIELD_MSG
+  }
+
   if (!values.cepod && typeof values.cepod !== 'object') {
     errors.cepod = REQUIRED_FIELD_MSG;
   }
@@ -68,7 +73,7 @@ export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: b
   }
 
   if (!values.surgeryDate?.trim()) {
-    errors.surgeryDate = REQUIRED_FIELD_MSG;
+    errors.surgeryDate = REQUIRED_FIELD_MSG + '. Please select a date.';
   }
 
   if (new Date(values.surgeryDate?.trim()) > new Date()) {
