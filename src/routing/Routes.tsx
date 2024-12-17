@@ -1,5 +1,6 @@
 import React from 'react';
 
+import LandingPage from 'pages/LandingPage';
 import Login from 'pages/Login';
 import PatientDirectory from 'pages/PatientDirectory';
 import RegisterPatient from 'pages/RegisterPatient';
@@ -33,9 +34,9 @@ const Routes: React.FC = () => (
       path={`${urls.patients()}/:hospitalID/:patientID`}
       component={PatientDetails}
     />
-
     <PrivateRoute exact path={[urls.patients()]} component={PatientDirectory} />
-    <Redirect to={urls.patients()} />
+    <PrivateRoute exact path={urls.landingPage()} component={LandingPage} />
+    <Redirect to={urls.login()} />
   </Switch>
 );
 

@@ -221,3 +221,18 @@ export interface PreferredHospital {
     id: number;
   };
 }
+
+export type SurgeonEpisodeSummaryAPI = {
+  episode_count: number;
+  last_episode_date: string;
+};
+
+export type OwnedEpisodeAPI = {
+  id: number;
+  surgery_date: string;
+  patient_name: string;
+  discharge: DischargeAPI | null;
+  follow_up_dates: FollowUpAPI[];
+  patient_id: number;
+  hospital_id: number;
+};

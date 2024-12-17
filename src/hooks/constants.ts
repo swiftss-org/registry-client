@@ -4,4 +4,6 @@ export const ReactQueryKeys = {
   SurgeonsQuery: 'surgeonsQuery',
   EpisodesQuery: 'episodesQuery',
   PreferredHospitalQuery: 'preferredHospital',
+  SurgeonEpisodeSummaryQuery: 'surgeonEpisodeSummary',
+  OwnedEpisodesQuery: 'ownedEpisodes',
 };

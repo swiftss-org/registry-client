@@ -5,6 +5,7 @@ const urls = {
   patients: () => '/patients',
   registerPatient: () => '/patients/register',
   episodes: () => '/episodes',
+  landingPage: () => '/landing',
 };
 
 export default urls;

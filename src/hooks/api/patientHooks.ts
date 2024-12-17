@@ -14,12 +14,15 @@ import {
   HospitalMappingPayload,
   HospitalsAPI,
   HospitalsResponse,
+  OwnedEpisodeAPI,
   PaginationParams,
   PatientAPI,
   PatientsPayload,
-  PatientsResponse, PreferredHospital,
+  PatientsResponse,
+  PreferredHospital,
   RegisterEpisodePayload,
   RegisterPatientPayload,
+  SurgeonEpisodeSummaryAPI,
   SurgeonsResponse,
 } from '../../models/apiTypes';
 import { RegisterEpisodeFormType } from '../../pages/RegisterEpisode/types';
@@ -53,6 +56,38 @@ export const useGetPreferredHospital = () => {
     {
       onError: (error) => {
         console.error("Error fetching preferred hospital:", error);
+      },
+      retry: false,
+    }
+  );
+};
+
+export const useGetSurgeonEpisodeSummary = () => {
+  return useQuery<SurgeonEpisodeSummaryAPI, AxiosError, SurgeonEpisodeSummaryAPI>(
+    ReactQueryKeys.SurgeonEpisodeSummaryQuery,
+    async () => {
+      const { request } = patientsAPI.single.getSurgeonEpisodeSummary();
+      return await request();
+    },
+    {
+      onError: (error) => {
+        console.error("Error fetching surgeon episode stats:", error);
+      },
+      retry: false,
+    }
+  );
+};
+
+export const useGetOwnedEpisodes = () => {
+  return useQuery<OwnedEpisodeAPI[], AxiosError>(
+    ReactQueryKeys.OwnedEpisodesQuery,
+    async () => {
+      const { request } = patientsAPI.single.getOwnedEpisodes();
+      return await request();
+    },
+    {
+      onError: (error: AxiosError) => {
+        console.error("Error fetching owned episodes:", error);
       },
       retry: false,
     }
@@ -333,3 +368,4 @@ export const useFollowUp = (episodeID: string) => {
     }
   );
 };
+

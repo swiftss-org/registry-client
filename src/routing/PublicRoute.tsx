@@ -12,7 +12,7 @@ const PublicRoute: React.FC<CustomRouteProps> = ({ component: Component, ...rest
   const token = getUserStorageItem(__TOKEN__);
 
   if (token && rest.path === urls.login()) {
-    return <Route {...rest} render={() => <Redirect to={urls.patients()} />} />;
+    return <Route {...rest} render={() => <Redirect to={urls.landingPage()} />} />;
   }
 
   return (

@@ -33,7 +33,7 @@ export const useSignIn = () => {
         setUserStorageItem(__EMAIL__, data?.user.email ?? '');
         setAxiosToken(data?.token ?? '');
 
-        history.replace(urls.patients());
+        history.replace(urls.landingPage());
       },
       onError: (errors) => {
         setNotification('Invalid credential combination.', 'error');
