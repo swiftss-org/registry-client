@@ -22,6 +22,7 @@
     "@types/react-router-dom": "^5.1.7",
     "axios": "^0.21.1",
     "customize-cra": "^1.0.0",
+    "express": "^4.21.2",
     "final-form": "^4.20.2",
     "final-form-arrays": "^3.0.2",
     "history": "^4.10.1",
