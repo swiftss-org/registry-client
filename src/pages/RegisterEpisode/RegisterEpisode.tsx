@@ -113,7 +113,6 @@ const RegisterEpisode: React.FC = () => {
             form: {
               mutators: { push },
             },
-            valid,
             submitting,
           }) => {
             if (dirty) {
@@ -147,7 +146,7 @@ const RegisterEpisode: React.FC = () => {
                     color={'blue-500'}
                     buttonType="button"
                     onClick={handleSubmit}
-                    disabled={isLoading || !valid || submitting || isSubmitLoading}
+                    disabled={isLoading || submitting || isSubmitLoading}
                     block
                     size="md"
                   >
