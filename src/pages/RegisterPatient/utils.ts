@@ -12,7 +12,7 @@ export const getHospitalOptions = (hospitals: HospitalsAPI[]): FilterOption[] =>
   }));
 };
 
-export const formValidation = (values: RegisterPatientFormType) => {
+export const patientFormValidation = (values: RegisterPatientFormType) => {
   const errors = {} || {
     hospital: '',
     firstName: '',

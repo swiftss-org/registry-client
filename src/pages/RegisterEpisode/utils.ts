@@ -29,7 +29,7 @@ export const getSurgeonOptionsSorted = (surgeons: SurgeonsAPI[]): SelectOption[]
   return options;
 };
 
-export const formValidation = (values: RegisterEpisodeFormType, isNewHospital: boolean) => {
+export const episodeFormValidation = (values: RegisterEpisodeFormType, isNewHospital: boolean) => {
   const errors = {} || {
     hospital: '',
     firstName: '',

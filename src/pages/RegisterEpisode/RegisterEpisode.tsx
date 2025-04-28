@@ -22,7 +22,7 @@ import {
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import RegisterEpisodeForm from './components/RegisterEpisodeForm';
 import { RegisterEpisodeFormType } from './types';
-import { formValidation } from './utils';
+import { episodeFormValidation } from './utils';
 
 const RegisterEpisode: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
@@ -97,7 +97,7 @@ const RegisterEpisode: React.FC = () => {
           mutators={{
             ...arrayMutators,
           }}
-          validate={(values) => formValidation(values, isNewHospital)}
+          validate={(values) => episodeFormValidation(values, isNewHospital)}
           onSubmit={(values) => {
             const newValues = {
               ...values,

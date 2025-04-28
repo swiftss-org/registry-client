@@ -15,16 +15,17 @@ import {
   SelectWrapper,
 } from '../../../../RegisterEpisode/components/RegisterEpisodeForm/RegisterEpisodeForm.style';
 import { BOOLEAN_OPTIONS } from '../../../../RegisterEpisode/constants';
+import { dischargeFormValidation } from '../../../utils';
 import { InternalContainer } from '../style';
 import { FieldWrapper } from './style';
 
 const POST_OPERATIVE_COMPLICATIONS = [
+  { label: 'None' },
   { label: 'Bleeding' },
   { label: 'Haematoma' },
   { label: 'Urinary Retention' },
   { label: 'Return to theatre' },
-  { label: 'Death' },
-  { label: 'None' },
+  { label: 'Death' }
 ];
 
 const Discharge: FC<{
@@ -60,6 +61,7 @@ const Discharge: FC<{
           // @ts-ignore
           handleSubmit(newValues);
         }}
+        validate={(values) => dischargeFormValidation(values)}
         initialValues={{
           ...discharge,
           infection: discharge && discharge.infection ? discharge.infection?.split(',') : undefined,
@@ -193,6 +195,29 @@ const Discharge: FC<{
                       </div>
                     ))}
                   </CheckBoxWrapper>
+                  <Field
+                    name="infection"
+                    initialValue={discharge?.discharge_duration}
+                    parse={(value) => value}
+                  >
+                    {(props) => {
+                      const hasError =
+                        props.meta.touched && props.meta.invalid && !props.meta.active;
+                      return (
+                        <TextField
+                          id="infection"
+                          disabled
+                          label={'Infection'}
+                          required={canSubmit}
+                          styleType="outlined"
+                          size="md"
+                          status={hasError ? 'error' : 'hint'}
+                          hintMsg={hasError ? props.meta.error : undefined}
+                          {...props.input}
+                        />
+                      );
+                    }}
+                  </Field>
                 </FieldWrapper>
 
                 <FieldWrapper>
@@ -220,7 +245,7 @@ const Discharge: FC<{
                   color={'blue-200'}
                   buttonType="button"
                   onClick={handleSubmit}
-                  disabled={isLoading || !canSubmit || !values.infection}
+                  disabled={isLoading}
                   block
                   size="md"
                 >

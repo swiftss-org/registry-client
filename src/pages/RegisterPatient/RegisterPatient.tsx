@@ -13,7 +13,7 @@ import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHook
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import RegisterPatientForm from './components/RegisterPatientForm';
 import { RegisterPatientFormType } from './types';
-import { formValidation } from './utils';
+import { patientFormValidation } from './utils';
 
 const RegisterPatient: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
@@ -49,7 +49,7 @@ const RegisterPatient: React.FC = () => {
           </IconWrapper>
           Add new patient
         </PageTitle>
-        <Form onSubmit={handleSubmit} validate={formValidation}>
+        <Form onSubmit={handleSubmit} validate={patientFormValidation}>
           {({ handleSubmit, values, submitting, dirty }) => {
             if (dirty) {
               setIsFormDirty(true);
