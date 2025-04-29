@@ -18,12 +18,14 @@ import {
 } from '../../../../RegisterEpisode/components/RegisterEpisodeForm/RegisterEpisodeForm.style';
 import { BOOLEAN_OPTIONS, FOLLOW_UP_PAIN_OPTIONS } from '../../../../RegisterEpisode/constants';
 import { getSurgeonOptionsSorted } from '../../../../RegisterEpisode/utils';
+import { followUpFormValidation } from '../../../utils';
 import { InternalContainer } from '../style';
 import { FieldWrapper } from './style';
 
 const FollowUps: FC<{
   isOpen: boolean;
   followUp: FollowUpAPI;
+  values: FollowUpForm;
 }> = ({ isOpen, followUp }) => {
   const match = useRouteMatch<{ episodeID: string }>();
   const { episodeID } = match.params;
@@ -47,6 +49,7 @@ const FollowUps: FC<{
         mutators={{
           ...arrayMutators,
         }}
+        validate={(values) => followUpFormValidation(values)}
         onSubmit={handleSubmit}
       >
         {({
@@ -443,7 +446,7 @@ const FollowUps: FC<{
                   color={'blue-200'}
                   buttonType="button"
                   onClick={handleSubmit}
-                  disabled={isLoading || !canSubmit || isSurgeonsLoading}
+                  disabled={isLoading || isSurgeonsLoading}
                   block
                   size="md"
                 >

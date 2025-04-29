@@ -12,13 +12,15 @@ export const getHospitalOptions = (hospitals: HospitalsAPI[]): FilterOption[] =>
   }));
 };
 
-export const formValidation = (values: RegisterPatientFormType) => {
+export const patientFormValidation = (values: RegisterPatientFormType) => {
   const errors = {} || {
     hospital: '',
     firstName: '',
     lastName: '',
     yearOfBirth: '',
+    gender: '',
     patientHospitalId: '',
+    phone1: '',
   };
 
   if (!values.hospital && typeof values.hospital !== 'object') {
@@ -37,8 +39,16 @@ export const formValidation = (values: RegisterPatientFormType) => {
     errors.yearOfBirth = REQUIRED_FIELD_MSG;
   }
 
+  if (!values.gender) {
+    errors.gender = REQUIRED_FIELD_MSG + '. Please select the gender above.';
+  }
+
   if (!values.patientHospitalId) {
     errors.patientHospitalId = REQUIRED_FIELD_MSG;
+  }
+
+  if (!values.phone1) {
+    errors.phone1 = REQUIRED_FIELD_MSG;
   }
 
   return errors;
