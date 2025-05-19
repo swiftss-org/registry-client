@@ -23,7 +23,7 @@ import {
   RegisterEpisodePayload,
   RegisterPatientPayload,
   SurgeonEpisodeSummaryAPI,
-  SurgeonsResponse,
+  SurgeonsResponse, UnlinkedPatientsResponse,
 } from '../../models/apiTypes';
 import { RegisterEpisodeFormType } from '../../pages/RegisterEpisode/types';
 import { RegisterPatientFormType } from '../../pages/RegisterPatient/types';
@@ -133,6 +133,22 @@ export const useGetPatients = (params?: PatientsPayload) => {
         console.log(errors);
       },
 
+      retry: false,
+    }
+  );
+};
+
+export const useGetUnlinkedPatients = () => {
+  return useQuery<UnlinkedPatientsResponse, AxiosError>(
+    ReactQueryKeys.UnlinkedPatientsQuery,
+    async () => {
+      const { request } = patientsAPI.single.getUnlinkedPatients();
+      return await request();
+    },
+    {
+      onError: (error: AxiosError) => {
+        console.error("Error fetching unlinked patients:", error);
+      },
       retry: false,
     }
   );

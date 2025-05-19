@@ -236,3 +236,12 @@ export type OwnedEpisodeAPI = {
   patient_id: number;
   hospital_id: number;
 };
+
+export type UnlinkedPatient = {
+  id: string;
+  full_name: string;
+  hospital_id: string;
+  patient_hospital_id: string;
+};
+
+export type UnlinkedPatientsResponse = UnlinkedPatient[];

@@ -17,6 +17,7 @@ export default {
   getSurgeons: (params?: PaginationParams) =>
     request(METHODS.GET, '/medical-personnel/', { params }),
   getPatient: (id: string) => request(METHODS.GET, `/patients/${id}/`, {}),
+  getUnlinkedPatients: () => request(METHODS.GET, '/unlinked-patients/', {}),
   getEpisode: (id: string) => request(METHODS.GET, `/episodes/${id}/`, {}),
   getEpisodeDischarge: (id: string) => request(METHODS.GET, `/episodes/${id}/discharge/`, {}),
   getEpisodeFollowUps: (id: string) => request(METHODS.GET, `/episodes/${id}/follow-ups/`, {}),

@@ -6,4 +6,5 @@ export const ReactQueryKeys = {
   PreferredHospitalQuery: 'preferredHospital',
   SurgeonEpisodeSummaryQuery: 'surgeonEpisodeSummary',
   OwnedEpisodesQuery: 'ownedEpisodes',
+  UnlinkedPatientsQuery: 'unlinkedPatientsQuery',
 };

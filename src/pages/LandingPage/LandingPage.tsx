@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 
 import { Button } from '@orfium/ictinus';
-import { useGetSurgeonEpisodeSummary, useGetOwnedEpisodes } from 'hooks/api/patientHooks';
+import {
+  useGetSurgeonEpisodeSummary,
+  useGetOwnedEpisodes,
+  useGetUnlinkedPatients,
+  useGetPreferredHospital,
+} from 'hooks/api/patientHooks';
 import { useHistory } from 'react-router-dom';
 import urls from 'routing/urls';
 
@@ -18,6 +23,9 @@ const LandingPage: React.FC = () => {
   const { data: ownedEpisodes = [], error: episodesError } = useGetOwnedEpisodes();
   const history = useHistory();
   const { isDesktop } = useResponsiveLayout();
+
+  const { data: preferredHospital, isLoading: isLoadingHospital, error: hospitalError } = useGetPreferredHospital();
+  const { data: unlinkedPatients = [] } = useGetUnlinkedPatients();
 
   // State to handle sorting
   const [sortConfig, setSortConfig] = useState<{
@@ -104,6 +112,53 @@ const LandingPage: React.FC = () => {
 
           <DashboardText>Loading surgeon summary...</DashboardText>
         )}
+
+        {/* Display unlinked patients section */}
+        {isLoadingHospital ? (
+          <DashboardText>Loading preferred hospital...</DashboardText>
+        ) : hospitalError ? (
+          <DashboardText style={{ color: 'red' }}>
+            Failed to load preferred hospital: {hospitalError.message}
+          </DashboardText>
+        ) : !preferredHospital || Object.keys(preferredHospital).length === 0 ? (
+          <DashboardText style={{ color: 'red', fontStyle: 'italic' }}>
+            Configure your preferred hospital to view any patients missing an episode.
+          </DashboardText>
+        ) : unlinkedPatients.length > 0 ? (
+          <div style={{ marginBottom: '2rem' }}>
+            <DashboardTextHeader>
+              <h2>Patients without Episodes Registered in Your Hospital</h2>
+            </DashboardTextHeader>
+            <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr>
+                    <th style={{ border: '1px solid lightgrey', padding: '8px' }}>Patient Name</th>
+                    <th style={{ border: '1px solid lightgrey', padding: '8px' }}>Patient Hospital ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {unlinkedPatients.map((patient) => (
+                    <tr
+                      key={patient.id}
+                      onClick={() =>
+                        history.push(`${urls.patients()}/${patient.hospital_id}/${patient.id}`)
+                      }
+                      style={{
+                        backgroundColor: '#fc7c7c',
+                        cursor: 'pointer',
+                        borderBottom: '1px solid lightgrey',
+                      }}
+                    >
+                      <td style={{ border: '1px solid lightgrey', padding: '8px' }}>{patient.full_name}</td>
+                      <td style={{ border: '1px solid lightgrey', padding: '8px' }}>{patient.patient_hospital_id}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
 
         {/* Render owned episodes table */}
         {ownedEpisodes ? (
