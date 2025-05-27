@@ -5,7 +5,7 @@ import {
   useGetSurgeonEpisodeSummary,
   useGetOwnedEpisodes,
   useGetUnlinkedPatients,
-  useGetPreferredHospital,
+  useGetPreferredHospital, useGetAnnouncements,
 } from 'hooks/api/patientHooks';
 import { useHistory } from 'react-router-dom';
 import urls from 'routing/urls';
@@ -17,6 +17,7 @@ import {
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import { OwnedEpisodeAPI } from '../../models/apiTypes';
 import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
+
 
 const LandingPage: React.FC = () => {
   const { data: surgeonEpisodeSummary, error: surgeonError } = useGetSurgeonEpisodeSummary();
@@ -84,8 +85,57 @@ const LandingPage: React.FC = () => {
     history.push(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
   };
 
+  const [dismissedIds, setDismissedIds] = useState<number[]>([]);
+
+  const { data: announcementsResponse, error: announcementsError } = useGetAnnouncements();
+  const announcements = announcementsResponse?.results ?? [];
+
+  const dismissAnnouncement = (id: number) => {
+  setDismissedIds((prev) => [...prev, id]);
+  };
+
   return (
     <PageWrapper isDesktop={isDesktop}>
+      {/* Render Announcements */}
+      {announcementsError && (
+        <div style={{ color: 'red', marginBottom: '1rem' }}>
+          Failed to load announcements: {announcementsError.message}
+        </div>
+      )}
+
+      {announcements
+        .filter((announcement) => !dismissedIds.includes(announcement.id))
+        .map((announcement) => (
+          <div
+            key={announcement.id}
+            style={{
+              border: '2px solid #0d629e',
+              backgroundColor: '#d5e6f2',
+              borderRadius: '6px',
+              padding: '1rem',
+              marginBottom: '1rem',
+              position: 'relative',
+            }}
+          >
+            <button
+              onClick={() => dismissAnnouncement(announcement.id)}
+              style={{
+                position: 'absolute',
+                top: '6px',
+                right: '10px',
+                background: 'transparent',
+                border: 'none',
+                fontSize: '1.2rem',
+                cursor: 'pointer',
+                color: '#0d629e',
+              }}
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+            <div>{announcement.announcement_text}</div>
+          </div>
+      ))}
       <PageTitle>
         Surgeon Dashboard
       </PageTitle>

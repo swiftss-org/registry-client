@@ -32,4 +32,5 @@ export default {
   getPreferredHospital: () => request(METHODS.GET, '/preferred-hospital/retrieve_for_current_user/', {}),
   getSurgeonEpisodeSummary: () => request(METHODS.GET, '/surgeon-episode-summary/', {}),
   getOwnedEpisodes: () => request(METHODS.GET, '/owned-episodes/', {}),
+  getAnnouncements: () => request(METHODS.GET, '/announcements/', {}),
 };

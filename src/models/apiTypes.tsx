@@ -245,3 +245,15 @@ export type UnlinkedPatient = {
 };
 
 export type UnlinkedPatientsResponse = UnlinkedPatient[];
+
+export interface AnnouncementAPI {
+  id: number;
+  announcement_text: string;
+  display_from: string | null;
+  display_until: string | null;
+  created_at: string;
+}
+
+export interface AnnouncementsResponse extends PaginationResponse {
+  results: AnnouncementAPI[];
+}

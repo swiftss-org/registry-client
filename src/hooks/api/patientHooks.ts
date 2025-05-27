@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
+  AnnouncementsResponse,
   DischargeAPI,
   DischargeForm,
   EpisodesAPI,
@@ -385,3 +386,18 @@ export const useFollowUp = (episodeID: string) => {
   );
 };
 
+export const useGetAnnouncements = () => {
+  return useQuery<AnnouncementsResponse, AxiosError, AnnouncementsResponse>(
+    ReactQueryKeys.AnnouncementsQuery,
+    async () => {
+      const { request } = patientsAPI.single.getAnnouncements();
+      return await request();
+    },
+    {
+      onError: (error) => {
+        console.error("Error fetching announcements:", error);
+      },
+      retry: false,
+    }
+  );
+};
