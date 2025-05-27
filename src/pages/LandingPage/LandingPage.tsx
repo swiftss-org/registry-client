@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@orfium/ictinus';
 import {
@@ -85,45 +85,63 @@ const LandingPage: React.FC = () => {
     history.push(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
   };
 
-  const { data: announcementsData, isLoading: isLoadingAnnouncements } = useGetAnnouncements();
+  const [dismissedIds, setDismissedIds] = useState<number[]>([]);
 
+  const { data: announcementsResponse, error: announcementsError } = useGetAnnouncements();
+ const announcements = Array.isArray(announcementsResponse)
+  ? announcementsResponse
+  : announcementsResponse?.results ?? [];
+
+  const dismissAnnouncement = (id: number) => {
+  setDismissedIds((prev) => [...prev, id]);
+  };
 
   return (
     <PageWrapper isDesktop={isDesktop}>
+      {/* Render Announcements */}
+      {announcementsError && (
+        <div style={{ color: 'red', marginBottom: '1rem' }}>
+          Failed to load announcements: {announcementsError.message}
+        </div>
+      )}
 
-    <PageTitle>
-    Surgeon Dashboard
-    </PageTitle>
-    <DashboardWrapper>
-
-    <div style={{ width: '100%', zIndex: 1000 }}>
-     {!isLoadingAnnouncements && announcementsData && (
-      <div style={{ marginBottom: '2rem' }}>
-        {(Array.isArray(announcementsData)
-          ? announcementsData
-          : announcementsData.results
-        )
-          .filter((a) => a?.announcement_text)
+      <PageTitle>
+        Surgeon Dashboard
+      </PageTitle>
+      <DashboardWrapper>
+        {announcements
+          .filter((announcement) => !dismissedIds.includes(announcement.id))
           .map((announcement) => (
             <div
               key={announcement.id}
               style={{
                 border: '2px solid #0d629e',
                 backgroundColor: '#d5e6f2',
+                borderRadius: '6px',
                 padding: '1rem',
                 marginBottom: '1rem',
-                borderRadius: '4px',
-                whiteSpace: 'pre-wrap',
+                position: 'relative',
               }}
             >
-              {announcement.announcement_text}
+              <button
+                onClick={() => dismissAnnouncement(announcement.id)}
+                style={{
+                  position: 'absolute',
+                  top: '6px',
+                  right: '10px',
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.2rem',
+                  cursor: 'pointer',
+                  color: '#0d629e',
+                }}
+                aria-label="Dismiss"
+              >
+                ×
+              </button>
+              <div>{announcement.announcement_text}</div>
             </div>
-          ))}
-      </div>
-    )}
-    </div>
-
-
+        ))}
         <DashboardText>
           This is your personalized landing page with key insights on the episodes you have performed.
         </DashboardText>
