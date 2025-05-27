@@ -104,6 +104,7 @@ const LandingPage: React.FC = () => {
     </PageTitle>
     <DashboardWrapper>
 
+    <div style={{ width: '100%', zIndex: 1000 }}>
       {!announcementsLoading &&
         visibleAnnouncements.length > 0 &&
         visibleAnnouncements.map((announcement: AnnouncementAPI) => (
@@ -136,7 +137,7 @@ const LandingPage: React.FC = () => {
             </button>
           </div>
         ))}
-
+    </div>
 
 
         <DashboardText>
