@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 
 import { Button } from '@orfium/ictinus';
 import {
@@ -85,74 +85,59 @@ const LandingPage: React.FC = () => {
     history.push(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
   };
 
-  const [dismissedIds, setDismissedIds] = useState<number[]>([]);
-  const [announcementsToShow, setAnnouncementsToShow] = useState<AnnouncementAPI[]>([]);
+  const { data: announcementsResponse, isLoading: announcementsLoading } = useGetAnnouncements();
+  const [dismissedAnnouncements, setDismissedAnnouncements] = useState<number[]>([]);
 
-  const { data: announcementsResponse, isLoading: isLoadingAnnouncements, error: announcementsError } = useGetAnnouncements();
-  const announcements = announcementsResponse?.results ?? [];
-
-  useEffect(() => {
-    if (announcements.length > 0) {
-      setAnnouncementsToShow(
-        announcements.filter((a) => !dismissedIds.includes(a.id))
-      );
-    }
-  }, [announcements, dismissedIds]);
-
-  const dismissAnnouncement = (id: number) => {
-    setDismissedIds((prev) => [...prev, id]);
+  const handleDismiss = (id: number) => {
+    setDismissedAnnouncements((prev) => [...prev, id]);
   };
+
+  const visibleAnnouncements = announcementsResponse?.results?.filter(
+  (a: AnnouncementAPI) => !dismissedAnnouncements.includes(a.id)
+  ) ?? [];
 
   return (
     <PageWrapper isDesktop={isDesktop}>
-      {/* Render Announcements */}
-      {announcementsError && (
-        <div style={{ color: 'red', marginBottom: '1rem' }}>
-          Failed to load announcements: {announcementsError.message}
-        </div>
-      )}
 
-
-  <PageTitle>
-  Surgeon Dashboard
-  </PageTitle>
+    <PageTitle>
+    Surgeon Dashboard
+    </PageTitle>
     <DashboardWrapper>
 
-
-
-      {isLoadingAnnouncements && <div>Loading announcements...</div>}
-
-      {announcementsToShow.map((announcement) => (
+      {!announcementsLoading &&
+        visibleAnnouncements.length > 0 &&
+        visibleAnnouncements.map((announcement: AnnouncementAPI) => (
           <div
             key={announcement.id}
             style={{
-              border: '2px solid #0d629e',
+              border: '1px solid #0d629e',
               backgroundColor: '#d5e6f2',
-              borderRadius: '6px',
-              padding: '1rem',
-              marginBottom: '1rem',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              marginBottom: '16px',
               position: 'relative',
             }}
           >
+            <span>{announcement.announcement_text}</span>
             <button
-              onClick={() => dismissAnnouncement(announcement.id)}
+              onClick={() => handleDismiss(announcement.id)}
               style={{
                 position: 'absolute',
-                top: '6px',
-                right: '10px',
+                top: '8px',
+                right: '12px',
                 background: 'transparent',
                 border: 'none',
-                fontSize: '1.2rem',
+                fontWeight: 'bold',
                 cursor: 'pointer',
-                color: '#0d629e',
               }}
-              aria-label="Dismiss"
+              aria-label="Dismiss announcement"
             >
               ×
             </button>
-            <div>{announcement.announcement_text}</div>
           </div>
-      ))}
+        ))}
+
+
 
         <DashboardText>
           This is your personalized landing page with key insights on the episodes you have performed.
