@@ -87,7 +87,7 @@ const LandingPage: React.FC = () => {
 
   const [dismissedIds, setDismissedIds] = useState<number[]>([]);
 
-  const { data: announcementsResponse, error: announcementsError } = useGetAnnouncements();
+  const { data: announcementsResponse, isLoading: isLoadingAnnouncements, error: announcementsError } = useGetAnnouncements();
   const announcements = announcementsResponse?.results ?? [];
 
   const dismissAnnouncement = (id: number) => {
@@ -102,6 +102,16 @@ const LandingPage: React.FC = () => {
           Failed to load announcements: {announcementsError.message}
         </div>
       )}
+
+
+  <PageTitle>
+  Surgeon Dashboard
+  </PageTitle>
+    <DashboardWrapper>
+
+
+
+      {isLoadingAnnouncements && <div>Loading announcements...</div>}
 
       {announcements
         .filter((announcement) => !dismissedIds.includes(announcement.id))
@@ -136,10 +146,7 @@ const LandingPage: React.FC = () => {
             <div>{announcement.announcement_text}</div>
           </div>
       ))}
-      <PageTitle>
-        Surgeon Dashboard
-      </PageTitle>
-      <DashboardWrapper>
+
         <DashboardText>
           This is your personalized landing page with key insights on the episodes you have performed.
         </DashboardText>
