@@ -97,25 +97,30 @@ const LandingPage: React.FC = () => {
     <DashboardWrapper>
 
     <div style={{ width: '100%', zIndex: 1000 }}>
-      {!isLoadingAnnouncements && announcementsData && announcementsData.results.length > 0 && (
+     {!isLoadingAnnouncements && announcementsData && (
       <div style={{ marginBottom: '2rem' }}>
-        {announcementsData.results.map((announcement) => (
-          <div
-            key={announcement.id}
-            style={{
-              border: '2px solid #0d629e',
-              backgroundColor: '#d5e6f2',
-              padding: '1rem',
-              marginBottom: '1rem',
-              borderRadius: '4px',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            {announcement.announcement_text}
-          </div>
-        ))}
+        {(Array.isArray(announcementsData)
+          ? announcementsData
+          : announcementsData.results
+        )
+          .filter((a) => a?.announcement_text)
+          .map((announcement) => (
+            <div
+              key={announcement.id}
+              style={{
+                border: '2px solid #0d629e',
+                backgroundColor: '#d5e6f2',
+                padding: '1rem',
+                marginBottom: '1rem',
+                borderRadius: '4px',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {announcement.announcement_text}
+            </div>
+          ))}
       </div>
-      )}
+    )}
     </div>
 
 
