@@ -15,7 +15,7 @@ import {
   PageWrapper,
 } from '../../common.style';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
-import { AnnouncementAPI, OwnedEpisodeAPI } from '../../models/apiTypes';
+import { OwnedEpisodeAPI } from '../../models/apiTypes';
 import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
 
 
@@ -85,16 +85,8 @@ const LandingPage: React.FC = () => {
     history.push(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
   };
 
-  const { data: announcementsResponse, isLoading: announcementsLoading } = useGetAnnouncements();
-  const [dismissedAnnouncements, setDismissedAnnouncements] = useState<number[]>([]);
+  const { data: announcementsData, isLoading: isLoadingAnnouncements } = useGetAnnouncements();
 
-  const handleDismiss = (id: number) => {
-    setDismissedAnnouncements((prev) => [...prev, id]);
-  };
-
-  const visibleAnnouncements = announcementsResponse?.results?.filter(
-  (a: AnnouncementAPI) => !dismissedAnnouncements.includes(a.id)
-  ) ?? [];
 
   return (
     <PageWrapper isDesktop={isDesktop}>
@@ -105,38 +97,25 @@ const LandingPage: React.FC = () => {
     <DashboardWrapper>
 
     <div style={{ width: '100%', zIndex: 1000 }}>
-      {!announcementsLoading &&
-        visibleAnnouncements.length > 0 &&
-        visibleAnnouncements.map((announcement: AnnouncementAPI) => (
+      {!isLoadingAnnouncements && announcementsData && announcementsData.results.length > 0 && (
+      <div style={{ marginBottom: '2rem' }}>
+        {announcementsData.results.map((announcement) => (
           <div
             key={announcement.id}
             style={{
-              border: '1px solid #0d629e',
+              border: '2px solid #0d629e',
               backgroundColor: '#d5e6f2',
-              padding: '12px 16px',
-              borderRadius: '8px',
-              marginBottom: '16px',
-              position: 'relative',
+              padding: '1rem',
+              marginBottom: '1rem',
+              borderRadius: '4px',
+              whiteSpace: 'pre-wrap',  // preserves line breaks if any
             }}
           >
-            <span>{announcement.announcement_text}</span>
-            <button
-              onClick={() => handleDismiss(announcement.id)}
-              style={{
-                position: 'absolute',
-                top: '8px',
-                right: '12px',
-                background: 'transparent',
-                border: 'none',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-              }}
-              aria-label="Dismiss announcement"
-            >
-              ×
-            </button>
+            {announcement.announcement_text}
           </div>
         ))}
+      </div>
+    )}
     </div>
 
 
