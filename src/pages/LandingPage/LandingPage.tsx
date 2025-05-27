@@ -108,14 +108,14 @@ const LandingPage: React.FC = () => {
               padding: '1rem',
               marginBottom: '1rem',
               borderRadius: '4px',
-              whiteSpace: 'pre-wrap',  // preserves line breaks if any
+              whiteSpace: 'pre-wrap',
             }}
           >
             {announcement.announcement_text}
           </div>
         ))}
       </div>
-    )}
+      )}
     </div>
 
 
