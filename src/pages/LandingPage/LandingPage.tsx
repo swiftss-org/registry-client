@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@orfium/ictinus';
 import {
@@ -15,7 +15,7 @@ import {
   PageWrapper,
 } from '../../common.style';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
-import { OwnedEpisodeAPI } from '../../models/apiTypes';
+import { AnnouncementAPI, OwnedEpisodeAPI } from '../../models/apiTypes';
 import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
 
 
@@ -86,12 +86,21 @@ const LandingPage: React.FC = () => {
   };
 
   const [dismissedIds, setDismissedIds] = useState<number[]>([]);
+  const [announcementsToShow, setAnnouncementsToShow] = useState<AnnouncementAPI[]>([]);
 
   const { data: announcementsResponse, isLoading: isLoadingAnnouncements, error: announcementsError } = useGetAnnouncements();
   const announcements = announcementsResponse?.results ?? [];
 
+  useEffect(() => {
+    if (announcements.length > 0) {
+      setAnnouncementsToShow(
+        announcements.filter((a) => !dismissedIds.includes(a.id))
+      );
+    }
+  }, [announcements, dismissedIds]);
+
   const dismissAnnouncement = (id: number) => {
-  setDismissedIds((prev) => [...prev, id]);
+    setDismissedIds((prev) => [...prev, id]);
   };
 
   return (
@@ -113,9 +122,7 @@ const LandingPage: React.FC = () => {
 
       {isLoadingAnnouncements && <div>Loading announcements...</div>}
 
-      {announcements
-        .filter((announcement) => !dismissedIds.includes(announcement.id))
-        .map((announcement) => (
+      {announcementsToShow.map((announcement) => (
           <div
             key={announcement.id}
             style={{
