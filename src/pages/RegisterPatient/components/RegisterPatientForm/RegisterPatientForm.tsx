@@ -6,6 +6,7 @@ import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { OnBlur } from 'react-final-form-listeners';
 
+import { FormContainer, FormHeadingContainer, SelectWrapper, BirthdayFieldsContainer } from './RegisterPatientForm.style';
 import {
   FieldsContainer,
   FieldWrapper,
@@ -17,7 +18,6 @@ import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI } from '../../../../models/apiTypes';
 import { RegisterPatientFormType } from '../../types';
 import { getHospitalOptions } from '../../utils';
-import { FormContainer, FormHeadingContainer, SelectWrapper, BirthdayFieldsContainer } from './RegisterPatientForm.style';
 
 type Props = {
   values: RegisterPatientFormType;

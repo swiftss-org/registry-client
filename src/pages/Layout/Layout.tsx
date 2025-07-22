@@ -8,9 +8,9 @@ import { useUserType } from 'hooks/useUserType';
 import { debounce } from 'lodash';
 import { useHistory } from 'react-router';
 
+import { Header, Main, MainContainer, SideNav } from './Layout.style';
 import Drawer from '../../components/Drawer';
 import SearchField from '../../components/SearchField';
-import { Header, Main, MainContainer, SideNav } from './Layout.style';
 
 interface Props {
   /** Component to load */

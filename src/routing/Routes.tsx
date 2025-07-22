@@ -8,12 +8,12 @@ import RegisterPatient from 'pages/RegisterPatient';
 import Settings from 'pages/Settings';
 import { Redirect, Switch } from 'react-router-dom';
 
-import EpisodeDetails from '../pages/EpisodeDetails';
-import PatientDetails from '../pages/PatientDetails';
-import RegisterEpisode from '../pages/RegisterEpisode';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 import urls from './urls';
+import EpisodeDetails from '../pages/EpisodeDetails';
+import PatientDetails from '../pages/PatientDetails';
+import RegisterEpisode from '../pages/RegisterEpisode';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -35,7 +35,7 @@ const Routes: React.FC = () => (
       path={`${urls.patients()}/:hospitalID/:patientID`}
       component={PatientDetails}
     />
-    <PrivateRoute exact path={[urls.patients()]} component={PatientDirectory} />
+    <PrivateRoute exact path={[urls.patients()]} component={PatientDirectory} />\
     <PrivateRoute exact path={urls.landingPage()} component={LandingPage} />
     <PrivateRoute exact path={urls.nationalKPIs()} component={NationalKPIs} />
     <Redirect to={urls.login()} />

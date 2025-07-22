@@ -5,6 +5,11 @@ import { Icon } from '@orfium/ictinus';
 import { IconWrapper } from 'App.style';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
+import ExpandableContainer from './components/ExpandableContainer';
+import Discharge from './components/ExpandableContainer/components/Discharge';
+import FollowUps from './components/ExpandableContainer/components/FollowUps';
+import Surgery from './components/ExpandableContainer/components/Surgery';
+import { Container, PageWrapper } from './EpisodeDetails.style';
 import { PageTitle } from '../../common.style';
 import {
   useGetEpisode,
@@ -18,11 +23,6 @@ import {
   Subheading,
   TextWrapper,
 } from '../PatientDetails/components/EpisodeList/EpisodeCard/EpisodeCard.style';
-import ExpandableContainer from './components/ExpandableContainer';
-import Discharge from './components/ExpandableContainer/components/Discharge';
-import FollowUps from './components/ExpandableContainer/components/FollowUps';
-import Surgery from './components/ExpandableContainer/components/Surgery';
-import { Container, PageWrapper } from './EpisodeDetails.style';
 
 const EpisodeDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();

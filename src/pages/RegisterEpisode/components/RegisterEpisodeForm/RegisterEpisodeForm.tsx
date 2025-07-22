@@ -9,6 +9,12 @@ import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
+import {
+  ArrayContainer,
+  FormContainer,
+  FormHeadingContainer,
+  SelectWrapper,
+} from './RegisterEpisodeForm.style';
 import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI, PatientAPI, SurgeonsAPI } from '../../../../models/apiTypes';
 import {
@@ -25,12 +31,6 @@ import {
 } from '../../constants';
 import { RegisterEpisodeFormType } from '../../types';
 import {getHospitalOptions, getSurgeonOptionsSorted} from '../../utils';
-import {
-  ArrayContainer,
-  FormContainer,
-  FormHeadingContainer,
-  SelectWrapper,
-} from './RegisterEpisodeForm.style';
 
 type Props = {
   values: RegisterEpisodeFormType;

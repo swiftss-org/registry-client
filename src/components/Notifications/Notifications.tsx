@@ -4,9 +4,9 @@ import React from 'react';
 import { InlineNotification } from '@orfium/ictinus';
 import { NotificationTypes } from '@orfium/ictinus/dist/components/Notification/Notification';
 
+import { NotificationWrapper } from './Notifications.styles';
 import { resetNotifications } from '../../providers/Notifications/actions';
 import { useNotifications } from '../../providers/Notifications/NotificationProvider';
-import { NotificationWrapper } from './Notifications.styles';
 
 export interface NotificationType {
   message: string;

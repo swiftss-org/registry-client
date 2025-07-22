@@ -4,8 +4,8 @@ import React from 'react';
 import { TextField } from '@orfium/ictinus';
 import { HospitalsAPI, PatientAPI } from 'models/apiTypes';
 
-import { FieldsContainer } from '../../../../common.style';
 import { Container } from './GeneralInformation.style';
+import { FieldsContainer } from '../../../../common.style';
 
 type Props = {
   patient?: PatientAPI;

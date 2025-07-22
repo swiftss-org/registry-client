@@ -11,6 +11,9 @@ import { useHistory } from 'react-router';
 import { useRouteMatch } from 'react-router-dom';
 import urls from 'routing/urls';
 
+import RegisterEpisodeForm from './components/RegisterEpisodeForm';
+import { RegisterEpisodeFormType } from './types';
+import { episodeFormValidation } from './utils';
 import {
   useCreateHospitalMapping,
   useGetHospital,
@@ -20,9 +23,6 @@ import {
   useRegisterEpisode,
 } from '../../hooks/api/patientHooks';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
-import RegisterEpisodeForm from './components/RegisterEpisodeForm';
-import { RegisterEpisodeFormType } from './types';
-import { episodeFormValidation } from './utils';
 
 const RegisterEpisode: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();

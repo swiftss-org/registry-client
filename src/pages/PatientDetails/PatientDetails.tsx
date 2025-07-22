@@ -6,13 +6,13 @@ import { IconWrapper } from 'App.style';
 import { useGetHospital, useGetPatient } from 'hooks/api/patientHooks';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
+import EpisodeList from './components/EpisodeList';
+import GeneralInformation from './components/GeneralInformation';
+import { ComponentWrapper } from './PatientDetails.style';
 import { ButtonContainer, PageTitle, PageWrapper } from '../../common.style';
 import { Tabs } from '../../components/Tabs';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import urls from '../../routing/urls';
-import EpisodeList from './components/EpisodeList';
-import GeneralInformation from './components/GeneralInformation';
-import { ComponentWrapper } from './PatientDetails.style';
 
 const tabs = [
   { label: 'General Information', value: 'info' },
