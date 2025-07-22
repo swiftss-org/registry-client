@@ -71,6 +71,7 @@ export type FollowUpAPI = {
   pain_severity: string;
   date: string;
   attendees: SurgeonsAPI[];
+  attendees_list?: string;
   mesh_awareness: boolean;
   seroma: boolean;
   infection: boolean;

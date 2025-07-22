@@ -24,18 +24,19 @@ export const dischargeFormValidation = (values: {
         errors.date = 'Discharge date cannot be set in the future.';
     }
 
+    // aware_of_mesh is actually the "Antibiotics given on discharge" field
     if (!values.aware_of_mesh && typeof values.aware_of_mesh !== 'object') {
         errors.aware_of_mesh = REQUIRED_FIELD_MSG;
     } else {
-        console.log(values)
-
-        if (!values.discharge_duration && typeof values.discharge_duration !== 'object') {
-            errors.discharge_duration = REQUIRED_FIELD_MSG;
+        if (values.aware_of_mesh.value === 0) {
+            if (!values.discharge_duration && typeof values.discharge_duration !== 'object') {
+                errors.discharge_duration = REQUIRED_FIELD_MSG;
+            }
         }
     }
 
     if (values.infection === undefined || values.infection?.length == 0) {
-        const errorMessage = "Please record the post-operative complication above. if there wasn't any then select the option 'None'";
+        const errorMessage = "Please record the post-operative complication above. If there wasn't any then select the option 'None'";
         errors.infection = errorMessage;
     }
     return errors;

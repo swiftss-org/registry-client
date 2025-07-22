@@ -197,7 +197,7 @@ const Discharge: FC<{
                   </CheckBoxWrapper>
                   <Field
                     name="infection"
-                    initialValue={discharge?.discharge_duration}
+                    initialValue={discharge?.infection}
                     parse={(value) => value}
                   >
                     {(props) => {
@@ -207,7 +207,7 @@ const Discharge: FC<{
                         <TextField
                           id="infection"
                           disabled
-                          label={'Infection'}
+                          label={'Post-operative complications'}
                           required={canSubmit}
                           styleType="outlined"
                           size="md"
