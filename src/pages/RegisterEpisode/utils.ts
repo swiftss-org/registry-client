@@ -1,7 +1,7 @@
 import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
 
-import { HospitalsAPI, SelectOption, SurgeonsAPI } from '../../models/apiTypes';
 import { RegisterEpisodeFormType } from './types';
+import { HospitalsAPI, SelectOption, SurgeonsAPI } from '../../models/apiTypes';
 
 const REQUIRED_FIELD_MSG = 'This field is required';
 

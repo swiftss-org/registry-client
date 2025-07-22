@@ -10,13 +10,13 @@ import {
 import { useHistory } from 'react-router-dom';
 import urls from 'routing/urls';
 
+import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
 import {
   ButtonContainer, PageTitle,
   PageWrapper,
 } from '../../common.style';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import { OwnedEpisodeAPI } from '../../models/apiTypes';
-import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
 
 
 const LandingPage: React.FC = () => {

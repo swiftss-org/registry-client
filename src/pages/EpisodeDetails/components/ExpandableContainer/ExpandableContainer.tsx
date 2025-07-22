@@ -2,8 +2,8 @@ import React, { FC, useState } from 'react';
 
 import { Icon, useTheme } from '@orfium/ictinus';
 
-import { DischargeAPI, EpisodesAPI, FollowUpAPI } from '../../../../models/apiTypes';
 import { Header, ListItem } from './style';
+import { DischargeAPI, EpisodesAPI, FollowUpAPI } from '../../../../models/apiTypes';
 
 const ExpandableContainer: FC<{
   component: React.FunctionComponent<{

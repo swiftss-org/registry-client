@@ -10,12 +10,12 @@ import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useHistory } from 'react-router';
 import urls from 'routing/urls';
 
-import Notifications from '../../components/Notifications';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import PatientCard from './components/PatientCard';
 import SortingOptions from './components/SortingOptions';
 import { PatientsList, IconButtonWrapper, OptionsWrapper } from './PatientDirectory.style';
 import { SortingOptionsType } from './types';
+import Notifications from '../../components/Notifications';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
 const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { isDesktop } = useResponsiveLayout();

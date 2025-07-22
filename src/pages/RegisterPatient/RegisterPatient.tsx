@@ -9,11 +9,11 @@ import { Form } from 'react-final-form';
 import { useHistory } from 'react-router';
 import urls from 'routing/urls';
 
-import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import RegisterPatientForm from './components/RegisterPatientForm';
 import { RegisterPatientFormType } from './types';
 import { patientFormValidation } from './utils';
+import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
 const RegisterPatient: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
