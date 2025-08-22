@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Button, IconButton } from '@orfium/ictinus';
+import WarningIcon from '@mui/icons-material/Warning';
+import { Button, IconButton } from '@mui/material';
 
 import Modal from '../Modal';
 import { Portal } from '../Portal';
@@ -18,17 +19,13 @@ const ConfirmationModal: React.FC<Props> = ({ onClose, title, subtitle, buttonTe
   return (
     <Portal baseComponent={Modal} onClose={onClose}>
       <IBWRapper>
-        <IconButton
-          name={'warning'}
-          iconSize={36}
-          type={'warning'}
-          color={'orange-400'}
-          size={48}
-        />
+        <IconButton color={"warning"} size={"large"}>
+          <WarningIcon fontSize="large" />
+        </IconButton>
       </IBWRapper>
       <Title>{title}</Title>
       <Subtitle>{subtitle}</Subtitle>
-      <Button onClick={onClick} buttonType={'button'} type={'primary'} filled={false}>
+      <Button onClick={onClick} variant={"outlined"} color={"primary"}>
         {buttonText}
       </Button>
     </Portal>

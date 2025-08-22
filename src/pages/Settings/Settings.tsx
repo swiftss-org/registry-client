@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 
-import { Icon } from '@orfium/ictinus';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { IconButton } from '@mui/material';
 import { IconWrapper } from 'App.style';
 import { PageTitle, PageWrapper } from 'common.style';
 import { Tabs } from 'components/Tabs';
 import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 
 import { ComponentWrapper } from '../PatientDetails/PatientDetails.style';
@@ -18,20 +19,19 @@ const Settings: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
 
   const [activeTab, setActiveTab] = useState('change-password');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <PageWrapper isDesktop={isDesktop}>
       <PageTitle>
         <IconWrapper>
-          <Icon
-            name="fatArrowLeft"
-            size={24}
-            color={'lightGray-700'}
+          <IconButton
             onClick={() => {
-              history.push(urls.patients());
+              navigate(urls.patients());
             }}
-          />
+          >
+            <ArrowBackIcon />
+          </IconButton>
         </IconWrapper>
         Settings
       </PageTitle>
@@ -42,10 +42,11 @@ const Settings: React.FC = () => {
         }}
         tabs={tabs}
         shouldDisplayTabs
-      />
-      <ComponentWrapper>
-        {activeTab === 'change-password' ? <ChangePasswordForm /> : <div />}
-      </ComponentWrapper>
+      >
+        <ComponentWrapper>
+          {activeTab === 'change-password' ? <ChangePasswordForm /> : <div />}
+        </ComponentWrapper>
+      </Tabs>
     </PageWrapper>
   );
 };

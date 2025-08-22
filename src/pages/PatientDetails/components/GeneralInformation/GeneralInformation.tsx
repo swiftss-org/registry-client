@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { TextField } from '@orfium/ictinus';
+import { TextField } from '@mui/material';
 import { HospitalsAPI, PatientAPI } from 'models/apiTypes';
 
 import { Container } from './GeneralInformation.style';
@@ -19,22 +19,22 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
   return (
     <Container>
       <TextField
-        locked
+        disabled
         label="Full Name"
-        styleType="outlined"
-        size="md"
+        variant="outlined"
+        size="medium"
         value={patient?.full_name}
       />
 
-      <TextField locked label="Gender" styleType="outlined" size="md" value={patient?.gender} />
+      <TextField disabled label="Gender" variant="outlined" size="medium" value={patient?.gender} />
       <FieldsContainer>
         <TextField
-          locked
+          disabled
           id="year_of_birth"
           label="Year Of Birth"
-          styleType="outlined"
+          variant="outlined"
           type="number"
-          size="md"
+          size="medium"
           value={patient?.year_of_birth}
         />
         <TextField
@@ -42,49 +42,49 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
           id="age"
           label="Age"
           type="number"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={patient?.age}
         />
       </FieldsContainer>
       <TextField
         id="national_id"
         label="National ID"
-        styleType="outlined"
-        size="md"
-        locked
+        variant="outlined"
+        size="medium"
+        disabled
         value={patient?.national_id}
       />
       <TextField
         id="hospital"
         label="Hospital"
-        styleType="outlined"
-        size="md"
-        locked
+        variant="outlined"
+        size="medium"
+        disabled
         value={hospital?.name}
       />
       <TextField
         id="patient_hospital_id"
         label="Patient Hospital ID"
-        styleType="outlined"
-        size="md"
-        locked
+        variant="outlined"
+        size="medium"
+        disabled
         value={hospitalPatientID}
       />
       <TextField
         id="patient_phone_number_1"
         label="Patient Phone number 1"
-        styleType="outlined"
-        size="md"
-        locked
+        variant="outlined"
+        size="medium"
+        disabled
         value={patient?.phone_1}
       />
       <TextField
         id="patient_phone_number_2"
         label="Patient Phone number 2"
-        styleType="outlined"
-        size="md"
-        locked
+        variant="outlined"
+        size="medium"
+        disabled
         value={patient?.phone_2}
       />
     </Container>

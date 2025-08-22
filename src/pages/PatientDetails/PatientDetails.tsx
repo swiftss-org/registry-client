@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 
-import { Button, Icon } from '@orfium/ictinus';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button, IconButton } from '@mui/material';
 import { IconWrapper } from 'App.style';
 import { useGetHospital, useGetPatient } from 'hooks/api/patientHooks';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import EpisodeList from './components/EpisodeList';
 import GeneralInformation from './components/GeneralInformation';
@@ -22,11 +23,10 @@ const tabs = [
 const PatientDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
 
-  const match = useRouteMatch<{ hospitalID?: string; patientID?: string }>();
   const [activeTab, setActiveTab] = useState('info');
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const { hospitalID, patientID } = match.params;
+  const { hospitalID, patientID } = useParams<{ hospitalID?: string; patientID?: string }>();
 
   const { data: patient, isLoading: isPatientLoading } = useGetPatient(patientID ?? '');
   const { data: hospital, isLoading: isHospitalLoading } = useGetHospital(hospitalID ?? '');
@@ -37,14 +37,13 @@ const PatientDetails: React.FC = () => {
     <PageWrapper isDesktop={isDesktop}>
       <PageTitle>
         <IconWrapper>
-          <Icon
-            name="fatArrowLeft"
-            size={24}
-            color={'lightGray-700'}
+          <IconButton
             onClick={() => {
-              history.push(urls.patients());
+              navigate(urls.patients());
             }}
-          />
+          >
+            <ArrowBackIcon />
+          </IconButton>
         </IconWrapper>
         Patient Details
       </PageTitle>
@@ -55,22 +54,23 @@ const PatientDetails: React.FC = () => {
         }}
         tabs={tabs}
         shouldDisplayTabs
-      />
-      <ComponentWrapper>
-        {activeTab === 'info' ? (
-          <GeneralInformation patient={patient} hospital={hospital} />
-        ) : (
-          <EpisodeList patient={patient} />
-        )}
-      </ComponentWrapper>
+      >
+        <ComponentWrapper>
+          {activeTab === 'info' ? (
+            <GeneralInformation patient={patient} hospital={hospital} />
+          ) : (
+            <EpisodeList patient={patient} />
+          )}
+        </ComponentWrapper>
+      </Tabs>
       <ButtonContainer isDesktop={isDesktop}>
         <Button
-          color={'blue-500'}
-          buttonType="button"
+          variant="contained"
+          color="primary"
           disabled={isLoading}
-          block
-          size="md"
-          onClick={() => history.push(`${history.location.pathname}/add-episode`)}
+          fullWidth
+          size="medium"
+          onClick={() => navigate(`${location.pathname}/add-episode`)}
         >
           Register new episode
         </Button>

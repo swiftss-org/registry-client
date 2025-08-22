@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Icon, useTheme } from '@orfium/ictinus';
+import { Icon } from '@mui/material';
 
 import { ClosePortalType } from '../Portal';
 import { CloseContainer, ComponentContainer, Wrapper } from './Modal.style';
@@ -8,18 +8,15 @@ import { CloseContainer, ComponentContainer, Wrapper } from './Modal.style';
 interface Props {
   title?: string;
   handleClosePortal?: ClosePortalType;
+  children: React.ReactNode;
 }
 
 const Modal: FC<Props> = ({ children, handleClosePortal }) => {
-  const {
-    utils: { getColor },
-  } = useTheme();
-
   return (
     <Wrapper>
       <ComponentContainer>
         <CloseContainer onClick={(e) => handleClosePortal?.(e)} data-testid={'window-close'}>
-          <Icon color={getColor('lightGray', 600)} name={'close'} size={20} />
+          <Icon>close</Icon>
         </CloseContainer>
         {children}
       </ComponentContainer>

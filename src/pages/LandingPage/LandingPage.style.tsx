@@ -14,11 +14,11 @@ export const DashboardWrapper = styled.div`
 `;
 
 export const DashboardText = styled.div`
-  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  color: ${(props) => props.theme.palette.grey[400]};
 `;
 
 export const DashboardTextHeader = styled.div`
-  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  color: ${(props) => props.theme.palette.grey[400]};
   font-size: 14px;
   font-weight: 400;
 `;

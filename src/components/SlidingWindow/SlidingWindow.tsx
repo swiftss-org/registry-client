@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Icon, useTheme } from '@orfium/ictinus';
+import { Icon } from '@mui/material';
 import { useAnimationClass } from 'hooks/useAnimationClass/useAnimationClass';
 
 import { ClosePortalType } from '../Portal';
@@ -15,15 +15,12 @@ import {
 interface Props {
   title?: string;
   handleClosePortal?: ClosePortalType;
+  children: React.ReactNode;
 }
 
 const SlidingWindow: FC<Props> = ({ children, title, handleClosePortal }) => {
   const { ref: slideRef } = useAnimationClass('sliding-window-animation');
   const { ref: fadeRef } = useAnimationClass('overlay-fade-animation');
-
-  const {
-    utils: { getColor },
-  } = useTheme();
 
   return (
     <Wrapper ref={fadeRef}>
@@ -31,7 +28,7 @@ const SlidingWindow: FC<Props> = ({ children, title, handleClosePortal }) => {
         <PaddedContent>
           <CloseContainer onClick={(e) => handleClosePortal?.(e)} data-testid={'window-close'}>
             {title && <Title>{title}</Title>}
-            <Icon color={getColor('lightGray', 600)} name={'close'} size={20} />
+            <Icon>close</Icon>
           </CloseContainer>
           {children}
         </PaddedContent>

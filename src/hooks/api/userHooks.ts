@@ -7,13 +7,13 @@ import { LoginFormType, LoginResponse, ChangePasswordFormType, ChangePasswordRes
 import { resetNotifications } from 'providers/Notifications/actions';
 import { useNotifications } from 'providers/Notifications/NotificationProvider';
 import { useMutation } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 import { __EMAIL__, __TOKEN__ } from 'utils/constants';
 import { setUserStorageItem } from 'utils/storage';
 
 export const useSignIn = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const setNotification = useSetNotification();
   const [, notificationDispatch] = useNotifications();
 
@@ -39,7 +39,7 @@ export const useSignIn = () => {
         setUserStorageItem('user_level', medicalPersonnel?.level ?? '');
         setUserStorageItem('user_level_display', medicalPersonnel?.level_display ?? '');
 
-        history.replace(urls.landingPage());
+        navigate(urls.landingPage(), { replace: true });
       },
       onError: (errors) => {
         setNotification('Invalid credential combination.', 'error');
@@ -50,7 +50,7 @@ export const useSignIn = () => {
 };
 
 export const useChangePassword = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const setNotification = useSetNotification();
   const [, notificationDispatch] = useNotifications();
 
@@ -75,7 +75,7 @@ export const useChangePassword = () => {
         ).setItem(__TOKEN__, data?.token ?? '');
 
         setNotification('Password changed.', 'success');
-        history.replace(urls.settings());
+        navigate(urls.settings(), { replace: true });
       },
       onError: (errors) => {
         setNotification('Invalid credential combination.', 'error');

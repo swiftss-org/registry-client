@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { useTheme, Icon } from '@orfium/ictinus';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PersonIcon from '@mui/icons-material/Person';
+import { useTheme } from '@mui/material/styles';
 import { PatientAPI } from 'models/apiTypes';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { CardContainer, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
 
@@ -19,17 +21,17 @@ const PatientCard: React.FC<Props> = ({
   selectedHospital,
 }) => {
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    history.push(`/patients/${selectedHospital}/${id}`);
+    navigate(`/patients/${selectedHospital}/${id}`);
   };
 
   return (
     <CardContainer key={'patient_' + national_id} onClick={handleClick}>
       <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <Icon name="user" color={theme.utils.getColor('blue', 400)} size={24} />
-        <Icon name="fatArrowRight" color={theme.utils.getColor('cyan', 200)} size={24} />
+        <PersonIcon sx={{ color: theme.palette.primary.dark, fontSize: 24 }} />
+        <ArrowForwardIcon sx={{ color: theme.palette.primary.light, fontSize: 24 }} />
       </div>
       <Title>{full_name}</Title>
       <Subtitle>

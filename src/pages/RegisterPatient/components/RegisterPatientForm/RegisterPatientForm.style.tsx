@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { grid } from '@orfium/ictinus/dist/theme/functions';
 
 import { scrollBar } from '../../../../common.style';
 
@@ -21,8 +20,8 @@ export const FormContainer = styled.div<{ isDesktop: boolean }>`
 `;
 
 export const BirthdayFieldsContainer = styled.div<{ withMargin?: boolean }>`
-  ${grid};
   column-gap: 8px;
+  display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   margin-bottom: ${(props) => (props.withMargin ? '24px' : null)};
   row-gap: 8px;

@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
   z-index: 15;
 
   :before {
-    background-color: ${(props) => props.theme.utils.getColor('blue', 700)};
+    background-color: ${(props) => props.theme.palette.primary.dark};
     content: ' ';
     height: 100%;
     opacity: 0.75;

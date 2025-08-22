@@ -9,6 +9,7 @@ interface Props {
   shouldDisplayTabs?: boolean;
   matchActiveDataType: string;
   onTabClick(value: string): void;
+  children: React.ReactNode;
 }
 
 const Tabs: FC<Props> = ({

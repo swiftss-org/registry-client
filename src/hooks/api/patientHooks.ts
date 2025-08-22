@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ReactQueryKeys } from 'hooks/constants';
 import { useMutation, useQuery } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
@@ -228,7 +228,7 @@ export const useCreateHospitalMapping = () => {
 };
 
 export const useRegisterPatient = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return useMutation<RegisterPatientPayload, AxiosError, RegisterPatientFormType>(
     (params) => {
@@ -252,7 +252,7 @@ export const useRegisterPatient = () => {
     },
     {
       onSuccess: () => {
-        history.replace(urls.patients());
+        navigate(urls.patients(), { replace: true });
       },
       onError: (errors) => {
         console.log(errors);
@@ -262,7 +262,7 @@ export const useRegisterPatient = () => {
 };
 
 export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return useMutation<RegisterEpisodePayload, AxiosError, RegisterEpisodeFormType>(
     (params) => {
@@ -292,7 +292,7 @@ export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
     },
     {
       onSuccess: () => {
-        history.replace(`${urls.patients()}/${hospitalID}/${patientID}`);
+        navigate(`${urls.patients()}/${hospitalID}/${patientID}`, { replace: true });
       },
       onError: (errors) => {
         console.log(errors);

@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React, { FC, useMemo } from 'react';
 
-import { Button, Icon, Select, TextArea, TextField } from '@orfium/ictinus';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Button, Select, TextField, TextareaAutosize, FormControl, FormHelperText, MenuItem } from '@mui/material';
 import arrayMutators from 'final-form-arrays';
 import { omit } from 'lodash';
 import { Field, Form } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useFollowUp, useGetSurgeons } from '../../../../../hooks/api/patientHooks';
 import { FollowUpAPI, FollowUpForm } from '../../../../../models/apiTypes';
@@ -27,8 +28,10 @@ const FollowUps: FC<{
   followUp: FollowUpAPI;
   values: FollowUpForm;
 }> = ({ isOpen, followUp }) => {
-  const match = useRouteMatch<{ episodeID: string }>();
-  const { episodeID } = match.params;
+  const { episodeID } = useParams<{ episodeID: string }>();
+  if (!episodeID) {
+    throw new Error('Episode ID is missing');
+  }
   const { mutate, isLoading } = useFollowUp(episodeID);
 
   const { data: surgeons, isLoading: isSurgeonsLoading } = useGetSurgeons({
@@ -76,14 +79,14 @@ const FollowUps: FC<{
                       return (
                         <TextField
                           id="date"
-                          locked={!canSubmit}
+                          disabled={!canSubmit}
                           type={'date'}
                           label={'Date'}
                           required={canSubmit}
-                          styleType="outlined"
-                          size="md"
-                          status={hasError ? 'error' : 'hint'}
-                          hintMsg={hasError ? props.meta.error : undefined}
+                          variant="outlined"
+                          size="medium"
+                          error={hasError}
+                          helperText={hasError ? props.meta.error : undefined}
                           {...props.input}
                         />
                       );
@@ -103,28 +106,30 @@ const FollowUps: FC<{
                               return (
                                 <ArrayContainer>
                                   <SelectWrapper>
-                                    <Select
-                                      id="id"
-                                      label="Surgeon"
-                                      isSearchable={true}
-                                      styleType="outlined"
-                                      size="md"
-                                      locked={!canSubmit}
-                                      required={canSubmit}
-                                      status={hasError ? 'error' : 'hint'}
-                                      hintMsg={hasError ? props.meta.error : undefined}
-                                      options={surgeonOptions}
-                                      {...omit(props.input, ['onFocus'])}
-                                      selectedOption={surgeonOptions.find(
-                                        (option) => option.value === props.input.value.value
-                                      )}
-                                      handleSelectedOption={props.input.onChange}
-                                    />
+                                    <FormControl fullWidth error={hasError}>
+                                      <Select
+                                        id="id"
+                                        label="Surgeon"
+                                        variant="outlined"
+                                        size="medium"
+                                        disabled={!canSubmit}
+                                        required={canSubmit}
+                                        error={hasError}
+                                        {...omit(props.input, ['onFocus'])}
+                                        value={props.input.value.value}
+                                        onChange={props.input.onChange}
+                                      >
+                                        {surgeonOptions.map((option) => (
+                                          <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                          </MenuItem>
+                                        ))}
+                                      </Select>
+                                      {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                                    </FormControl>
                                   </SelectWrapper>
                                   {index === 0 && canSubmit && (
-                                    <Icon
-                                      name={'plus'}
-                                      size={24}
+                                    <AddCircleOutlineIcon
                                       onClick={() => addField('attendees', undefined)}
                                     />
                                   )}
@@ -140,10 +145,10 @@ const FollowUps: FC<{
                   followUp?.attendees.map((attendee, index) => (
                     <FieldWrapper key={`attendee_fetched_${index}`}>
                       <TextField
-                        locked
-                        styleType="outlined"
+                        disabled
+                        variant="outlined"
                         label={'Surgeon'}
-                        size="md"
+                        size="medium"
                         value={`${attendee.user.first_name} ${attendee.user.last_name}`}
                       />
                     </FieldWrapper>
@@ -161,22 +166,27 @@ const FollowUps: FC<{
                         props.meta.touched && props.meta.invalid && !props.meta.active;
                       return (
                         <SelectWrapper>
-                          <Select
-                            locked={!canSubmit}
-                            id="pain_severity"
-                            label="Pain Severity"
-                            styleType="outlined"
-                            size="md"
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={FOLLOW_UP_PAIN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={FOLLOW_UP_PAIN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              disabled={!canSubmit}
+                              id="pain_severity"
+                              label="Pain Severity"
+                              variant="outlined"
+                              size="medium"
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {FOLLOW_UP_PAIN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -201,22 +211,27 @@ const FollowUps: FC<{
 
                       return (
                         <SelectWrapper>
-                          <Select
-                            id="mesh_awareness"
-                            label="Mesh Awareness"
-                            styleType="outlined"
-                            size="md"
-                            locked={!canSubmit}
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              id="mesh_awareness"
+                              label="Mesh Awareness"
+                              variant="outlined"
+                              size="medium"
+                              disabled={!canSubmit}
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {BOOLEAN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -239,22 +254,27 @@ const FollowUps: FC<{
 
                       return (
                         <SelectWrapper>
-                          <Select
-                            id="seroma"
-                            label="Seroma"
-                            styleType="outlined"
-                            size="md"
-                            locked={!canSubmit}
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              id="seroma"
+                              label="Seroma"
+                              variant="outlined"
+                              size="medium"
+                              disabled={!canSubmit}
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {BOOLEAN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -277,22 +297,27 @@ const FollowUps: FC<{
 
                       return (
                         <SelectWrapper>
-                          <Select
-                            id="infection"
-                            label="Infection"
-                            styleType="outlined"
-                            size="md"
-                            locked={!canSubmit}
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              id="infection"
+                              label="Infection"
+                              variant="outlined"
+                              size="medium"
+                              disabled={!canSubmit}
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {BOOLEAN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -315,22 +340,27 @@ const FollowUps: FC<{
 
                       return (
                         <SelectWrapper>
-                          <Select
-                            locked={!canSubmit}
-                            id="numbness"
-                            label="Numbness"
-                            styleType="outlined"
-                            size="md"
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              disabled={!canSubmit}
+                              id="numbness"
+                              label="Numbness"
+                              variant="outlined"
+                              size="medium"
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {BOOLEAN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -353,22 +383,27 @@ const FollowUps: FC<{
 
                       return (
                         <SelectWrapper>
-                          <Select
-                            locked={!canSubmit}
-                            id="recurrence"
-                            label="Recurrence"
-                            styleType="outlined"
-                            size="md"
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={BOOLEAN_OPTIONS.find(
-                              (option) => option.value === props.input.value.value
-                            )}
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              disabled={!canSubmit}
+                              id="recurrence"
+                              label="Recurrence"
+                              variant="outlined"
+                              size="medium"
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {BOOLEAN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -393,30 +428,27 @@ const FollowUps: FC<{
 
                       return (
                         <SelectWrapper>
-                          <Select
-                            locked={!canSubmit}
-                            id="further_surgery_need"
-                            label="Need for further surgery?"
-                            styleType="outlined"
-                            size="md"
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={
-                              followUp?.further_surgery_need !== undefined
-                                ? BOOLEAN_OPTIONS.find((option) =>
-                                    followUp?.further_surgery_need
-                                      ? option.label === 'Yes'
-                                      : option.label === 'No'
-                                  )
-                                : BOOLEAN_OPTIONS.find(
-                                    (option) => option.value === props.input.value.value
-                                  )
-                            }
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              disabled={!canSubmit}
+                              id="further_surgery_need"
+                              label="Need for further surgery?"
+                              variant="outlined"
+                              size="medium"
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {BOOLEAN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -429,26 +461,28 @@ const FollowUps: FC<{
                       const hasError =
                         props.meta.touched && props.meta.invalid && !props.meta.active;
                       return (
-                        <TextArea
-                          id="surgery_comments_box"
-                          required={canSubmit}
-                          styleType="outlined"
-                          status={hasError ? 'error' : 'hint'}
-                          hintMsg={hasError ? props.meta.error : undefined}
-                          disabled={!canSubmit}
-                          {...props.input}
-                        />
+                        <FormControl fullWidth error={hasError}>
+                          <TextareaAutosize
+                            id="surgery_comments_box"
+                            minRows={3}
+                            placeholder="Comments"
+                            required={canSubmit}
+                            disabled={!canSubmit}
+                            {...props.input}
+                          />
+                          {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                        </FormControl>
                       );
                     }}
                   </Field>
                 </FieldWrapper>
                 <Button
-                  color={'blue-200'}
-                  buttonType="button"
+                  variant="contained"
+                  color="primary"
                   onClick={handleSubmit}
                   disabled={isLoading || isSurgeonsLoading}
-                  block
-                  size="md"
+                  fullWidth
+                  size="medium"
                 >
                   Save changes
                 </Button>

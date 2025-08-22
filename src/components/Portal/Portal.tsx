@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 
 import ReactDOM from 'react-dom';
 
@@ -9,6 +9,7 @@ interface Props {
   baseComponent: React.ComponentType<{
     title?: string;
     handleClosePortal?: ClosePortalType;
+    children: React.ReactNode;
   }>;
   /** The title prop of the component */
   title?: string;
@@ -22,7 +23,7 @@ const handlePortalOverflow = (overflowType: 'hidden' | 'unset') => {
   document.body.style.overflow = overflowType;
 };
 
-const Portal: FC<Props> = ({ baseComponent: Component, children, onDidMount, title, onClose }) => {
+const Portal: FC<PropsWithChildren<Props>> = ({ baseComponent: Component, children, onDidMount, title, onClose }) => {
   React.useEffect(() => {
     onDidMount?.();
     handlePortalOverflow('hidden');

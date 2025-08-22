@@ -1,16 +1,13 @@
 import styled from '@emotion/styled';
-import { transition } from '@orfium/ictinus/dist/theme/functions';
 import { rem } from 'polished';
 import { NavLink } from 'react-router-dom';
 
-import { flexCenterVertical } from '../../../theme/functions';
-
 export const Container = styled.div<{ expanded: boolean }>`
-  ${transition(10.2)};
   background-color: white;
   box-sizing: border-box;
   height: 100%;
   position: relative;
+  transition: opacity 0.2s ease-in-out, width 0.2s ease-in-out;
   width: 100%;
   .menu-item-text,
   .submenu-item-text {
@@ -32,29 +29,28 @@ export const PlaceholderContainer = styled.div`
 `;
 
 export const PlaceholderText = styled.span`
-  font-size: ${(props) => props.theme.typography.fontSizes[16]};
+  font-size: ${(props) => props.theme.typography.body1.fontSize};
   line-height: ${rem(24)};
 `;
 
 export const PlaceholderLink = styled.span`
-  color: ${(props) => props.theme.utils.getColor('blue', 500)};
+  color: ${(props) => props.theme.palette.primary.dark};
   cursor: pointer;
-  font-weight: ${(props) => props.theme.typography.weights.bold};
+  font-weight: ${(props) => props.theme.typography.body1.fontWeight};
 `;
 
 export const Header = styled.div`
-  background-color: ${(props) => props.theme.utils.getColor('blue', 500)};
+  background-color: ${(props) => props.theme.palette.primary.dark};
   color: white;
-  position: relative;
   height: ${rem(176)};
-  padding: ${rem(16)}};
-
+  padding: ${rem(16)};
+  position: relative;
 `;
 
 export const HeaderText = styled.span`
   bottom: ${rem(24)};
-  font-size: ${(props) => props.theme.typography.fontSizes[20]};
-  font-weight: ${(props) => props.theme.typography.weights.regular};
+  font-size: ${(props) => props.theme.typography.h1.fontSize};
+  font-weight: ${(props) => props.theme.typography.h1.fontWeight};
   left: ${rem(16)};
   line-height: ${rem(24)};
   position: absolute;
@@ -67,7 +63,7 @@ export const UserContainer = styled.div`
 `;
 
 export const Footer = styled.div`
-  border-top: 1px solid ${(props) => props.theme.utils.getColor('lightGray', 200)};
+  border-top: 1px solid ${(props) => props.theme.palette.grey[200]};
   bottom: ${rem(16)};
   display: flex;
   flex-direction: column;
@@ -78,27 +74,28 @@ export const Footer = styled.div`
 `;
 
 export const FooterText = styled.span`
-  font-size: ${(props) => props.theme.typography.fontSizes[10]};
+  font-size: ${(props) => props.theme.typography.body2.fontSize};
   line-height: ${rem(17)};
 `;
 
 export const MenuLink = styled(NavLink)`
-  ${flexCenterVertical};
-  color: ${(props) => props.theme.palette.black};
+  align-items: center;
+  color: ${(props) => props.theme.palette.common.black};
   cursor: default;
+  display: flex;
   font-size: ${rem(16)};
-  font-weight: ${(props) => props.theme.typography.weights.regular};
+  font-weight: ${(props) => props.theme.typography.body1.fontWeight};
   height: ${rem(44)};
-  padding: 0 ${(props) => props.theme.spacing.md};
+  padding: 0 ${(props) => props.theme.spacing(4)};
 
   &:hover {
-    background-color: ${(props) => props.theme.utils.getColor('lightGray', 100)};
+    background-color: ${(props) => props.theme.palette.grey[100]};
   }
 
   text-decoration: none;
 `;
 
 export const MenuItemText = styled.span<{ current: boolean }>`
-  ${transition(0.2)};
-  font-weight: ${(props) => (props.current ? props.theme.typography.weights.bold : 'initial')};
+  font-weight: ${(props) => (props.current ? props.theme.typography.body1.fontWeight : 'initial')};
+  transition: font-weight 0.2s ease-in-out;
 `;

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Button, CheckBox, TextField } from '@orfium/ictinus';
+import { Button, Checkbox, TextField } from '@mui/material';
 import { CheckBoxContainer, FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
 import { useSignIn } from 'hooks/api/userHooks';
 import { LoginFormType } from 'models/apiTypes';
@@ -30,8 +30,8 @@ const SignIn: React.FC = () => {
                         <TextField
                           id="username"
                           label="Username"
-                          styleType="outlined"
-                          size="md"
+                          variant="outlined"
+                          size="medium"
                           {...props.input}
                         />
                       );
@@ -51,10 +51,10 @@ const SignIn: React.FC = () => {
                         <TextField
                           id="currentPassword"
                           label="Password"
-                          styleType="outlined"
-                          size="md"
-                          status={hasError && 'error'}
-                          hintMsg={hasError && props.meta.error}
+                          variant="outlined"
+                          size="medium"
+                          error={hasError}
+                          helperText={hasError && props.meta.error}
                           type="password"
                           {...props.input}
                         />
@@ -70,13 +70,12 @@ const SignIn: React.FC = () => {
                 {(props) => {
                   return (
                     <CheckBoxContainer>
-                      <CheckBox
+                      <Checkbox
                         {...props.input}
-                        filled={true}
                         onClick={props.input.onChange}
-                        label="Remember Me"
                         checked={props.input.value}
                       />
+                      <span>Remember Me</span>
                     </CheckBoxContainer>
                   );
                 }}
@@ -84,7 +83,7 @@ const SignIn: React.FC = () => {
             </FormBottom>
 
             <ButtonContainer>
-              <Button block color={'blue-500'} filled size="lg" buttonType="submit">
+              <Button fullWidth variant="contained" size="large" type="submit">
                 Sign In
               </Button>
             </ButtonContainer>

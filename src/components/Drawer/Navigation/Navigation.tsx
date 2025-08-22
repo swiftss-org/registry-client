@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import useLocationToGetCurrentMenuItem from '@orfium/ictinus/dist/hooks/useLocationToGetCurrentMenuItem';
-
+import useCurrentMenuItem from './useCurrentMenuItem';
 import { useIsLoggedIn } from '../../../hooks/useIsLoggedIn';
 import { Props } from '../Drawer';
 import MenuItem from './MenuItem/MenuItem';
@@ -10,8 +9,7 @@ import { Container, PlaceholderContainer, PlaceholderText } from './Navigation.s
 type NavigationProps = Props;
 
 const Navigation: React.FC<NavigationProps> = ({ menuItems, expanded, handleClick }) => {
-  const [, setOpenMenuItems] = useState<string[]>([]);
-  const [currentMenuItem] = useLocationToGetCurrentMenuItem(menuItems, setOpenMenuItems);
+  const currentMenuItem = useCurrentMenuItem(menuItems);
   const { isLoggedIn } = useIsLoggedIn();
 
   return (

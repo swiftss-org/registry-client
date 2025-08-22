@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { transition } from '@orfium/ictinus/dist/theme/functions';
 import { rem } from 'polished';
 
 export const Container = styled.div<{
@@ -7,15 +6,15 @@ export const Container = styled.div<{
   isDesktop: boolean;
   isSmallDesktop: boolean;
 }>`
-  ${transition(0.2)};
   background-color: white;
-  border-right: ${rem(1)} solid ${(props) => props.theme.utils.getColor('lightGray', 200)};
+  border-right: ${rem(1)} solid ${(props) => props.theme.palette.grey[200]};
   flex-grow: 0;
   flex-shrink: 0;
   height: 100%;
   min-height: 100%;
   overflow: hidden;
   position: ${(props) => (props.isSmallDesktop ? 'absolute' : 'relative')};
+  transition: width 0.2s ease-in-out;
   width: ${(props) => (props.expanded ? rem('308px') : rem('0px'))};
   z-index: 100;
 `;

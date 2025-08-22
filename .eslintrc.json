@@ -8,8 +8,7 @@
     "react",
     "@typescript-eslint",
     "react-hooks",
-    "import",
-    "better-styled-components"
+    "import"
   ],
   "env": {
     "node": true,
@@ -19,7 +18,6 @@
     "es6": true
   },
   "rules": {
-    "better-styled-components/sort-declarations-alphabetically": 2,
     "import/order": [
       "error",
       {

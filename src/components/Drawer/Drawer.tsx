@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { Button, useBreakpoints } from '@orfium/ictinus';
-import { useHistory } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useNavigate } from 'react-router-dom';
 
 import { Container } from './Drawer.style';
 import Navigation from './Navigation/Navigation';
@@ -58,27 +60,27 @@ if (window.location.hostname === 'tz-registry.swiftss.org' ||
 }
 
 const Drawer: React.FC<Props> = (props) => {
-  const breakpoints = useBreakpoints();
-  const isSmallDesktop = breakpoints.des1200 && !breakpoints.des1440;
+  const theme = useTheme();
+  const isSmallDesktop = useMediaQuery(theme.breakpoints.between('des1200', 'des1440'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('des1200'));
   const { isLoggedIn } = useIsLoggedIn();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     clearUserStorage();
-    history.push('/');
+    navigate('/');
   };
 
   const handleSettings = () => {
     handleClick();
-    history.push(urls.settings());
+    navigate(urls.settings());
   };
 
   const handleClick = () => {
     props.setExpanded(false);
   };
 
-  const isDesktop =
-    breakpoints.des1200 || breakpoints.des1440 || breakpoints.des1366 || breakpoints.des1920;
+  
 
   const getLocalisedFooterText = () => {
     if (window.location.hostname === 'tz-registry.swiftss.org' ||
@@ -196,19 +198,15 @@ const Drawer: React.FC<Props> = (props) => {
         {isLoggedIn && (
           <UserContainer>
             <Button
-              transparent
-              filled={false}
-              buttonType={'button'}
-              color={'lightGray-100'}
+              variant={"text"}
+              color={"inherit"}
               onClick={handleSettings}
             >
               Settings
             </Button>
             <Button
-              transparent
-              filled={false}
-              buttonType={'button'}
-              color={'lightGray-100'}
+              variant={"text"}
+              color={"inherit"}
               onClick={handleLogout}
             >
               Logout

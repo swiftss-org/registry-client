@@ -1,9 +1,7 @@
 import styled from '@emotion/styled';
 
-import { flex } from 'theme/functions';
-
 export const Container = styled.div`
-  ${flex};
+  display: flex;
   flex-direction: column;
   gap: 8px;
 `;

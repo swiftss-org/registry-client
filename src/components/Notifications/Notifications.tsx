@@ -1,20 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { InlineNotification } from '@orfium/ictinus';
-import { NotificationTypes } from '@orfium/ictinus/dist/components/Notification/Notification';
+import { Alert } from '@mui/material';
 
 import { NotificationWrapper } from './Notifications.styles';
 import { resetNotifications } from '../../providers/Notifications/actions';
 import { useNotifications } from '../../providers/Notifications/NotificationProvider';
 
-export interface NotificationType {
+export type NotificationType = {
   message: string;
-  type: NotificationTypes;
+  type: 'success' | 'error' | 'warning' | 'info';
   isGlobal: boolean;
   isPreview?: boolean;
   id: number;
-}
+};
 
 const Notifications: React.FC = () => {
   const [notification, dispatch] = useNotifications();
@@ -34,14 +33,9 @@ const Notifications: React.FC = () => {
     <>
       {notification && (
         <NotificationWrapper ref={ref}>
-          <InlineNotification
-            styleType={'outlined'}
-            withIcon
-            message={notification.message}
-            type={notification.type}
-            primaryCTALabel="Action"
-            closeCTA={() => removeNotification()}
-          />
+          <Alert severity={notification.type} onClose={removeNotification}>
+            {notification.message}
+          </Alert>
         </NotificationWrapper>
       )}
     </>

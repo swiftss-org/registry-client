@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Icon } from '@orfium/ictinus';
-import { useHistory } from 'react-router-dom';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { Container, Heading, Subheading, TextWrapper } from './EpisodeCard.style';
 
@@ -13,10 +13,11 @@ type Props = {
 };
 
 const EpisodeCard: React.FC<Props> = ({ type, date, episodeID }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = () => {
-    history.push(`${history.location.pathname}/episodes/${episodeID}`);
+    navigate(`${location.pathname}/episodes/${episodeID}`);
   };
 
   return (
@@ -25,7 +26,7 @@ const EpisodeCard: React.FC<Props> = ({ type, date, episodeID }) => {
         <Heading>{type}</Heading>
         <Subheading>{date}</Subheading>
       </TextWrapper>
-      <Icon name={'chevronSmallRight'} color={'lightGrey'} variant={400} size={24} />
+      <ChevronRightIcon />
     </Container>
   );
 };

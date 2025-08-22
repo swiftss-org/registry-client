@@ -1,11 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import React, { useMemo } from 'react';
 
-import { Icon, Select, TextField, TextArea } from '@orfium/ictinus';
-import { SelectOption } from '@orfium/ictinus/dist/components/Select/Select';
+import AddIcon from '@mui/icons-material/Add';
+import { Select, TextField, MenuItem, InputLabel, FormControl, Typography } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material/Select';
+interface SelectOption {
+  value: string | number;
+  label: string;
+}
 import { CheckBoxWrapper, FieldWrapper, SectionTitle } from 'common.style';
 import Checkbox from 'components/FormElements/Checkbox';
-import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
@@ -38,7 +42,7 @@ type Props = {
   selectedHospital: HospitalsAPI;
   surgeons: SurgeonsAPI[];
   hospitals: HospitalsAPI[];
-  addField: (fieldName: string, value: any) => void;
+  addField: (fieldName: string, value: unknown) => void;
   setIsNewHospital: (isNewHospital: boolean) => void;
   isNewHospital: boolean;
 };
@@ -97,21 +101,28 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="hospital"
-                    label="Hospital"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={hospitalOptions}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={hospitalOptions.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={handleSelectHospital}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="hospital-label">Hospital</InputLabel>
+                    <Select
+                      labelId="hospital-label"
+                      id="hospital"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) => {
+                        const selectedOption = hospitalOptions.find(
+                          (option) => option.value === event.target.value
+                        );
+                        handleSelectHospital(selectedOption || { value: '', label: '' });
+                      }}
+                      label="Hospital"
+                    >
+                      {hospitalOptions.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -127,10 +138,10 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     id="patient_hospital_id"
                     label="Patient Hospital ID"
                     required={isNewHospital}
-                    styleType="outlined"
-                    size="md"
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
+                    variant="outlined"
+                    size="medium"
+                    error={hasError}
+                    helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
                   />
                 );
@@ -148,21 +159,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="episode_type"
-                    label="Episode Type"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={EPISODE_TYPE_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={EPISODE_TYPE_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="episode-type-label">Episode Type</InputLabel>
+                    <Select
+                      labelId="episode-type-label"
+                      id="episode_type"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Episode Type"
+                    >
+                      {EPISODE_TYPE_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -175,21 +190,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="cepod"
-                    label="CEPOD"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={CEPOD_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={CEPOD_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="cepod-label">CEPOD</InputLabel>
+                    <Select
+                      labelId="cepod-label"
+                      id="cepod"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="CEPOD"
+                    >
+                      {CEPOD_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -202,20 +221,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="side"
-                    label="Side"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={SIDE_OPTIONS}
-                    selectedOption={SIDE_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="side-label">Side</InputLabel>
+                    <Select
+                      labelId="side-label"
+                      id="side"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Side"
+                    >
+                      {SIDE_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -228,21 +252,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="occurence"
-                    label="Occurrence"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={OCCURRENCE_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={OCCURRENCE_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="occurrence-label">Occurrence</InputLabel>
+                    <Select
+                      labelId="occurrence-label"
+                      id="occurence"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Occurrence"
+                    >
+                      {OCCURRENCE_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -255,21 +283,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="type"
-                    label="Type"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={TYPE_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={TYPE_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="type-label">Type</InputLabel>
+                    <Select
+                      labelId="type-label"
+                      id="type"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Type"
+                    >
+                      {TYPE_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -282,21 +314,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="size"
-                    label="Size"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={SIZE_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={SIZE_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="size-label">Size</InputLabel>
+                    <Select
+                      labelId="size-label"
+                      id="size"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Size"
+                    >
+                      {SIZE_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -309,21 +345,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="complexity"
-                    label="Complexity"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={COMPLEXITY_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={COMPLEXITY_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="complexity-label">Complexity</InputLabel>
+                    <Select
+                      labelId="complexity-label"
+                      id="complexity"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Complexity"
+                    >
+                      {COMPLEXITY_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -339,16 +379,19 @@ const RegisterEpisodeForm: React.FC<Props> = ({
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
               return (
                 <TextField
-                  id="surgery_date"
-                  label="Surgery Date"
-                  type={'date'}
-                  required
-                  styleType="outlined"
-                  size="md"
-                  status={hasError ? 'error' : 'hint'}
-                  hintMsg={hasError ? props.meta.error : undefined}
-                  {...props.input}
-                />
+                    id="surgery_date"
+                    label="Surgery Date"
+                    type="date"
+                    required
+                    variant="outlined"
+                    size="medium"
+                    error={hasError}
+                    helperText={hasError ? props.meta.error : undefined}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    {...props.input}
+                  />
               );
             }}
           </Field>
@@ -360,21 +403,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="mesh_type"
-                    label="Mesh Type"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={MESH_TYPE_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={MESH_TYPE_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="mesh-type-label">Mesh Type</InputLabel>
+                    <Select
+                      labelId="mesh-type-label"
+                      id="mesh_type"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Mesh Type"
+                    >
+                      {MESH_TYPE_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -387,21 +434,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="anaesthetic_type"
-                    label="Anaesthetic Type"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={ANAESTHETIC_TYPE_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={ANAESTHETIC_TYPE_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="anaesthetic-type-label">Anaesthetic Type</InputLabel>
+                    <Select
+                      labelId="anaesthetic-type-label"
+                      id="anaesthetic_type"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Anaesthetic Type"
+                    >
+                      {ANAESTHETIC_TYPE_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -414,21 +465,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="diathermy_used"
-                    label="Diathermy Used"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={BOOLEAN_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={BOOLEAN_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="diathermy-used-label">Diathermy Used</InputLabel>
+                    <Select
+                      labelId="diathermy-used-label"
+                      id="diathermy_used"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Diathermy Used"
+                    >
+                      {BOOLEAN_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -441,21 +496,25 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
               return (
                 <SelectWrapper>
-                  <Select
-                    id="antibiotic_used"
-                    label="Prophylactic antibiotics given?"
-                    styleType="outlined"
-                    size="md"
-                    required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={BOOLEAN_OPTIONS}
-                    {...omit(props.input, ['onFocus'])}
-                    selectedOption={BOOLEAN_OPTIONS.find(
-                      (option) => option.value === props.input.value.value
-                    )}
-                    handleSelectedOption={props.input.onChange}
-                  />
+                  <FormControl fullWidth variant="outlined" required error={hasError}>
+                    <InputLabel id="antibiotic-used-label">Prophylactic antibiotics given?</InputLabel>
+                    <Select
+                      labelId="antibiotic-used-label"
+                      id="antibiotic_used"
+                      value={props.input.value.value || ''}
+                      onChange={(event: SelectChangeEvent<string>) =>
+                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      }
+                      label="Prophylactic antibiotics given?"
+                    >
+                      {BOOLEAN_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                  </FormControl>
                 </SelectWrapper>
               );
             }}
@@ -486,28 +545,30 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                   return (
                     <ArrayContainer>
                       <SelectWrapper>
+                        <FormControl fullWidth variant="outlined" required error={hasError}>
+                        <InputLabel id="surgeon-label">Surgeon</InputLabel>
                         <Select
+                          labelId="surgeon-label"
                           id="id"
+                          value={props.input.value.value || ''}
+                          onChange={(event: SelectChangeEvent<string>) =>
+                            props.input.onChange({ value: event.target.value, label: event.target.value })
+                          }
                           label="Surgeon"
-                          isSearchable={true}
-                          styleType="outlined"
-                          size="md"
-                          required
-                          status={hasError ? 'error' : 'hint'}
-                          hintMsg={hasError ? props.meta.error : undefined}
-                          options={surgeonOptions}
-                          {...omit(props.input, ['onFocus'])}
-                          selectedOption={surgeonOptions.find(
-                            (option) => option.value === props.input.value.value
-                          )}
-                          handleSelectedOption={props.input.onChange}
-                        />
+                        >
+                          {surgeonOptions.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                      </FormControl>
                       </SelectWrapper>
                       {index === 0 && (
-                        <Icon
-                          name={'plus'}
-                          size={24}
+                        <AddIcon
                           onClick={() => addField('surgeons', undefined)}
+                          sx={{ cursor: 'pointer' }}
                         />
                       )}
                     </ArrayContainer>
@@ -521,10 +582,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
           <Field name="comments">
             {(props) => {
               return (
-                <TextArea
+                <TextField
                   id="comments"
                   placeholder="Comments"
-                  styleType="outlined"
+                  variant="outlined"
+                  multiline
+                  rows={4}
                   {...props.input}
                 />
               );

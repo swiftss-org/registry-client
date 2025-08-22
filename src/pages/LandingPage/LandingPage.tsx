@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import { Button } from '@orfium/ictinus';
+import { Button } from '@mui/material';
 import {
   useGetSurgeonEpisodeSummary,
   useGetOwnedEpisodes,
   useGetUnlinkedPatients,
   useGetPreferredHospital, useGetAnnouncements,
 } from 'hooks/api/patientHooks';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 
 import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
@@ -22,7 +22,7 @@ import { OwnedEpisodeAPI } from '../../models/apiTypes';
 const LandingPage: React.FC = () => {
   const { data: surgeonEpisodeSummary, error: surgeonError } = useGetSurgeonEpisodeSummary();
   const { data: ownedEpisodes = [], error: episodesError } = useGetOwnedEpisodes();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isDesktop } = useResponsiveLayout();
 
   const { data: preferredHospital, isLoading: isLoadingHospital, error: hospitalError } = useGetPreferredHospital();
@@ -82,7 +82,7 @@ const LandingPage: React.FC = () => {
 
   const handleRowClick = (episode: OwnedEpisodeAPI) => {
     const { hospital_id, patient_id, id } = episode;
-    history.push(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
+    navigate(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
   };
 
   const [dismissedIds, setDismissedIds] = useState<number[]>([]);
@@ -194,7 +194,7 @@ const LandingPage: React.FC = () => {
                     <tr
                       key={patient.id}
                       onClick={() =>
-                        history.push(`${urls.patients()}/${patient.hospital_id}/${patient.id}`)
+                        navigate(`${urls.patients()}/${patient.hospital_id}/${patient.id}`)
                       }
                       style={{
                         backgroundColor: '#fc7c7c',
@@ -314,11 +314,10 @@ const LandingPage: React.FC = () => {
       </DashboardWrapper>
       <ButtonContainer isDesktop={isDesktop}>
         <Button
-          buttonType="button"
-          block
-          filled
-          size="md"
-          onClick={() => history.push(urls.patients())}
+          variant="contained"
+          fullWidth
+          size="medium"
+          onClick={() => navigate(urls.patients())}
         >
           Go to Patient Directory
         </Button>

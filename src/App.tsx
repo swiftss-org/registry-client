@@ -1,14 +1,13 @@
 import React from 'react';
 
-import { ThemeProvider } from '@orfium/ictinus';
+import { ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AppWrapper } from './App.style';
 import { useResponsiveLayout } from './hooks/useResponsiveSidebar';
 import NotificationsProvider from './providers/Notifications/NotificationProvider';
 import Routes from './routing/Routes';
-import { themeOverride } from './theme/globals';
+import theme from './theme/theme';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, refetchOnReconnect: false } },
@@ -18,13 +17,11 @@ const App: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={themeOverride}>
+      <ThemeProvider theme={theme}>
         <NotificationsProvider>
-          <Router>
-            <AppWrapper isDesktop={isDesktop}>
+          <AppWrapper isDesktop={isDesktop}>
               <Routes />
             </AppWrapper>
-          </Router>
         </NotificationsProvider>
       </ThemeProvider>
     </QueryClientProvider>
