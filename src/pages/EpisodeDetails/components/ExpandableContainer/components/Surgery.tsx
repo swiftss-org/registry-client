@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { TextArea, TextField } from '@orfium/ictinus';
+import { TextField, TextareaAutosize } from '@mui/material';
 import { EpisodesAPI } from 'models/apiTypes';
 
 import { Heading } from '../../../../PatientDetails/components/EpisodeList/EpisodeCard/EpisodeCard.style';
@@ -15,79 +15,79 @@ const Surgery: FC<{
     <InternalContainer isOpen={isOpen} aria-expanded={isOpen}>
       <Heading>Episode details:</Heading>
       <FieldContainer>
-        <TextField locked label="CEPOD" styleType="outlined" size="md" value={episode.cepod} />
-        <TextField locked label="Side" styleType="outlined" size="md" value={episode.side} />
+        <TextField disabled label="CEPOD" variant="outlined" size="medium" value={episode.cepod} />
+        <TextField disabled label="Side" variant="outlined" size="medium" value={episode.side} />
         <TextField
-          locked
+          disabled
           label="Occurrence"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.occurence}
         />
-        <TextField locked label="Type" styleType="outlined" size="md" value={episode.type} />
+        <TextField disabled label="Type" variant="outlined" size="medium" value={episode.type} />
         <TextField
-          locked
+          disabled
           label="Size"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.size}
         />
         <TextField
-          locked
+          disabled
           label="Complexity"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.complexity}
         />
       </FieldContainer>
       <Heading>Surgery details:</Heading>
       <FieldContainer>
         <TextField
-          locked
+          disabled
           label="Mesh type"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.mesh_type}
         />
         <TextField
-          locked
+          disabled
           label="Anaesthetic type"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.anaesthetic_type}
         />
         <TextField
-          locked
+          disabled
           label="Diathermy used"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.diathermy_used ? 'Yes' : 'No'}
         />
         <TextField
-          locked
+          disabled
           label="Prophylactic antibiotics given?"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.antibiotic_used ? 'Yes' : 'No'}
         />
         <TextField
-          locked
+          disabled
           label="Prophylactic antibiotics type"
-          styleType="outlined"
-          size="md"
+          variant="outlined"
+          size="medium"
           value={episode.antibiotic_type}
         />        
         {episode.surgeons.map((surgeon, index) => (
           <TextField
             key={`surgeon_${index}`}
-            locked
+            disabled
             label="Surgeon"
-            styleType="outlined"
-            size="md"
+            variant="outlined"
+            size="medium"
             value={`${surgeon.user.first_name} ${surgeon.user.last_name}`}
           />
         ))}
-        <TextArea disabled styleType="outlined" placeholder={episode.comments} />
+        <TextareaAutosize disabled minRows={3} placeholder={episode.comments} />
       </FieldContainer>
     </InternalContainer>
   );

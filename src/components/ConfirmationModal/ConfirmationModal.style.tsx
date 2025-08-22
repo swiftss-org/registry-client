@@ -9,14 +9,14 @@ export const IBWRapper = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: ${(props) => props.theme.typography.fontSizes[18]};
-  font-weight: ${(props) => props.theme.typography.weights.medium};
+  font-size: ${(props) => props.theme.typography.h1.fontSize};
+  font-weight: ${(props) => props.theme.typography.h1.fontWeight};
   line-height: ${rem(21)};
 `;
 
 export const Subtitle = styled.div`
-  color: ${(props) => props.theme.utils.getColor('lightGray', 600)};
-  font-size: ${(props) => props.theme.typography.fontSizes[16]};
-  font-weight: ${(props) => props.theme.typography.weights.regular};
+  color: ${(props) => props.theme.palette.grey[600]};
+  font-size: ${(props) => props.theme.typography.subtitle1.fontSize};
+  font-weight: ${(props) => props.theme.typography.subtitle1.fontWeight};
   line-height: ${rem(19)};
 `;

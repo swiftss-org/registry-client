@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Button, TextField } from '@orfium/ictinus';
+import { Button, TextField } from '@mui/material';
 import { FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
 import { useChangePassword } from 'hooks/api/userHooks';
 import { ChangePasswordFormType } from 'models/apiTypes';
 import { Field, Form } from 'react-final-form';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useSetNotification } from '../../../../hooks/useSetNotification';
 import { ButtonContainer } from '../../../Login/components/LoginForm/LoginForm.style';
@@ -16,14 +16,14 @@ const ChangePasswordForm: React.FC = () => {
 
   const setNotification = useSetNotification();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = (form: ChangePasswordFormType) => {
     return new Promise((resolve) => {
       mutateAsync(form)
         .then(() => {
           setNotification('Password changed successfully', 'success', true, true);
-          history.push('/');
+          navigate('/');
           resolve(true);
         })
         .catch((error) => {
@@ -50,10 +50,10 @@ const ChangePasswordForm: React.FC = () => {
                       <TextField
                         id="old_password"
                         label="Old password"
-                        styleType="outlined"
-                        size="md"
-                        status={hasError && 'error'}
-                        hintMsg={hasError && (props.meta.error || props.meta.submitError)}
+                        variant="outlined"
+                        size="medium"
+                        error={hasError}
+                        helperText={hasError && (props.meta.error || props.meta.submitError)}
                         type="password"
                         {...props.input}
                       />
@@ -77,10 +77,10 @@ const ChangePasswordForm: React.FC = () => {
                       <TextField
                         id="new_password1"
                         label="New password"
-                        styleType="outlined"
-                        size="md"
-                        status={hasError && 'error'}
-                        hintMsg={hasError && (props.meta.error || props.meta.submitError)}
+                        variant="outlined"
+                        size="medium"
+                        error={hasError}
+                        helperText={hasError && (props.meta.error || props.meta.submitError)}
                         type="password"
                         {...props.input}
                       />
@@ -104,10 +104,10 @@ const ChangePasswordForm: React.FC = () => {
                       <TextField
                         id="new_password2"
                         label="New password (again)"
-                        styleType="outlined"
-                        size="md"
-                        status={hasError && 'error'}
-                        hintMsg={hasError && (props.meta.error || props.meta.submitError)}
+                        variant="outlined"
+                        size="medium"
+                        error={hasError}
+                        helperText={hasError && (props.meta.error || props.meta.submitError)}
                         type="password"
                         {...props.input}
                       />
@@ -120,12 +120,11 @@ const ChangePasswordForm: React.FC = () => {
 
           <ButtonContainer>
             <Button
-              block
-              color={'blue-500'}
+              fullWidth
+              variant="contained"
               disabled={isLoading || submitting}
-              filled
-              size="lg"
-              buttonType="submit"
+              size="large"
+              type="submit"
             >
               Change Password
             </Button>

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Radio, RadioGroup } from '@orfium/ictinus';
+import { Radio, RadioGroup } from '@mui/material';
 import { Portal } from 'components/Portal';
 import SlidingWindow from 'components/SlidingWindow';
 import { SortingOptionsType } from 'pages/PatientDirectory/types';
@@ -34,11 +34,11 @@ const SortingOptions: React.FC<Props> = ({
           <RadioGroupContainer>
             <Title>Name:</Title>
             <RadioWithLabel>
-              <Radio filled={false} value="full_name" />
+              <Radio value="full_name" />
               <div>Name A-Z</div>
             </RadioWithLabel>
             <RadioWithLabel>
-              <Radio filled={false} value="-full_name" />
+              <Radio value="-full_name" />
               <div>Name Z-A</div>
             </RadioWithLabel>
           </RadioGroupContainer>
@@ -46,11 +46,11 @@ const SortingOptions: React.FC<Props> = ({
           <RadioGroupContainer>
             <Title>Date:</Title>
             <RadioWithLabel>
-              <Radio filled={false} value="-created_at" />
+              <Radio value="-created_at" />
               <div>Newest to oldest</div>
             </RadioWithLabel>
             <RadioWithLabel>
-              <Radio filled={false} value="created_at" />
+              <Radio value="created_at" />
               <div>Oldest to newest</div>
             </RadioWithLabel>
           </RadioGroupContainer>

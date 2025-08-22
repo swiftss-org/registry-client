@@ -9,12 +9,12 @@ export const dischargeFormValidation = (values: {
                                                     comments?: string;
                                                     discharge_duration?: string;
                                                   }) => {
-    const errors = {} || {
-        date: '',
-        discharge_duration: '',
-        aware_of_mesh: '',
-        infection: ''
-    };
+    const errors: {
+        date?: string;
+        discharge_duration?: string;
+        aware_of_mesh?: string;
+        infection?: string;
+    } = {};
 
     if (!values.date?.trim()) {
         errors.date = REQUIRED_FIELD_MSG + '. Please select a date.';
@@ -43,17 +43,7 @@ export const dischargeFormValidation = (values: {
 };
 
 export const followUpFormValidation = (values: FollowUpForm) => {
-  const errors = {} || {
-    pain_severity: '',
-    date: '',
-    attendees: '',
-    mesh_awareness: '',
-    seroma: '',
-    infection: '',
-    numbness: '',
-    recurrence: '',
-    further_surgery_need: ''
-  };
+  const errors: Partial<Record<keyof FollowUpForm, string>> = {};
 
   if (!values.date?.trim()) {
     errors.date = REQUIRED_FIELD_MSG + '. Please select a date.';

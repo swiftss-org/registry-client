@@ -1,11 +1,8 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { grid } from '@orfium/ictinus/dist/theme/functions';
-
-import { flex } from './theme/functions';
 
 export const PageWrapper = styled.div<{ isDesktop: boolean }>`
-  ${flex};
+  display: flex;
   flex-direction: column;
   height: ${({ isDesktop }) => (isDesktop ? '100%' : 'calc(100vh)')};
   justify-content: center;
@@ -21,10 +18,6 @@ export const PageWrapper = styled.div<{ isDesktop: boolean }>`
 
 export const CheckBoxContainer = styled.div<{ error?: boolean; checked?: boolean }>`
   margin-left: -12px;
-
-  svg path {
-    fill: white;
-  }
 `;
 export const CheckBoxWrapper = styled.div<{ error?: boolean; checked?: boolean }>`
   display: flex;
@@ -33,13 +26,13 @@ export const CheckBoxWrapper = styled.div<{ error?: boolean; checked?: boolean }
   position: relative;
 
   @media (max-width: 768px) {
-  display: block;
+    display: block;
   }
 `;
 
 export const FieldsContainer = styled.div<{ withMargin?: boolean }>`
-  ${grid};
   column-gap: 8px;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   margin-bottom: ${(props) => (props.withMargin ? '24px' : null)};
   row-gap: 8px;
@@ -98,7 +91,7 @@ export const scrollBar = css`
 `;
 
 export const PageTitle = styled.div`
-  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  color: ${(props) => props.theme.palette.grey[400]};
   display: flex;
   font-size: 24px;
   font-weight: 700;
@@ -107,7 +100,7 @@ export const PageTitle = styled.div`
 `;
 
 export const PageSubtitle = styled.div`
-  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  color: ${(props) => props.theme.palette.grey[400]};
   display: flex;
   font-size: 18px;
   font-weight: 400;
@@ -116,14 +109,14 @@ export const PageSubtitle = styled.div`
 `;
 
 export const SectionTitle = styled.div`
-  color: ${(props) => props.theme.utils.getColor('blue', 500)};
+  color: ${(props) => props.theme.palette.primary.dark};
   font-size: 18px;
   font-weight: 500;
 `;
 
 export const ButtonContainer = styled.div<{ isDesktop: boolean }>`
-  background: ${(props) => props.theme.utils.getColor('lightCoolGray', 400)};
-  border-top: 1px solid ${(props) => props.theme.utils.getColor('lightGray', 200)};
+  background: ${(props) => props.theme.palette.grey[300]};
+  border-top: 1px solid ${(props) => props.theme.palette.grey[200]};
   bottom: 0;
   box-sizing: border-box;
   padding: 16px;

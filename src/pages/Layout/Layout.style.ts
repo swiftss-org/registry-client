@@ -1,9 +1,7 @@
 import styled from '@emotion/styled';
-import { flexCenter } from '@orfium/ictinus/dist/theme/functions';
 
 import { scrollBar } from '../../common.style';
 import { ResponsiveProps } from '../types';
-import { flex } from 'theme/functions';
 
 const SIDEBAR_WIDTH_COLLAPSED = 110;
 
@@ -19,17 +17,21 @@ const getWidth = ({
 };
 
 export const PageWrapper = styled.div`
-  ${flexCenter};
+  align-items: center;
+  column-gap: 0;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  row-gap: 0;
 `;
 
 export const Main = styled.main<{ isDesktop: boolean }>`
   ${scrollBar};
 
+  display: flex;
   grid-area: main;
   overflow-x: hidden;
-
-  ${flex};
+  overflow-y: hidden;
 
   ${({ isDesktop }) =>
     isDesktop &&
@@ -37,8 +39,6 @@ export const Main = styled.main<{ isDesktop: boolean }>`
       align-items: center;
       
     `}
-
-  overflow-y: hidden;
 `;
 
 export const MainContainer = styled.div<ResponsiveProps & { isDesktop: boolean }>`

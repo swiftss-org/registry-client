@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
   z-index: 150;
 
   :before {
-    background-color: ${(props) => props.theme.utils.getColor('blue', 700)};
+    background-color: ${(props) => props.theme.palette.primary.dark};
     content: ' ';
     height: 100%;
     opacity: 0.75;
@@ -38,12 +38,12 @@ export const PaddedContent = styled.div`
 export const CloseContainer = styled.div`
   cursor: pointer;
   position: absolute;
-  right: ${(props) => props.theme.spacing.xl};
-  top: ${(props) => props.theme.spacing.xl};
+  right: ${(props) => props.theme.spacing(6)};
+  top: ${(props) => props.theme.spacing(6)};
 `;
 
 export const Title = styled.div`
-  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  color: ${(props) => props.theme.palette.grey[400]};
   font-size: 20px;
   font-weight: 700;
   left: 16px;

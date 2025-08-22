@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React, { FC } from 'react';
 
-import { Button, Select, TextArea, TextField } from '@orfium/ictinus';
+import { Button, TextField, Select, TextareaAutosize, FormControl, FormHelperText, MenuItem } from '@mui/material';
 import { omit } from 'lodash';
 import { Field, Form } from 'react-final-form';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { CheckBoxWrapper } from '../../../../../common.style';
 import Checkbox from '../../../../../components/FormElements/Checkbox';
@@ -32,8 +32,10 @@ const Discharge: FC<{
   isOpen: boolean;
   discharge: DischargeAPI;
 }> = ({ isOpen, discharge }) => {
-  const match = useRouteMatch<{ episodeID: string }>();
-  const { episodeID } = match.params;
+  const { episodeID } = useParams<{ episodeID: string }>();
+  if (!episodeID) {
+    throw new Error('Episode ID is missing');
+  }
   const { mutate, isLoading } = useDischarge(episodeID);
 
   const handleSubmit = (form: {
@@ -61,9 +63,20 @@ const Discharge: FC<{
           // @ts-ignore
           handleSubmit(newValues);
         }}
-        validate={(values) => dischargeFormValidation(values)}
+        validate={(values) => {
+          const newValues = {
+            ...values,
+            infection: (values.infection ? values.infection.join(',') : 'none') as string,
+          };
+          return dischargeFormValidation(newValues);
+        }}
         initialValues={{
           ...discharge,
+          aware_of_mesh: discharge?.aware_of_mesh !== undefined
+            ? BOOLEAN_OPTIONS.find((option) =>
+                discharge?.aware_of_mesh ? option.label === 'Yes' : option.label === 'No'
+              )
+            : undefined,
           infection: discharge && discharge.infection ? discharge.infection?.split(',') : undefined,
         }}
       >
@@ -86,14 +99,14 @@ const Discharge: FC<{
                       return (
                         <TextField
                           id="date"
-                          locked={!canSubmit}
+                          disabled={!canSubmit}
                           label={'Date'}
                           type={'date'}
                           required={canSubmit}
-                          styleType="outlined"
-                          size="md"
-                          status={hasError ? 'error' : 'hint'}
-                          hintMsg={hasError ? props.meta.error : undefined}
+                          variant="outlined"
+                          size="medium"
+                          error={hasError}
+                          helperText={hasError ? props.meta.error : undefined}
                           {...props.input}
                         />
                       );
@@ -120,30 +133,27 @@ const Discharge: FC<{
 
                       return (
                         <SelectWrapper>
-                          <Select
-                            locked={!canSubmit}
-                            id="aware_of_mesh"
-                            label="Antibiotics given on discharge"
-                            styleType="outlined"
-                            size="md"
-                            required={canSubmit}
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
-                            options={BOOLEAN_OPTIONS}
-                            {...omit(props.input, ['onFocus'])}
-                            selectedOption={
-                              discharge?.aware_of_mesh !== undefined
-                                ? BOOLEAN_OPTIONS.find((option) =>
-                                    discharge?.aware_of_mesh
-                                      ? option.label === 'Yes'
-                                      : option.label === 'No'
-                                  )
-                                : BOOLEAN_OPTIONS.find(
-                                    (option) => option.value === props.input.value.value
-                                  )
-                            }
-                            handleSelectedOption={props.input.onChange}
-                          />
+                          <FormControl fullWidth error={hasError}>
+                            <Select
+                              disabled={!canSubmit}
+                              id="aware_of_mesh"
+                              label="Antibiotics given on discharge"
+                              variant="outlined"
+                              size="medium"
+                              required={canSubmit}
+                              error={hasError}
+                              {...omit(props.input, ['onFocus'])}
+                              value={props.input.value.value}
+                              onChange={props.input.onChange}
+                            >
+                              {BOOLEAN_OPTIONS.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                          </FormControl>
                         </SelectWrapper>
                       );
                     }}
@@ -163,13 +173,13 @@ const Discharge: FC<{
                         return (
                           <TextField
                             id="discharge_duration"
-                            locked={!canSubmit}
+                            disabled={!canSubmit}
                             label={'Duration (days)'}
                             required={canSubmit}
-                            styleType="outlined"
-                            size="md"
-                            status={hasError ? 'error' : 'hint'}
-                            hintMsg={hasError ? props.meta.error : undefined}
+                            variant="outlined"
+                            size="medium"
+                            error={hasError}
+                            helperText={hasError ? props.meta.error : undefined}
                             {...props.input}
                           />
                         );
@@ -209,10 +219,10 @@ const Discharge: FC<{
                           disabled
                           label={'Post-operative complications'}
                           required={canSubmit}
-                          styleType="outlined"
-                          size="md"
-                          status={hasError ? 'error' : 'hint'}
-                          hintMsg={hasError ? props.meta.error : undefined}
+                          variant="outlined"
+                          size="medium"
+                          error={hasError}
+                          helperText={hasError ? props.meta.error : undefined}
                           {...props.input}
                         />
                       );
@@ -227,27 +237,29 @@ const Discharge: FC<{
                       const hasError =
                         props.meta.touched && props.meta.invalid && !props.meta.active;
                       return (
-                        <TextArea
-                          id="comments"
-                          required={canSubmit}
-                          styleType="outlined"
-                          status={hasError ? 'error' : 'hint'}
-                          hintMsg={hasError ? props.meta.error : undefined}
-                          disabled={!canSubmit}
-                          {...props.input}
-                        />
+                        <FormControl fullWidth error={hasError}>
+                          <TextareaAutosize
+                            id="comments"
+                            minRows={3}
+                            placeholder="Comments"
+                            required={canSubmit}
+                            disabled={!canSubmit}
+                            {...props.input}
+                          />
+                          {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                        </FormControl>
                       );
                     }}
                   </Field>
                 </FieldWrapper>
 
                 <Button
-                  color={'blue-200'}
-                  buttonType="button"
+                  variant="contained"
+                  color="primary"
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  block
-                  size="md"
+                  fullWidth
+                  size="medium"
                 >
                   Save changes
                 </Button>

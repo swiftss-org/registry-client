@@ -7,7 +7,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.div`
-  color: ${(props) => props.theme.utils.getColor('darkGray', 400)};
+  color: ${(props) => props.theme.palette.grey[400]};
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 16px;

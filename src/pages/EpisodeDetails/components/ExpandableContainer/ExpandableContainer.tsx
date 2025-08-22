@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
 
-import { Icon, useTheme } from '@orfium/ictinus';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { Header, ListItem } from './style';
 import { DischargeAPI, EpisodesAPI, FollowUpAPI } from '../../../../models/apiTypes';
@@ -20,9 +22,6 @@ const ExpandableContainer: FC<{
   isDone?: boolean;
 }> = ({ component: Component, title, episode, discharge, followUp, isDone = false }) => {
   const [toggle, setToggle] = useState(false);
-  const {
-    utils: { getColor },
-  } = useTheme();
 
   return (
     <ListItem
@@ -34,16 +33,13 @@ const ExpandableContainer: FC<{
       <Header isOpen={toggle}>
         <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
           {title}{' '}
-          {isDone && !toggle && <Icon name={'checkmark'} size={20} color={'green'} variant={400} />}
+          {isDone && !toggle && <CheckCircleIcon color="success" />}
         </div>
 
-        <Icon
-          name={toggle ? 'chevronLargeUp' : 'chevronLargeDown'}
-          color={getColor('lightGray', 500)}
-        />
+        {toggle ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
       </Header>
 
-      <div onClick={(e: any) => e.stopPropagation()}>
+      <div onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
         <Component isOpen={toggle} episode={episode} discharge={discharge} followUp={followUp} />
       </div>
     </ListItem>

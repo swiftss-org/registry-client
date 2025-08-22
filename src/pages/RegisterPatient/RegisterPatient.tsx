@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 
-import { Button, Icon } from '@orfium/ictinus';
-import { IconWrapper } from 'App.style';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button, IconButton } from '@mui/material';
 import { ButtonContainer, PageTitle, PageWrapper } from 'common.style';
 import ConfirmationModal from 'components/ConfirmationModal';
-import { Form } from 'react-final-form';
-import { useHistory } from 'react-router';
+import { Form, FormRenderProps } from 'react-final-form';
+import { useNavigate } from 'react-router';
 import urls from 'routing/urls';
 
 import RegisterPatientForm from './components/RegisterPatientForm';
@@ -27,30 +27,27 @@ const RegisterPatient: React.FC = () => {
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <>
       <PageWrapper isDesktop={isDesktop}>
         <PageTitle>
-          <IconWrapper>
-            <Icon
-              name="fatArrowLeft"
-              size={24}
-              color={'lightGray-700'}
-              onClick={() => {
-                if (isFormDirty) {
-                  setShowWarningModal(true);
-                } else {
-                  history.push(urls.patients());
-                }
-              }}
-            />
-          </IconWrapper>
+          <IconButton
+            onClick={() => {
+              if (isFormDirty) {
+                setShowWarningModal(true);
+              } else {
+                navigate(urls.patients());
+              }
+            }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
           Add new patient
         </PageTitle>
-        <Form onSubmit={handleSubmit} validate={patientFormValidation}>
-          {({ handleSubmit, values, submitting, dirty }) => {
+        <Form<RegisterPatientFormType> onSubmit={handleSubmit} validate={patientFormValidation}>
+          {({ handleSubmit, values, submitting, dirty }: FormRenderProps<RegisterPatientFormType>) => {
             if (dirty) {
               setIsFormDirty(true);
             }
@@ -68,11 +65,12 @@ const RegisterPatient: React.FC = () => {
                 <RegisterPatientForm values={values} hospitals={hospitals?.results ?? []} />
                 <ButtonContainer isDesktop={isDesktop}>
                   <Button
-                    color={'blue-500'}
-                    buttonType="submit"
+                    variant="contained"
+                    color="primary"
+                    type="submit"
                     disabled={isLoading || submitting}
-                    block
-                    size="md"
+                    fullWidth
+                    size="medium"
                   >
                     Add new patient
                   </Button>
@@ -92,7 +90,7 @@ const RegisterPatient: React.FC = () => {
             'Are you sure you want to cancel adding a new patient? All information you’ve entered will be lost!'
           }
           buttonText={'Yes, cancel new addition'}
-          onClick={() => history.push('/patients')}
+          onClick={() => navigate('/patients')}
         />
       )}
     </>

@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState, useRef } from 'react';
 
-import { IconButton, Filter } from '@orfium/ictinus';
-import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
-import { ReactComponent as SortIcon } from 'assets/PatientDirectory/sortIcon.svg';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import SortIcon from '@mui/icons-material/Sort';
+import { IconButton, Select, MenuItem } from '@mui/material';
 import { PageWrapper, PageTitle } from 'common.style';
 import { useGetHospitals, useGetPatients, useGetPreferredHospital } from 'hooks/api/patientHooks';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import urls from 'routing/urls';
 
 import PatientCard from './components/PatientCard';
@@ -59,7 +59,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
     }
   }, [sortingOption]);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const filterOptions = getHospitalOptions(hospitals?.results || []);
   const [selectedOption, setSelectedOption] = useState<number>();
@@ -70,19 +70,23 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         <Notifications />
         <PageTitle>Patients directory</PageTitle>
         <OptionsWrapper>
-          <Filter
+          <Select
             label="Center"
-            items={filterOptions}
-            defaultValue={filterOptions.length > 0 ? filterOptions[0] : { label: '', value: -1 }}
-            selectedItem={filterOptions.find((option) => option.value === selectedOption)}
-            onSelect={(option: FilterOption) => {
-              setSelectedOption(option.value as number);
-              setHospitalId(parseInt(option.value.toString()));
+            value={selectedOption}
+            onChange={(event) => {
+              setSelectedOption(event.target.value as number);
+              setHospitalId(event.target.value as number);
             }}
-            styleType="transparent"
-            buttonType="primary"
-          />
-          <SortIcon onClick={() => setShowSortingOptions(!showSortingOptions)} />
+          >
+            {filterOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+          <IconButton onClick={() => setShowSortingOptions(!showSortingOptions)}>
+            <SortIcon />
+          </IconButton>
         </OptionsWrapper>
 
         {patients && (
@@ -99,13 +103,12 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         )}
         <IconButtonWrapper>
           <IconButton
-            name="plus"
-            color={'blue-400'}
-            filled
-            iconSize={24}
-            size={'lg'}
-            onClick={() => history.push(urls.registerPatient())}
-          />
+            color="primary"
+            size="large"
+            onClick={() => navigate(urls.registerPatient())}
+          >
+            <AddCircleIcon fontSize="large" />
+          </IconButton>
         </IconButtonWrapper>
       </PageWrapper>
 

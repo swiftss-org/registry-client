@@ -1,14 +1,14 @@
-import { Location, LocationState } from 'history';
-import { match } from 'react-router';
+import { Location } from 'history';
+import { PathMatch } from 'react-router-dom';
 
 export type MenuItem = {
   name: string;
   url: string;
-  state?: Record<string, any> | null;
+  state?: Record<string, unknown> | null;
   visible: boolean;
-  isActive?<Params extends { [K in keyof Params]?: string }, S = LocationState>(
-    match: match<Params> | null,
-    location: Location<S>
+  isActive?<ParamKey extends string>(
+    match: PathMatch<ParamKey> | null,
+    location: Location
   ): boolean;
   options: MenuItem[];
 };

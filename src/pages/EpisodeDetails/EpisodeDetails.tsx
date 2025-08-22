@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Icon } from '@orfium/ictinus';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { IconButton } from '@mui/material';
 import { IconWrapper } from 'App.style';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import ExpandableContainer from './components/ExpandableContainer';
 import Discharge from './components/ExpandableContainer/components/Discharge';
@@ -26,9 +27,13 @@ import {
 
 const EpisodeDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
-  const history = useHistory();
-  const match = useRouteMatch<{ hospitalID: string; patientID: string; episodeID: string }>();
-  const { hospitalID, patientID, episodeID } = match.params;
+  const navigate = useNavigate();
+  const { hospitalID, patientID, episodeID } = useParams<{ hospitalID: string; patientID: string; episodeID: string }>();
+
+  if (!hospitalID || !patientID || !episodeID) {
+    // Or show a friendly error to the user
+    throw new Error('Missing required route parameters');
+  }
 
   const { data: episode } = useGetEpisode(episodeID);
   const { data: followUps } = useGetEpisodeFollowUps(episodeID);
@@ -38,14 +43,13 @@ const EpisodeDetails: React.FC = () => {
     <PageWrapper isDesktop={isDesktop}>
       <PageTitle>
         <IconWrapper>
-          <Icon
-            name="fatArrowLeft"
-            size={24}
-            color={'lightGray-700'}
+          <IconButton
             onClick={() => {
-              history.replace(`${urls.patients()}/${hospitalID}/${patientID}`);
+              navigate(`${urls.patients()}/${hospitalID}/${patientID}`, { replace: true });
             }}
-          />
+          >
+            <ArrowBackIcon />
+          </IconButton>
         </IconWrapper>
         Episode Details
       </PageTitle>

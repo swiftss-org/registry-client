@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { flex } from '@orfium/ictinus/dist/theme/functions';
 import { rem } from 'polished';
 
 export const TabWrapper = styled.button<{ isActive: boolean }>`
@@ -7,16 +6,16 @@ export const TabWrapper = styled.button<{ isActive: boolean }>`
   border: none;
   color: ${({
     theme: {
-      utils: { getColor },
+      palette
     },
     isActive,
-  }) => (isActive ? getColor('primary', 500, 'normal') : getColor('lightGray', 600))};
+  }) => (isActive ? palette.primary.dark : palette.grey[600])};
 
   cursor: pointer;
-  font-size: ${({ theme }) => theme.typography.fontSizes[18]};
-  font-weight: ${({ theme, isActive }) => theme.typography.weights[isActive ? 'bold' : 'regular']};
+  font-size: ${({ theme }) => theme.typography.body1.fontSize};
+  font-weight: ${({ theme, isActive }) => isActive ? theme.typography.h1.fontWeight : theme.typography.body1.fontWeight};
   margin-right: ${rem(42)};
-  margin-top: ${({ theme }) => theme.spacing.sm};
+  margin-top: ${({ theme }) => theme.spacing(2)};
   padding: 0;
   position: relative;
   transition: color 1s;
@@ -29,7 +28,7 @@ export const TabWrapper = styled.button<{ isActive: boolean }>`
       top: ${rem(26)};
       left: 0;
       width: 100%;
-      border-bottom: 2px solid ${theme.utils.getColor('primary', 400, 'normal')};
+      border-bottom: 2px solid ${theme.palette.primary.dark};
       animation-name: load;
       animation-duration: 1s;
     }`
@@ -48,11 +47,11 @@ export const TabWrapper = styled.button<{ isActive: boolean }>`
 `;
 
 export const TabsContainer = styled.ul`
-  ${flex};
   align-items: start;
+  display: flex;
   justify-content: start;
-  margin: 0 0 ${({ theme }) => theme.spacing.md} 0;
-  padding: 0 0 ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  margin: 0 0 ${({ theme }) => theme.spacing(4)} 0;
+  padding: 0 0 ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(4)};
   width: 100%;
   > li {
     list-style: none;

@@ -23,13 +23,10 @@ const MenuItem: React.FC<Props> = memo(
     return (
       <React.Fragment>
         <MenuLink
-          exact
-          to={{
-            pathname: url,
-            state: linkState,
-          }}
+          to={url}
+          state={linkState}
           data-testid={url}
-          activeClassName="active"
+          className={({ isActive }) => (isActive ? 'active' : undefined)}
           key={url}
           onClick={handleClick}
         >

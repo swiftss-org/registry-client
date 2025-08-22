@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { flexCenter } from '@orfium/ictinus/dist/theme/functions';
 
 export const FormContainer = styled.div`
   height: 100%;
@@ -9,7 +8,8 @@ export const FormContainer = styled.div`
 `;
 
 export const FormBottom = styled.div`
-  ${flexCenter};
+  align-items: center;
+  display: flex;
   justify-content: space-between;
   margin-bottom: 24px;
 `;

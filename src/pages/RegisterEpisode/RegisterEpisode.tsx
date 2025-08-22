@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 
-import { Button, Icon } from '@orfium/ictinus';
-import { IconWrapper } from 'App.style';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button, IconButton } from '@mui/material';
 import { ButtonContainer, PageSubtitle, PageTitle, PageWrapper } from 'common.style';
 import ConfirmationModal from 'components/ConfirmationModal';
 import arrayMutators from 'final-form-arrays';
 import { Form } from 'react-final-form';
-import { useHistory } from 'react-router';
-import { useRouteMatch } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 import urls from 'routing/urls';
 
 import RegisterEpisodeForm from './components/RegisterEpisodeForm';
@@ -26,8 +26,7 @@ import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
 const RegisterEpisode: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
-  const match = useRouteMatch<{ hospitalID?: string; patientID?: string }>();
-  const { hospitalID, patientID } = match.params;
+  const { hospitalID, patientID } = useParams<{ hospitalID?: string; patientID?: string }>();
 
   const [isNewHospital, setIsNewHospital] = useState(false);
 
@@ -67,26 +66,23 @@ const RegisterEpisode: React.FC = () => {
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <>
       <PageWrapper isDesktop={isDesktop}>
         <PageTitle>
-          <IconWrapper>
-            <Icon
-              name="fatArrowLeft"
-              size={24}
-              color={'lightGray-700'}
-              onClick={() => {
-                if (isFormDirty) {
-                  setShowWarningModal(true);
-                } else {
-                  history.push(urls.patients());
-                }
-              }}
-            />
-          </IconWrapper>
+          <IconButton
+            onClick={() => {
+              if (isFormDirty) {
+                setShowWarningModal(true);
+              } else {
+                navigate(urls.patients());
+              }
+            }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
           Register an Episode
         </PageTitle>
         <PageSubtitle>
@@ -143,12 +139,12 @@ const RegisterEpisode: React.FC = () => {
                 )}
                 <ButtonContainer isDesktop={isDesktop}>
                   <Button
-                    color={'blue-500'}
-                    buttonType="button"
+                    variant="contained"
+                    color="primary"
                     onClick={handleSubmit}
                     disabled={isLoading || submitting || isSubmitLoading}
-                    block
-                    size="md"
+                    fullWidth
+                    size="medium"
                   >
                     Register an Episode
                   </Button>
@@ -168,7 +164,7 @@ const RegisterEpisode: React.FC = () => {
             'Are you sure you want to cancel registering an episode? All information you’ve entered will be lost!'
           }
           buttonText={'Yes, cancel new registration'}
-          onClick={() => history.push(`${urls.patients()}/${hospitalID}/${patientID}`)}
+          onClick={() => navigate(`${urls.patients()}/${hospitalID}/${patientID}`)}
         />
       )}
     </>

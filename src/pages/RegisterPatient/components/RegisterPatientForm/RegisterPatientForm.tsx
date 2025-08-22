@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, { ChangeEvent } from 'react';
 
-import { Radio, RadioGroup, Select, TextField } from '@orfium/ictinus';
+import { FormControl, FormHelperText, MenuItem, Radio, RadioGroup, Select, TextField } from '@mui/material';
 import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { OnBlur } from 'react-final-form-listeners';
 
-import { FormContainer, FormHeadingContainer, SelectWrapper, BirthdayFieldsContainer } from './RegisterPatientForm.style';
+import { FormContainer, FormHeadingContainer, BirthdayFieldsContainer } from './RegisterPatientForm.style';
 import {
   FieldsContainer,
   FieldWrapper,
@@ -20,7 +20,7 @@ import { RegisterPatientFormType } from '../../types';
 import { getHospitalOptions } from '../../utils';
 
 type Props = {
-  values: RegisterPatientFormType;
+  values?: RegisterPatientFormType;
   hospitals: HospitalsAPI[];
 };
 
@@ -41,20 +41,25 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
 
               return (
-                <SelectWrapper>
+                <FormControl fullWidth error={hasError}>
                   <Select
                     id="hospital"
                     label="Hospital"
-                    styleType="outlined"
-                    size="sm"
+                    variant="outlined"
+                    size="medium"
                     required
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
-                    options={getHospitalOptions(hospitals)}
                     {...omit(props.input, ['onFocus'])}
-                    handleSelectedOption={props.input.onChange}
-                  />
-                </SelectWrapper>
+                    value={props.input.value}
+                    onChange={props.input.onChange}
+                  >
+                    {getHospitalOptions(hospitals).map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                </FormControl>
               );
             }}
           </Field>
@@ -71,10 +76,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   id="first_name"
                   label="First Name"
                   required
-                  styleType="outlined"
-                  size="sm"
-                  status={hasError ? 'error' : 'hint'}
-                  hintMsg={hasError ? props.meta.error : undefined}
+                  variant="outlined"
+                  size="medium"
+                  error={hasError}
+                  helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
                 />
               );
@@ -89,10 +94,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                 <TextField
                   id="first_name"
                   label="Middle Name"
-                  styleType="outlined"
-                  size="sm"
-                  status={hasError ? 'error' : 'hint'}
-                  hintMsg={hasError ? props.meta.error : undefined}
+                  variant="outlined"
+                  size="medium"
+                  error={hasError}
+                  helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
                 />
               );
@@ -108,10 +113,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   id="last_name"
                   label="Last Name"
                   required
-                  styleType="outlined"
-                  size="sm"
-                  status={hasError ? 'error' : 'hint'}
-                  hintMsg={hasError ? props.meta.error : undefined}
+                  variant="outlined"
+                  size="medium"
+                  error={hasError}
+                  helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
                 />
               );
@@ -123,7 +128,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
             {({ input: { onChange } }) => (
               <OnBlur name="yearOfBirth">
                 {() => {
-                  const age = new Date().getFullYear() - values.yearOfBirth;
+                  const age = values?.yearOfBirth !== undefined ? new Date().getFullYear() - values.yearOfBirth : 0;
                   onChange(age < 150 ? age : '');
                 }}
               </OnBlur>
@@ -138,11 +143,11 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                     id="year_of_birth"
                     label="Year Of Birth"
                     required
-                    styleType="outlined"
+                    variant="outlined"
                     type="number"
-                    size="sm"
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
+                    size="medium"
+                    error={hasError}
+                    helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
                   />
                 );
@@ -157,11 +162,11 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   <TextField
                     id="month_of_birth"
                     label="Month Of Birth"
-                    styleType="outlined"
+                    variant="outlined"
                     type="number"
-                    size="sm"
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
+                    size="medium"
+                    error={hasError}
+                    helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
                   />
                 );
@@ -176,11 +181,11 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   <TextField
                     id="day_of_birth"
                     label="Day Of Birth"
-                    styleType="outlined"
+                    variant="outlined"
                     type="number"
-                    size="sm"
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
+                    size="medium"
+                    error={hasError}
+                    helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
                   />
                 );
@@ -196,8 +201,8 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                     id="age"
                     label="Age"
                     type="number"
-                    styleType="outlined"
-                    size="sm"
+                    variant="outlined"
+                    size="medium"
                     {...props.input}
                   />
                 );
@@ -212,9 +217,9 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                 <TextField
                   id="national_id"
                   label="National ID"
-                  styleType="outlined"
-                  size="sm"
-                  maxLength={20}
+                  variant="outlined"
+                  size="medium"
+                  inputProps={{ maxLength: 20 }}
                   {...props.input}
                 />
               );
@@ -230,11 +235,11 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   id="patient_hospital_id"
                   label="Patient Hospital ID"
                   required
-                  styleType="outlined"
-                  size="sm"
-                  maxLength={20}
-                  status={hasError ? 'error' : 'hint'}
-                  hintMsg={hasError ? props.meta.error : undefined}
+                  variant="outlined"
+                  size="medium"
+                  inputProps={{ maxLength: 20 }}
+                  error={hasError}
+                  helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
                 />
               );
@@ -251,13 +256,13 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               return (
                 <RadioGroup
                   name="gender"
+                  value={values?.gender}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     onChange(e.target.value);
                   }}
                 >
                   <div>
                     <Radio value="Male" />
-
                     <RadioText>Male</RadioText>
                   </div>
                   <div>
@@ -275,12 +280,12 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                             <TextField
                               id="gender"
                               label="Gender"
-                              styleType="outlined"
+                              variant="outlined"
                               disabled
-                              size="sm"
-                              maxLength={20}
-                              status={hasError ? 'error' : 'hint'}
-                              hintMsg={hasError ? props.meta.error : undefined}
+                              size="medium"
+                              inputProps={{ maxLength: 20 }}
+                              error={hasError}
+                              helperText={hasError ? props.meta.error : undefined}
                               {...props.input}
                             />
                           );
@@ -300,12 +305,12 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   <TextField
                     id="phone1"
                     label="Phone #1"
-                    styleType="outlined"
+                    variant="outlined"
                     required
-                    size="sm"
-                    maxLength={20}
-                    status={hasError ? 'error' : 'hint'}
-                    hintMsg={hasError ? props.meta.error : undefined}
+                    size="medium"
+                    inputProps={{ maxLength: 20 }}
+                    error={hasError}
+                    helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
                   />
                 );
@@ -320,9 +325,9 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                 <TextField
                   id="phone2"
                   label="Phone #2"
-                  styleType="outlined"
-                  size="sm"
-                  maxLength={20}
+                  variant="outlined"
+                  size="medium"
+                  inputProps={{ maxLength: 20 }}
                   {...props.input}
                 />
               );
@@ -336,8 +341,8 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                 <TextField
                   id="address"
                   label="Address"
-                  styleType="outlined"
-                  size="sm"
+                  variant="outlined"
+                  size="medium"
                   {...props.input}
                 />
               );

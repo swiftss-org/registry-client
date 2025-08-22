@@ -1,5 +1,4 @@
-import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
-
+import { FilterOption } from '../types';
 import { RegisterEpisodeFormType } from './types';
 import { HospitalsAPI, SelectOption, SurgeonsAPI } from '../../models/apiTypes';
 
@@ -14,14 +13,14 @@ export const getHospitalOptions = (hospitals: HospitalsAPI[]): FilterOption[] =>
 
 export const getSurgeonOptions = (surgeons: SurgeonsAPI[]): SelectOption[] => {
   return surgeons.map((surgeon) => ({
-    label: `${surgeon?.user.first_name} ${surgeon.user.last_name}` ?? '',
+    label: `${surgeon.user.first_name} ${surgeon.user.last_name}`,
     value: surgeon?.id,
   }));
 };
 
 export const getSurgeonOptionsSorted = (surgeons: SurgeonsAPI[]): SelectOption[] => {
   const options: SelectOption[] = surgeons.map((surgeon) => ({
-    label: `${surgeon?.user.first_name} ${surgeon?.user.last_name}` ?? '',
+    label: `${surgeon.user.first_name} ${surgeon.user.last_name}`,
     value: surgeon?.id,
   }));
   // Sort the options by label
@@ -30,27 +29,7 @@ export const getSurgeonOptionsSorted = (surgeons: SurgeonsAPI[]): SelectOption[]
 };
 
 export const episodeFormValidation = (values: RegisterEpisodeFormType, isNewHospital: boolean) => {
-  const errors = {} || {
-    hospital: '',
-    firstName: '',
-    lastName: '',
-    yearOfBirth: '',
-    patientHospitalId: '',
-    surgeons: '',
-    episodeType: '',
-    cepod: '',
-    side: '',
-    surgeryDate: '',
-    occurence: '',
-    type: '',
-    size: '',
-    complexity: '',
-    meshType: '',
-    anaestheticType: '',
-    diathermyUsed: '',
-    antibioticUsed: '',
-    antibioticType: '',
-  };
+  const errors: Partial<Record<keyof RegisterEpisodeFormType, string>> = {};
 
   if (!values.hospital && typeof values.hospital !== 'object') {
     errors.hospital = REQUIRED_FIELD_MSG;

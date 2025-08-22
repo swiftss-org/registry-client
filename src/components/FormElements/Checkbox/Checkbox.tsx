@@ -4,7 +4,12 @@ import { FieldRenderProps } from 'react-final-form';
 
 import { Wrapper } from './Checkbox.style';
 
-const Checkbox = ({ input, label, disabled }: FieldRenderProps<string | number, HTMLElement>) => {
+interface CheckboxProps extends FieldRenderProps<string | number, HTMLElement> {
+  label: string;
+  disabled?: boolean;
+}
+
+const Checkbox = ({ input, label, disabled }: CheckboxProps) => {
   return (
     <Wrapper>
       <input
