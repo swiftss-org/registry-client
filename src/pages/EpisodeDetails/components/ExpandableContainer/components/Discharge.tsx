@@ -36,7 +36,7 @@ const Discharge: FC<{
   if (!episodeID) {
     throw new Error('Episode ID is missing');
   }
-  const { mutate, isLoading } = useDischarge(episodeID);
+  const { mutate, isPending } = useDischarge(episodeID);
 
   const handleSubmit = (form: {
     date: string;
@@ -257,7 +257,7 @@ const Discharge: FC<{
                   variant="contained"
                   color="primary"
                   onClick={handleSubmit}
-                  disabled={isLoading}
+                  disabled={isPending}
                   fullWidth
                   size="medium"
                 >

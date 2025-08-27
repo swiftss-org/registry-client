@@ -32,7 +32,7 @@ const FollowUps: FC<{
   if (!episodeID) {
     throw new Error('Episode ID is missing');
   }
-  const { mutate, isLoading } = useFollowUp(episodeID);
+  const { mutate, isPending } = useFollowUp(episodeID);
 
   const { data: surgeons, isLoading: isSurgeonsLoading } = useGetSurgeons({
     offset: 0,
@@ -480,7 +480,7 @@ const FollowUps: FC<{
                   variant="contained"
                   color="primary"
                   onClick={handleSubmit}
-                  disabled={isLoading || isSurgeonsLoading}
+                  disabled={isPending || isSurgeonsLoading}
                   fullWidth
                   size="medium"
                 >

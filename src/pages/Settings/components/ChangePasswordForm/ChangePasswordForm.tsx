@@ -12,7 +12,7 @@ import { useSetNotification } from '../../../../hooks/useSetNotification';
 import { ButtonContainer } from '../../../Login/components/LoginForm/LoginForm.style';
 
 const ChangePasswordForm: React.FC = () => {
-  const { mutateAsync, isLoading } = useChangePassword();
+  const { mutateAsync, isPending } = useChangePassword();
 
   const setNotification = useSetNotification();
 
@@ -122,7 +122,7 @@ const ChangePasswordForm: React.FC = () => {
             <Button
               fullWidth
               variant="contained"
-              disabled={isLoading || submitting}
+              disabled={isPending || submitting}
               size="large"
               type="submit"
             >

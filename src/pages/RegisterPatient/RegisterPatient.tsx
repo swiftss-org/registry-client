@@ -18,7 +18,7 @@ import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 const RegisterPatient: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
-  const { mutate, isLoading } = useRegisterPatient();
+  const { mutate, isPending } = useRegisterPatient();
 
   const handleSubmit = (form: RegisterPatientFormType) => {
     mutate(form);
@@ -68,7 +68,7 @@ const RegisterPatient: React.FC = () => {
                     variant="contained"
                     color="primary"
                     type="submit"
-                    disabled={isLoading || submitting}
+                    disabled={isPending || submitting}
                     fullWidth
                     size="medium"
                   >

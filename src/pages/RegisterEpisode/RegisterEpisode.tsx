@@ -44,7 +44,7 @@ const RegisterEpisode: React.FC = () => {
   const isLoading =
     isHospitalLoading || isHospitalsLoading || isSurgeonsLoading || isPatientLoading;
 
-  const { mutate: registerEpisode, isLoading: isSubmitLoading } = useRegisterEpisode(
+  const { mutate: registerEpisode, isPending: isSubmitLoading } = useRegisterEpisode(
     hospitalID,
     patientID
   );
