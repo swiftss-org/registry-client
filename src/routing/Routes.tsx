@@ -1,6 +1,7 @@
 import React from 'react';
 
 import LandingPage from 'pages/LandingPage';
+import Layout from 'pages/Layout';
 import Login from 'pages/Login';
 import NationalKPIs from 'pages/NationalKPIs';
 import PatientDirectory from 'pages/PatientDirectory';
@@ -54,31 +55,31 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 const router = createBrowserRouter([
   {
     path: urls.login(),
-    element: <Login />,
+    element:<Layout component={Login} />,
   },
   {
     path: urls.settings(),
-    element: <PrivateRoute><Settings /></PrivateRoute>,
+    element: <PrivateRoute><Layout component={Settings} /></PrivateRoute>,
   },
   {
     path: urls.registerPatient(),
-    element: <PrivateRoute><RegisterPatient /></PrivateRoute>,
+    element: <PrivateRoute><Layout component={RegisterPatient} /></PrivateRoute>,
   },
   {
     path: `${urls.patients()}/:hospitalID/:patientID${urls.episodes()}/:episodeID`,
-    element: <PrivateRoute><EpisodeDetails /></PrivateRoute>,
+    element: <PrivateRoute><Layout component={EpisodeDetails} /></PrivateRoute>,
   },
   {
     path: `${urls.patients()}/:hospitalID/:patientID/add-episode`,
-    element: <PrivateRoute><RegisterEpisode /></PrivateRoute>,
+    element: <PrivateRoute><Layout component={RegisterEpisode} /></PrivateRoute>,
   },
   {
     path: `${urls.patients()}/:hospitalID/:patientID`,
-    element: <PrivateRoute><PatientDetails /></PrivateRoute>,
+    element: <PrivateRoute><Layout component={PatientDetails} /></PrivateRoute>,
   },
   {
     path: urls.patients(),
-    element: <PrivateRoute><PatientDirectory /></PrivateRoute>,
+    element: <PrivateRoute><Layout component={PatientDirectory} /></PrivateRoute>,
   },
   {
     path: urls.nationalKPIs(),
@@ -86,7 +87,7 @@ const router = createBrowserRouter([
   },
   {
     path: urls.landingPage(),
-    element: <PrivateRoute><LandingPage /></PrivateRoute>,
+    element: <PrivateRoute><Layout component={LandingPage} /></PrivateRoute>,
   },
   {
     path: '*',
