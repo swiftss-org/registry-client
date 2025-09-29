@@ -107,6 +107,10 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
     }
   }, [sortingOption]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [hospitalId, searchTerm, sortingOption]);
+
   const history = useHistory();
 
   const filterOptions = getHospitalOptions(hospitals?.results || []);
