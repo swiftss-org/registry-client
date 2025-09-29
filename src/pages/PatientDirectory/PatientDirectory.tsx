@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState, useRef } from 'react';
 
+import { Button } from '@orfium/ictinus';
 import { IconButton, Filter } from '@orfium/ictinus';
 import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
 import { ReactComponent as SortIcon } from 'assets/PatientDirectory/sortIcon.svg';
@@ -24,9 +25,56 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
     (localStorage.getItem('sortingOption') as SortingOptionsType) || '-created_at'
   );
 
+  const [page, setPage] = useState(1);
+
+  const limit = 10;
+
+  const offset = (page - 1) * limit;
+
+  const PaginationControls: React.FC<{
+      page: number;
+      total: number;
+      limit: number;
+      onPageChange: (newPage: number) => void;
+    }> = ({ page, total, limit, onPageChange }) => {
+      const totalPages = Math.ceil(total / limit);
+      const start = (page - 1) * limit + 1;
+      const end = Math.min(page * limit, total);
+
+      return (
+        <div
+          css={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '12px',
+            margin: '16px 0',
+          }}
+        >
+          <Button
+            size="sm"
+            disabled={page === 1}
+            onClick={() => onPageChange(page - 1)}
+          >
+            Previous
+          </Button>
+          <span css={{ fontSize: 14 }}>
+            Patients {start}-{end} out of {total}
+          </span>
+          <Button
+            size="sm"
+            disabled={page === totalPages}
+            onClick={() => onPageChange(page + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      );
+  };
+
   const { data: patients } = useGetPatients({
-    offset: 0,
-    limit: 100,
+    offset,
+    limit,
     search_term: searchTerm,
     hospital_id: hospitalId,
     ordering: sortingOption,
@@ -84,6 +132,15 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           />
           <SortIcon onClick={() => setShowSortingOptions(!showSortingOptions)} />
         </OptionsWrapper>
+
+        {patients && patients.count > limit && (
+            <PaginationControls
+              page={page}
+              total={patients.count}
+              limit={limit}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
+          )}
 
         {patients && (
           <PatientsList>
