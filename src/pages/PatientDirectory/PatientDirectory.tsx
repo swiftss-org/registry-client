@@ -150,7 +150,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           <PatientsList>
             {patients.results.map((patient) => (
               <div
-                key={`patient_${patient.national_id}_${selectedOption}`}
+                key={patient.id}
                 css={{ marginBottom: '8px' }}
               >
                 <PatientCard {...patient} selectedHospital={selectedOption} />
