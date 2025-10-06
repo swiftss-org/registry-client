@@ -57,7 +57,7 @@ const Discharge: FC<{
         onSubmit={(values) => {
           const newValues = {
             ...values,
-            infection: (values.infection ? values.infection.join(',') : 'none') as string,
+            infection: (values.infection ? values.infection.toString() : 'none') as string,
           };
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
@@ -66,7 +66,7 @@ const Discharge: FC<{
         validate={(values) => {
           const newValues = {
             ...values,
-            infection: (values.infection ? values.infection.join(',') : 'none') as string,
+            infection: (values.infection ? values.infection.toString() : 'none') as string,
           };
           return dischargeFormValidation(newValues);
         }}

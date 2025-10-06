@@ -49,8 +49,8 @@ export const Header = styled.div`
 
 export const HeaderText = styled.span`
   bottom: ${rem(24)};
-  font-size: ${(props) => props.theme.typography.h1.fontSize};
-  font-weight: ${(props) => props.theme.typography.h1.fontWeight};
+  font-size: ${(props) => props.theme.typography.h6.fontSize};
+  font-weight: ${(props) => props.theme.typography.h6.fontWeight};
   left: ${rem(16)};
   line-height: ${rem(24)};
   position: absolute;
@@ -74,7 +74,7 @@ export const Footer = styled.div`
 `;
 
 export const FooterText = styled.span`
-  font-size: ${(props) => props.theme.typography.body2.fontSize};
+  font-size: ${rem(11)};
   line-height: ${rem(17)};
 `;
 

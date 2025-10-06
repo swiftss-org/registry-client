@@ -165,9 +165,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="episode-type-label"
                       id="episode_type"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                          const selectedOption = EPISODE_TYPE_OPTIONS.find(
+                            (option) => option.value === Number(event.target.value)
+                          );
+                          props.input.onChange(selectedOption);
+                        }}
                       label="Episode Type"
                     >
                       {EPISODE_TYPE_OPTIONS.map((option) => (
@@ -196,8 +199,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="cepod-label"
                       id="cepod"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
+                      onChange={(event: SelectChangeEvent<string>) => {
+                          const selectedOption = CEPOD_OPTIONS.find(
+                                                    (option) => option.value === Number(event.target.value)
+                                                  );
+                                                  props.input.onChange(selectedOption);
+                                                  }
                       }
                       label="CEPOD"
                     >
@@ -227,9 +234,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="side-label"
                       id="side"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                          const selectedOption = SIDE_OPTIONS.find(
+                            (option) => option.value === Number(event.target.value)
+                          );
+                          props.input.onChange(selectedOption);
+                        }}
                       label="Side"
                     >
                       {SIDE_OPTIONS.map((option) => (
@@ -258,9 +268,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="occurrence-label"
                       id="occurence"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                         const selectedOption = OCCURRENCE_OPTIONS.find(
+                           (option) => option.value === Number(event.target.value)
+                         );
+                         props.input.onChange(selectedOption);
+                       }}
                       label="Occurrence"
                     >
                       {OCCURRENCE_OPTIONS.map((option) => (
@@ -289,9 +302,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="type-label"
                       id="type"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                         const selectedOption = TYPE_OPTIONS.find(
+                           (option) => option.value === Number(event.target.value)
+                         );
+                         props.input.onChange(selectedOption);
+                       }}
                       label="Type"
                     >
                       {TYPE_OPTIONS.map((option) => (
@@ -320,9 +336,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="size-label"
                       id="size"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                         const selectedOption = SIZE_OPTIONS.find(
+                           (option) => option.value === Number(event.target.value)
+                         );
+                         props.input.onChange(selectedOption);
+                       }}
                       label="Size"
                     >
                       {SIZE_OPTIONS.map((option) => (
@@ -351,9 +370,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="complexity-label"
                       id="complexity"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                         const selectedOption = COMPLEXITY_OPTIONS.find(
+                           (option) => option.value === Number(event.target.value)
+                         );
+                         props.input.onChange(selectedOption);
+                       }}
                       label="Complexity"
                     >
                       {COMPLEXITY_OPTIONS.map((option) => (
@@ -409,9 +431,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="mesh-type-label"
                       id="mesh_type"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                          const selectedOption = MESH_TYPE_OPTIONS.find(
+                            (option) => option.value === Number(event.target.value)
+                          );
+                          props.input.onChange(selectedOption);
+                        }}
                       label="Mesh Type"
                     >
                       {MESH_TYPE_OPTIONS.map((option) => (
@@ -440,9 +465,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="anaesthetic-type-label"
                       id="anaesthetic_type"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                        const selectedOption = ANAESTHETIC_TYPE_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       label="Anaesthetic Type"
                     >
                       {ANAESTHETIC_TYPE_OPTIONS.map((option) => (
@@ -471,9 +499,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="diathermy-used-label"
                       id="diathermy_used"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                          const selectedOption = BOOLEAN_OPTIONS.find(
+                            (option) => option.value === Number(event.target.value)
+                          );
+                          props.input.onChange(selectedOption);
+                        }}
                       label="Diathermy Used"
                     >
                       {BOOLEAN_OPTIONS.map((option) => (
@@ -502,9 +533,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="antibiotic-used-label"
                       id="antibiotic_used"
                       value={props.input.value.value || ''}
-                      onChange={(event: SelectChangeEvent<string>) =>
-                        props.input.onChange({ value: event.target.value, label: event.target.value })
-                      }
+                      onChange={(event: SelectChangeEvent<string>) => {
+                        const selectedOption = BOOLEAN_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       label="Prophylactic antibiotics given?"
                     >
                       {BOOLEAN_OPTIONS.map((option) => (

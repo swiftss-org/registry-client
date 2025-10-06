@@ -91,7 +91,7 @@ export const scrollBar = css`
 `;
 
 export const PageTitle = styled.div`
-  color: ${(props) => props.theme.palette.grey[400]};
+  color: ${(props) => props.theme.palette.grey[800]};
   display: flex;
   font-size: 24px;
   font-weight: 700;
@@ -100,7 +100,7 @@ export const PageTitle = styled.div`
 `;
 
 export const PageSubtitle = styled.div`
-  color: ${(props) => props.theme.palette.grey[400]};
+  color: ${(props) => props.theme.palette.grey[600]};
   display: flex;
   font-size: 18px;
   font-weight: 400;
