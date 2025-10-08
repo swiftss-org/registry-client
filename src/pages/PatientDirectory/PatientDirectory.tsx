@@ -27,7 +27,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
 
   const [page, setPage] = useState(1);
 
-  const limit = 10;
+  const limit = 25;
 
   const offset = (page - 1) * limit;
 
@@ -37,6 +37,24 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
       limit: number;
       onPageChange: (newPage: number) => void;
     }> = ({ page, total, limit, onPageChange }) => {
+
+      if (total === 0) {
+        return (
+          <div
+            css={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: '16px 0',
+              fontSize: 14,
+              color: '#666',
+            }}
+          >
+            No patients to show
+          </div>
+        );
+      }
+
       const totalPages = Math.ceil(total / limit);
       const start = (page - 1) * limit + 1;
       const end = Math.min(page * limit, total);
@@ -51,23 +69,27 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             margin: '16px 0',
           }}
         >
-          <Button
-            size="sm"
-            disabled={page === 1}
-            onClick={() => onPageChange(page - 1)}
-          >
-            Previous
-          </Button>
-          <span css={{ fontSize: 14 }}>
-            Patients {start}-{end} out of {total}
-          </span>
-          <Button
-            size="sm"
-            disabled={page === totalPages}
-            onClick={() => onPageChange(page + 1)}
-          >
-            Next
-          </Button>
+          {totalPages > 1 && (
+              <Button
+                size="sm"
+                disabled={page === 1}
+                onClick={() => onPageChange(page - 1)}
+              >
+                Previous
+              </Button>
+            )}
+            <span css={{ fontSize: 14 }}>
+              Patients {start}-{end} out of {total}
+            </span>
+            {totalPages > 1 && (
+              <Button
+                size="sm"
+                disabled={page === totalPages}
+                onClick={() => onPageChange(page + 1)}
+              >
+                Next
+              </Button>
+            )}
         </div>
       );
   };
@@ -137,7 +159,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           <SortIcon onClick={() => setShowSortingOptions(!showSortingOptions)} />
         </OptionsWrapper>
 
-        {patients && patients.count > limit && (
+        {patients && (
             <PaginationControls
               page={page}
               total={patients.count}
