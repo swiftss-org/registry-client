@@ -9,6 +9,7 @@ import {
   DischargeAPI,
   DischargeForm,
   EpisodesAPI,
+  EpisodeStatsAPI,
   FollowUpAPI,
   FollowUpForm,
   FollowUpPayload,
@@ -24,7 +25,8 @@ import {
   RegisterEpisodePayload,
   RegisterPatientPayload,
   SurgeonEpisodeSummaryAPI,
-  SurgeonsResponse, UnlinkedPatientsResponse,
+  SurgeonsResponse,
+  UnlinkedPatientsResponse,
 } from '../../models/apiTypes';
 import { RegisterEpisodeFormType } from '../../pages/RegisterEpisode/types';
 import { RegisterPatientFormType } from '../../pages/RegisterPatient/types';
@@ -73,6 +75,22 @@ export const useGetSurgeonEpisodeSummary = () => {
     {
       onError: (error) => {
         console.error("Error fetching surgeon episode stats:", error);
+      },
+      retry: false,
+    }
+  );
+};
+
+export const useGetEpisodeStats = (period?: string) => {
+  return useQuery<EpisodeStatsAPI, AxiosError>(
+    [ReactQueryKeys.EpisodeStatsQuery, period],
+    async () => {
+      const { request } = patientsAPI.single.getEpisodeStats(period);
+      return await request();
+    },
+    {
+      onError: (error: AxiosError) => {
+        console.error("Error fetching episode stats:", error);
       },
       retry: false,
     }

@@ -33,4 +33,5 @@ export default {
   getSurgeonEpisodeSummary: () => request(METHODS.GET, '/surgeon-episode-summary/', {}),
   getOwnedEpisodes: () => request(METHODS.GET, '/owned-episodes/', {}),
   getAnnouncements: () => request(METHODS.GET, '/announcements/', {}),
+  getEpisodeStats: (period?: string) => request(METHODS.GET, '/episodes/stats/', { params: period ? { period } : {} }),
 };

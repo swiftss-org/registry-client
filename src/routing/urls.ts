@@ -5,6 +5,7 @@ const urls = {
   patients: () => '/patients',
   registerPatient: () => '/patients/register',
   episodes: () => '/episodes',
+  episodeStats: () => '/episodes/stats',
   landingPage: () => '/landing',
   globalKPIs: () => '/globalKPIs',
 };

@@ -70,6 +70,10 @@ export type EpisodesAPI = {
   surgeons: SurgeonsAPI[];
 };
 
+export interface EpisodeStatsAPI {
+  total_episodes: number;
+}
+
 export type FollowUpAPI = {
   id: number;
   episode: EpisodesAPI;

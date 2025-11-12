@@ -5,6 +5,7 @@ export const ReactQueryKeys = {
   EpisodesQuery: 'episodesQuery',
   PreferredHospitalQuery: 'preferredHospital',
   SurgeonEpisodeSummaryQuery: 'surgeonEpisodeSummary',
+  EpisodeStatsQuery: 'episodeStats',
   OwnedEpisodesQuery: 'ownedEpisodes',
   UnlinkedPatientsQuery: 'unlinkedPatientsQuery',
   AnnouncementsQuery: 'announcements-query',
