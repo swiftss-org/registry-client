@@ -31,7 +31,11 @@ export const useSignIn = () => {
         notificationDispatch(resetNotifications());
         setUserStorageItem(__TOKEN__, data?.token ?? '', !variables.rememberMe);
         setUserStorageItem(__EMAIL__, data?.user.email ?? '');
+        setUserStorageItem('username', data?.user.username ?? '');
         setAxiosToken(data?.token ?? '');
+
+        setUserStorageItem('is_staff', data?.user.is_staff ? 'true' : 'false');
+        setUserStorageItem('is_superuser', data?.user.is_superuser ? 'true' : 'false');
 
         history.replace(urls.landingPage());
       },

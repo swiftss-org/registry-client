@@ -1,5 +1,6 @@
 import React from 'react';
 
+import GlobalKPIs from 'pages/GlobalKPIs';
 import LandingPage from 'pages/LandingPage';
 import Login from 'pages/Login';
 import PatientDirectory from 'pages/PatientDirectory';
@@ -36,6 +37,7 @@ const Routes: React.FC = () => (
     />
     <PrivateRoute exact path={[urls.patients()]} component={PatientDirectory} />
     <PrivateRoute exact path={urls.landingPage()} component={LandingPage} />
+    <PrivateRoute exact path={urls.globalKPIs()} component={GlobalKPIs} />
     <Redirect to={urls.login()} />
   </Switch>
 );

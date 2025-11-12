@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { IconButton } from '@orfium/ictinus';
 import { TopBar } from 'App.style';
 import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
+import { useUserType } from 'hooks/useUserType';
 import { debounce } from 'lodash';
 import { useHistory } from 'react-router';
 
@@ -21,6 +22,8 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const history = useHistory();
+
+  const { username, isStaff, isSuperuser } = useUserType();
 
   const handleSearchTerm = (term: string) => {
     setSearchTerm(term);
@@ -66,7 +69,13 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
             {
               name: 'Dashboard',
               visible: true,
-              url: '/patients/landing',
+              url: '/landing',
+              options: [],
+            },
+            {
+              name: 'Global KPIs',
+              visible: ( isStaff || isSuperuser ) && username === 'admin',
+              url: '/globalKPIs',
               options: [],
             },
             // {

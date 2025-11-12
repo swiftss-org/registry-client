@@ -6,6 +6,7 @@ const urls = {
   registerPatient: () => '/patients/register',
   episodes: () => '/episodes',
   landingPage: () => '/landing',
+  globalKPIs: () => '/globalKPIs',
 };
 
 export default urls;
