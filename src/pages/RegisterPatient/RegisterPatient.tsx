@@ -9,11 +9,11 @@ import { Form } from 'react-final-form';
 import { useHistory } from 'react-router';
 import urls from 'routing/urls';
 
-import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import RegisterPatientForm from './components/RegisterPatientForm';
 import { RegisterPatientFormType } from './types';
 import { patientFormValidation } from './utils';
+import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
 const RegisterPatient: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
@@ -33,18 +33,20 @@ const RegisterPatient: React.FC = () => {
     <>
       <PageWrapper isDesktop={isDesktop}>
         <PageTitle>
-          <IconWrapper>
+          <IconWrapper
+            data-testid="back-button"
+            onClick={() => {
+              if (isFormDirty) {
+                setShowWarningModal(true);
+              } else {
+                history.push(urls.patients());
+              }
+            }}
+          >
             <Icon
               name="fatArrowLeft"
               size={24}
               color={'lightGray-700'}
-              onClick={() => {
-                if (isFormDirty) {
-                  setShowWarningModal(true);
-                } else {
-                  history.push(urls.patients());
-                }
-              }}
             />
           </IconWrapper>
           Add new patient

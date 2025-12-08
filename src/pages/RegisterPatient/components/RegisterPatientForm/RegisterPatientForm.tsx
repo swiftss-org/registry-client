@@ -6,6 +6,7 @@ import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { OnBlur } from 'react-final-form-listeners';
 
+import { FormContainer, FormHeadingContainer, SelectWrapper, BirthdayFieldsContainer } from './RegisterPatientForm.style';
 import {
   FieldsContainer,
   FieldWrapper,
@@ -17,7 +18,6 @@ import { useResponsiveLayout } from '../../../../hooks/useResponsiveSidebar';
 import { HospitalsAPI } from '../../../../models/apiTypes';
 import { RegisterPatientFormType } from '../../types';
 import { getHospitalOptions } from '../../utils';
-import { FormContainer, FormHeadingContainer, SelectWrapper, BirthdayFieldsContainer } from './RegisterPatientForm.style';
 
 type Props = {
   values: RegisterPatientFormType;
@@ -41,7 +41,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
 
               return (
-                <SelectWrapper>
+                <SelectWrapper data-testid="hospital-select-wrapper">
                   <Select
                     id="hospital"
                     label="Hospital"
@@ -87,7 +87,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
               return (
                 <TextField
-                  id="first_name"
+                  id="middle_name"
                   label="Middle Name"
                   styleType="outlined"
                   size="sm"
@@ -270,21 +270,21 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
           <Field name="gender">
             {(props) => {
-                          const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
-                          return (
-                            <TextField
-                              id="gender"
-                              label="Gender"
-                              styleType="outlined"
-                              disabled
-                              size="sm"
-                              maxLength={20}
-                              status={hasError ? 'error' : 'hint'}
-                              hintMsg={hasError ? props.meta.error : undefined}
-                              {...props.input}
-                            />
-                          );
-                        }}
+              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              return (
+                <TextField
+                  id="gender"
+                  label="Gender"
+                  styleType="outlined"
+                  disabled
+                  size="sm"
+                  maxLength={20}
+                  status={hasError ? 'error' : 'hint'}
+                  hintMsg={hasError ? props.meta.error : undefined}
+                  {...props.input}
+                />
+              );
+            }}
           </Field>
         </FieldsContainer>
       </FormHeadingContainer>

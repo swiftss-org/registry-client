@@ -1,7 +1,7 @@
 import { FilterOption } from '@orfium/ictinus/dist/components/Filter/types';
 
-import { HospitalsAPI } from '../../models/apiTypes';
 import { RegisterPatientFormType } from './types';
+import { HospitalsAPI } from '../../models/apiTypes';
 
 const REQUIRED_FIELD_MSG = 'This field is required';
 
@@ -13,15 +13,7 @@ export const getHospitalOptions = (hospitals: HospitalsAPI[]): FilterOption[] =>
 };
 
 export const patientFormValidation = (values: RegisterPatientFormType) => {
-  const errors = {} || {
-    hospital: '',
-    firstName: '',
-    lastName: '',
-    yearOfBirth: '',
-    gender: '',
-    patientHospitalId: '',
-    phone1: '',
-  };
+  const errors: any = {};
 
   if (!values.hospital && typeof values.hospital !== 'object') {
     errors.hospital = REQUIRED_FIELD_MSG;
