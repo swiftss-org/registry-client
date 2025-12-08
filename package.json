@@ -50,6 +50,7 @@
     "start_win": "react-scripts start",
     "build": "react-app-rewired --openssl-legacy-provider build",
     "test": "react-app-rewired test",
+    "test:e2e": "cypress run",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build",

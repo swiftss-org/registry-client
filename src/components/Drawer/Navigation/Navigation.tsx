@@ -1,10 +1,10 @@
 import React from 'react';
 
+import MenuItem from './MenuItem/MenuItem';
+import { Container, PlaceholderContainer, PlaceholderText } from './Navigation.style';
 import useCurrentMenuItem from './useCurrentMenuItem';
 import { useIsLoggedIn } from '../../../hooks/useIsLoggedIn';
 import { Props } from '../Drawer';
-import MenuItem from './MenuItem/MenuItem';
-import { Container, PlaceholderContainer, PlaceholderText } from './Navigation.style';
 
 type NavigationProps = Props;
 

@@ -33,34 +33,24 @@ describe('Global KPIs Page', () => {
         cy.visit('/globalKPIs');
 
         cy.wait('@getStats');
-
-        // Remove error overlay if present (hack for lint warnings)
-        cy.get('body > iframe').then(($iframe) => {
-            $iframe.remove();
-        });
     });
 
     describe('Happy Path', () => {
         it('should display KPI table with correct data', () => {
-            cy.get('main').contains('Global KPIs').should('be.visible');
+            cy.contains('Global KPIs').should('be.visible');
 
             // Headers
-            cy.get('main').get('th').contains('Total');
-            cy.get('main').get('th').contains('Past Year');
-            cy.get('main').get('th').contains('Past Month');
-            cy.get('main').get('th').contains('Past Week');
+            cy.get('#global-kpis-table').get('th').contains('Total');
+            cy.get('#global-kpis-table').get('th').contains('Past Year');
+            cy.get('#global-kpis-table').get('th').contains('Past Month');
+            cy.get('#global-kpis-table').get('th').contains('Past Week');
 
             // Data
             // Wait for calls - simpler to just look for text because multiple calls happen
-            cy.get('main').get('td').contains('1000').should('be.visible'); // Total
-            cy.get('main').get('td').contains('500').should('be.visible');  // Year
-            cy.get('main').get('td').contains('50').should('be.visible');   // Month
-            cy.get('main').get('td').contains('10').should('be.visible');   // Week
-        });
-
-        it('should display multiple KPI rows if available', () => {
-            // If the implementation supports multiple KPI types
-            cy.get('main').contains('Global KPIs').should('be.visible');
+            cy.get('#global-kpis-table').get('td').contains('1000').should('be.visible'); // Total
+            cy.get('#global-kpis-table').get('td').contains('500').should('be.visible');  // Year
+            cy.get('#global-kpis-table').get('td').contains('50').should('be.visible');   // Month
+            cy.get('#global-kpis-table').get('td').contains('10').should('be.visible');   // Week
         });
     });
 
@@ -75,13 +65,9 @@ describe('Global KPIs Page', () => {
 
             cy.reload();
             cy.wait('@getZeroStats');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should display 0 without errors
-            cy.contains('td', '0').should('be.visible');
+            cy.get('#global-kpis-table').get('td').contains('0').should('be.visible');
         });
 
         it('should handle API errors gracefully', () => {
@@ -92,13 +78,9 @@ describe('Global KPIs Page', () => {
 
             cy.reload();
             cy.wait('@getStatsError');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should handle error without crashing
-            cy.get('main').get('td').filter(':contains("Error")').should('have.length', 4);
+            cy.get('#global-kpis-table').get('td').filter(':contains("Error")').should('have.length', 4);
         });
 
         it('should handle missing data fields', () => {
@@ -111,13 +93,9 @@ describe('Global KPIs Page', () => {
 
             cy.reload();
             cy.wait('@getEmptyStats');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should handle empty data gracefully
-            cy.get('main').get('td').filter(':contains("0")').should('have.length', 4);
+            cy.get('#global-kpis-table').get('td').filter(':contains("0")').should('have.length', 4);
         });
 
         it('should handle network errors', () => {
@@ -127,13 +105,9 @@ describe('Global KPIs Page', () => {
 
             cy.reload();
             cy.wait('@getStatsNetworkError');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should handle network error gracefully
-            cy.get('main').get('td').filter(':contains("Error")').should('have.length', 4);
+            cy.get('#global-kpis-table').get('td').filter(':contains("Error")').should('have.length', 4);
         });
 
         it('should handle very large numbers', () => {
@@ -146,13 +120,9 @@ describe('Global KPIs Page', () => {
 
             cy.reload();
             cy.wait('@getLargeStats');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should display large numbers correctly
-            cy.contains('td', '999999999999999').should('be.visible');
+            cy.get('#global-kpis-table').get('td').filter(':contains("999999999999999")').should('have.length', 4);
         });
 
         it('should refresh data when navigating back to page', () => {
@@ -163,8 +133,23 @@ describe('Global KPIs Page', () => {
             cy.visit('/globalKPIs');
 
             // Data should reload
-            cy.get('main').contains('Global KPIs').should('be.visible');
-            cy.get('main').contains('1000').should('be.visible');
+            cy.contains('Global KPIs').should('be.visible');
+            cy.get('#global-kpis-table').contains('1000').should('be.visible');
+        });
+    });
+
+    describe('not authorised', () => {
+        it('should not show page', () => {
+            cy.window().then((win) => {
+                win.localStorage.setItem('token-registry', 'fake-token');
+                // Required for /globalKPIs access: must be staff/superuser AND username='admin'
+                win.localStorage.setItem('username', 'admin');
+                win.localStorage.setItem('is_staff', 'false');
+                win.localStorage.setItem('is_superuser', 'false');
+            });
+            cy.visit('/globalKPIs');
+            cy.get('#global-kpis-table').should('not.exist');
+            cy.url().should('include', '/login');
         });
     });
 });

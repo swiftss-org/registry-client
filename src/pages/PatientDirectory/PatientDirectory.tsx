@@ -3,8 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SortIcon from '@mui/icons-material/Sort';
-import { IconButton, Select, MenuItem } from '@mui/material';
-import { ReactComponent as SortIcon } from 'assets/PatientDirectory/sortIcon.svg';
+import { IconButton, Select, MenuItem, Button } from '@mui/material';
 import { PageWrapper, PageTitle } from 'common.style';
 import { useGetHospitals, useGetPatients, useGetPreferredHospital } from 'hooks/api/patientHooks';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
@@ -32,66 +31,66 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
   const offset = (page - 1) * limit;
 
   const PaginationControls: React.FC<{
-      page: number;
-      total: number;
-      limit: number;
-      onPageChange: (newPage: number) => void;
-    }> = ({ page, total, limit, onPageChange }) => {
+    page: number;
+    total: number;
+    limit: number;
+    onPageChange: (newPage: number) => void;
+  }> = ({ page, total, limit, onPageChange }) => {
 
-      if (total === 0) {
-        return (
-          <div
-            css={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              margin: '16px 0',
-              fontSize: 14,
-              color: '#666',
-            }}
-          >
-            No patients to show
-          </div>
-        );
-      }
-
-      const totalPages = Math.ceil(total / limit);
-      const start = (page - 1) * limit + 1;
-      const end = Math.min(page * limit, total);
-
+    if (total === 0) {
       return (
         <div
           css={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: '12px',
             margin: '16px 0',
+            fontSize: 14,
+            color: '#666',
           }}
         >
-          {totalPages > 1 && (
-              <Button
-                size="sm"
-                disabled={page === 1}
-                onClick={() => onPageChange(page - 1)}
-              >
-                Previous
-              </Button>
-            )}
-            <span css={{ fontSize: 14 }}>
-              Patients {start}-{end} out of {total}
-            </span>
-            {totalPages > 1 && (
-              <Button
-                size="sm"
-                disabled={page === totalPages}
-                onClick={() => onPageChange(page + 1)}
-              >
-                Next
-              </Button>
-            )}
+          No patients to show
         </div>
       );
+    }
+
+    const totalPages = Math.ceil(total / limit);
+    const start = (page - 1) * limit + 1;
+    const end = Math.min(page * limit, total);
+
+    return (
+      <div
+        css={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '12px',
+          margin: '16px 0',
+        }}
+      >
+        {totalPages > 1 && (
+          <Button
+            size="small"
+            disabled={page === 1}
+            onClick={() => onPageChange(page - 1)}
+          >
+            Previous
+          </Button>
+        )}
+        <span css={{ fontSize: 14 }}>
+          Patients {start}-{end} out of {total}
+        </span>
+        {totalPages > 1 && (
+          <Button
+            size="small"
+            disabled={page === totalPages}
+            onClick={() => onPageChange(page + 1)}
+          >
+            Next
+          </Button>
+        )}
+      </div>
+    );
   };
 
   const { data: patients } = useGetPatients({
@@ -164,13 +163,13 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         </OptionsWrapper>
 
         {patients && (
-            <PaginationControls
-              page={page}
-              total={patients.count}
-              limit={limit}
-              onPageChange={(newPage) => setPage(newPage)}
-            />
-          )}
+          <PaginationControls
+            page={page}
+            total={patients.count}
+            limit={limit}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        )}
 
         {patients && (
           <PatientsList>
