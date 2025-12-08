@@ -33,7 +33,7 @@ const RegisterPatient: React.FC = () => {
     <>
       <PageWrapper isDesktop={isDesktop}>
         <PageTitle>
-          <IconButton
+          <IconButton data-testid="back-button"
             onClick={() => {
               if (isFormDirty) {
                 setShowWarningModal(true);

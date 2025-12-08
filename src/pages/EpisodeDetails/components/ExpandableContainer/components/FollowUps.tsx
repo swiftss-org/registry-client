@@ -2,7 +2,7 @@
 import React, { FC, useMemo } from 'react';
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { Button, Select, TextField, TextareaAutosize, FormControl, FormHelperText, MenuItem } from '@mui/material';
+import { Button, Select, TextField, TextareaAutosize, FormControl, FormHelperText, MenuItem, InputLabel } from '@mui/material';
 import arrayMutators from 'final-form-arrays';
 import { omit } from 'lodash';
 import { Field, Form } from 'react-final-form';
@@ -107,8 +107,10 @@ const FollowUps: FC<{
                                 <ArrayContainer>
                                   <SelectWrapper>
                                     <FormControl fullWidth error={hasError}>
+                                      <InputLabel id="surgeon-label">Surgeon</InputLabel>
                                       <Select
                                         id="id"
+                                        labelId="surgeon-label"
                                         label="Surgeon"
                                         variant="outlined"
                                         size="medium"
@@ -148,6 +150,7 @@ const FollowUps: FC<{
                         disabled
                         variant="outlined"
                         label={'Surgeon'}
+                        id="surgeon"
                         size="medium"
                         value={`${attendee.user.first_name} ${attendee.user.last_name}`}
                       />
@@ -167,9 +170,11 @@ const FollowUps: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="pain_severity-label">Pain Severity</InputLabel>
                             <Select
                               disabled={!canSubmit}
                               id="pain_severity"
+                              labelId="pain_severity-label"
                               label="Pain Severity"
                               variant="outlined"
                               size="medium"
@@ -198,10 +203,10 @@ const FollowUps: FC<{
                     initialValue={
                       followUp?.mesh_awareness !== undefined
                         ? BOOLEAN_OPTIONS.find((option) =>
-                            followUp?.mesh_awareness
-                              ? option.label === 'Yes'
-                              : option.label === 'No'
-                          )
+                          followUp?.mesh_awareness
+                            ? option.label === 'Yes'
+                            : option.label === 'No'
+                        )
                         : undefined
                     }
                   >
@@ -212,8 +217,10 @@ const FollowUps: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="mesh_awareness-label">Mesh Awareness</InputLabel>
                             <Select
                               id="mesh_awareness"
+                              labelId="mesh_awareness-label"
                               label="Mesh Awareness"
                               variant="outlined"
                               size="medium"
@@ -243,8 +250,8 @@ const FollowUps: FC<{
                     initialValue={
                       followUp?.seroma !== undefined
                         ? BOOLEAN_OPTIONS.find((option) =>
-                            followUp?.seroma ? option.label === 'Yes' : option.label === 'No'
-                          )
+                          followUp?.seroma ? option.label === 'Yes' : option.label === 'No'
+                        )
                         : undefined
                     }
                   >
@@ -255,8 +262,10 @@ const FollowUps: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="seroma-label">Seroma</InputLabel>
                             <Select
                               id="seroma"
+                              labelId="seroma-label"
                               label="Seroma"
                               variant="outlined"
                               size="medium"
@@ -286,8 +295,8 @@ const FollowUps: FC<{
                     initialValue={
                       followUp?.infection !== undefined
                         ? BOOLEAN_OPTIONS.find((option) =>
-                            followUp?.infection ? option.label === 'Yes' : option.label === 'No'
-                          )
+                          followUp?.infection ? option.label === 'Yes' : option.label === 'No'
+                        )
                         : undefined
                     }
                   >
@@ -298,8 +307,10 @@ const FollowUps: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="infection-label">Infection</InputLabel>
                             <Select
                               id="infection"
+                              labelId="infection-label"
                               label="Infection"
                               variant="outlined"
                               size="medium"
@@ -329,8 +340,8 @@ const FollowUps: FC<{
                     initialValue={
                       followUp?.numbness !== undefined
                         ? BOOLEAN_OPTIONS.find((option) =>
-                            followUp?.numbness ? option.label === 'Yes' : option.label === 'No'
-                          )
+                          followUp?.numbness ? option.label === 'Yes' : option.label === 'No'
+                        )
                         : undefined
                     }
                   >
@@ -341,9 +352,11 @@ const FollowUps: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="numbness-label">Numbness</InputLabel>
                             <Select
                               disabled={!canSubmit}
                               id="numbness"
+                              labelId="numbness-label"
                               label="Numbness"
                               variant="outlined"
                               size="medium"
@@ -372,8 +385,8 @@ const FollowUps: FC<{
                     initialValue={
                       followUp?.recurrence != null
                         ? BOOLEAN_OPTIONS.find((option) =>
-                            followUp?.recurrence ? option.label === 'Yes' : option.label === 'No'
-                          )
+                          followUp?.recurrence ? option.label === 'Yes' : option.label === 'No'
+                        )
                         : undefined
                     }
                   >
@@ -384,9 +397,11 @@ const FollowUps: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="recurrence-label">Recurrence</InputLabel>
                             <Select
                               disabled={!canSubmit}
                               id="recurrence"
+                              labelId="recurrence-label"
                               label="Recurrence"
                               variant="outlined"
                               size="medium"
@@ -415,10 +430,10 @@ const FollowUps: FC<{
                     initialValue={
                       followUp?.further_surgery_need !== undefined
                         ? BOOLEAN_OPTIONS.find((option) =>
-                            followUp?.further_surgery_need
-                              ? option.label === 'Yes'
-                              : option.label === 'No'
-                          )
+                          followUp?.further_surgery_need
+                            ? option.label === 'Yes'
+                            : option.label === 'No'
+                        )
                         : undefined
                     }
                   >
@@ -429,9 +444,11 @@ const FollowUps: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="further_surgery_need-label">Need for further surgery?</InputLabel>
                             <Select
                               disabled={!canSubmit}
                               id="further_surgery_need"
+                              labelId="further_surgery_need-label"
                               label="Need for further surgery?"
                               variant="outlined"
                               size="medium"

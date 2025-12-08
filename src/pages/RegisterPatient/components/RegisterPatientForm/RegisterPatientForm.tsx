@@ -41,7 +41,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
 
               return (
-                <FormControl fullWidth error={hasError}>
+                <FormControl fullWidth error={hasError} data-testid="hospital-select-wrapper">
                   <Select
                     id="hospital"
                     label="Hospital"
@@ -92,7 +92,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
               return (
                 <TextField
-                  id="first_name"
+                  id="middle_name"
                   label="Middle Name"
                   variant="outlined"
                   size="medium"

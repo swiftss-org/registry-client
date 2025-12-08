@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { FC } from 'react';
 
-import { Button, TextField, Select, TextareaAutosize, FormControl, FormHelperText, MenuItem } from '@mui/material';
+import { Button, TextField, Select, TextareaAutosize, FormControl, FormHelperText, MenuItem, InputLabel } from '@mui/material';
 import { omit } from 'lodash';
 import { Field, Form } from 'react-final-form';
 import { useParams } from 'react-router-dom';
@@ -74,8 +74,8 @@ const Discharge: FC<{
           ...discharge,
           aware_of_mesh: discharge?.aware_of_mesh !== undefined
             ? BOOLEAN_OPTIONS.find((option) =>
-                discharge?.aware_of_mesh ? option.label === 'Yes' : option.label === 'No'
-              )
+              discharge?.aware_of_mesh ? option.label === 'Yes' : option.label === 'No'
+            )
             : undefined,
           infection: discharge && discharge.infection ? discharge.infection?.split(',') : undefined,
         }}
@@ -120,10 +120,10 @@ const Discharge: FC<{
                     initialValue={
                       discharge?.aware_of_mesh !== undefined
                         ? BOOLEAN_OPTIONS.find((option) =>
-                            discharge?.aware_of_mesh
-                              ? option.label === 'Yes'
-                              : option.label === 'No'
-                          )
+                          discharge?.aware_of_mesh
+                            ? option.label === 'Yes'
+                            : option.label === 'No'
+                        )
                         : undefined
                     }
                   >
@@ -134,10 +134,12 @@ const Discharge: FC<{
                       return (
                         <SelectWrapper>
                           <FormControl fullWidth error={hasError}>
+                            <InputLabel id="aware_of_mesh-label">Antibiotics given on discharge</InputLabel>
                             <Select
                               disabled={!canSubmit}
                               id="aware_of_mesh"
-                              label="Antibiotics given on discharge"
+                              labelId="aware_of_mesh-label"
+                              label={'Antibiotics given on discharge'}
                               variant="outlined"
                               size="medium"
                               required={canSubmit}
@@ -174,7 +176,7 @@ const Discharge: FC<{
                           <TextField
                             id="discharge_duration"
                             disabled={!canSubmit}
-                            label={'Duration (days)'}
+                            label={'Discharge Duration (days)'}
                             required={canSubmit}
                             variant="outlined"
                             size="medium"
