@@ -25,9 +25,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
   );
 
   const [page, setPage] = useState(1);
-
   const limit = 25;
-
   const offset = (page - 1) * limit;
 
   const PaginationControls: React.FC<{
@@ -102,15 +100,16 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
   });
 
   const [showSortingOptions, setShowSortingOptions] = useState(false);
-
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
-
-  const { data: preferredHospital } = useGetPreferredHospital();
-
+  const { data: preferredHospital, isLoading: isLoadingPreferred } = useGetPreferredHospital();
   const isFirstLoad = useRef(true);
+  const navigate = useNavigate();
+  const filterOptions = getHospitalOptions(hospitals?.results || []);
+  const [selectedOption, setSelectedOption] = useState<number>();
 
   useEffect(() => {
     if (hospitals && isFirstLoad.current) {
+      if (isLoadingPreferred) return;
       if (preferredHospital && preferredHospital.hospital) {
         setHospitalId(preferredHospital.hospital.id);
         setSelectedOption(preferredHospital.hospital.id);
@@ -118,9 +117,10 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
       } else {
         setHospitalId(hospitals?.results[0].id);
         setSelectedOption(hospitals?.results[0].id);
+        isFirstLoad.current = false;
       }
     }
-  }, [hospitals, preferredHospital]);
+  }, [hospitals, preferredHospital, isLoadingPreferred, setHospitalId, setSelectedOption]);
 
   useEffect(() => {
     if (sortingOption) {
@@ -132,11 +132,6 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
     setPage(1);
   }, [hospitalId, searchTerm, sortingOption]);
 
-  const navigate = useNavigate();
-
-  const filterOptions = getHospitalOptions(hospitals?.results || []);
-  const [selectedOption, setSelectedOption] = useState<number>();
-
   return (
     <>
       <PageWrapper isDesktop={isDesktop}>
@@ -145,7 +140,8 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         <OptionsWrapper>
           <Select
             label="Center"
-            value={selectedOption}
+            id="center"
+            value={selectedOption ?? ''}
             onChange={(event) => {
               setSelectedOption(event.target.value as number);
               setHospitalId(event.target.value as number);
@@ -184,13 +180,16 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           </PatientsList>
         )}
         <IconButtonWrapper>
-          <IconButton
+          <Button
+            id="add_patient"
+            variant="contained"
             color="primary"
             size="large"
+            startIcon={<AddCircleIcon />}
             onClick={() => navigate(urls.registerPatient())}
           >
-            <AddCircleIcon fontSize="large" />
-          </IconButton>
+            Add Patient
+          </Button>
         </IconButtonWrapper>
       </PageWrapper>
 

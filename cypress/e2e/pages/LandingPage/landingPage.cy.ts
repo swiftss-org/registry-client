@@ -63,11 +63,6 @@ describe('Landing Page', () => {
         cy.visit('/landing');
 
         cy.wait(['@getSummary', '@getOwnedEpisodes', '@getUnlinked', '@getPreferredHospital', '@getAnnouncements']);
-
-        // Remove error overlay if present (hack for lint warnings)
-        cy.get('body > iframe').then(($iframe) => {
-            $iframe.remove();
-        });
     });
 
     describe('Happy Path', () => {
@@ -146,10 +141,6 @@ describe('Landing Page', () => {
 
             cy.reload();
             cy.wait('@getEmptyEpisodes');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should display without errors
             cy.get('main').contains('Your Episodes').should('be.visible');
@@ -164,10 +155,6 @@ describe('Landing Page', () => {
 
             cy.reload();
             cy.wait('@getNoUnlinked');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should handle empty state gracefully
             cy.get('main').contains('Patients without Episodes Registered in Your Hospital').should('not.exist');
@@ -181,10 +168,6 @@ describe('Landing Page', () => {
 
             cy.reload();
             cy.wait('@getSummaryError');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Should handle error without crashing the entire page
             cy.get('main').contains('Surgeon Dashboard').should('be.visible');
@@ -201,10 +184,6 @@ describe('Landing Page', () => {
 
             cy.reload();
             cy.wait('@getNoAnnouncements');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             // Page should load without announcements section or show empty state
             cy.get('button[aria-label="Dismiss"]').should('not.exist');

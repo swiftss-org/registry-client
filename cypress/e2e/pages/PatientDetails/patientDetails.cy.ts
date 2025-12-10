@@ -35,10 +35,6 @@ describe('Patient Details Page', () => {
         cy.visit('/patients/1/101');
 
         cy.wait(['@getPatient', '@getHospital']);
-        // Remove error overlay if present (hack for lint warnings)
-        cy.get('body > iframe').then(($iframe) => {
-            $iframe.remove();
-        });
     });
 
     it('should display patient details', () => {
@@ -48,26 +44,26 @@ describe('Patient Details Page', () => {
         cy.contains('General Information').should('have.css', 'border-bottom-color'); // active tab check might vary
 
         // Check content from GeneralInformation (assuming it shows name etc)
-        cy.get('input[placeholder="Full Name"]').should('have.value', 'John Doe');
-        cy.get('input[placeholder="Gender"]').should('have.value', 'Male');
-        cy.get('input[placeholder="Year Of Birth"]').should('have.value', '1980');
-        cy.get('input[placeholder="Age"]').should('have.value', '42');
-        cy.get('input[placeholder="National ID"]').should('have.value', '123456789');
-        cy.get('input[placeholder="Hospital"]').should('have.value', 'General Hospital');
-        cy.get('input[placeholder="Patient Hospital ID"]').should('have.value', 'H123');
-        cy.get('input[placeholder="Patient Phone number 1"]').should('have.value', '123456789');
-        cy.get('input[placeholder="Patient Phone number 2"]').should('have.value', '987654321');
+        cy.get('input[id="full_name"]').should('have.value', 'John Doe');
+        cy.get('input[id="gender"]').should('have.value', 'Male');
+        cy.get('input[id="year_of_birth"]').should('have.value', '1980');
+        cy.get('input[id="age"]').should('have.value', '42');
+        cy.get('input[id="national_id"]').should('have.value', '123456789');
+        cy.get('input[id="hospital"]').should('have.value', 'General Hospital');
+        cy.get('input[id="patient_hospital_id"]').should('have.value', 'H123');
+        cy.get('input[id="patient_phone_number_1"]').should('have.value', '123456789');
+        cy.get('input[id="patient_phone_number_2"]').should('have.value', '987654321');
 
         // Verify the input fields are disabled
-        cy.get('input[placeholder="Full Name"]').should('be.disabled');
-        cy.get('input[placeholder="Gender"]').should('be.disabled');
-        cy.get('input[placeholder="Year Of Birth"]').should('be.disabled');
-        cy.get('input[placeholder="Age"]').should('be.disabled');
-        cy.get('input[placeholder="National ID"]').should('be.disabled');
-        cy.get('input[placeholder="Hospital"]').should('be.disabled');
-        cy.get('input[placeholder="Patient Hospital ID"]').should('be.disabled');
-        cy.get('input[placeholder="Patient Phone number 1"]').should('be.disabled');
-        cy.get('input[placeholder="Patient Phone number 2"]').should('be.disabled');
+        cy.get('input[id="full_name"]').should('be.disabled');
+        cy.get('input[id="gender"]').should('be.disabled');
+        cy.get('input[id="year_of_birth"]').should('be.disabled');
+        cy.get('input[id="age"]').should('be.disabled');
+        cy.get('input[id="national_id"]').should('be.disabled');
+        cy.get('input[id="hospital"]').should('be.disabled');
+        cy.get('input[id="patient_hospital_id"]').should('be.disabled');
+        cy.get('input[id="patient_phone_number_1"]').should('be.disabled');
+        cy.get('input[id="patient_phone_number_2"]').should('be.disabled');
     });
 
     it('should display episode list tab', () => {
@@ -93,7 +89,7 @@ describe('Patient Details Page', () => {
 
     it('should return to directory on back', () => {
         // Back arrow
-        cy.get('main > div > div > div > span > svg').first().click();
+        cy.get('main > div > div > div > button > svg').first().click();
 
         cy.url().should('include', '/patients');
         cy.url().should('not.include', '/101');
@@ -127,12 +123,8 @@ describe('Patient Details Page', () => {
 
             cy.reload();
             cy.wait(['@getPatientWithoutEpisodes']);
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
-            cy.contains('Episodes').click();
 
+            cy.contains('Episodes').click();
             cy.contains('There are no episodes to display').should('be.visible');
         });
 
@@ -148,20 +140,16 @@ describe('Patient Details Page', () => {
 
             cy.visit('/patients/1/102');
             cy.wait('@getPatientWithMinimalFields');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
-            cy.get('input[placeholder="Full Name"]').should('have.value', '');
-            cy.get('input[placeholder="Gender"]').should('have.value', '');
-            cy.get('input[placeholder="Year Of Birth"]').should('have.value', '');
-            cy.get('input[placeholder="Age"]').should('have.value', '');
-            cy.get('input[placeholder="National ID"]').should('have.value', '');
-            cy.get('input[placeholder="Hospital"]').should('have.value', 'General Hospital');
-            cy.get('input[placeholder="Patient Hospital ID"]').should('have.value', '');
-            cy.get('input[placeholder="Patient Phone number 1"]').should('have.value', '');
-            cy.get('input[placeholder="Patient Phone number 2"]').should('have.value', '');
+            cy.get('input[id="full_name"]').should('have.value', '');
+            cy.get('input[id="gender"]').should('have.value', '');
+            cy.get('input[id="year_of_birth"]').should('have.value', '');
+            cy.get('input[id="age"]').should('have.value', '');
+            cy.get('input[id="national_id"]').should('have.value', '');
+            cy.get('input[id="hospital"]').should('have.value', 'General Hospital');
+            cy.get('input[id="patient_hospital_id"]').should('have.value', '');
+            cy.get('input[id="patient_phone_number_1"]').should('have.value', '');
+            cy.get('input[id="patient_phone_number_2"]').should('have.value', '');
         });
     });
 });

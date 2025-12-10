@@ -16,6 +16,11 @@ import RegisterEpisode from '../pages/RegisterEpisode';
 import { __TOKEN__ } from '../utils/constants';
 import { getUserStorageItem } from '../utils/storage';
 
+const LoginButMaybeAlreadySignedInRoute = () => {
+  const token = getUserStorageItem(__TOKEN__);
+  return token ? <Navigate to={urls.landingPage()} /> : <Layout component={Login} />;
+};
+
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
     const token = getUserStorageItem(__TOKEN__);
     const level = getUserStorageItem('user_level');
@@ -42,7 +47,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 const router = createBrowserRouter([
   {
     path: urls.login(),
-    element:<Layout component={Login} />,
+    element: <LoginButMaybeAlreadySignedInRoute />,
   },
   {
     path: urls.settings(),

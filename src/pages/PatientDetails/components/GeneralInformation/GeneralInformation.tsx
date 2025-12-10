@@ -12,8 +12,8 @@ type Props = {
   hospital?: HospitalsAPI;
 };
 const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
-  const hospitalPatientID = patient?.hospital_mappings.find(
-    (value) => value.hospital_id === hospital?.id
+  const hospitalPatientID = patient?.hospital_mappings?.find(
+    (mapping) => mapping.hospital_id === hospital?.id
   )?.patient_hospital_id;
 
   return (
@@ -21,12 +21,13 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
       <TextField
         disabled
         label="Full Name"
+        id="full_name"
         variant="outlined"
         size="medium"
         value={patient?.full_name}
       />
 
-      <TextField disabled label="Gender" variant="outlined" size="medium" value={patient?.gender} />
+      <TextField disabled label="Gender" id="gender" variant="outlined" size="medium" value={patient?.gender} />
       <FieldsContainer>
         <TextField
           disabled

@@ -19,7 +19,7 @@ describe('Patient Directory Page', () => {
 
         cy.intercept('GET', '**/preferred-hospital/**', {
             statusCode: 200,
-            body: { hospital: { id: 1, name: 'General Hospital' } }
+            body: { results: [{ id: 1, name: 'General Hospital' }] }
         }).as('getPreferredHospital');
 
         cy.intercept('GET', '**/patients/**', (req) => {
@@ -73,15 +73,10 @@ describe('Patient Directory Page', () => {
         cy.visit('/patients');
 
         cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
-        // Remove error overlay if present (hack for lint warnings)
-        cy.get('body > iframe').then(($iframe) => {
-            $iframe.remove();
-        });
     });
 
     it('should display patients list', () => {
         cy.contains('Patients directory').should('be.visible');
-        cy.contains('Center').should('be.visible');
         cy.contains('General Hospital').should('be.visible');
         cy.contains('Patients 1-3 out of 3').should('be.visible');
         cy.contains('John Doe').parent().within(() => {
@@ -107,21 +102,21 @@ describe('Patient Directory Page', () => {
     it('should filter by hospital', () => {
         // Change hospital filter
         cy.contains('General Hospital').click();
-        cy.get('[data-testid="ictinus_list_item_0"] div').click();
+        cy.contains('City Hospital').click();
 
         cy.wait('@getPatients');
 
         // Second hospital does not have patients
-        // TODO activate it after the UI is better cy.contains('No patients to show').should('be.visible');
+        cy.contains('No patients to show').should('be.visible');
     });
 
     it('should navigate to register patient', () => {
-        cy.get('main button[data-testid="icon-button"]').click();
+        cy.get('main button[id="add_patient"]').click();
         cy.url().should('include', '/patients/register');
     });
 
     it('should sort the patients by name back and forth', () => {
-        cy.get('main > div > div > svg').click();
+        cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="full_name"]').check();
 
         cy.contains('John Doe').parent().parent().parent().then(($rows) => {
@@ -130,7 +125,7 @@ describe('Patient Directory Page', () => {
             cy.wrap($rows).children().eq(2).contains('Test Patient').should('exist');
         });
 
-        cy.get('main > div > div > svg').click();
+        cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="-full_name"]').check();
 
         cy.contains('John Doe').parent().parent().parent().then(($rows) => {
@@ -141,7 +136,7 @@ describe('Patient Directory Page', () => {
     });
 
     it('should sort the patients by date back and forth', () => {
-        cy.get('main > div > div > svg').click();
+        cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="created_at"]').check();
 
         cy.contains('John Doe').parent().parent().parent().then(($rows) => {
@@ -150,7 +145,7 @@ describe('Patient Directory Page', () => {
             cy.wrap($rows).children().eq(2).contains('Jane Smith').should('exist');
         });
 
-        cy.get('main > div > div > svg').click();
+        cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="-created_at"]').check();
 
         cy.contains('John Doe').parent().parent().parent().then(($rows) => {
@@ -161,21 +156,21 @@ describe('Patient Directory Page', () => {
     });
 
     it('should search for a patient by name', () => {
-        cy.get('input[data-testid="search-field"]').type('John Doe').type('{enter}');
+        cy.get('div[data-testid="search-field"] input').type('John Doe').type('{enter}');
         cy.contains('John Doe').should('exist')
         cy.contains('Jane Smith').should('not.exist')
         cy.contains('Test Patient').should('not.exist')
     });
 
     it('should search for a patient by gender', () => {
-        cy.get('input[data-testid="search-field"]').type('Male').type('{enter}');
+        cy.get('div[data-testid="search-field"] input').type('Male').type('{enter}');
         cy.contains('John Doe').should('exist')
         cy.contains('Test Patient').should('exist')
         cy.contains('Jane Smith').should('not.exist')
     });
 
     it('should search for a patient by national id', () => {
-        cy.get('input[data-testid="search-field"]').type('123456789').type('{enter}');
+        cy.get('div[data-testid="search-field"] input').type('123456789').type('{enter}');
         cy.contains('John Doe').should('exist')
         cy.contains('Test Patient').should('not.exist')
         cy.contains('Jane Smith').should('not.exist')

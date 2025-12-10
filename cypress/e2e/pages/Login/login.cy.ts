@@ -16,16 +16,10 @@ describe('Login Page', () => {
             }).as('signIn');
 
             cy.visit('/login');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             cy.get('#username').type('testuser');
             cy.get('#currentPassword').type('password123');
-
             cy.get('input[type="checkbox"]').check({ force: true });
-
             cy.get('button[type="submit"]').click();
 
             cy.wait('@signIn').then((interception) => {
@@ -45,12 +39,7 @@ describe('Login Page', () => {
                 body: { detail: 'Invalid credentials' }
             }).as('signInFail');
 
-
             cy.visit('/login');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             cy.get('#username').type('wronguser');
             cy.get('#currentPassword').type('wrongpassword');
@@ -74,10 +63,6 @@ describe('Login Page', () => {
             }).as('signIn');
 
             cy.reload();
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             cy.get('#username').type('testuser');
             cy.get('#currentPassword').type('password123');
@@ -98,10 +83,6 @@ describe('Login Page', () => {
             }).as('signInFail');
 
             cy.visit('/login');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             cy.get('#username').type('wronguser');
             cy.get('#currentPassword').type('wrongpass');
@@ -121,10 +102,6 @@ describe('Login Page', () => {
             }).as('signInFail');
 
             cy.visit('/login');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             cy.get('#username').type('wronguser');
             cy.get('#currentPassword').type('wrongpass');
@@ -135,17 +112,13 @@ describe('Login Page', () => {
             // Expect notification or error message
             cy.contains('Invalid credential combination.').should('be.visible');
 
-            cy.get('span[data-testid="notification-close"]').click();
+            cy.get('svg[data-testid="CloseIcon"]').click();
 
             cy.contains('Invalid credential combination.').should('not.exist');
         });
 
         it('should require username and password', () => {
             cy.visit('/login');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
             cy.get('button[type="submit"]').click();
 
             cy.contains('Invalid credential combination.').should('be.visible');
@@ -162,15 +135,17 @@ describe('Login Page', () => {
 
             cy.url().should('include', '/landing');
         });
+
+        it('should show login page if not authorised', () => {
+            cy.visit('/login');
+
+            cy.url().should('include', '/login');
+        });
     });
 
     describe('UI Elements', () => {
         it('should display all login elements', () => {
             cy.visit('/login');
-            // Remove error overlay if present (hack for lint warnings)
-            cy.get('body > iframe').then(($iframe) => {
-                $iframe.remove();
-            });
 
             cy.get('main').contains('Welcome!');
             cy.get('main').contains('Please sign in using your credentials to access your account.');

@@ -106,7 +106,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="hospital-label"
                       id="hospital"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                         const selectedOption = hospitalOptions.find(
                           (option) => option.value === event.target.value
@@ -164,7 +164,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="episode-type-label"
                       id="episode_type"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                           const selectedOption = EPISODE_TYPE_OPTIONS.find(
                             (option) => option.value === Number(event.target.value)
@@ -198,7 +198,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="cepod-label"
                       id="cepod"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                           const selectedOption = CEPOD_OPTIONS.find(
                                                     (option) => option.value === Number(event.target.value)
@@ -233,7 +233,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="side-label"
                       id="side"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                           const selectedOption = SIDE_OPTIONS.find(
                             (option) => option.value === Number(event.target.value)
@@ -267,7 +267,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="occurrence-label"
                       id="occurence"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                          const selectedOption = OCCURRENCE_OPTIONS.find(
                            (option) => option.value === Number(event.target.value)
@@ -301,7 +301,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="type-label"
                       id="type"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                          const selectedOption = TYPE_OPTIONS.find(
                            (option) => option.value === Number(event.target.value)
@@ -335,7 +335,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="size-label"
                       id="size"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                          const selectedOption = SIZE_OPTIONS.find(
                            (option) => option.value === Number(event.target.value)
@@ -369,7 +369,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="complexity-label"
                       id="complexity"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                          const selectedOption = COMPLEXITY_OPTIONS.find(
                            (option) => option.value === Number(event.target.value)
@@ -430,7 +430,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="mesh-type-label"
                       id="mesh_type"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                           const selectedOption = MESH_TYPE_OPTIONS.find(
                             (option) => option.value === Number(event.target.value)
@@ -464,7 +464,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="anaesthetic-type-label"
                       id="anaesthetic_type"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                         const selectedOption = ANAESTHETIC_TYPE_OPTIONS.find(
                           (option) => option.value === Number(event.target.value)
@@ -498,7 +498,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="diathermy-used-label"
                       id="diathermy_used"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                           const selectedOption = BOOLEAN_OPTIONS.find(
                             (option) => option.value === Number(event.target.value)
@@ -532,7 +532,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <Select
                       labelId="antibiotic-used-label"
                       id="antibiotic_used"
-                      value={props.input.value.value || ''}
+                      value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
                         const selectedOption = BOOLEAN_OPTIONS.find(
                           (option) => option.value === Number(event.target.value)
@@ -584,7 +584,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                         <Select
                           labelId="surgeon-label"
                           id="id"
-                          value={props.input.value.value || ''}
+                          value={props.input.value ? props.input.value.value : ''}
                           onChange={(event: SelectChangeEvent<string>) =>
                             props.input.onChange({ value: event.target.value, label: event.target.value })
                           }
