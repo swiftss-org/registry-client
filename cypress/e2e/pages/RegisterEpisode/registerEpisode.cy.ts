@@ -143,128 +143,93 @@ describe('Register Episode Page', () => {
     });
 
     describe('Input Validation', () => {
+        it('should validate Hospital is required', () => {
+            cy.get('#hospital').click();
+            cy.get('body').type('{esc}');
+
+            cy.contains('This field is required').should('exist');
+        });
+
         it('should validate Episode Type is required', () => {
             cy.get('#episode_type').click();
-            cy.get('#episode_type').parent().find('input').focus().blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Surgery Date is required', () => {
-            // Fill Episode Type
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#surgery_date').focus().blur();
-            cy.get('#surgery_date').parent().parent().parent().parent().parent().should('contain', 'This field is required. Please select a date.');
+            cy.get('body').type('{esc}');
+
+            cy.contains('This field is required. Please select a date.').should('exist');
         });
 
         it('should validate CEPOD is required', () => {
-            // Fill previous required fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#cepod').click();
-            cy.get('#cepod').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Side is required', () => {
-            // Fill previous required fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#side').click();
-            cy.get('#side').blur();
+            cy.get('body').type('{esc}');
 
             // TODO this should be fixed by requiring this field cy.contains('This field is required').should('exist');
         });
 
         it('should validate Occurrence is required', () => {
-            // Fill previous required fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#occurence').click();
-            cy.get('#occurence').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Type is required', () => {
-            // Fill previous required fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#size').click();
-            cy.get('#size').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Size is required', () => {
-            // Fill all previous fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#size').click();
-            cy.get('#size').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Complexity is required', () => {
-            // Fill all previous fields including Size
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#complexity').click();
-            cy.get('#complexity').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Mesh Type is required', () => {
-            // Fill all previous fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#mesh_type').click();
-            cy.get('#mesh_type').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Anaesthetic Type is required', () => {
-            // Fill all previous fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#anaesthetic_type').click();
-            cy.get('#anaesthetic_type').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Diathermy Used is required', () => {
-            // Fill all previous fields
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#diathermy_used').click();
-            cy.get('#diathermy_used').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
 
         it('should validate Antibiotic Used is required', () => {
-            // Fill all previous fields including Diathermy
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             cy.get('#antibiotic_used').click();
-            cy.get('#antibiotic_used').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('This field is required').should('exist');
         });
@@ -299,25 +264,25 @@ describe('Register Episode Page', () => {
             cy.get('#comments').type('Successfull surgery');
 
             cy.get('#id').click(); // Surgeon field
-            cy.get('#id').blur();
+            cy.get('body').type('{esc}');
 
             cy.contains('button', 'Register an Episode').click();
 
             cy.contains('This field is required').should('exist');
         });
 
-//         it('should validate all field before submitting the form', () => {
-//             cy.contains('button', 'Register an Episode').click();
-//
-//             cy.contains('This field is required').should('exist').its('length').should('eq', 3);
-//         });
+        it('should validate all field before submitting the form', () => {
+            cy.contains('button', 'Register an Episode').click();
+
+            cy.contains('This field is required').should('exist').its('length').should('eq', 3);
+        });
     });
 
     describe('Edge Cases', () => {
         it('should handle dirty form warning', () => {
             cy.get('#comments').type('Dirty');
 
-            cy.get('main > div > div > div > span > svg').first().click();
+            cy.get('main > div > div > button > svg').first().click();
 
             cy.contains('Cancel new registration?').should('be.visible');
             cy.contains('Yes, cancel new registration').click();
@@ -325,9 +290,6 @@ describe('Register Episode Page', () => {
         });
 
         it('should show error when surgery date is in the future', () => {
-            cy.get('#episode_type').click();
-            cy.contains('Femoral Mesh Hernia Repair').click();
-
             // Enter a future date
             const futureDate = new Date();
             futureDate.setFullYear(futureDate.getFullYear() + 1);
@@ -390,30 +352,29 @@ describe('Register Episode Page', () => {
             cy.contains('General Hospital').click();
             cy.get('#episode_type').click();
             cy.contains('Femoral Mesh Hernia Repair').click();
+            cy.get('#surgery_date').type('2023-11-20');
             cy.get('#cepod').click();
             cy.contains('Emergency').click();
             cy.get('#side').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.contains('Right').click();
             cy.get('#occurence').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.contains('Recurrent').click();
             cy.get('#type').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.contains('Indirect').click();
             cy.get('#size').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.contains('Very Large (>4 finger breadths)').click();
             cy.get('#complexity').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
-            cy.get('#surgery_date').type('2023-11-20');
+            cy.contains('Irreducible').click();
             cy.get('#mesh_type').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.contains('TNMHP Mesh').click();
             cy.get('#anaesthetic_type').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.contains('Local Anaesthetic').click();
             cy.get('#diathermy_used').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.get('ul[aria-labelledby="diathermy-used-label"]').contains('Yes').click();
             cy.get('#antibiotic_used').click();
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
-            cy.get('form > div > div > div:nth-child(7) > div:nth-child(2) > div > input').click({ force: true });
-            cy.get('#id').click(); // ID for surgeon select is 'id' in the loop
-            cy.get('[data-testid="ictinus_list_item_0"]').click();
+            cy.get('ul[aria-labelledby="antibiotic-used-label"]').contains('No').click();
+            cy.get('#id').click();
+            cy.contains('Dr. Surgeon').click();
 
             // Enter comments with special characters
             cy.get('#comments').type('Patient had: <script>alert("test")</script> & "quoted" text');

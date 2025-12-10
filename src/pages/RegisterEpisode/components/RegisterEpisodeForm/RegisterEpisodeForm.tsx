@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Select, TextField, MenuItem, InputLabel, FormControl, Typography } from '@mui/material';
@@ -70,6 +70,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   const { isDesktop } = useResponsiveLayout();
   const hospitalOptions = useMemo(() => getHospitalOptions(hospitals), [hospitals]);
   const surgeonOptions = useMemo(() => getSurgeonOptionsSorted(surgeons), [surgeons]);
+  const [touchedFields, setTouchedFields] = useState<{ [key: string]: boolean }>({});
 
   const defaultHospital = useMemo(
     () => ({ value: selectedHospital?.id, label: selectedHospital?.name }),
@@ -83,7 +84,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="hospital" initialValue={defaultHospital}>
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               const handleSelectHospital = (option: SelectOption) => {
                 props.input.onChange(option);
@@ -113,6 +114,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                         );
                         handleSelectHospital(selectedOption || { value: '', label: '' });
                       }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Hospital"
                     >
                       {hospitalOptions.map((option) => (
@@ -132,7 +134,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
           <FieldWrapper>
             <Field name="patientHospitalId" parse={(value) => value}>
               {(props) => {
-                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                const hasError = touchedFields[props.input.name] && props.meta.invalid;
                 return (
                   <TextField
                     id="patient_hospital_id"
@@ -142,6 +144,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     size="medium"
                     error={hasError}
                     helperText={hasError ? props.meta.error : undefined}
+//                     onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                     {...props.input}
                   />
                 );
@@ -155,7 +158,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="episodeType">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -171,6 +174,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                           );
                           props.input.onChange(selectedOption);
                         }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Episode Type"
                     >
                       {EPISODE_TYPE_OPTIONS.map((option) => (
@@ -189,7 +193,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="cepod">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -206,6 +210,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                                                   props.input.onChange(selectedOption);
                                                   }
                       }
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="CEPOD"
                     >
                       {CEPOD_OPTIONS.map((option) => (
@@ -224,7 +229,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="side">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -240,6 +245,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                           );
                           props.input.onChange(selectedOption);
                         }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Side"
                     >
                       {SIDE_OPTIONS.map((option) => (
@@ -258,7 +264,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="occurence">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -274,6 +280,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                          );
                          props.input.onChange(selectedOption);
                        }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Occurrence"
                     >
                       {OCCURRENCE_OPTIONS.map((option) => (
@@ -292,7 +299,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="type">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -308,6 +315,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                          );
                          props.input.onChange(selectedOption);
                        }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Type"
                     >
                       {TYPE_OPTIONS.map((option) => (
@@ -326,7 +334,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="size">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -342,6 +350,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                          );
                          props.input.onChange(selectedOption);
                        }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Size"
                     >
                       {SIZE_OPTIONS.map((option) => (
@@ -360,7 +369,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="complexity">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -376,6 +385,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                          );
                          props.input.onChange(selectedOption);
                        }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Complexity"
                     >
                       {COMPLEXITY_OPTIONS.map((option) => (
@@ -398,7 +408,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="surgeryDate" parse={(value) => value}>
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
               return (
                 <TextField
                     id="surgery_date"
@@ -421,7 +431,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="meshType">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -437,6 +447,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                           );
                           props.input.onChange(selectedOption);
                         }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Mesh Type"
                     >
                       {MESH_TYPE_OPTIONS.map((option) => (
@@ -455,7 +466,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="anaestheticType">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -471,6 +482,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                         );
                         props.input.onChange(selectedOption);
                       }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Anaesthetic Type"
                     >
                       {ANAESTHETIC_TYPE_OPTIONS.map((option) => (
@@ -489,7 +501,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="diathermyUsed">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -505,6 +517,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                           );
                           props.input.onChange(selectedOption);
                         }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Diathermy Used"
                     >
                       {BOOLEAN_OPTIONS.map((option) => (
@@ -523,7 +536,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="antibioticUsed">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
               return (
                 <SelectWrapper>
@@ -539,6 +552,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                         );
                         props.input.onChange(selectedOption);
                       }}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Prophylactic antibiotics given?"
                     >
                       {BOOLEAN_OPTIONS.map((option) => (
@@ -574,7 +588,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
             fields.map((name, index) => (
               <Field name={`${name}`} key={name}>
                 {(props) => {
-                  const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                  const hasError = touchedFields[props.input.name] && props.meta.invalid;
 
                   return (
                     <ArrayContainer>
@@ -585,9 +599,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                           labelId="surgeon-label"
                           id="id"
                           value={props.input.value ? props.input.value.value : ''}
-                          onChange={(event: SelectChangeEvent<string>) =>
-                            props.input.onChange({ value: event.target.value, label: event.target.value })
-                          }
+                          onChange={(event: SelectChangeEvent<string>) => {
+                            props.input.onChange({ value: event.target.value, label: event.target.value });
+                            setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                          }}
+                          onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                           label="Surgeon"
                         >
                           {surgeonOptions.map((option) => (
