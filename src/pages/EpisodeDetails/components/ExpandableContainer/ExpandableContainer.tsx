@@ -43,7 +43,7 @@ const ExpandableContainer: FC<{
         />
       </Header>
 
-      <div onClick={(e: any) => e.stopPropagation()}>
+      <div onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
         <Component isOpen={toggle} episode={episode} discharge={discharge} followUp={followUp} />
       </div>
     </ListItem>

@@ -10,7 +10,7 @@ export const useAnimationClass = (className: string) => {
     return () => {
       wrapper?.classList.remove(className);
     };
-  }, []);
+  }, [className]);
 
   return {
     ref,
