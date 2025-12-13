@@ -10,9 +10,7 @@ import urls from './urls';
 
 const PrivateRoute: React.FC<CustomRouteProps> = ({ component: Component, ...rest }) => {
   const token = getUserStorageItem(__TOKEN__);
-  const isStaff = getUserStorageItem('is_staff') === 'true';
-  const isSuperuser = getUserStorageItem('is_superuser') === 'true';
-  const username = getUserStorageItem('username');
+  const level = getUserStorageItem('user_level');
 
   if (!token) {
     return <Route {...rest} render={() => <Redirect to={urls.login()} />} />;
@@ -21,7 +19,7 @@ const PrivateRoute: React.FC<CustomRouteProps> = ({ component: Component, ...res
     return <Redirect to={urls.patients()} />;
   }
 
-  if (rest.path === '/globalKPIs' && !( (isStaff || isSuperuser) && username == 'admin')) {
+  if (rest.path === '/nationalKPIs' && level !== 'NATIONAL_LEAD') {
     return <Redirect to={urls.landingPage()} />; // redirect unauthorized users
   }
 

@@ -7,7 +7,7 @@ import {
 import { useGetEpisodeStats } from '../../hooks/api/patientHooks';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
-const GlobalKPIs: React.FC = () => {
+const NationalKPIs: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
 
   // Fetch stats for different periods
@@ -25,7 +25,7 @@ const GlobalKPIs: React.FC = () => {
 
   return (
     <PageWrapper isDesktop={isDesktop}>
-      <PageTitle>Global KPIs</PageTitle>
+      <PageTitle>National KPIs</PageTitle>
 
       <table
         style={{
@@ -57,4 +57,4 @@ const GlobalKPIs: React.FC = () => {
   );
 };
 
-export default GlobalKPIs;
+export default NationalKPIs;

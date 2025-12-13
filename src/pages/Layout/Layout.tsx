@@ -23,7 +23,7 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
 
   const history = useHistory();
 
-  const { username, isStaff, isSuperuser } = useUserType();
+  const { level } = useUserType();
 
   const handleSearchTerm = (term: string) => {
     setSearchTerm(term);
@@ -73,9 +73,9 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
               options: [],
             },
             {
-              name: 'Global KPIs',
-              visible: ( isStaff || isSuperuser ) && username === 'admin',
-              url: '/globalKPIs',
+              name: 'National KPIs',
+              visible: level === 'NATIONAL_LEAD',
+              url: '/nationalKPIs',
               options: [],
             },
             // {

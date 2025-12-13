@@ -1,8 +1,8 @@
 import React from 'react';
 
-import GlobalKPIs from 'pages/GlobalKPIs';
 import LandingPage from 'pages/LandingPage';
 import Login from 'pages/Login';
+import NationalKPIs from 'pages/NationalKPIs';
 import PatientDirectory from 'pages/PatientDirectory';
 import RegisterPatient from 'pages/RegisterPatient';
 import Settings from 'pages/Settings';
@@ -37,7 +37,7 @@ const Routes: React.FC = () => (
     />
     <PrivateRoute exact path={[urls.patients()]} component={PatientDirectory} />
     <PrivateRoute exact path={urls.landingPage()} component={LandingPage} />
-    <PrivateRoute exact path={urls.globalKPIs()} component={GlobalKPIs} />
+    <PrivateRoute exact path={urls.nationalKPIs()} component={NationalKPIs} />
     <Redirect to={urls.login()} />
   </Switch>
 );

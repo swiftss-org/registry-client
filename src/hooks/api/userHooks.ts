@@ -34,8 +34,10 @@ export const useSignIn = () => {
         setUserStorageItem('username', data?.user.username ?? '');
         setAxiosToken(data?.token ?? '');
 
-        setUserStorageItem('is_staff', data?.user.is_staff ? 'true' : 'false');
-        setUserStorageItem('is_superuser', data?.user.is_superuser ? 'true' : 'false');
+        const medicalPersonnel = data?.user.medical_personnel ?? null;
+
+        setUserStorageItem('user_level', medicalPersonnel?.level ?? '');
+        setUserStorageItem('user_level_display', medicalPersonnel?.level_display ?? '');
 
         history.replace(urls.landingPage());
       },

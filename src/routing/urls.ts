@@ -7,7 +7,7 @@ const urls = {
   episodes: () => '/episodes',
   episodeStats: () => '/episodes/stats',
   landingPage: () => '/landing',
-  globalKPIs: () => '/globalKPIs',
+  nationalKPIs: () => '/nationalKPIs',
 };
 
 export default urls;
