@@ -81,17 +81,21 @@ export const useGetSurgeonEpisodeSummary = () => {
   );
 };
 
-export const useGetEpisodeStats = (period?: string) => {
+export const useGetEpisodeStats = (
+  period?: string,
+  groupBy?: 'hospital'
+) => {
   return useQuery<EpisodeStatsAPI, AxiosError>(
-    [ReactQueryKeys.EpisodeStatsQuery, period],
+    [ReactQueryKeys.EpisodeStatsQuery, period, groupBy],
     async () => {
-      const { request } = patientsAPI.single.getEpisodeStats(period);
+      const params: Record<string, string> = {};
+      if (period) params.period = period;
+      if (groupBy) params.group_by = groupBy;
+
+      const { request } = patientsAPI.single.getEpisodeStats(params);
       return await request();
     },
     {
-      onError: (error: AxiosError) => {
-        console.error("Error fetching episode stats:", error);
-      },
       retry: false,
     }
   );

@@ -72,8 +72,15 @@ export type EpisodesAPI = {
   surgeons: SurgeonsAPI[];
 };
 
+export interface EpisodeStatsByHospital {
+  hospital_id: number;
+  hospital_name: string;
+  total_episodes: number;
+}
+
 export interface EpisodeStatsAPI {
   total_episodes: number;
+  by_hospital?: EpisodeStatsByHospital[];
 }
 
 export type FollowUpAPI = {
