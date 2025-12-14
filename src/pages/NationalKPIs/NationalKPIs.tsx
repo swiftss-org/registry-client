@@ -11,51 +11,40 @@ import {
   ItalicCell,
 } from './NationalKPIs.style';
 
-type SortColumn = 'hospital_name' | 'total' | 'pastYear' | 'pastMonth' | 'pastWeek';
+type SortColumn = 'hospital_name' | 'total' | 'pastYear' | 'pastMonth' | 'pastWeek' | 'lastEpisodeDate' | 'patientsWithoutEpisode';
 type SortDirection = 'asc' | 'desc';
 
 const NationalKPIs: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
 
   const totalEpisodes = useGetEpisodeStats(undefined, 'hospital');
-  const episodesPastYear = useGetEpisodeStats('365d', 'hospital');
-  const episodesPastMonth = useGetEpisodeStats('30d', 'hospital');
-  const episodesPastWeek = useGetEpisodeStats('7d', 'hospital');
 
   const [sortColumn, setSortColumn] = useState<SortColumn>('hospital_name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
-  const renderCount = (query: typeof totalEpisodes) => {
-    if (query.isLoading) return 'Loading...';
-    if (query.isError) return 'Error';
-    return query.data?.total_episodes ?? 0;
-  };
 
-  const getHospitalCount = (query: typeof totalEpisodes, hospitalId: number) => {
-    if (query.isLoading) return 'Loading...';
-    if (query.isError) return 'Error';
-    return (
-      query.data?.by_hospital?.find(h => h.hospital_id === hospitalId)
-        ?.total_episodes ?? 0
-    );
-  };
+
+  const formatDate = (date: string | null | undefined) =>
+    date ? new Date(date).toLocaleDateString() : '—';
 
   // Combine hospital data for easy sorting
   const hospitalData = useMemo(() => {
-    const data = totalEpisodes.data?.by_hospital?.map(hospital => ({
-      hospital_id: hospital.hospital_id,
-      hospital_name: hospital.hospital_name,
-      total: getHospitalCount(totalEpisodes, hospital.hospital_id),
-      pastYear: getHospitalCount(episodesPastYear, hospital.hospital_id),
-      pastMonth: getHospitalCount(episodesPastMonth, hospital.hospital_id),
-      pastWeek: getHospitalCount(episodesPastWeek, hospital.hospital_id),
-    })) ?? [];
+    const data =
+      totalEpisodes.data?.by_hospital?.map(hospital => ({
+        hospital_id: hospital.hospital_id,
+        hospital_name: hospital.hospital_name,
+        total: hospital.total_episodes,
+        pastYear: hospital.past_year_episodes,
+        pastMonth: hospital.past_month_episodes,
+        pastWeek: hospital.past_week_episodes,
+        lastEpisodeDate: hospital.last_episode_date,
+        patientsWithoutEpisode: hospital.patients_without_episode,
+      })) ?? [];
 
     const sorted = [...data].sort((a, b) => {
-      let aValue: string | number = (a as any)[sortColumn];
-      let bValue: string | number = (b as any)[sortColumn];
+      let aValue = (a as any)[sortColumn];
+      let bValue = (b as any)[sortColumn];
 
-      // Sort strings case-insensitively
       if (typeof aValue === 'string') aValue = aValue.toLowerCase();
       if (typeof bValue === 'string') bValue = bValue.toLowerCase();
 
@@ -65,14 +54,7 @@ const NationalKPIs: React.FC = () => {
     });
 
     return sorted;
-  }, [
-    totalEpisodes.data,
-    episodesPastYear.data,
-    episodesPastMonth.data,
-    episodesPastWeek.data,
-    sortColumn,
-    sortDirection,
-  ]);
+  }, [totalEpisodes.data, sortColumn, sortDirection]);
 
   // Handle click on header to toggle sorting
   const handleSort = (column: SortColumn) => {
@@ -97,47 +79,59 @@ const NationalKPIs: React.FC = () => {
         <thead>
           {/* Top-level single-column header */}
           <TableRow>
-            <TableHeader colSpan={5}>Episode KPIs</TableHeader>
+            <TableHeader colSpan={7}>Episode KPIs</TableHeader>
           </TableRow>
           {/* KPI column headers */}
           <TableRow>
-            <TableHeader onClick={() => handleSort('hospital_name')} style={{ cursor: 'pointer' }}>
+            <TableHeader onClick={() => handleSort('hospital_name')}>
               Hospital{renderSortArrow('hospital_name')}
             </TableHeader>
-            <TableHeader onClick={() => handleSort('total')} style={{ cursor: 'pointer' }}>
+            <TableHeader onClick={() => handleSort('total')}>
               Total{renderSortArrow('total')}
             </TableHeader>
-            <TableHeader onClick={() => handleSort('pastYear')} style={{ cursor: 'pointer' }}>
+            <TableHeader onClick={() => handleSort('pastYear')}>
               Past Year{renderSortArrow('pastYear')}
             </TableHeader>
-            <TableHeader onClick={() => handleSort('pastMonth')} style={{ cursor: 'pointer' }}>
+            <TableHeader onClick={() => handleSort('pastMonth')}>
               Past Month{renderSortArrow('pastMonth')}
             </TableHeader>
-            <TableHeader onClick={() => handleSort('pastWeek')} style={{ cursor: 'pointer' }}>
+            <TableHeader onClick={() => handleSort('pastWeek')}>
               Past Week{renderSortArrow('pastWeek')}
+            </TableHeader>
+            <TableHeader onClick={() => handleSort('lastEpisodeDate')}>
+              Last Episode{renderSortArrow('lastEpisodeDate')}
+            </TableHeader>
+            <TableHeader onClick={() => handleSort('patientsWithoutEpisode')}>
+              Patients without Episode{renderSortArrow('patientsWithoutEpisode')}
             </TableHeader>
           </TableRow>
         </thead>
         <tbody>
-          {/* All hospitals row in italics */}
           <TableRow>
             <ItalicCell>All Hospitals</ItalicCell>
-            <TableCell>{renderCount(totalEpisodes)}</TableCell>
-            <TableCell>{renderCount(episodesPastYear)}</TableCell>
-            <TableCell>{renderCount(episodesPastMonth)}</TableCell>
-            <TableCell>{renderCount(episodesPastWeek)}</TableCell>
+            <TableCell>{totalEpisodes.data?.global.total_episodes ?? '—'}</TableCell>
+            <TableCell>{totalEpisodes.data?.global.past_year_episodes ?? '—'}</TableCell>
+            <TableCell>{totalEpisodes.data?.global.past_month_episodes ?? '—'}</TableCell>
+            <TableCell>{totalEpisodes.data?.global.past_week_episodes ?? '—'}</TableCell>
+            <TableCell>
+              {formatDate(totalEpisodes.data?.global.last_episode_date)}
+            </TableCell>
+            <TableCell>
+              {totalEpisodes.data?.global.patients_without_episode ?? '—'}
+            </TableCell>
           </TableRow>
 
-          {/* Sorted hospital rows */}
           {hospitalData.map(hospital => (
-            <TableRow key={hospital.hospital_id}>
-              <TableCell>{hospital.hospital_name}</TableCell>
-              <TableCell>{hospital.total}</TableCell>
-              <TableCell>{hospital.pastYear}</TableCell>
-              <TableCell>{hospital.pastMonth}</TableCell>
-              <TableCell>{hospital.pastWeek}</TableCell>
-            </TableRow>
-          ))}
+          <TableRow key={hospital.hospital_id}>
+            <TableCell>{hospital.hospital_name}</TableCell>
+            <TableCell>{hospital.total}</TableCell>
+            <TableCell>{hospital.pastYear}</TableCell>
+            <TableCell>{hospital.pastMonth}</TableCell>
+            <TableCell>{hospital.pastWeek}</TableCell>
+            <TableCell>{formatDate(hospital.lastEpisodeDate)}</TableCell>
+            <TableCell>{hospital.patientsWithoutEpisode}</TableCell>
+          </TableRow>
+        ))}
         </tbody>
       </TableWrapper>
     </PageWrapper>

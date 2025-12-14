@@ -72,14 +72,22 @@ export type EpisodesAPI = {
   surgeons: SurgeonsAPI[];
 };
 
-export interface EpisodeStatsByHospital {
+export interface EpisodeStatsRow {
+  total_episodes: number;
+  past_year_episodes: number;
+  past_month_episodes: number;
+  past_week_episodes: number;
+  last_episode_date: string | null;
+  patients_without_episode: number;
+}
+
+export interface EpisodeStatsByHospital extends EpisodeStatsRow {
   hospital_id: number;
   hospital_name: string;
-  total_episodes: number;
 }
 
 export interface EpisodeStatsAPI {
-  total_episodes: number;
+  global: EpisodeStatsRow;
   by_hospital?: EpisodeStatsByHospital[];
 }
 
