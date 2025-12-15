@@ -34,7 +34,7 @@ export const ItalicCell = styled(TableCell)`
 `;
 
 export const TableScrollContainer = styled.div`
-  max-height: 420px; 
+  max-height: 620px; 
   overflow-y: auto;
   width: 100%;
 `;
