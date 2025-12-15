@@ -9,6 +9,8 @@ import {
   TableCell,
   TableRow,
   ItalicCell,
+  TableScrollContainer,
+  KPIsContentWrapper,
 } from './NationalKPIs.style';
 
 type SortColumn = 'hospital_name' | 'total' | 'pastYear' | 'pastMonth' | 'pastWeek' | 'lastEpisodeDate' | 'patientsWithoutEpisode';
@@ -45,6 +47,13 @@ const NationalKPIs: React.FC = () => {
       let aValue = (a as any)[sortColumn];
       let bValue = (b as any)[sortColumn];
 
+      if (sortColumn === 'lastEpisodeDate') {
+        const aDate = aValue ? new Date(aValue).getTime() : 0;
+        const bDate = bValue ? new Date(bValue).getTime() : 0;
+        return sortDirection === 'asc' ? aDate - bDate : bDate - aDate;
+      }
+
+      // String sorting
       if (typeof aValue === 'string') aValue = aValue.toLowerCase();
       if (typeof bValue === 'string') bValue = bValue.toLowerCase();
 
@@ -73,67 +82,70 @@ const NationalKPIs: React.FC = () => {
 
   return (
     <PageWrapper isDesktop={isDesktop}>
-      <PageTitle>National KPIs</PageTitle>
+        <KPIsContentWrapper>
+          <PageTitle>National KPIs</PageTitle>
+          <TableScrollContainer>
+          <TableWrapper>
+                <thead>
+                  {/* Top-level single-column header */}
+                  <TableRow>
+                    <TableHeader colSpan={7}>Episode KPIs</TableHeader>
+                  </TableRow>
+                  {/* KPI column headers */}
+                  <TableRow>
+                    <TableHeader onClick={() => handleSort('hospital_name')}>
+                      Hospital{renderSortArrow('hospital_name')}
+                    </TableHeader>
+                    <TableHeader onClick={() => handleSort('total')}>
+                      Total{renderSortArrow('total')}
+                    </TableHeader>
+                    <TableHeader onClick={() => handleSort('pastYear')}>
+                      Past Year{renderSortArrow('pastYear')}
+                    </TableHeader>
+                    <TableHeader onClick={() => handleSort('pastMonth')}>
+                      Past Month{renderSortArrow('pastMonth')}
+                    </TableHeader>
+                    <TableHeader onClick={() => handleSort('pastWeek')}>
+                      Past Week{renderSortArrow('pastWeek')}
+                    </TableHeader>
+                    <TableHeader onClick={() => handleSort('lastEpisodeDate')}>
+                      Last Episode{renderSortArrow('lastEpisodeDate')}
+                    </TableHeader>
+                    <TableHeader onClick={() => handleSort('patientsWithoutEpisode')}>
+                      Patients without Episode{renderSortArrow('patientsWithoutEpisode')}
+                    </TableHeader>
+                  </TableRow>
+                </thead>
+                <tbody>
+                  <TableRow>
+                    <ItalicCell>All Hospitals</ItalicCell>
+                    <TableCell>{totalEpisodes.data?.global.total_episodes ?? '—'}</TableCell>
+                    <TableCell>{totalEpisodes.data?.global.past_year_episodes ?? '—'}</TableCell>
+                    <TableCell>{totalEpisodes.data?.global.past_month_episodes ?? '—'}</TableCell>
+                    <TableCell>{totalEpisodes.data?.global.past_week_episodes ?? '—'}</TableCell>
+                    <TableCell>
+                      {formatDate(totalEpisodes.data?.global.last_episode_date)}
+                    </TableCell>
+                    <TableCell>
+                      {totalEpisodes.data?.global.patients_without_episode ?? '—'}
+                    </TableCell>
+                  </TableRow>
 
-      <TableWrapper>
-        <thead>
-          {/* Top-level single-column header */}
-          <TableRow>
-            <TableHeader colSpan={7}>Episode KPIs</TableHeader>
-          </TableRow>
-          {/* KPI column headers */}
-          <TableRow>
-            <TableHeader onClick={() => handleSort('hospital_name')}>
-              Hospital{renderSortArrow('hospital_name')}
-            </TableHeader>
-            <TableHeader onClick={() => handleSort('total')}>
-              Total{renderSortArrow('total')}
-            </TableHeader>
-            <TableHeader onClick={() => handleSort('pastYear')}>
-              Past Year{renderSortArrow('pastYear')}
-            </TableHeader>
-            <TableHeader onClick={() => handleSort('pastMonth')}>
-              Past Month{renderSortArrow('pastMonth')}
-            </TableHeader>
-            <TableHeader onClick={() => handleSort('pastWeek')}>
-              Past Week{renderSortArrow('pastWeek')}
-            </TableHeader>
-            <TableHeader onClick={() => handleSort('lastEpisodeDate')}>
-              Last Episode{renderSortArrow('lastEpisodeDate')}
-            </TableHeader>
-            <TableHeader onClick={() => handleSort('patientsWithoutEpisode')}>
-              Patients without Episode{renderSortArrow('patientsWithoutEpisode')}
-            </TableHeader>
-          </TableRow>
-        </thead>
-        <tbody>
-          <TableRow>
-            <ItalicCell>All Hospitals</ItalicCell>
-            <TableCell>{totalEpisodes.data?.global.total_episodes ?? '—'}</TableCell>
-            <TableCell>{totalEpisodes.data?.global.past_year_episodes ?? '—'}</TableCell>
-            <TableCell>{totalEpisodes.data?.global.past_month_episodes ?? '—'}</TableCell>
-            <TableCell>{totalEpisodes.data?.global.past_week_episodes ?? '—'}</TableCell>
-            <TableCell>
-              {formatDate(totalEpisodes.data?.global.last_episode_date)}
-            </TableCell>
-            <TableCell>
-              {totalEpisodes.data?.global.patients_without_episode ?? '—'}
-            </TableCell>
-          </TableRow>
-
-          {hospitalData.map(hospital => (
-          <TableRow key={hospital.hospital_id}>
-            <TableCell>{hospital.hospital_name}</TableCell>
-            <TableCell>{hospital.total}</TableCell>
-            <TableCell>{hospital.pastYear}</TableCell>
-            <TableCell>{hospital.pastMonth}</TableCell>
-            <TableCell>{hospital.pastWeek}</TableCell>
-            <TableCell>{formatDate(hospital.lastEpisodeDate)}</TableCell>
-            <TableCell>{hospital.patientsWithoutEpisode}</TableCell>
-          </TableRow>
-        ))}
-        </tbody>
-      </TableWrapper>
+                  {hospitalData.map(hospital => (
+                  <TableRow key={hospital.hospital_id}>
+                    <TableCell>{hospital.hospital_name}</TableCell>
+                    <TableCell>{hospital.total}</TableCell>
+                    <TableCell>{hospital.pastYear}</TableCell>
+                    <TableCell>{hospital.pastMonth}</TableCell>
+                    <TableCell>{hospital.pastWeek}</TableCell>
+                    <TableCell>{formatDate(hospital.lastEpisodeDate)}</TableCell>
+                    <TableCell>{hospital.patientsWithoutEpisode}</TableCell>
+                  </TableRow>
+                ))}
+                </tbody>
+              </TableWrapper>
+          </TableScrollContainer>
+        </KPIsContentWrapper>
     </PageWrapper>
   );
 };

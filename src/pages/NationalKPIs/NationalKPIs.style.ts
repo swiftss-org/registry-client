@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 
+import { scrollBar } from '../../common.style';
+
 export const TableWrapper = styled.table`
   border-collapse: collapse;
   font-family: Arial, sans-serif;
@@ -29,4 +31,21 @@ export const TableRow = styled.tr`
 
 export const ItalicCell = styled(TableCell)`
   font-style: italic;
+`;
+
+export const TableScrollContainer = styled.div`
+  max-height: 420px; 
+  overflow-y: auto;
+  width: 100%;
+`;
+
+
+export const KPIsContentWrapper = styled.div`
+  ${scrollBar};
+  overflow-y: auto;
+  padding: 0 16px 16px 16px;
+  
+  @media (max-width: 1200px) {
+    height: calc(100vh - 200px);
+  }
 `;
