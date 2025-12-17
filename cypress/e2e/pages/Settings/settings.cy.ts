@@ -5,10 +5,6 @@ describe('Settings Page', () => {
             win.localStorage.setItem('token-registry', 'fake-token');
         });
         cy.visit('/settings');
-        // Remove error overlay if present (hack for lint warnings)
-        cy.get('body > iframe').then(($iframe) => {
-            $iframe.remove();
-        });
     });
 
     describe('Change Password', () => {
@@ -25,7 +21,7 @@ describe('Settings Page', () => {
             cy.get('#new_password2').type('newPass123');
 
             // Submit
-            cy.get('form button[data-testid="button"]').click();
+            cy.get('#change-password-button').click();
 
             cy.wait('@changePassword').then((interception) => {
                 expect(interception.request.body).to.include({
@@ -49,22 +45,22 @@ describe('Settings Page', () => {
             cy.get('#new_password1').type('newPass123');
             cy.get('#new_password2').type('newPass123');
 
-            cy.get('form button[data-testid="button"]').click();
+            cy.get('#change-password-button').click();
 
             cy.wait('@changePasswordFail');
 
             cy.contains('Wrong password').should('be.visible');
         });
 
-        // TODO password cahnge error handling should be improved
-        // it('should password fields be required', () => {
-        //     cy.get('#old_password').focus().blur();
-        //     cy.get('#new_password1').focus().blur();
-        //     cy.get('#new_password2').focus().blur();
+        // TODO password change error handling should be improved
+        it.skip('should password fields be required', () => {
+            cy.get('#old_password').focus().blur();
+            cy.get('#new_password1').focus().blur();
+            cy.get('#new_password2').focus().blur();
 
-        //     cy.get('form button[data-testid="button"]').click();
+            cy.get('#change-password-button').click();
 
-        //     cy.contains('This field is required').should('be.visible');
-        // });
+            cy.contains('This field is required').should('be.visible');
+        });
     });
 });

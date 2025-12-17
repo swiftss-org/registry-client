@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
-import { FormControl, FormHelperText, MenuItem, Radio, RadioGroup, Select, TextField } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@mui/material';
 import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { OnBlur } from 'react-final-form-listeners';
 
-import { FormContainer, FormHeadingContainer, BirthdayFieldsContainer } from './RegisterPatientForm.style';
+import { FormContainer, FormHeadingContainer, BirthdayFieldsContainer, SelectWrapper } from './RegisterPatientForm.style';
 import {
   FieldsContainer,
   FieldWrapper,
@@ -26,6 +26,7 @@ type Props = {
 
 const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
   const { isDesktop } = useResponsiveLayout();
+  const [touchedFields, setTouchedFields] = useState<{ [key: string]: boolean }>({});
 
   const parseOnlyNumbers = (value: string) => {
     return value.replace(/[^0-9]+/g, '');
@@ -38,28 +39,33 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <FieldWrapper>
           <Field name="hospital">
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = (touchedFields[props.input.name] || props.meta.touched) && props.meta.invalid;
 
               return (
-                <FormControl fullWidth error={hasError} data-testid="hospital-select-wrapper">
-                  <Select
-                    id="hospital"
-                    label="Hospital"
-                    variant="outlined"
-                    size="medium"
-                    required
-                    {...omit(props.input, ['onFocus'])}
-                    value={props.input.value}
-                    onChange={props.input.onChange}
-                  >
-                    {getHospitalOptions(hospitals).map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
-                </FormControl>
+                <SelectWrapper>
+                  <FormControl fullWidth error={hasError} data-testid="hospital-select-wrapper">
+                    <InputLabel id="hospital-label">Hospital</InputLabel>
+                    <Select
+                      id="hospital"
+                      labelId="hospital-label"
+                      label="Hospital"
+                      variant="outlined"
+                      size="medium"
+                      required
+                      {...omit(props.input, ['onFocus'])}
+                      value={props.input.value}
+                      onChange={props.input.onChange}
+                      onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
+                    >
+                      {getHospitalOptions(hospitals).map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {hasError && <FormHelperText>{props.meta.error}</FormHelperText>}
+                  </FormControl>
+                </SelectWrapper>
               );
             }}
           </Field>
@@ -70,7 +76,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <FieldWrapper>
           <Field name="firstName" parse={(value) => value}>
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
               return (
                 <TextField
                   id="first_name"
@@ -81,6 +87,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   error={hasError}
                   helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
+                  onBlur={(e) => {
+                    props.input.onBlur(e);
+                    setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                  }}
                 />
               );
             }}
@@ -89,7 +99,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <FieldWrapper>
           <Field name="middleName" parse={(value) => value}>
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
               return (
                 <TextField
                   id="middle_name"
@@ -99,6 +109,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   error={hasError}
                   helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
+                  onBlur={(e) => {
+                    props.input.onBlur(e);
+                    setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                  }}
                 />
               );
             }}
@@ -107,7 +121,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <FieldWrapper>
           <Field name="lastName" parse={(value) => value}>
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
               return (
                 <TextField
                   id="last_name"
@@ -118,6 +132,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   error={hasError}
                   helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
+                  onBlur={(e) => {
+                    props.input.onBlur(e);
+                    setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                  }}
                 />
               );
             }}
@@ -137,7 +155,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           <FieldWrapper>
             <Field name="yearOfBirth" parse={(value) => value}>
               {(props) => {
-                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                const hasError = touchedFields[props.input.name] && props.meta.invalid;
                 return (
                   <TextField
                     id="year_of_birth"
@@ -149,6 +167,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                     error={hasError}
                     helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
+                    onBlur={(e) => {
+                      props.input.onBlur(e);
+                      setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                    }}
                   />
                 );
               }}
@@ -157,7 +179,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           <FieldWrapper>
             <Field name="monthOfBirth" parse={(value) => value}>
               {(props) => {
-                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                const hasError = touchedFields[props.input.name] && props.meta.invalid;
                 return (
                   <TextField
                     id="month_of_birth"
@@ -168,6 +190,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                     error={hasError}
                     helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
+                    onBlur={(e) => {
+                      props.input.onBlur(e);
+                      setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                    }}
                   />
                 );
               }}
@@ -176,7 +202,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           <FieldWrapper>
             <Field name="dayOfBirth" parse={(value) => value}>
               {(props) => {
-                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                const hasError = touchedFields[props.input.name] && props.meta.invalid;
                 return (
                   <TextField
                     id="day_of_birth"
@@ -187,6 +213,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                     error={hasError}
                     helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
+                    onBlur={(e) => {
+                      props.input.onBlur(e);
+                      setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                    }}
                   />
                 );
               }}
@@ -213,6 +243,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <FieldWrapper>
           <Field name="nationalId" parse={parseOnlyNumbers}>
             {(props) => {
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
               return (
                 <TextField
                   id="national_id"
@@ -220,7 +251,13 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   variant="outlined"
                   size="medium"
                   inputProps={{ maxLength: 20 }}
+                  error={hasError}
+                  helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
+                  onBlur={(e) => {
+                    props.input.onBlur(e);
+                    setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                  }}
                 />
               );
             }}
@@ -229,7 +266,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
         <FieldWrapper>
           <Field name="patientHospitalId" parse={parseOnlyNumbers}>
             {(props) => {
-              const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+              const hasError = touchedFields[props.input.name] && props.meta.invalid;
               return (
                 <TextField
                   id="patient_hospital_id"
@@ -241,6 +278,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   error={hasError}
                   helperText={hasError ? props.meta.error : undefined}
                   {...props.input}
+                  onBlur={(e) => {
+                    props.input.onBlur(e);
+                    setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                  }}
                 />
               );
             }}
@@ -259,6 +300,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                   value={values?.gender}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     onChange(e.target.value);
+                    setTouchedFields({ ...touchedFields, ['gender']: true });
+                  }}
+                  onBlur={() => {
+                    setTouchedFields({ ...touchedFields, ['gender']: true });
                   }}
                 >
                   <div>
@@ -273,23 +318,27 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
               );
             }}
           </Field>
+          {/* This TextField for gender seems redundant if RadioGroup is used for input.
+              Assuming it's for display or a different purpose, keeping it as is,
+              but its error handling might not be directly tied to the RadioGroup's input. */}
           <Field name="gender">
             {(props) => {
-                          const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
-                          return (
-                            <TextField
-                              id="gender"
-                              label="Gender"
-                              variant="outlined"
-                              disabled
-                              size="medium"
-                              inputProps={{ maxLength: 20 }}
-                              error={hasError}
-                              helperText={hasError ? props.meta.error : undefined}
-                              {...props.input}
-                            />
-                          );
-                        }}
+              const hasError = (touchedFields[props.input.name] || props.meta.touched) && props.meta.invalid;
+              return (
+                <TextField
+                  id="gender"
+                  label="Gender"
+                  variant="outlined"
+                  disabled
+                  required
+                  size="medium"
+                  inputProps={{ maxLength: 20 }}
+                  error={hasError}
+                  helperText={hasError ? props.meta.error : undefined}
+                  {...props.input}
+                />
+              );
+            }}
           </Field>
         </FieldsContainer>
       </FormHeadingContainer>
@@ -300,7 +349,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           <FieldWrapper>
             <Field name="phone1" parse={parseOnlyNumbers}>
               {(props) => {
-                const hasError = props.meta.touched && props.meta.invalid && !props.meta.active;
+                const hasError = touchedFields[props.input.name] && props.meta.invalid;
                 return (
                   <TextField
                     id="phone1"
@@ -312,6 +361,10 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
                     error={hasError}
                     helperText={hasError ? props.meta.error : undefined}
                     {...props.input}
+                    onBlur={(e) => {
+                      props.input.onBlur(e);
+                      setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                    }}
                   />
                 );
               }}
@@ -350,7 +403,7 @@ const RegisterPatientForm: React.FC<Props> = ({ values, hospitals }) => {
           </Field>
         </FieldWrapper>
       </FormHeadingContainer>
-    </FormContainer>
+    </FormContainer >
   );
 };
 

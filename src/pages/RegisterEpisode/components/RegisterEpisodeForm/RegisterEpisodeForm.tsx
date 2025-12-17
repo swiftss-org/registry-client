@@ -4,12 +4,9 @@ import React, { useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { Select, TextField, MenuItem, InputLabel, FormControl, Typography } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
-interface SelectOption {
-  value: string | number;
-  label: string;
-}
 import { CheckBoxWrapper, FieldWrapper, SectionTitle } from 'common.style';
 import Checkbox from 'components/FormElements/Checkbox';
+import { omit } from 'lodash';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
@@ -34,7 +31,7 @@ import {
   EPISODE_TYPE_OPTIONS,
 } from '../../constants';
 import { RegisterEpisodeFormType } from '../../types';
-import {getHospitalOptions, getSurgeonOptionsSorted} from '../../utils';
+import { getHospitalOptions, getSurgeonOptionsSorted } from '../../utils';
 
 type Props = {
   values: RegisterEpisodeFormType;
@@ -73,7 +70,10 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   const [touchedFields, setTouchedFields] = useState<{ [key: string]: boolean }>({});
 
   const defaultHospital = useMemo(
-    () => ({ value: selectedHospital?.id, label: selectedHospital?.name }),
+    () =>
+      selectedHospital?.id
+        ? { value: selectedHospital?.id, label: selectedHospital?.name }
+        : undefined,
     [selectedHospital?.id, selectedHospital?.name]
   );
 
@@ -84,14 +84,14 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         <FieldWrapper>
           <Field name="hospital" initialValue={defaultHospital}>
             {(props) => {
-              const hasError = touchedFields[props.input.name] && props.meta.invalid;
+              const hasError = (touchedFields[props.input.name] || props.meta.touched) && props.meta.invalid;
 
-              const handleSelectHospital = (option: SelectOption) => {
-                props.input.onChange(option);
+              const handleSelectHospital = (value: string | number | undefined) => {
+                if (!value) return;
 
                 if (
                   patient?.hospital_mappings.find(
-                    (mapping) => mapping.hospital_id === option.value
+                    (mapping) => mapping.hospital_id === Number(value)
                   ) === undefined
                 ) {
                   setIsNewHospital(true);
@@ -108,11 +108,16 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       labelId="hospital-label"
                       id="hospital"
                       value={props.input.value ? props.input.value.value : ''}
+                      required
+                      {...omit(props.input, ['onFocus', 'value'])}
                       onChange={(event: SelectChangeEvent<string>) => {
                         const selectedOption = hospitalOptions.find(
-                          (option) => option.value === event.target.value
+                          (option) => option.value === Number(event.target.value)
                         );
-                        handleSelectHospital(selectedOption || { value: '', label: '' });
+                        props.input.onChange(selectedOption);
+                        if (selectedOption) {
+                          handleSelectHospital(selectedOption.value);
+                        }
                       }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Hospital"
@@ -144,7 +149,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     size="medium"
                     error={hasError}
                     helperText={hasError ? props.meta.error : undefined}
-//                     onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
+                    //                     onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                     {...props.input}
                   />
                 );
@@ -169,11 +174,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="episode_type"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                          const selectedOption = EPISODE_TYPE_OPTIONS.find(
-                            (option) => option.value === Number(event.target.value)
-                          );
-                          props.input.onChange(selectedOption);
-                        }}
+                        const selectedOption = EPISODE_TYPE_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Episode Type"
                     >
@@ -204,11 +209,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="cepod"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                          const selectedOption = CEPOD_OPTIONS.find(
-                                                    (option) => option.value === Number(event.target.value)
-                                                  );
-                                                  props.input.onChange(selectedOption);
-                                                  }
+                        const selectedOption = CEPOD_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }
                       }
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="CEPOD"
@@ -240,11 +245,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="side"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                          const selectedOption = SIDE_OPTIONS.find(
-                            (option) => option.value === Number(event.target.value)
-                          );
-                          props.input.onChange(selectedOption);
-                        }}
+                        const selectedOption = SIDE_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Side"
                     >
@@ -275,11 +280,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="occurence"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                         const selectedOption = OCCURRENCE_OPTIONS.find(
-                           (option) => option.value === Number(event.target.value)
-                         );
-                         props.input.onChange(selectedOption);
-                       }}
+                        const selectedOption = OCCURRENCE_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Occurrence"
                     >
@@ -310,11 +315,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="type"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                         const selectedOption = TYPE_OPTIONS.find(
-                           (option) => option.value === Number(event.target.value)
-                         );
-                         props.input.onChange(selectedOption);
-                       }}
+                        const selectedOption = TYPE_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Type"
                     >
@@ -345,11 +350,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="size"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                         const selectedOption = SIZE_OPTIONS.find(
-                           (option) => option.value === Number(event.target.value)
-                         );
-                         props.input.onChange(selectedOption);
-                       }}
+                        const selectedOption = SIZE_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Size"
                     >
@@ -380,11 +385,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="complexity"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                         const selectedOption = COMPLEXITY_OPTIONS.find(
-                           (option) => option.value === Number(event.target.value)
-                         );
-                         props.input.onChange(selectedOption);
-                       }}
+                        const selectedOption = COMPLEXITY_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Complexity"
                     >
@@ -411,19 +416,19 @@ const RegisterEpisodeForm: React.FC<Props> = ({
               const hasError = touchedFields[props.input.name] && props.meta.invalid;
               return (
                 <TextField
-                    id="surgery_date"
-                    label="Surgery Date"
-                    type="date"
-                    required
-                    variant="outlined"
-                    size="medium"
-                    error={hasError}
-                    helperText={hasError ? props.meta.error : undefined}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    {...props.input}
-                  />
+                  id="surgery_date"
+                  label="Surgery Date"
+                  type="date"
+                  required
+                  variant="outlined"
+                  size="medium"
+                  error={hasError}
+                  helperText={hasError ? props.meta.error : undefined}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  {...props.input}
+                />
               );
             }}
           </Field>
@@ -442,11 +447,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="mesh_type"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                          const selectedOption = MESH_TYPE_OPTIONS.find(
-                            (option) => option.value === Number(event.target.value)
-                          );
-                          props.input.onChange(selectedOption);
-                        }}
+                        const selectedOption = MESH_TYPE_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Mesh Type"
                     >
@@ -512,11 +517,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                       id="diathermy_used"
                       value={props.input.value ? props.input.value.value : ''}
                       onChange={(event: SelectChangeEvent<string>) => {
-                          const selectedOption = BOOLEAN_OPTIONS.find(
-                            (option) => option.value === Number(event.target.value)
-                          );
-                          props.input.onChange(selectedOption);
-                        }}
+                        const selectedOption = BOOLEAN_OPTIONS.find(
+                          (option) => option.value === Number(event.target.value)
+                        );
+                        props.input.onChange(selectedOption);
+                      }}
                       onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
                       label="Diathermy Used"
                     >
@@ -594,26 +599,26 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                     <ArrayContainer>
                       <SelectWrapper>
                         <FormControl fullWidth variant="outlined" required error={hasError}>
-                        <InputLabel id="surgeon-label">Surgeon</InputLabel>
-                        <Select
-                          labelId="surgeon-label"
-                          id="id"
-                          value={props.input.value ? props.input.value.value : ''}
-                          onChange={(event: SelectChangeEvent<string>) => {
-                            props.input.onChange({ value: event.target.value, label: event.target.value });
-                            setTouchedFields({ ...touchedFields, [props.input.name]: true });
-                          }}
-                          onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
-                          label="Surgeon"
-                        >
-                          {surgeonOptions.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                        {hasError && <Typography color="error">{props.meta.error}</Typography>}
-                      </FormControl>
+                          <InputLabel id="surgeon-label">Surgeon</InputLabel>
+                          <Select
+                            labelId="surgeon-label"
+                            id="id"
+                            value={props.input.value ? props.input.value.value : ''}
+                            onChange={(event: SelectChangeEvent<string>) => {
+                              props.input.onChange({ value: event.target.value, label: event.target.value });
+                              setTouchedFields({ ...touchedFields, [props.input.name]: true });
+                            }}
+                            onClose={() => setTouchedFields({ ...touchedFields, [props.input.name]: true })}
+                            label="Surgeon"
+                          >
+                            {surgeonOptions.map((option) => (
+                              <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          {hasError && <Typography color="error">{props.meta.error}</Typography>}
+                        </FormControl>
                       </SelectWrapper>
                       {index === 0 && (
                         <AddIcon

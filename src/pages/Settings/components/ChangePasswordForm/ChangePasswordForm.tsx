@@ -120,6 +120,7 @@ const ChangePasswordForm: React.FC = () => {
 
           <ButtonContainer>
             <Button
+              id="change-password-button"
               fullWidth
               variant="contained"
               disabled={isPending || submitting}
