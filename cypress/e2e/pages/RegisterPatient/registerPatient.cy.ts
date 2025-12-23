@@ -77,8 +77,8 @@ describe('Register Patient Page', () => {
             // Verify request
             cy.wait('@registerPatient').then((interception) => {
                 expect(interception.request.body).to.include({
-                    year_of_birth: '1990',
-                    gender: 'Male'
+                    year_of_birth: 1990,
+                    gender: 'male'
                 });
             });
 
@@ -90,11 +90,10 @@ describe('Register Patient Page', () => {
 
     describe('Input Validation', () => {
 
-        it('should validate Hospital dropw down is required', () => {
-            cy.get('#hospital').click();
-            cy.get('body').type('{esc}');
+        it('should validate Hospital drop down is required', () => {
+            cy.get('#hospital').focus().blur();
 
-            cy.contains('This field is required').should('exist');
+            cy.contains('Hospital field is required').should('exist');
         });
 
         it('should validate First Name is required', () => {
@@ -105,7 +104,7 @@ describe('Register Patient Page', () => {
             cy.get('#first_name').type('{enter}');
             cy.get('#first_name').blur();
 
-            cy.get('#first_name').parent().parent().parent().parent().parent().should('contain', 'This field is required');
+            cy.contains('First name field is required').should('exist');
         });
 
         it('should validate Last Name is required', () => {
@@ -117,7 +116,7 @@ describe('Register Patient Page', () => {
             cy.get('#last_name').type('{enter}');
             cy.get('#last_name').blur();
 
-            cy.get('#last_name').parent().parent().parent().parent().parent().should('contain', 'This field is required');
+            cy.contains('Last name field is required').should('exist');
         });
 
         it('should validate Year of Birth is required', () => {
@@ -128,7 +127,7 @@ describe('Register Patient Page', () => {
             cy.get('#last_name').type('Doe');
 
             cy.get('#year_of_birth').focus().blur();
-            cy.get('#year_of_birth').parent().parent().parent().parent().parent().should('contain', 'This field is required');
+            cy.contains('Year of birth field is required').should('exist');
         });
 
         it('should validate Patient Hospital ID is required', () => {
@@ -140,7 +139,7 @@ describe('Register Patient Page', () => {
             cy.get('#year_of_birth').type('1990');
 
             cy.get('#patient_hospital_id').focus().blur();
-            cy.get('#patient_hospital_id').parent().parent().parent().parent().parent().should('contain', 'This field is required');
+            cy.contains('Patient Hospital ID field is required').should('exist');
         });
 
         it('should validate Gender is required', () => {
@@ -156,7 +155,7 @@ describe('Register Patient Page', () => {
             // Attempt to submit without selecting gender
             cy.contains('button', 'Add new patient').click();
             // Gender validation message is often custom, check utils.ts or UI
-            cy.contains('This field is required. Please select the gender above.').should('exist');
+            cy.contains('Gender field is required. Please select the gender above.').should('exist');
         });
 
         it('should validate Phone #1 is required', () => {
@@ -170,7 +169,7 @@ describe('Register Patient Page', () => {
             cy.get('input[value="Male"]').check();
 
             cy.get('#phone1').focus().blur();
-            cy.get('#phone1').parent().parent().parent().parent().parent().should('contain', 'This field is required');
+            cy.contains('Phone #1 field is required').should('exist');
         });
 
         it('should validate phone number input (numbers only)', () => {

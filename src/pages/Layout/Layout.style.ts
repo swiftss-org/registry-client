@@ -31,7 +31,7 @@ export const Main = styled.main<{ isDesktop: boolean }>`
   display: flex;
   grid-area: main;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
 
   ${({ isDesktop }) =>
     isDesktop &&

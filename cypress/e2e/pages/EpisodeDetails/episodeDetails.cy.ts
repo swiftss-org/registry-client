@@ -286,7 +286,7 @@ describe('Episode Details Page', () => {
 
                     // Verify discharge details are visible
                     cy.get('input[id="date"]').should('have.value', '2023-01-16');
-                    cy.get('div[id="aware_of_mesh"]').contains('Yes').should('exist');
+                    cy.get('#aware_of_mesh').contains('Yes').should('exist');
                     cy.get('input[id="discharge_duration"]').should('have.value', '2');
                     cy.get('input[id="infection"]').should('have.value', 'Bleeding,Urinary Retention');
                     cy.get('textarea[id="comments"]').should('have.value', 'Test discharge comments');

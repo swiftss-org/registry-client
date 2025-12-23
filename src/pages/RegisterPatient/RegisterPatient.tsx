@@ -2,16 +2,13 @@
 import React, { useState } from 'react';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button, IconButton } from '@mui/material';
-import { ButtonContainer, PageTitle, PageWrapper } from 'common.style';
+import { IconButton, Container, Box, Typography, Paper } from '@mui/material';
 import ConfirmationModal from 'components/ConfirmationModal';
-import { Form, FormRenderProps } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import urls from 'routing/urls';
 
 import RegisterPatientForm from './components/RegisterPatientForm';
 import { RegisterPatientFormType } from './types';
-import { patientFormValidation } from './utils';
 import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
@@ -31,9 +28,11 @@ const RegisterPatient: React.FC = () => {
 
   return (
     <>
-      <PageWrapper isDesktop={isDesktop}>
-        <PageTitle>
-          <IconButton data-testid="back-button"
+      <Container maxWidth="md" sx={{ pb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', py: 2, gap: 2 }}>
+          <IconButton
+            data-testid="back-button"
+            edge="start"
             onClick={() => {
               if (isFormDirty) {
                 setShowWarningModal(true);
@@ -44,55 +43,34 @@ const RegisterPatient: React.FC = () => {
           >
             <ArrowBackIcon />
           </IconButton>
-          Add new patient
-        </PageTitle>
-        <Form<RegisterPatientFormType> onSubmit={handleSubmit} validate={patientFormValidation}>
-          {({ handleSubmit, values, submitting, dirty }: FormRenderProps<RegisterPatientFormType>) => {
-            if (dirty) {
-              setIsFormDirty(true);
+          <Typography variant="h5" component="h1" fontWeight={700} color="text.primary">
+            Add new patient
+          </Typography>
+        </Box>
+        <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
+          <RegisterPatientForm
+            hospitals={hospitals?.results ?? []}
+            onSubmit={handleSubmit}
+            isPending={isPending}
+            isDesktop={isDesktop}
+            onDirtyChange={setIsFormDirty}
+          />
+        </Paper>
+        {showWarningModal && (
+          <ConfirmationModal
+            onClose={() => {
+              setShowWarningModal(false);
+            }}
+            title={'Cancel new addition?'}
+            subtitle={
+              "Are you sure you want to cancel adding a new patient? All information you’ve entered will be lost!"
             }
+            buttonText={'Yes, cancel new addition'}
+            onClick={() => navigate(urls.patients())}
+          />
+        )}
+      </Container>
 
-            return (
-              <form
-                onSubmit={handleSubmit}
-                css={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: isDesktop ? '100%' : 'calc(100vh)',
-                  overflow: 'hidden',
-                }}
-              >
-                <RegisterPatientForm values={values} hospitals={hospitals?.results ?? []} />
-                <ButtonContainer isDesktop={isDesktop}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={isPending || submitting}
-                    fullWidth
-                    size="medium"
-                  >
-                    Add new patient
-                  </Button>
-                </ButtonContainer>
-              </form>
-            );
-          }}
-        </Form>
-      </PageWrapper>
-      {showWarningModal && (
-        <ConfirmationModal
-          onClose={() => {
-            setShowWarningModal(false);
-          }}
-          title={'Cancel new addition?'}
-          subtitle={
-            'Are you sure you want to cancel adding a new patient? All information you’ve entered will be lost!'
-          }
-          buttonText={'Yes, cancel new addition'}
-          onClick={() => navigate('/patients')}
-        />
-      )}
     </>
   );
 };
