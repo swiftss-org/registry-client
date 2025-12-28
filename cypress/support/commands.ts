@@ -24,3 +24,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// MUI Dropdown Option Selector
+Cypress.Commands.add('selectMuiOption', (selector, optionText) => {
+    cy.get(selector).click();
+    cy.get('[role="listbox"]').contains(optionText).click();
+    cy.get('.MuiPopover-root').should('not.exist'); // The "Secret Sauce"
+});

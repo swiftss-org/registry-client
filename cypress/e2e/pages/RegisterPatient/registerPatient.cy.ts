@@ -35,8 +35,7 @@ describe('Register Patient Page', () => {
             }).as('registerPatient');
 
             // 1. Select Hospital
-            cy.get('#hospital').click();
-            cy.contains('General Hospital').click();
+            cy.selectMUIOption('#hospital', 'General Hospital');
             cy.contains('General Hospital').should('be.visible');
 
             // 2. Personal Details
@@ -98,8 +97,7 @@ describe('Register Patient Page', () => {
 
         it('should validate First Name is required', () => {
             // Select Hospital
-            cy.get('#hospital').click();
-            cy.contains('General Hospital').click();
+            cy.selectMUIOption('#hospital', 'General Hospital');
 
             cy.get('#first_name').type('{enter}');
             cy.get('#first_name').blur();
@@ -109,8 +107,7 @@ describe('Register Patient Page', () => {
 
         it('should validate Last Name is required', () => {
             // Select Hospital
-            cy.get('#hospital').click();
-            cy.contains('General Hospital').click();
+            cy.selectMUIOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
 
             cy.get('#last_name').type('{enter}');
@@ -121,8 +118,7 @@ describe('Register Patient Page', () => {
 
         it('should validate Year of Birth is required', () => {
             // Select Hospital
-            cy.get('#hospital').click();
-            cy.contains('General Hospital').click();
+            cy.selectMUIOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
             cy.get('#last_name').type('Doe');
 
@@ -132,8 +128,7 @@ describe('Register Patient Page', () => {
 
         it('should validate Patient Hospital ID is required', () => {
             // Select Hospital
-            cy.get('#hospital').click();
-            cy.contains('General Hospital').click();
+            cy.selectMUIOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
             cy.get('#last_name').type('Doe');
             cy.get('#year_of_birth').type('1990');
@@ -144,8 +139,7 @@ describe('Register Patient Page', () => {
 
         it('should validate Gender is required', () => {
             // Select Hospital
-            cy.get('#hospital').click();
-            cy.contains('General Hospital').click();
+            cy.selectMUIOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
             cy.get('#last_name').type('Doe');
             cy.get('#year_of_birth').type('1990');
@@ -160,8 +154,7 @@ describe('Register Patient Page', () => {
 
         it('should validate Phone #1 is required', () => {
             // Select Hospital
-            cy.get('#hospital').click();
-            cy.contains('General Hospital').click();
+            cy.selectMUIOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
             cy.get('#last_name').type('Doe');
             cy.get('#year_of_birth').type('1990');
@@ -179,6 +172,18 @@ describe('Register Patient Page', () => {
 
             cy.get('#phone1').type('123');
             cy.get('#phone1').should('have.value', '123');
+        });
+
+        it('should validate an empty submitted form', () => {
+            cy.contains('button', 'Add new patient').click();
+
+            cy.contains('Hospital field is required').should('exist');
+            cy.contains('First name field is required').should('exist');
+            cy.contains('Last name field is required').should('exist');
+            cy.contains('Year of birth field is required').should('exist');
+            cy.contains('Patient Hospital ID field is required').should('exist');
+            cy.contains('Gender field is required. Please select the gender above.').should('exist');
+            cy.contains('Phone #1 field is required').should('exist');
         });
     });
 
