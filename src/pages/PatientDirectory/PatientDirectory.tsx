@@ -1,10 +1,19 @@
-/** @jsxImportSource @emotion/react */
+
 import React, { useEffect, useState, useRef } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SortIcon from '@mui/icons-material/Sort';
-import { IconButton, Select, MenuItem, Button } from '@mui/material';
-import { PageWrapper, PageTitle } from 'common.style';
+import {
+  IconButton,
+  Select,
+  MenuItem,
+  Button,
+  Container,
+  Box,
+  Typography,
+  Stack,
+  SelectChangeEvent
+} from '@mui/material';
 import { useGetHospitals, useGetPatients, useGetPreferredHospital } from 'hooks/api/patientHooks';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useNavigate } from 'react-router';
@@ -12,7 +21,6 @@ import urls from 'routing/urls';
 
 import PatientCard from './components/PatientCard';
 import SortingOptions from './components/SortingOptions';
-import { PatientsList, IconButtonWrapper, OptionsWrapper } from './PatientDirectory.style';
 import { SortingOptionsType } from './types';
 import Notifications from '../../components/Notifications';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
@@ -37,18 +45,18 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
 
     if (total === 0) {
       return (
-        <div
-          css={{
+        <Box
+          sx={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            margin: '16px 0',
-            fontSize: 14,
-            color: '#666',
+            my: 2,
           }}
         >
-          No patients to show
-        </div>
+          <Typography variant="body2" color="text.secondary">
+            No patients to show
+          </Typography>
+        </Box>
       );
     }
 
@@ -57,13 +65,13 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
     const end = Math.min(page * limit, total);
 
     return (
-      <div
-        css={{
+      <Box
+        sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: '12px',
-          margin: '16px 0',
+          gap: 2,
+          my: 2,
         }}
       >
         {totalPages > 1 && (
@@ -75,9 +83,9 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             Previous
           </Button>
         )}
-        <span css={{ fontSize: 14 }}>
+        <Typography variant="body2" color="text.secondary">
           Patients {start}-{end} out of {total}
-        </span>
+        </Typography>
         {totalPages > 1 && (
           <Button
             size="small"
@@ -87,7 +95,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             Next
           </Button>
         )}
-      </div>
+      </Box>
     );
   };
 
@@ -133,65 +141,105 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
   }, [hospitalId, searchTerm, sortingOption]);
 
   return (
-    <>
-      <PageWrapper isDesktop={isDesktop}>
-        <Notifications />
-        <PageTitle>Patients directory</PageTitle>
-        <OptionsWrapper>
-          <Select
-            label="Center"
-            id="center"
-            value={selectedOption ?? ''}
-            onChange={(event) => {
-              setSelectedOption(event.target.value as number);
-              setHospitalId(event.target.value as number);
-            }}
-          >
-            {filterOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-          <IconButton onClick={() => setShowSortingOptions(!showSortingOptions)}>
-            <SortIcon />
-          </IconButton>
-        </OptionsWrapper>
+    <Container
+      maxWidth="md"
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        pt: 2,
+        pb: isDesktop ? 4 : 10,
+        position: 'relative'
+      }}
+    >
+      <Notifications />
+      <Typography variant="h5" component="h1" fontWeight={700} sx={{ mb: 2, px: isDesktop ? 0 : 2 }}>
+        Patients directory
+      </Typography>
 
-        {patients && (
-          <PaginationControls
-            page={page}
-            total={patients.count}
-            limit={limit}
-            onPageChange={(newPage) => setPage(newPage)}
-          />
-        )}
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        mb: 2,
+        px: isDesktop ? 0 : 2
+      }}>
+        <Select
+          id="center"
+          value={selectedOption ?? ''}
+          onChange={(event: SelectChangeEvent<number>) => {
+            setSelectedOption(event.target.value as number);
+            setHospitalId(event.target.value as number);
+          }}
+          size="small"
+          sx={{ minWidth: 200 }}
+        >
+          {filterOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+        <IconButton onClick={() => setShowSortingOptions(!showSortingOptions)}>
+          <SortIcon />
+        </IconButton>
+      </Box>
 
-        {patients && (
-          <PatientsList>
-            {patients.results.map((patient) => (
-              <div
-                key={patient.id}
-                css={{ marginBottom: '8px' }}
-              >
-                <PatientCard {...patient} selectedHospital={selectedOption} />
-              </div>
-            ))}
-          </PatientsList>
-        )}
-        <IconButtonWrapper>
-          <Button
-            id="add_patient"
-            variant="contained"
-            color="primary"
-            size="large"
-            startIcon={<AddCircleIcon />}
-            onClick={() => navigate(urls.registerPatient())}
-          >
-            Add Patient
-          </Button>
-        </IconButtonWrapper>
-      </PageWrapper>
+      {patients && (
+        <PaginationControls
+          page={page}
+          total={patients.count}
+          limit={limit}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      )}
+
+      {patients && (
+        <Stack spacing={1} sx={{
+          flexGrow: 1,
+          overflowY: 'auto',
+          px: isDesktop ? 0 : 2,
+          pb: 2,
+          '&::-webkit-scrollbar': {
+            width: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'grey.400',
+            borderRadius: '4px',
+          }
+        }}>
+          {patients.results.map((patient) => (
+            <PatientCard key={patient.id} {...patient} selectedHospital={selectedOption} />
+          ))}
+        </Stack>
+      )}
+
+      <Box sx={{
+        position: 'fixed',
+        bottom: '12px',
+        right: isDesktop ? 'calc(50% - 600px)' : 'calc(50% - 60px)',
+        zIndex: 1000
+      }}>
+        <Button
+          id="add_patient"
+          variant="contained"
+          color="primary"
+          size="large"
+          startIcon={<AddCircleIcon />}
+          onClick={() => navigate(urls.registerPatient())}
+          sx={{
+            borderRadius: '28px',
+            px: 3,
+            py: 1.5,
+            boxShadow: 3,
+            '&:hover': {
+              boxShadow: 6
+            }
+          }}
+        >
+          Add Patient
+        </Button>
+      </Box>
 
       {showSortingOptions && (
         <SortingOptions
@@ -204,8 +252,9 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           onClose={() => setShowSortingOptions(false)}
         />
       )}
-    </>
+    </Container>
   );
+
 };
 
 export default PatientDirectory;
