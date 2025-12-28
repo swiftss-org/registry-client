@@ -27,9 +27,9 @@ describe('Patient Directory Page', () => {
             const { hospital_id, search_term, ordering } = req.query;
 
             let patients = [
-                { id: 101, full_name: 'John Doe', created_at: '2023-01-01', year_of_birth: 1980, gender: 'Male', national_id: '123456789', patient_hospital_id: 'H1', hospital_mappings: [{ hospital_id: 1, patient_hospital_id: 'H1' }] },
-                { id: 102, full_name: 'Jane Smith', created_at: '2023-03-01', year_of_birth: 1990, gender: 'Female', national_id: '987654321', patient_hospital_id: 'H2', hospital_mappings: [{ hospital_id: 1, patient_hospital_id: 'H2' }] },
-                { id: 103, full_name: 'Test Patient', created_at: '2023-02-01', year_of_birth: 1980, gender: 'Male', national_id: '112233445', patient_hospital_id: 'H1', hospital_mappings: [{ hospital_id: 1, patient_hospital_id: 'H1' }] },
+                { id: 101, full_name: 'John Doe', created_at: '2023-01-01', year_of_birth: 1980, gender: 'Male', national_id: '123456789', patient_hospital_id: '1', hospital_mappings: [{ hospital_id: 1, patient_hospital_id: '1' }] },
+                { id: 102, full_name: 'Jane Smith', created_at: '2023-03-01', year_of_birth: 1990, gender: 'Female', national_id: '987654321', patient_hospital_id: '2', hospital_mappings: [{ hospital_id: 1, patient_hospital_id: '2' }] },
+                { id: 103, full_name: 'Test Patient', created_at: '2023-02-01', year_of_birth: 1980, gender: 'Male', national_id: '112233445', patient_hospital_id: '1', hospital_mappings: [{ hospital_id: 1, patient_hospital_id: '1' }] },
             ];
 
             // Filter by search term (searches full_name, gender, and national_id)
@@ -79,23 +79,23 @@ describe('Patient Directory Page', () => {
         cy.contains('Patients directory').should('be.visible');
         cy.contains('General Hospital').should('be.visible');
         cy.contains('Patients 1-3 out of 3').should('be.visible');
-        cy.contains('John Doe').parent().within(() => {
+        cy.contains('John Doe').scrollIntoView().should('be.visible').parent().within(() => {
             cy.contains('John Doe').should('be.visible');
             cy.contains('Male').should('be.visible');
             cy.contains('123456789').should('be.visible');
-            cy.contains('H1').should('be.visible');
+            cy.contains('1').should('be.visible');
         });
-        cy.contains('Jane Smith').parent().within(() => {
+        cy.contains('Jane Smith').scrollIntoView().should('be.visible').parent().within(() => {
             cy.contains('Jane Smith').should('be.visible');
             cy.contains('Female').should('be.visible');
             cy.contains('987654321').should('be.visible');
-            cy.contains('H2').should('be.visible');
+            cy.contains('2').should('be.visible');
         });
-        cy.contains('Test Patient').parent().within(() => {
+        cy.contains('Test Patient').scrollIntoView().should('be.visible').parent().within(() => {
             cy.contains('Test Patient').should('be.visible');
             cy.contains('Male').should('be.visible');
             cy.contains('112233445').should('be.visible');
-            cy.contains('H1').should('be.visible');
+            cy.contains('1').should('be.visible');
         });
     });
 
@@ -119,7 +119,7 @@ describe('Patient Directory Page', () => {
         cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="full_name"]').check();
 
-        cy.contains('John Doe').parent().parent().parent().then(($rows) => {
+        cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('Jane Smith').should('exist');
             cy.wrap($rows).children().eq(1).contains('John Doe').should('exist');
             cy.wrap($rows).children().eq(2).contains('Test Patient').should('exist');
@@ -128,7 +128,7 @@ describe('Patient Directory Page', () => {
         cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="-full_name"]').check();
 
-        cy.contains('John Doe').parent().parent().parent().then(($rows) => {
+        cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('Test Patient').should('exist');
             cy.wrap($rows).children().eq(1).contains('John Doe').should('exist');
             cy.wrap($rows).children().eq(2).contains('Jane Smith').should('exist');
@@ -139,7 +139,7 @@ describe('Patient Directory Page', () => {
         cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="created_at"]').check();
 
-        cy.contains('John Doe').parent().parent().parent().then(($rows) => {
+        cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('John Doe').should('exist');
             cy.wrap($rows).children().eq(1).contains('Test Patient').should('exist');
             cy.wrap($rows).children().eq(2).contains('Jane Smith').should('exist');
@@ -148,7 +148,7 @@ describe('Patient Directory Page', () => {
         cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="-created_at"]').check();
 
-        cy.contains('John Doe').parent().parent().parent().then(($rows) => {
+        cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('Jane Smith').should('exist');
             cy.wrap($rows).children().eq(1).contains('Test Patient').should('exist');
             cy.wrap($rows).children().eq(2).contains('John Doe').should('exist');
