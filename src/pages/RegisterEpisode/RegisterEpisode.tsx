@@ -2,18 +2,14 @@
 import React, { useState } from 'react';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button, IconButton } from '@mui/material';
-import { ButtonContainer, PageSubtitle, PageTitle, PageWrapper } from 'common.style';
+import { IconButton, Container, Box, Typography, Paper } from '@mui/material';
 import ConfirmationModal from 'components/ConfirmationModal';
-import arrayMutators from 'final-form-arrays';
-import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router-dom';
 import urls from 'routing/urls';
 
 import RegisterEpisodeForm from './components/RegisterEpisodeForm';
 import { RegisterEpisodeFormType } from './types';
-import { episodeFormValidation } from './utils';
 import {
   useCreateHospitalMapping,
   useGetHospital,
@@ -30,19 +26,16 @@ const RegisterEpisode: React.FC = () => {
 
   const [isNewHospital, setIsNewHospital] = useState(false);
 
-  const { data: hospitals, isLoading: isHospitalsLoading } = useGetHospitals({
+  const { data: hospitals } = useGetHospitals({
     offset: 0,
     limit: 100,
   });
-  const { data: patient, isLoading: isPatientLoading } = useGetPatient(patientID ?? '');
-  const { data: selectedHospital, isLoading: isHospitalLoading } = useGetHospital(hospitalID ?? '');
-  const { data: surgeons, isLoading: isSurgeonsLoading } = useGetSurgeons({
+  const { data: patient } = useGetPatient(patientID ?? '');
+  const { data: selectedHospital } = useGetHospital(hospitalID ?? '');
+  const { data: surgeons } = useGetSurgeons({
     offset: 0,
     limit: 100,
   });
-
-  const isLoading =
-    isHospitalLoading || isHospitalsLoading || isSurgeonsLoading || isPatientLoading;
 
   const { mutate: registerEpisode, isPending: isSubmitLoading } = useRegisterEpisode(
     hospitalID,
@@ -70,9 +63,11 @@ const RegisterEpisode: React.FC = () => {
 
   return (
     <>
-      <PageWrapper isDesktop={isDesktop}>
-        <PageTitle>
+      <Container maxWidth="md" sx={{ pb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', py: 2, gap: 2 }}>
           <IconButton
+            data-testid="back-button"
+            edge="start"
             onClick={() => {
               if (isFormDirty) {
                 setShowWarningModal(true);
@@ -83,90 +78,42 @@ const RegisterEpisode: React.FC = () => {
           >
             <ArrowBackIcon />
           </IconButton>
-          Register an Episode
-        </PageTitle>
-        <PageSubtitle>
+          <Typography variant="h5" component="h1" fontWeight={700} color="text.primary">
+            Register an Episode
+          </Typography>
+        </Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2, ml: 7 }}>
           Please verify that the hospital of the surgery is correct. If you wish, you can choose
           another hospital.
-        </PageSubtitle>
-        <Form
-          mutators={{
-            ...arrayMutators,
-          }}
-          validate={(values) => episodeFormValidation(values, isNewHospital)}
-          onSubmit={(values) => {
-            const newValues = {
-              ...values,
-              antibioticType: values.antibioticType ? values.antibioticType.join(',') : undefined,
-            };
-            handleSubmit(newValues);
-          }}
-        >
-          {({
-            handleSubmit,
-            values,
-            dirty,
-            form: {
-              mutators: { push },
-            },
-            submitting,
-          }) => {
-            if (dirty) {
-              setIsFormDirty(true);
-            }
-
-            return (
-              <form
-                onSubmit={handleSubmit}
-                css={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: isDesktop ? '100%' : 'calc(100vh)',
-                  overflow: 'hidden',
-                }}
-              >
-                {patient && surgeons && hospitals && selectedHospital && (
-                  <RegisterEpisodeForm
-                    values={values}
-                    surgeons={surgeons?.results ?? []}
-                    patient={patient}
-                    selectedHospital={selectedHospital}
-                    hospitals={hospitals?.results ?? []}
-                    addField={push}
-                    setIsNewHospital={setIsNewHospital}
-                    isNewHospital={isNewHospital}
-                  />
-                )}
-                <ButtonContainer isDesktop={isDesktop}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={isLoading || submitting || isSubmitLoading}
-                    fullWidth
-                    size="medium"
-                  >
-                    Register an Episode
-                  </Button>
-                </ButtonContainer>
-              </form>
-            );
-          }}
-        </Form>
-      </PageWrapper>
-      {showWarningModal && (
-        <ConfirmationModal
-          onClose={() => {
-            setShowWarningModal(false);
-          }}
-          title={'Cancel new registration?'}
-          subtitle={
-            'Are you sure you want to cancel registering an episode? All information you’ve entered will be lost!'
-          }
-          buttonText={'Yes, cancel new registration'}
-          onClick={() => navigate(`${urls.patients()}/${hospitalID}/${patientID}`)}
-        />
-      )}
+        </Typography>
+        <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
+          {patient && surgeons && hospitals && (selectedHospital || !hospitalID) && (
+            <RegisterEpisodeForm
+              surgeons={surgeons?.results ?? []}
+              patient={patient}
+              selectedHospital={selectedHospital}
+              hospitals={hospitals?.results ?? []}
+              setIsNewHospital={setIsNewHospital}
+              isNewHospital={isNewHospital}
+              onSubmit={handleSubmit}
+              isPending={isSubmitLoading}
+              isDesktop={isDesktop}
+              onDirtyChange={setIsFormDirty}
+            />
+          )}
+        </Paper>
+        {showWarningModal && (
+          <ConfirmationModal
+            onClose={() => {
+              setShowWarningModal(false);
+            }}
+            title="Cancel new registration?"
+            subtitle="Are you sure you want to cancel registering an episode? All information you've entered will be lost!"
+            buttonText="Yes, cancel new registration"
+            onClick={() => navigate(`${urls.patients()}/${hospitalID}/${patientID}`)}
+          />
+        )}
+      </Container>
     </>
   );
 };

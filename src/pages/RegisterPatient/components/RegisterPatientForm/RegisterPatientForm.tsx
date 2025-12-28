@@ -128,7 +128,7 @@ const RegisterPatientForm: React.FC<Props> = ({
 
     return (
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', height: isDesktop ? 'auto' : '100%' }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', height: isDesktop ? 'auto' : '100%' }}>
             <Box sx={{ p: 2, flexGrow: 1, pb: isDesktop ? 2 : '100px' }}>
                 <Typography variant="h6" color="primary.dark" gutterBottom>
                     Hospital Details
