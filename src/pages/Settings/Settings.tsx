@@ -10,8 +10,8 @@ import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
 import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 
-import { ComponentWrapper } from '../PatientDetails/PatientDetails.style';
 import ChangePasswordForm from './components/ChangePasswordForm';
+import { ComponentWrapper } from '../PatientDetails/PatientDetails.style';
 
 const tabs = [{ label: 'Change Password', value: 'change-password' }];
 
