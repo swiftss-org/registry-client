@@ -1,97 +1,124 @@
-/** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Button, Checkbox, TextField } from '@mui/material';
-import { CheckBoxContainer, FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
-import { useSignIn } from 'hooks/api/userHooks';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField
+} from '@mui/material';
 import { LoginFormType } from 'models/apiTypes';
-import { Field, Form } from 'react-final-form';
 
-import { ButtonContainer, FormBottom, FormContainer } from './LoginForm.style';
+type Props = {
+  onSubmit: (data: LoginFormType) => void;
+  isPending?: boolean;
+};
 
-const SignIn: React.FC = () => {
-  const { mutate } = useSignIn();
+const LoginForm: React.FC<Props> = ({ onSubmit, isPending }) => {
+  const [values, setValues] = useState<LoginFormType>({
+    username: '',
+    password: '',
+    rememberMe: false
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const handleSubmit = (form: LoginFormType) => {
-    mutate(form);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setValues({
+      ...values,
+      [name]: type === 'checkbox' ? checked : value
+    });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    setTouched({ ...touched, [name]: true });
+
+    const validationErrors = validate(values);
+    setErrors(validationErrors);
+  };
+
+  const validate = (currentValues: LoginFormType) => {
+    const newErrors: Record<string, string> = {};
+    if (!currentValues.username) newErrors.username = 'Username is required';
+    if (!currentValues.password) newErrors.password = 'Password is required';
+    return newErrors;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors = validate(values);
+    if (Object.keys(newErrors).length === 0) {
+      onSubmit(values);
+    } else {
+      setErrors(newErrors);
+      setTouched({
+        username: true,
+        password: true
+      });
+    }
   };
 
   return (
-    <FormContainer>
-      <Form initialValues={{ rememberMe: false }} onSubmit={handleSubmit}>
-        {({ handleSubmit }) => (
-          <form style={{ height: '100%' }} onSubmit={handleSubmit}>
-            <FieldsContainer withMargin>
-              <LongFieldWrapper>
-                <FieldWrapper>
-                  <Field name="username" parse={(value) => value}>
-                    {(props) => {
-                      return (
-                        <TextField
-                          id="username"
-                          label="Username"
-                          variant="outlined"
-                          size="medium"
-                          {...props.input}
-                        />
-                      );
-                    }}
-                  </Field>
-                </FieldWrapper>
-              </LongFieldWrapper>
-            </FieldsContainer>
-
-            <FieldsContainer withMargin>
-              <LongFieldWrapper>
-                <FieldWrapper>
-                  <Field name="password" parse={(value) => value}>
-                    {(props) => {
-                      const hasError = props.meta.touched && props.meta.invalid;
-                      return (
-                        <TextField
-                          id="currentPassword"
-                          label="Password"
-                          variant="outlined"
-                          size="medium"
-                          error={hasError}
-                          helperText={hasError && props.meta.error}
-                          type="password"
-                          {...props.input}
-                        />
-                      );
-                    }}
-                  </Field>
-                </FieldWrapper>
-              </LongFieldWrapper>
-            </FieldsContainer>
-
-            <FormBottom>
-              <Field name="rememberMe">
-                {(props) => {
-                  return (
-                    <CheckBoxContainer>
-                      <Checkbox
-                        {...props.input}
-                        onClick={props.input.onChange}
-                        checked={props.input.value}
-                      />
-                      <span>Remember Me</span>
-                    </CheckBoxContainer>
-                  );
-                }}
-              </Field>
-            </FormBottom>
-
-            <ButtonContainer>
-              <Button fullWidth variant="contained" size="large" type="submit">
-                Sign In
-              </Button>
-            </ButtonContainer>
-          </form>
-        )}
-      </Form>
-    </FormContainer>
+    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="username"
+        label="Username"
+        name="username"
+        autoComplete="username"
+        autoFocus
+        value={values.username}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.username && !!errors.username}
+        helperText={touched.username && errors.username}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type="password"
+        id="password"
+        autoComplete="current-password"
+        value={values.password}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.password && !!errors.password}
+        helperText={touched.password && errors.password}
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            value="remember"
+            color="primary"
+            name="rememberMe"
+            checked={values.rememberMe}
+            onChange={handleChange}
+          />
+        }
+        label="Remember me"
+      />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        disabled={isPending}
+        sx={{ mt: 3, mb: 2 }}
+        size="large"
+      >
+        Sign In
+      </Button>
+    </Box>
   );
 };
 
-export default SignIn;
+export default LoginForm;

@@ -18,7 +18,7 @@ describe('Login Page', () => {
             cy.visit('/login');
 
             cy.get('#username').type('testuser');
-            cy.get('#currentPassword').type('password123');
+            cy.get('#password').type('password123');
             cy.get('input[type="checkbox"]').check({ force: true });
             cy.get('button[type="submit"]').click();
 
@@ -42,7 +42,7 @@ describe('Login Page', () => {
             cy.visit('/login');
 
             cy.get('#username').type('wronguser');
-            cy.get('#currentPassword').type('wrongpassword');
+            cy.get('#password').type('wrongpassword');
             cy.get('button[type="submit"]').click();
 
             cy.wait('@signInFail');
@@ -65,7 +65,7 @@ describe('Login Page', () => {
             cy.reload();
 
             cy.get('#username').type('testuser');
-            cy.get('#currentPassword').type('password123');
+            cy.get('#password').type('password123');
             cy.get('button[type="submit"]').click();
 
             cy.wait('@signIn');
@@ -85,7 +85,7 @@ describe('Login Page', () => {
             cy.visit('/login');
 
             cy.get('#username').type('wronguser');
-            cy.get('#currentPassword').type('wrongpass');
+            cy.get('#password').type('wrongpass');
             cy.get('button[type="submit"]').click();
 
             cy.wait('@signInFail');
@@ -104,7 +104,7 @@ describe('Login Page', () => {
             cy.visit('/login');
 
             cy.get('#username').type('wronguser');
-            cy.get('#currentPassword').type('wrongpass');
+            cy.get('#password').type('wrongpass');
             cy.get('button[type="submit"]').click();
 
             cy.wait('@signInFail');
@@ -121,7 +121,8 @@ describe('Login Page', () => {
             cy.visit('/login');
             cy.get('button[type="submit"]').click();
 
-            cy.contains('Invalid credential combination.').should('be.visible');
+            cy.contains('Username is required').should('be.visible');
+            cy.contains('Password is required').should('be.visible');
         });
     });
 
@@ -150,8 +151,8 @@ describe('Login Page', () => {
             cy.get('main').contains('Welcome!');
             cy.get('main').contains('Please sign in using your credentials to access your account.');
             cy.get('#username').should('be.visible');
-            cy.get('#currentPassword').should('be.visible');
-            cy.get('main').contains('Remember Me').should('be.visible');
+            cy.get('#password').should('be.visible');
+            cy.get('main').contains('Remember me').should('be.visible');
             cy.get('button[type="submit"]').should('be.visible');
         });
     });
