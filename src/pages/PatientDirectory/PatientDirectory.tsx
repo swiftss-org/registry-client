@@ -1,20 +1,20 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SortIcon from '@mui/icons-material/Sort';
 import {
-  IconButton,
-  Select,
-  MenuItem,
+  Box,
   Button,
   Container,
-  Box,
-  Typography,
+  IconButton,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
-  SelectChangeEvent
+  Typography
 } from '@mui/material';
 import { useGetHospitals, useGetPatients, useGetPreferredHospital } from 'hooks/api/patientHooks';
+import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
 import { getHospitalOptions } from 'pages/RegisterPatient/utils';
 import { useNavigate } from 'react-router';
 import urls from 'routing/urls';
@@ -23,7 +23,6 @@ import PatientCard from './components/PatientCard';
 import SortingOptions from './components/SortingOptions';
 import { SortingOptionsType } from './types';
 import Notifications from '../../components/Notifications';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
 const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => {
   const { isDesktop } = useResponsiveLayout();
@@ -144,7 +143,6 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
     <Container
       maxWidth="md"
       sx={{
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         pt: 2,
@@ -197,16 +195,8 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
       {patients && (
         <Stack spacing={1} sx={{
           flexGrow: 1,
-          overflowY: 'auto',
           px: isDesktop ? 0 : 2,
-          pb: 2,
-          '&::-webkit-scrollbar': {
-            width: '4px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: 'grey.400',
-            borderRadius: '4px',
-          }
+          pb: 2
         }}>
           {patients.results.map((patient) => (
             <PatientCard key={patient.id} {...patient} selectedHospital={selectedOption} />
@@ -214,27 +204,34 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         </Stack>
       )}
 
-      <Box sx={{
-        position: 'fixed',
-        bottom: '12px',
-        right: isDesktop ? 'calc(50% - 600px)' : 'calc(50% - 60px)',
-        zIndex: 1000
-      }}>
+      <Box
+        sx={{
+          position: isDesktop ? 'static' : 'fixed',
+          bottom: isDesktop ? 'auto' : 0,
+          left: isDesktop ? 'auto' : 0,
+          right: isDesktop ? 'auto' : 0,
+          p: isDesktop ? 0 : 2,
+          bgcolor: isDesktop ? 'transparent' : 'background.paper',
+          borderTop: isDesktop ? 'none' : 1,
+          borderColor: 'divider',
+          zIndex: 1000,
+          display: 'flex',
+          justifyContent: isDesktop ? 'flex-end' : 'stretch'
+        }}
+      >
         <Button
           id="add_patient"
           variant="contained"
           color="primary"
+          fullWidth={!isDesktop}
           size="large"
           startIcon={<AddCircleIcon />}
           onClick={() => navigate(urls.registerPatient())}
           sx={{
-            borderRadius: '28px',
-            px: 3,
+            borderRadius: isDesktop ? '28px' : '8px',
+            px: isDesktop ? 3 : 2,
             py: 1.5,
-            boxShadow: 3,
-            '&:hover': {
-              boxShadow: 6
-            }
+            boxShadow: isDesktop ? 3 : 'none',
           }}
         >
           Add Patient
