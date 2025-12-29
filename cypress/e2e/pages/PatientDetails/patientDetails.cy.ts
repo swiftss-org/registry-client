@@ -24,6 +24,7 @@ describe('Patient Details Page', () => {
                 ],
                 phone_1: '123456789',
                 phone_2: '987654321',
+                address: '123 Main St, Anytown, USA',
             }
         }).as('getPatient');
 
@@ -44,26 +45,17 @@ describe('Patient Details Page', () => {
         cy.contains('General Information').should('have.css', 'border-bottom-color'); // active tab check might vary
 
         // Check content from GeneralInformation (assuming it shows name etc)
-        cy.get('input[id="full_name"]').should('have.value', 'John Doe');
-        cy.get('input[id="gender"]').should('have.value', 'Male');
-        cy.get('input[id="year_of_birth"]').should('have.value', '1980');
-        cy.get('input[id="age"]').should('have.value', '42');
-        cy.get('input[id="national_id"]').should('have.value', '123456789');
-        cy.get('input[id="hospital"]').should('have.value', 'General Hospital');
-        cy.get('input[id="patient_hospital_id"]').should('have.value', 'H123');
-        cy.get('input[id="patient_phone_number_1"]').should('have.value', '123456789');
-        cy.get('input[id="patient_phone_number_2"]').should('have.value', '987654321');
-
-        // Verify the input fields are disabled
-        cy.get('input[id="full_name"]').should('be.disabled');
-        cy.get('input[id="gender"]').should('be.disabled');
-        cy.get('input[id="year_of_birth"]').should('be.disabled');
-        cy.get('input[id="age"]').should('be.disabled');
-        cy.get('input[id="national_id"]').should('be.disabled');
-        cy.get('input[id="hospital"]').should('be.disabled');
-        cy.get('input[id="patient_hospital_id"]').should('be.disabled');
-        cy.get('input[id="patient_phone_number_1"]').should('be.disabled');
-        cy.get('input[id="patient_phone_number_2"]').should('be.disabled');
+        cy.get('#full_name').should('have.text', 'John Doe');
+        cy.get('#gender').should('have.text', 'Male');
+        cy.get('#year_of_birth').should('have.text', '1980');
+        cy.get('#month_of_birth').should('have.text', '01');
+        cy.get('#age').should('have.text', '42');
+        cy.get('#national_id').should('have.text', '123456789');
+        cy.get('#hospital').should('have.text', 'General Hospital');
+        cy.get('#patient_hospital_id').should('have.text', 'H123');
+        cy.get('#phone_1').should('have.text', '123456789');
+        cy.get('#phone_2').should('have.text', '987654321');
+        cy.get('#address').should('have.text', '123 Main St, Anytown, USA');
     });
 
     it('should display episode list tab', () => {
@@ -118,6 +110,7 @@ describe('Patient Details Page', () => {
                     episodes: [],
                     phone_1: '123456789',
                     phone_2: '987654321',
+                    address: '123 Main St, Anytown, USA',
                 }
             }).as('getPatientWithoutEpisodes');
 
@@ -141,15 +134,17 @@ describe('Patient Details Page', () => {
             cy.visit('/patients/1/102');
             cy.wait('@getPatientWithMinimalFields');
 
-            cy.get('input[id="full_name"]').should('have.value', '');
-            cy.get('input[id="gender"]').should('have.value', '');
-            cy.get('input[id="year_of_birth"]').should('have.value', '');
-            cy.get('input[id="age"]').should('have.value', '');
-            cy.get('input[id="national_id"]').should('have.value', '');
-            cy.get('input[id="hospital"]').should('have.value', 'General Hospital');
-            cy.get('input[id="patient_hospital_id"]').should('have.value', '');
-            cy.get('input[id="patient_phone_number_1"]').should('have.value', '');
-            cy.get('input[id="patient_phone_number_2"]').should('have.value', '');
+            cy.get('#full_name').should('have.text', '—');
+            cy.get('#gender').should('have.text', '—');
+            cy.get('#year_of_birth').should('have.text', '—');
+            cy.get('#month_of_birth').should('have.text', '—');
+            cy.get('#age').should('have.text', '—');
+            cy.get('#national_id').should('have.text', '—');
+            cy.get('#hospital').should('have.text', 'General Hospital');
+            cy.get('#patient_hospital_id').should('have.text', '—');
+            cy.get('#phone_1').should('have.text', '—');
+            cy.get('#phone_2').should('have.text', '—');
+            cy.get('#address').should('have.text', '—');
         });
     });
 });
