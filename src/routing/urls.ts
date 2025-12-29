@@ -8,6 +8,10 @@ const urls = {
   episodeStats: () => '/episodes/stats',
   landingPage: () => '/landing',
   nationalKPIs: () => '/nationalKPIs',
+  patientDetails: (hospitalID: string, patientID: string) => `/patients/${hospitalID}/${patientID}`,
+  addEpisode: (hospitalID: string, patientID: string) => `/patients/${hospitalID}/${patientID}/add-episode`,
+  episodeDetails: (hospitalID: string, patientID: string, episodeID: string) =>
+    `/patients/${hospitalID}/${patientID}/episodes/${episodeID}`,
 };
 
 export default urls;

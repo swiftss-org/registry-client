@@ -1,34 +1,31 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { TextField } from '@mui/material';
+import { TextField, Box, Stack } from '@mui/material';
 import { HospitalsAPI, PatientAPI } from 'models/apiTypes';
-
-import { Container } from './GeneralInformation.style';
-import { FieldsContainer } from '../../../../common.style';
 
 type Props = {
   patient?: PatientAPI;
   hospital?: HospitalsAPI;
 };
+
 const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
   const hospitalPatientID = patient?.hospital_mappings?.find(
     (mapping) => mapping.hospital_id === hospital?.id
   )?.patient_hospital_id;
 
   return (
-    <Container>
+    <Stack spacing={1} sx={{ p: 2 }}>
       <TextField
         disabled
         label="Full Name"
         id="full_name"
         variant="outlined"
         size="medium"
-        value={patient?.full_name}
+        value={patient?.full_name || ''}
       />
 
-      <TextField disabled label="Gender" id="gender" variant="outlined" size="medium" value={patient?.gender} />
-      <FieldsContainer>
+      <TextField disabled label="Gender" id="gender" variant="outlined" size="medium" value={patient?.gender || ''} />
+      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1 }}>
         <TextField
           disabled
           id="year_of_birth"
@@ -36,7 +33,7 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
           variant="outlined"
           type="number"
           size="medium"
-          value={patient?.year_of_birth}
+          value={patient?.year_of_birth || ''}
         />
         <TextField
           disabled
@@ -45,16 +42,16 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
           type="number"
           variant="outlined"
           size="medium"
-          value={patient?.age}
+          value={patient?.age || ''}
         />
-      </FieldsContainer>
+      </Box>
       <TextField
         id="national_id"
         label="National ID"
         variant="outlined"
         size="medium"
         disabled
-        value={patient?.national_id}
+        value={patient?.national_id || ''}
       />
       <TextField
         id="hospital"
@@ -62,7 +59,7 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         variant="outlined"
         size="medium"
         disabled
-        value={hospital?.name}
+        value={hospital?.name || ''}
       />
       <TextField
         id="patient_hospital_id"
@@ -70,7 +67,7 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         variant="outlined"
         size="medium"
         disabled
-        value={hospitalPatientID}
+        value={hospitalPatientID || ''}
       />
       <TextField
         id="patient_phone_number_1"
@@ -78,7 +75,7 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         variant="outlined"
         size="medium"
         disabled
-        value={patient?.phone_1}
+        value={patient?.phone_1 || ''}
       />
       <TextField
         id="patient_phone_number_2"
@@ -86,9 +83,9 @@ const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
         variant="outlined"
         size="medium"
         disabled
-        value={patient?.phone_2}
+        value={patient?.phone_2 || ''}
       />
-    </Container>
+    </Stack>
   );
 };
 
