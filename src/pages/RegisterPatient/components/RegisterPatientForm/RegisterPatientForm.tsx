@@ -1,13 +1,12 @@
-
 import React, { useEffect, useState } from 'react';
 
 import {
     Box,
-    Button,
     FormControl,
     FormControlLabel,
     FormHelperText,
     FormLabel,
+    Grid,
     InputLabel,
     MenuItem,
     Radio,
@@ -15,8 +14,7 @@ import {
     Select,
     SelectChangeEvent,
     TextField,
-    Typography,
-    Grid,
+    Typography
 } from '@mui/material';
 
 import { HospitalsAPI } from '../../../../models/apiTypes';
@@ -25,8 +23,6 @@ import { RegisterPatientFormType } from '../../types';
 type Props = {
     hospitals: HospitalsAPI[];
     onSubmit: (data: RegisterPatientFormType) => void;
-    isPending: boolean;
-    isDesktop: boolean;
     onDirtyChange?: (isDirty: boolean) => void;
 };
 
@@ -49,8 +45,6 @@ const initialValues = {
 const RegisterPatientForm: React.FC<Props> = ({
     hospitals,
     onSubmit,
-    isPending,
-    isDesktop,
     onDirtyChange,
 }) => {
     const [values, setValues] = useState(initialValues);
@@ -128,8 +122,14 @@ const RegisterPatientForm: React.FC<Props> = ({
 
     return (
 
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', height: isDesktop ? 'auto' : '100%' }}>
-            <Box sx={{ p: 2, flexGrow: 1, pb: isDesktop ? 2 : '100px' }}>
+        <Box
+            id="register-patient-form"
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ display: 'flex', flexDirection: 'column' }}
+        >
+            <Box sx={{ p: 2 }}>
                 <Typography variant="h6" color="primary.dark" gutterBottom>
                     Hospital Details
                 </Typography>
@@ -350,30 +350,6 @@ const RegisterPatientForm: React.FC<Props> = ({
                 />
             </Box>
 
-            <Box
-                sx={{
-                    p: 2,
-                    borderTop: '1px solid',
-                    borderColor: 'grey.200',
-                    bgcolor: 'grey.300',
-                    position: isDesktop ? 'relative' : 'fixed',
-                    bottom: 0,
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    zIndex: 10,
-                }}
-            >
-                <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={isPending}
-                    fullWidth
-                    size="large"
-                >
-                    Add new patient
-                </Button>
-            </Box>
         </Box>
     );
 
