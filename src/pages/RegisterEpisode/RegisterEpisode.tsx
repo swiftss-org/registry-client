@@ -106,8 +106,6 @@ const RegisterEpisode: React.FC = () => {
             setIsNewHospital={setIsNewHospital}
             isNewHospital={isNewHospital}
             onSubmit={handleSubmit}
-            isPending={isSubmitLoading}
-            isDesktop={isDesktop}
             onDirtyChange={setIsFormDirty}
           />
         )}

@@ -4,7 +4,6 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -44,8 +43,6 @@ type Props = {
   setIsNewHospital: (isNewHospital: boolean) => void;
   isNewHospital: boolean;
   onSubmit: (data: RegisterEpisodeFormType) => void;
-  isPending: boolean;
-  isDesktop: boolean;
   onDirtyChange?: (isDirty: boolean) => void;
 };
 
@@ -86,8 +83,6 @@ const RegisterEpisodeForm: React.FC<Props> = ({
   setIsNewHospital,
   isNewHospital,
   onSubmit,
-  isPending,
-  isDesktop,
   onDirtyChange,
 }) => {
   const hospitalOptions = useMemo(() => getHospitalOptions(hospitals), [hospitals]);
@@ -248,12 +243,13 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
   return (
     <Box
+      id="register-episode-form"
       component="form"
       onSubmit={handleSubmit}
       noValidate
-      sx={{ display: 'flex', flexDirection: 'column', height: isDesktop ? 'auto' : '100%' }}
+      sx={{ display: 'flex', flexDirection: 'column' }}
     >
-      <Box sx={{ p: 2, flexGrow: 1, pb: isDesktop ? 2 : '100px' }}>
+      <Box sx={{ p: 2 }}>
         <Typography variant="h6" color="primary.dark" gutterBottom>
           Hospital Details
         </Typography>
@@ -736,30 +732,6 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         />
       </Box>
 
-      <Box
-        sx={{
-          p: 2,
-          borderTop: '1px solid',
-          borderColor: 'grey.200',
-          bgcolor: 'grey.300',
-          position: isDesktop ? 'relative' : 'fixed',
-          bottom: 0,
-          width: '100%',
-          boxSizing: 'border-box',
-          zIndex: 10,
-        }}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={isPending}
-          fullWidth
-          size="large"
-        >
-          Register an Episode
-        </Button>
-      </Box>
     </Box>
   );
 };
