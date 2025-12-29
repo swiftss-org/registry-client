@@ -32,18 +32,15 @@ export const useSignIn = () => {
       setUserStorageItem(__EMAIL__, data?.user.email ?? '');
       setUserStorageItem('username', data?.user.username ?? '');
       setAxiosToken(data?.token ?? '');
-
-        const medicalPersonnel = data?.user.medical_personnel ?? null;
-
-        setUserStorageItem('user_level', medicalPersonnel?.level ?? '');
-        setUserStorageItem('user_level_display', medicalPersonnel?.level_display ?? '');
-
+      const medicalPersonnel = data?.user.medical_personnel ?? null;
+      setUserStorageItem('user_level', medicalPersonnel?.level ?? '');
+      setUserStorageItem('user_level_display', medicalPersonnel?.level_display ?? '');
       navigate(urls.landingPage(), { replace: true });
     },
     onError: (errors) => {
-        setNotification('Invalid credential combination.', 'error');
-        console.log(errors);
-      },
+      setNotification('Invalid credential combination.', 'error');
+      console.log(errors);
+    },
   });
 };
 
@@ -52,7 +49,7 @@ export const useChangePassword = () => {
   const setNotification = useSetNotification();
   const [, notificationDispatch] = useNotifications();
 
-  return useMutation<ChangePasswordResponse, AxiosError, ChangePasswordFormType>({
+  return useMutation<ChangePasswordResponse, Record<string, string[] | string>, ChangePasswordFormType>({
     mutationFn: (params) => {
       const { request } = userAPI.single.changePassword({
         old_password: params.old_password,
@@ -72,7 +69,15 @@ export const useChangePassword = () => {
       ).setItem(__TOKEN__, data?.token ?? '');
 
       setNotification('Password changed.', 'success');
-      navigate(urls.settings(), { replace: true });
+      navigate(urls.landingPage(), { replace: true });
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to change password.';
+      setNotification(errorMessage, 'error');
     },
   });
 };

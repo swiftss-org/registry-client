@@ -31,14 +31,14 @@ describe('Settings Page', () => {
                 });
             });
 
-            // TODO improve Notifications to users cy.contains('Password changed successfully').should('exist');
             cy.url().should('include', '/landing');
+            // TODO fix Notificaitons - cy.contains('Password changed successfully').should('exist');
         });
 
         it('should handle errors', () => {
             cy.intercept('PUT', '**/change-password/', {
                 statusCode: 400,
-                body: { errors: { old_password: ['Wrong password'] } }
+                body: { old_password: ['Wrong password'] }
             }).as('changePasswordFail');
 
             cy.get('#old_password').type('wrongPass');
@@ -52,15 +52,20 @@ describe('Settings Page', () => {
             cy.contains('Wrong password').should('be.visible');
         });
 
-        // TODO password change error handling should be improved
-        it.skip('should password fields be required', () => {
-            cy.get('#old_password').focus().blur();
-            cy.get('#new_password1').focus().blur();
-            cy.get('#new_password2').focus().blur();
-
+        it('should password fields be required', () => {
             cy.get('#change-password-button').click();
 
-            cy.contains('This field is required').should('be.visible');
+            cy.contains('Old password is required').should('be.visible');
+            cy.contains('New password is required').should('be.visible');
+            cy.contains('Please confirm your new password').should('be.visible');
+        });
+
+        it('should verify if user want to leave dirty form', () => {
+            cy.get('#old_password').type('oldPass123');
+
+            cy.get('main > div > div > button').click();
+
+            cy.contains('Are you sure you want to leave this page?').should('be.visible');
         });
     });
 });
