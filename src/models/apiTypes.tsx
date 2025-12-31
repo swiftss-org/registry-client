@@ -153,7 +153,7 @@ export type DischargePayload = {
 export type DischargeForm = {
   episode_id: number;
   date: string;
-  discharge_duration?: string;
+  discharge_duration?: number;
   aware_of_mesh: SelectOption;
   infection?: string;
   comments?: string;
