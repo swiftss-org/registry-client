@@ -1,37 +1,34 @@
 import React, { FC } from 'react';
 
-import { TextField, TextareaAutosize } from '@mui/material';
-import { EpisodesAPI } from 'models/apiTypes';
-
-import { Heading } from '../../../../PatientDetails/components/EpisodeList/EpisodeCard/EpisodeCard.style';
-import { InternalContainer } from '../style';
-import { FieldContainer } from './style';
+import { Box, TextField, TextareaAutosize, Typography } from '@mui/material';
+import { EpisodesAPI, SurgeonsAPI } from 'models/apiTypes';
 
 const Surgery: FC<{
-  isOpen: boolean;
   episode: EpisodesAPI;
-}> = ({ isOpen, episode }) => {
+}> = ({ episode }) => {
   return (
-    <InternalContainer isOpen={isOpen} aria-expanded={isOpen}>
-      <Heading>Episode details:</Heading>
-      <FieldContainer>
-        <TextField disabled label="CEPOD" id="cepod" variant="outlined" size="medium" value={episode.cepod} />
-        <TextField disabled label="Side" id="side" variant="outlined" size="medium" value={episode.side} />
+    <Box>
+      <Typography variant="h6" gutterBottom>
+        Episode details:
+      </Typography>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 2, mb: 3 }}>
+        <TextField disabled label="CEPOD" id="cepod" variant="outlined" size="small" value={episode.cepod} />
+        <TextField disabled label="Side" id="side" variant="outlined" size="small" value={episode.side} />
         <TextField
           disabled
           label="Occurrence"
           id="occurence"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.occurence}
         />
-        <TextField disabled label="Type" id="type" variant="outlined" size="medium" value={episode.type} />
+        <TextField disabled label="Type" id="type" variant="outlined" size="small" value={episode.type} />
         <TextField
           disabled
           label="Size"
           id="size"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.size}
         />
         <TextField
@@ -39,18 +36,21 @@ const Surgery: FC<{
           label="Complexity"
           id="complexity"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.complexity}
         />
-      </FieldContainer>
-      <Heading>Surgery details:</Heading>
-      <FieldContainer>
+      </Box>
+
+      <Typography variant="h6" gutterBottom>
+        Surgery details:
+      </Typography>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 2 }}>
         <TextField
           disabled
           label="Mesh type"
           id="mesh_type"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.mesh_type}
         />
         <TextField
@@ -58,7 +58,7 @@ const Surgery: FC<{
           label="Anaesthetic type"
           id="anaesthetic_type"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.anaesthetic_type}
         />
         <TextField
@@ -66,7 +66,7 @@ const Surgery: FC<{
           label="Diathermy used"
           id="diathermy_used"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.diathermy_used ? 'Yes' : 'No'}
         />
         <TextField
@@ -74,7 +74,7 @@ const Surgery: FC<{
           label="Prophylactic antibiotics given?"
           id="antibiotic_used"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.antibiotic_used ? 'Yes' : 'No'}
         />
         <TextField
@@ -82,23 +82,34 @@ const Surgery: FC<{
           label="Prophylactic antibiotics type"
           id="antibiotic_type"
           variant="outlined"
-          size="medium"
+          size="small"
           value={episode.antibiotic_type}
         />
-        {episode.surgeons.map((surgeon, index) => (
+        {episode.surgeons.map((surgeon: SurgeonsAPI, index: number) => (
           <TextField
             key={`surgeon_${index}`}
             disabled
             label="Surgeon"
             id="surgeon"
             variant="outlined"
-            size="medium"
+            size="small"
             value={`${surgeon.user.first_name} ${surgeon.user.last_name}`}
           />
         ))}
-        <TextareaAutosize disabled minRows={3} id="surgery_comments" value={episode.comments} />
-      </FieldContainer>
-    </InternalContainer>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+          Comments
+        </Typography>
+        <TextareaAutosize
+          disabled
+          minRows={3}
+          id="surgery_comments"
+          value={episode.comments}
+          style={{ width: '100%', padding: '8px', borderColor: '#c4c4c4', borderRadius: '4px' }}
+        />
+      </Box>
+    </Box>
   );
 };
 

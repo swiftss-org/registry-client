@@ -10,7 +10,7 @@ type Props = {
 };
 
 const EpisodeList: React.FC<Props> = ({ patient }) => {
-  if (!patient || patient.episodes.length === 0) {
+  if (!patient || !patient.episodes || patient.episodes.length === 0) {
     return (
       <Box sx={{ p: 4, textAlign: 'center' }}>
         <Typography variant="body1" color="text.secondary">

@@ -72,9 +72,9 @@ describe('Episode Details Page', () => {
                 cy.reload();
                 cy.wait(['@getEpisode', '@getDischarge', '@getFollowUps', '@getMedicalPersonnel']);
 
-                cy.get('main').contains('Surgery').find('svg').should('exist');
-                cy.get('main').contains('Discharge').find('svg').should('exist');
-                cy.get('main').contains('Follow Up').find('svg').should('not.exist');
+                cy.get('main h3 p').contains('Surgery').siblings('svg[data-testid="CheckCircleIcon"]').should('exist');
+                cy.get('main h3 p').contains('Discharge').siblings('svg[data-testid="CheckCircleIcon"]').should('exist');
+                cy.get('main h3 p').contains('Follow Up').siblings('svg[data-testid="CheckCircleIcon"]').should('not.exist');
             });
 
             it('should display episode details when the episode had Surgery but not Discharge nor Follow Up', () => {
@@ -128,9 +128,9 @@ describe('Episode Details Page', () => {
                 cy.reload();
                 cy.wait(['@getEpisode', '@getDischarge', '@getFollowUps', '@getMedicalPersonnel']);
 
-                cy.get('main').contains('Surgery').find('svg').should('exist');
-                cy.get('main').contains('Discharge').find('svg').should('not.exist');
-                cy.get('main').contains('Follow Up').find('svg').should('not.exist');
+                cy.get('main h3 p').contains('Surgery').siblings('svg[data-testid="CheckCircleIcon"]').should('exist');
+                cy.get('main h3 p').contains('Discharge').siblings('svg[data-testid="CheckCircleIcon"]').should('not.exist');
+                cy.get('main h3 p').contains('Follow Up').siblings('svg[data-testid="CheckCircleIcon"]').should('not.exist');
             });
         });
 
@@ -239,64 +239,72 @@ describe('Episode Details Page', () => {
                 cy.get('main').contains('Episode Details').should('be.visible');
                 cy.get('main').contains('Primary Inguinal').should('be.visible');
                 cy.get('main').contains('2023-01-15').should('be.visible');
-                cy.get('main').contains('Surgery').find('svg').should('exist');
-                cy.get('main').contains('Discharge').find('svg').should('exist');
-                cy.get('main').contains('Follow Up').find('svg').should('exist');
+                cy.get('main h3 p').contains('Surgery').siblings('svg[data-testid="CheckCircleIcon"]').should('exist');
+                cy.get('main h3 p').contains('Discharge').siblings('svg[data-testid="CheckCircleIcon"]').should('exist');
+                cy.get('main h3 p').contains('Follow Up').siblings('svg[data-testid="CheckCircleIcon"]').should('exist');
             });
 
             it('should expand and display surgery details', () => {
+                // Click on Surgery to collapse as it is open by default
+                cy.get('main > div > div > div:nth-child(2) > h3 > button').click();
                 // Click on Surgery to expand
-                cy.get('main > div > div > li:nth-child(2)').click().within(() => {
+                cy.get('main > div > div > div:nth-child(2) > h3 > button').click();
 
-                    // Verify surgery details are visible
-                    cy.get('input[id="cepod"]').should('have.value', 'Elective');
-                    cy.get('input[id="side"]').should('have.value', 'Left');
-                    cy.get('input[id="occurence"]').should('have.value', 'Primary');
-                    cy.get('input[id="type"]').should('have.value', 'Inguinal');
-                    cy.get('input[id="size"]').should('have.value', 'Medium');
-                    cy.get('input[id="complexity"]').should('have.value', 'Simple');
-                    cy.get('input[id="mesh_type"]').should('have.value', 'Synthetic');
-                    cy.get('input[id="anaesthetic_type"]').should('have.value', 'General');
-                    cy.get('input[id="diathermy_used"]').should('have.value', 'Yes');
-                    cy.get('input[id="antibiotic_used"]').should('have.value', 'Yes');
-                    cy.get('input[id="antibiotic_type"]').should('have.value', 'Cephalosporin');
-                    cy.get('input[id="surgeon"]').should('have.value', 'John Doe');
-                    cy.get('textarea[id="surgery_comments"]').should('have.value', 'Test surgery comments');
+                // Verify surgery details are visible
+                cy.get('input[id="cepod"]').should('have.value', 'Elective');
+                cy.get('input[id="side"]').should('have.value', 'Left');
+                cy.get('input[id="occurence"]').should('have.value', 'Primary');
+                cy.get('input[id="type"]').should('have.value', 'Inguinal');
+                cy.get('input[id="size"]').should('have.value', 'Medium');
+                cy.get('input[id="complexity"]').should('have.value', 'Simple');
+                cy.get('input[id="mesh_type"]').should('have.value', 'Synthetic');
+                cy.get('input[id="anaesthetic_type"]').should('have.value', 'General');
+                cy.get('input[id="diathermy_used"]').should('have.value', 'Yes');
+                cy.get('input[id="antibiotic_used"]').should('have.value', 'Yes');
+                cy.get('input[id="antibiotic_type"]').should('have.value', 'Cephalosporin');
+                cy.get('input[id="surgeon"]').should('have.value', 'John Doe');
+                cy.get('textarea[id="surgery_comments"]').should('have.value', 'Test surgery comments');
 
-                    // Verify surgery inputs are disabled
-                    cy.get('input[id="cepod"]').should('have.attr', 'disabled');
-                    cy.get('input[id="side"]').should('have.attr', 'disabled');
-                    cy.get('input[id="occurence"]').should('have.attr', 'disabled');
-                    cy.get('input[id="type"]').should('have.attr', 'disabled');
-                    cy.get('input[id="size"]').should('have.attr', 'disabled');
-                    cy.get('input[id="complexity"]').should('have.attr', 'disabled');
-                    cy.get('input[id="mesh_type"]').should('have.attr', 'disabled');
-                    cy.get('input[id="anaesthetic_type"]').should('have.attr', 'disabled');
-                    cy.get('input[id="diathermy_used"]').should('have.attr', 'disabled');
-                    cy.get('input[id="antibiotic_used"]').should('have.attr', 'disabled');
-                    cy.get('input[id="antibiotic_type"]').should('have.attr', 'disabled');
-                    cy.get('input[id="surgeon"]').should('have.attr', 'disabled');
-                    cy.get('textarea[id="surgery_comments"]').should('have.attr', 'disabled');
-                });
+                // Verify surgery inputs are disabled
+                cy.get('input[id="cepod"]').should('be.disabled');
+                cy.get('input[id="side"]').should('be.disabled');
+                cy.get('input[id="occurence"]').should('be.disabled');
+                cy.get('input[id="type"]').should('be.disabled');
+                cy.get('input[id="size"]').should('be.disabled');
+                cy.get('input[id="complexity"]').should('be.disabled');
+                cy.get('input[id="mesh_type"]').should('be.disabled');
+                cy.get('input[id="anaesthetic_type"]').should('be.disabled');
+                cy.get('input[id="diathermy_used"]').should('be.disabled');
+                cy.get('input[id="antibiotic_used"]').should('be.disabled');
+                cy.get('input[id="antibiotic_type"]').should('be.disabled');
+                cy.get('input[id="surgeon"]').should('be.disabled');
+                cy.get('textarea[id="surgery_comments"]').should('be.disabled');
             });
 
             it('should expand and display discharge details', () => {
                 // Click on Discharge to expand
-                cy.get('main > div > div > li:nth-child(3)').click().within(() => {
+                cy.get('main > div > div > div:nth-child(3) > h3 > button').click();
 
-                    // Verify discharge details are visible
-                    cy.get('input[id="date"]').should('have.value', '2023-01-16');
-                    cy.get('#aware_of_mesh').contains('Yes').should('exist');
-                    cy.get('input[id="discharge_duration"]').should('have.value', '2');
-                    cy.get('input[id="infection"]').should('have.value', 'Bleeding,Urinary Retention');
-                    cy.get('textarea[id="comments"]').should('have.value', 'Test discharge comments');
+                // Verify discharge details are visible
+                cy.get('input[id="date"]').should('have.value', '2023-01-16');
+                cy.get('#aware_of_mesh-select').should('contain', 'Yes');
+                cy.get('input[id="discharge_duration"]').should('have.value', '2');
 
-                    // Verify discharge inputs are disabled
-                    cy.get('input[id="date"]').should('have.attr', 'disabled');
-                    cy.get('input[name="aware_of_mesh"]').should('have.attr', 'disabled');
-                    cy.get('input[id="infection"]').should('have.attr', 'disabled');
-                    cy.get('textarea[id="comments"]').should('have.attr', 'disabled');
-                });
+                // Verify complications checkboxes
+                cy.get('input[id="infection-none"]').should('not.be.checked');
+                cy.get('input[id="infection-bleeding"]').should('be.checked');
+                cy.get('input[id="infection-haematoma"]').should('not.be.checked');
+                cy.get('input[id="infection-urinary_retention"]').should('be.checked');
+                cy.get('input[id="infection-return_to_theatre"]').should('not.be.checked');
+                cy.get('input[id="infection-death"]').should('not.be.checked');
+
+                cy.get('textarea[id="comments"]').should('have.value', 'Test discharge comments');
+
+                // Verify discharge inputs are disabled
+                cy.get('input[id="date"]').should('be.disabled');
+                cy.get('input[id="aware_of_mesh"]').should('be.disabled');
+                cy.get('input[id^="infection-"]').should('be.disabled');
+                cy.get('textarea[id="comments"]').should('be.disabled');
             });
 
             it('should display the discharge details when Post-operative complications is none', () => {
@@ -316,43 +324,43 @@ describe('Episode Details Page', () => {
                 cy.reload();
                 cy.wait('@getDischarge');
 
-                cy.get('#root main > div > div > li:nth-child(3)').click().within(() => {
-                    cy.get('input[id="infection"]').should('have.value', 'None');
-                });
+                cy.get('main > div > div > div:nth-child(3) > h3 > button').click();
+                cy.get('input[id="infection-none"]').should('be.checked');
+                cy.get('input[id="infection-bleeding"]').should('not.be.checked');
             });
 
             it('should display existing follow-up data', () => {
                 // Check existing Follow Up
-                cy.get('main > div > div > li:nth-child(4)').click().within(() => {
-                    // Verify follow-up details are visible
-                    cy.get('input[id="date"]').should('have.value', '2023-02-15');
-                    cy.get('input[id="surgeon"]').should('have.value', 'John Doe');
-                    cy.get('div[id="pain_severity"]').contains('No Pain').should('exist');
-                    cy.get('div[id="mesh_awareness"]').contains('Yes').should('exist');
-                    cy.get('div[id="seroma"]').contains('Yes').should('exist');
-                    cy.get('div[id="infection"]').contains('Yes').should('exist');
-                    cy.get('div[id="numbness"]').contains('Yes').should('exist');
-                    cy.get('div[id="recurrence"]').contains('Yes').should('exist');
-                    cy.get('div[id="further_surgery_need"]').contains('Yes').should('exist');
-                    cy.get('textarea[id="surgery_comments_box"]').should('have.value', 'Patient recovering well');
+                cy.get('main > div > div > div:nth-child(4) > h3 > button').click();
 
-                    // Verify follow-up inputs are disabled
-                    cy.get('input[id="date"]').should('have.attr', 'disabled');
-                    cy.get('input[id="surgeon"]').should('have.attr', 'disabled');
-                    cy.get('input[name="pain_severity"]').should('have.attr', 'disabled');
-                    cy.get('input[name="mesh_awareness"]').should('have.attr', 'disabled');
-                    cy.get('input[name="seroma"]').should('have.attr', 'disabled');
-                    cy.get('input[name="infection"]').should('have.attr', 'disabled');
-                    cy.get('input[name="numbness"]').should('have.attr', 'disabled');
-                    cy.get('input[name="recurrence"]').should('have.attr', 'disabled');
-                    cy.get('input[name="further_surgery_need"]').should('have.attr', 'disabled');
-                    cy.get('textarea[id="surgery_comments_box"]').should('have.attr', 'disabled');
-                });
+                // Verify follow-up details are visible
+                cy.get('input[id="follow-up-date"]').should('have.value', '2023-02-15');
+                cy.get('input[id="surgeon"]').should('have.value', 'John Doe');
+                cy.get('#pain_severity-select').contains('No Pain').should('exist');
+                cy.get('#mesh_awareness-select').contains('Yes').should('exist');
+                cy.get('#seroma-select').contains('Yes').should('exist');
+                cy.get('#infection-select').contains('Yes').should('exist');
+                cy.get('#numbness-select').contains('Yes').should('exist');
+                cy.get('#recurrence-select').contains('Yes').should('exist');
+                cy.get('#further_surgery_need-select').contains('Yes').should('exist');
+                cy.get('textarea[id="surgery_comments_box"]').should('have.value', 'Patient recovering well');
+
+                // Verify follow-up inputs are disabled
+                cy.get('input[id="date"]').should('be.disabled');
+                cy.get('input[id="surgeon"]').should('be.disabled');
+                cy.get('input[id="pain_severity"]').should('be.disabled');
+                cy.get('input[id="mesh_awareness"]').should('be.disabled');
+                cy.get('input[id="seroma"]').should('be.disabled');
+                cy.get('input[id="infection"]').should('be.disabled');
+                cy.get('input[id="numbness"]').should('be.disabled');
+                cy.get('input[id="recurrence"]').should('be.disabled');
+                cy.get('input[id="further_surgery_need"]').should('be.disabled');
+                cy.get('textarea[id="surgery_comments_box"]').should('be.disabled');
             });
 
-            it('should navigate back to patient details', () => {
-                cy.get('main > div > div > div > button > svg').first().click();
-                cy.url().should('include', '/patients/1/101');
+            it('should navigate back to patient details epsiode tab', () => {
+                cy.get('main > div > div > button > svg').first().click();
+                cy.url().should('include', '/patients/1/101?tab=episodes');
                 cy.url().should('not.include', '/episodes/888');
             });
         });
@@ -466,7 +474,7 @@ describe('Episode Details Page', () => {
             cy.contains('Episode Details').should('be.visible');
 
             // User can go back to the previous page
-            cy.get('main > div > div > div > button').click();
+            cy.get('main > div > div > button').click();
             cy.url().should('include', '/patients/1/101');
             cy.url().should('not.include', '/episodes/888');
         });
