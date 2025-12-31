@@ -14,7 +14,6 @@ import {
 import ConfirmationModal from 'components/ConfirmationModal';
 import Notifications from 'components/Notifications';
 import { useChangePassword } from 'hooks/api/userHooks';
-
 import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 
