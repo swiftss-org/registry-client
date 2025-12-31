@@ -44,7 +44,7 @@ const EpisodeDetails: React.FC = () => {
   const { data: followUps } = useGetEpisodeFollowUps(episodeID);
   const { data: discharge } = useGetEpisodeDischarge(episodeID);
 
-  const [expanded, setExpanded] = useState<string | false>('surgery');
+  const [expanded, setExpanded] = useState<string | false>();
 
   const handleChange = (panel: string) => (__event: SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
@@ -121,7 +121,7 @@ const EpisodeDetails: React.FC = () => {
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography fontWeight={600}>
-                  {discharge?.infection !== undefined ? 'Discharge' : 'Add New Discharge'}
+                  {discharge?.infection !== undefined ? `Discharge - ${discharge.date}` : 'Add New Discharge'}
                 </Typography>
                 {discharge?.infection !== undefined && (
                   <CheckCircleIcon color="success" fontSize="small" />
