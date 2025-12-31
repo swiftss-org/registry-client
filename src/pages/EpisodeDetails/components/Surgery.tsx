@@ -90,7 +90,7 @@ const Surgery: FC<{
             key={`surgeon_${index}`}
             disabled
             label="Surgeon"
-            id="surgeon"
+            id={`surgeon_${index}`}
             variant="outlined"
             size="small"
             value={`${surgeon.user.first_name} ${surgeon.user.last_name}`}

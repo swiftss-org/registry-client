@@ -245,8 +245,6 @@ describe('Episode Details Page', () => {
             });
 
             it('should expand and display surgery details', () => {
-                // Click on Surgery to collapse as it is open by default
-                cy.get('main > div > div > div:nth-child(2) > h3 > button').click();
                 // Click on Surgery to expand
                 cy.get('main > div > div > div:nth-child(2) > h3 > button').click();
 
@@ -262,7 +260,7 @@ describe('Episode Details Page', () => {
                 cy.get('input[id="diathermy_used"]').should('have.value', 'Yes');
                 cy.get('input[id="antibiotic_used"]').should('have.value', 'Yes');
                 cy.get('input[id="antibiotic_type"]').should('have.value', 'Cephalosporin');
-                cy.get('input[id="surgeon"]').should('have.value', 'John Doe');
+                cy.get('input[id="surgeon_0"]').should('have.value', 'John Doe');
                 cy.get('textarea[id="surgery_comments"]').should('have.value', 'Test surgery comments');
 
                 // Verify surgery inputs are disabled
@@ -277,7 +275,7 @@ describe('Episode Details Page', () => {
                 cy.get('input[id="diathermy_used"]').should('be.disabled');
                 cy.get('input[id="antibiotic_used"]').should('be.disabled');
                 cy.get('input[id="antibiotic_type"]').should('be.disabled');
-                cy.get('input[id="surgeon"]').should('be.disabled');
+                cy.get('input[id="surgeon_0"]').should('be.disabled');
                 cy.get('textarea[id="surgery_comments"]').should('be.disabled');
             });
 
@@ -335,7 +333,7 @@ describe('Episode Details Page', () => {
 
                 // Verify follow-up details are visible
                 cy.get('input[id="follow-up-date"]').should('have.value', '2023-02-15');
-                cy.get('input[id="surgeon"]').should('have.value', 'John Doe');
+                cy.get('input[id="surgeon_0"]').should('have.value', 'John Doe');
                 cy.get('#pain_severity-select').contains('No Pain').should('exist');
                 cy.get('#mesh_awareness-select').contains('Yes').should('exist');
                 cy.get('#seroma-select').contains('Yes').should('exist');
@@ -347,7 +345,7 @@ describe('Episode Details Page', () => {
 
                 // Verify follow-up inputs are disabled
                 cy.get('input[id="date"]').should('be.disabled');
-                cy.get('input[id="surgeon"]').should('be.disabled');
+                cy.get('input[id="surgeon_0"]').should('be.disabled');
                 cy.get('input[id="pain_severity"]').should('be.disabled');
                 cy.get('input[id="mesh_awareness"]').should('be.disabled');
                 cy.get('input[id="seroma"]').should('be.disabled');
@@ -421,10 +419,8 @@ describe('Episode Details Page', () => {
             cy.reload();
             cy.wait('@getEpisodeMultipleSurgeons');
 
-            cy.get('main > div > div > li:nth-child(2)').click().within(() => {
-                cy.get('input[id="surgeon"]').eq(0).should('have.value', 'John Doe');
-                cy.get('input[id="surgeon"]').eq(1).should('have.value', 'Jane Smith');
-            });
+            cy.get('input[id="surgeon_0"]').should('have.value', 'John Doe');
+            cy.get('input[id="surgeon_1"]').should('have.value', 'Jane Smith');
         });
 
         it('should handle missing optional fields gracefully', () => {
@@ -455,10 +451,10 @@ describe('Episode Details Page', () => {
 
             // Should still display without errors
             cy.contains('Episode Details').should('be.visible');
-            cy.get('main > div > div > li:nth-child(2)').click();
+            cy.get('main > div > div > div:nth-child(2) > h3 > button').click(); // Open Surgery section
             cy.get('input[id="antibiotic_used"]').should('have.value', 'No');
             cy.get('input[id="antibiotic_type"]').should('have.value', '');
-            cy.get('input[id="surgeon"]').should('not.exist');
+            cy.get('input[id="surgeon_0"]').should('not.exist');
         });
 
         it('should handle API errors gracefully', () => {
