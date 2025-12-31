@@ -207,7 +207,8 @@ const RegisterEpisodeForm: React.FC<Props> = ({
       onSubmit({
         ...values,
         patientHospitalId: Number(values.patientHospitalId),
-        antibioticType: values.antibioticType.join(','),
+        antibioticType:
+          values.antibioticType.length > 0 ? values.antibioticType.join(',') : 'none',
         surgeons: surgeonsList.filter((s) => s.value >= 0),
       } as RegisterEpisodeFormType);
     } else {
