@@ -126,6 +126,7 @@ describe('Register Episode Page', () => {
 
             // Redirect check
             cy.url().should('include', '/patients/1/101');
+            cy.contains('button[role="tab"]', 'Episodes').should('have.attr', 'aria-selected', 'true');
         });
 
         it('should pre-select the hospital of the patient', () => {

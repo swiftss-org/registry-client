@@ -118,7 +118,11 @@ const RegisterEpisode: React.FC = () => {
           title="Cancel new registration?"
           subtitle="Are you sure you want to cancel registering an episode? All information you've entered will be lost!"
           buttonText="Yes, cancel new registration"
-          onClick={() => navigate(`${urls.patients()}/${hospitalID}/${patientID}`)}
+          onClick={() => {
+              const targetUrl = (hospitalID && patientID) ? urls.patientDetails(hospitalID, patientID) : urls.patients();
+              navigate(targetUrl);
+            }
+        }
         />
       )}
       <Box

@@ -64,7 +64,7 @@ const EpisodeDetails: React.FC = () => {
         <IconButton
           edge="start"
           onClick={() => {
-            navigate(`${urls.patients()}/${hospitalID}/${patientID}`, { replace: true });
+            navigate(urls.patientDetails(hospitalID, patientID, 'episodes'));
           }}
         >
           <ArrowBackIcon />

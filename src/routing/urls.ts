@@ -8,10 +8,9 @@ const urls = {
   episodeStats: () => '/episodes/stats',
   landingPage: () => '/landing',
   nationalKPIs: () => '/nationalKPIs',
-  patientDetails: (hospitalID: string, patientID: string) => `/patients/${hospitalID}/${patientID}`,
+  patientDetails: (hospitalID: string, patientID: string, tab='general') => `/patients/${hospitalID}/${patientID}?tab=${tab}`,
   addEpisode: (hospitalID: string, patientID: string) => `/patients/${hospitalID}/${patientID}/add-episode`,
-  episodeDetails: (hospitalID: string, patientID: string, episodeID: string) =>
-    `/patients/${hospitalID}/${patientID}/episodes/${episodeID}`,
+  episodeDetails: (hospitalID: string, patientID: string, episodeID: string) => `/patients/${hospitalID}/${patientID}/episodes/${episodeID}`,
 };
 
 export default urls;

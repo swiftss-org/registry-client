@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ReactQueryKeys } from 'hooks/constants';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
@@ -242,9 +242,7 @@ export const useRegisterEpisode = (
       return request();
     },
     onSuccess: () => {
-      navigate(`${urls.patients()}/${hospitalID}/${patientID}`, {
-        replace: true,
-      });
+      navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
     },
   });
 };
@@ -283,6 +281,9 @@ export const useGetEpisodeFollowUps = (id: string) => {
 };
 
 export const useDischarge = (episodeID: string) => {
+  const navigate = useNavigate();
+  const { hospitalID, patientID } = useParams<{ hospitalID: string; patientID: string }>();
+
   return useMutation<DischargeAPI, AxiosError, DischargeForm>({
     mutationFn: (params) => {
       const payload = {
@@ -299,7 +300,11 @@ export const useDischarge = (episodeID: string) => {
       return request();
     },
     onSuccess: () => {
-      window.location.reload();
+      if (hospitalID && patientID) {
+        navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
+      } else {
+        window.location.reload();
+      }
     },
   });
 };

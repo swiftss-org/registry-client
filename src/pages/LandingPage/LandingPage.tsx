@@ -82,7 +82,7 @@ const LandingPage: React.FC = () => {
 
   const handleRowClick = (episode: OwnedEpisodeAPI) => {
     const { hospital_id, patient_id, id } = episode;
-    navigate(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
+    navigate(urls.episodeDetails(String(hospital_id), String(patient_id), String(id)));
   };
 
   const [dismissedIds, setDismissedIds] = useState<number[]>([]);
@@ -194,7 +194,7 @@ const LandingPage: React.FC = () => {
                     <tr
                       key={patient.id}
                       onClick={() =>
-                        navigate(`${urls.patients()}/${patient.hospital_id}/${patient.id}`)
+                        navigate(urls.patientDetails(patient.hospital_id, patient.id))
                       }
                       style={{
                         backgroundColor: '#fc7c7c',
