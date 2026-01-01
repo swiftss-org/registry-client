@@ -25,7 +25,7 @@ import urls from 'routing/urls';
 
 import Discharge from './components/Discharge';
 import FollowUps from './components/FollowUps';
-import Surgery from './components/Surgery';
+import SurgeryReadOnly from './components/SurgeryReadOnly';
 
 const EpisodeDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
@@ -107,7 +107,7 @@ const EpisodeDetails: React.FC = () => {
               </Box>
             </AccordionSummary>
             <AccordionDetails>
-              <Surgery episode={episode} />
+              <SurgeryReadOnly episode={episode} />
             </AccordionDetails>
           </Accordion>
 
