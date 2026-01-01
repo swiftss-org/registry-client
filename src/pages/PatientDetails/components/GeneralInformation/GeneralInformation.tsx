@@ -1,29 +1,13 @@
 import React from 'react';
 
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper } from '@mui/material';
+import { DetailItem, SectionTitle } from 'components/Display';
 import { HospitalsAPI, PatientAPI } from 'models/apiTypes';
 
 type Props = {
   patient?: PatientAPI;
   hospital?: HospitalsAPI;
 };
-
-const DetailItem: React.FC<{ id: string; label: string; value: string | number }> = ({ id, label, value }) => (
-  <Box sx={{ mb: 1.5 }}>
-    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontWeight: 500 }}>
-      {label}
-    </Typography>
-    <Typography id={id} variant="body1" color="text.primary" sx={{ fontWeight: 400 }}>
-      {value || '—'}
-    </Typography>
-  </Box>
-);
-
-const SectionTitle: React.FC<{ title: string }> = ({ title }) => (
-  <Typography variant="h6" color="primary" sx={{ mb: 2, fontWeight: 600, mt: 1 }}>
-    {title}
-  </Typography>
-);
 
 const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
   const hospitalPatientID = patient?.hospital_mappings?.find(
