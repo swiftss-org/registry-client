@@ -1,11 +1,8 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react';
 
 import { Alert } from '@mui/material';
-
-import { NotificationWrapper } from './Notifications.styles';
-import { resetNotifications } from '../../providers/Notifications/actions';
-import { useNotifications } from '../../providers/Notifications/NotificationProvider';
+import { resetNotifications } from 'providers/Notifications/actions';
+import { useNotifications } from 'providers/Notifications/NotificationProvider';
 
 export type NotificationType = {
   message: string;
@@ -29,16 +26,23 @@ const Notifications: React.FC = () => {
     }
   }, [notification]);
 
+  if (!notification) {
+    return null;
+  }
+
   return (
-    <>
-      {notification && (
-        <NotificationWrapper ref={ref}>
-          <Alert severity={notification.type} onClose={removeNotification}>
-            {notification.message}
-          </Alert>
-        </NotificationWrapper>
-      )}
-    </>
+    <Alert
+      ref={ref}
+      severity={notification.type}
+      onClose={removeNotification}
+      sx={{
+        borderRadius: '8px',
+        scrollMargin: '40px',
+        mb: 2,
+      }}
+    >
+      {notification.message}
+    </Alert>
   );
 };
 
