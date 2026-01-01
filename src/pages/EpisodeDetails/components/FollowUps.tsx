@@ -190,61 +190,45 @@ const FollowUps: FC<{
           />
         </Box>
 
-        {canSubmit ? (
-          <Box>
-            {formState.attendees.map((attendeeId, index) => (
-              <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <Box sx={{ flexGrow: 1 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id={`surgeon-label-${index}`}>Surgeon</InputLabel>
-                    <Select
-                      labelId={`surgeon-label-${index}`}
-                      id={`surgeon-${index}`}
-                      value={attendeeId === 0 ? '' : attendeeId}
-                      label="Surgeon"
-                      onChange={(e) => handleAttendeeChange(index, Number(e.target.value))}
-                    >
-                      {surgeonOptions.map((option: SelectOption) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                {index === formState.attendees.length - 1 && (
-                  <IconButton onClick={handleAddAttendee} color="primary">
-                    <AddCircleOutlineIcon />
-                  </IconButton>
-                )}
-                {formState.attendees.length > 0 && (
-                  <IconButton onClick={() => handleRemoveAttendee(index)} color="error">
-                    <RemoveCircleOutlineIcon />
-                  </IconButton>
-                )}
+        <Box>
+          {formState.attendees.map((attendeeId, index) => (
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+              <Box sx={{ flexGrow: 1 }}>
+                <FormControl fullWidth>
+                  <InputLabel id={`surgeon-label-${index}`}>Surgeon</InputLabel>
+                  <Select
+                    labelId={`surgeon-label-${index}`}
+                    id={`surgeon-${index}`}
+                    value={attendeeId === 0 ? '' : attendeeId}
+                    label="Surgeon"
+                    onChange={(e) => handleAttendeeChange(index, Number(e.target.value))}
+                  >
+                    {surgeonOptions.map((option: SelectOption) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
-            ))}
-            {formState.attendees.length === 0 && (
-              <Button startIcon={<AddCircleOutlineIcon />} onClick={handleAddAttendee}>
-                Add Surgeon
-              </Button>
-            )}
-          </Box>
-        ) : (
-          <Stack spacing={2}>
-            {followUp?.attendees.map((attendee: { user: { first_name: string; last_name: string } }, index: number) => (
-              <TextField
-                key={`attendee_disabled_${index}`}
-                disabled
-                variant="outlined"
-                label="Surgeon"
-                size="medium"
-                fullWidth
-                value={`${attendee.user.first_name} ${attendee.user.last_name}`}
-              />
-            ))}
-          </Stack>
-        )}
+              {index === formState.attendees.length - 1 && (
+                <IconButton onClick={handleAddAttendee} color="primary">
+                  <AddCircleOutlineIcon />
+                </IconButton>
+              )}
+              {formState.attendees.length > 0 && (
+                <IconButton onClick={() => handleRemoveAttendee(index)} color="error">
+                  <RemoveCircleOutlineIcon />
+                </IconButton>
+              )}
+            </Box>
+          ))}
+          {formState.attendees.length === 0 && (
+            <Button startIcon={<AddCircleOutlineIcon />} onClick={handleAddAttendee}>
+              Add Surgeon
+            </Button>
+          )}
+        </Box>
 
         <Box>
           <FormControl fullWidth error={touched.pain_severity && !!errors.pain_severity}>

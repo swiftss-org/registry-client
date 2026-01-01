@@ -24,6 +24,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import urls from 'routing/urls';
 
 import Discharge from './components/Discharge';
+import FollowUpReadOnly from './components/FollowUpReadOnly';
 import FollowUps from './components/FollowUps';
 import SurgeryReadOnly from './components/SurgeryReadOnly';
 
@@ -149,7 +150,7 @@ const EpisodeDetails: React.FC = () => {
                 </Box>
               </AccordionSummary>
               <AccordionDetails>
-                <FollowUps followUp={followUp} />
+                <FollowUpReadOnly followUp={followUp} />
               </AccordionDetails>
             </Accordion>
           ))}
