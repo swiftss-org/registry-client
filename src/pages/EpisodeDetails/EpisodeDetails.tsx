@@ -24,6 +24,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import urls from 'routing/urls';
 
 import Discharge from './components/Discharge';
+import DischargeReadOnly from './components/DischargeReadOnly';
 import FollowUpReadOnly from './components/FollowUpReadOnly';
 import FollowUps from './components/FollowUps';
 import SurgeryReadOnly from './components/SurgeryReadOnly';
@@ -130,7 +131,11 @@ const EpisodeDetails: React.FC = () => {
               </Box>
             </AccordionSummary>
             <AccordionDetails>
-              <Discharge discharge={discharge!} />
+              {discharge?.infection !== undefined ? (
+                <DischargeReadOnly discharge={discharge} />
+              ) : (
+                <Discharge discharge={discharge!} />
+              )}
             </AccordionDetails>
           </Accordion>
 
