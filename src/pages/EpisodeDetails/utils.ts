@@ -90,3 +90,10 @@ export const followUpFormValidation = (values: FollowUpForm) => {
 
   return errors;
 };
+
+// TODO: This is a sign that something went wrong with the types; should be refactored end delete this function
+export const getBooleanValue = (value: boolean | string | null | undefined): 0 | 1 | '' => {
+  if (value === undefined || value === null || value === '') return '';
+  if (value === true || value === 'Yes' || String(value).toLowerCase() === 'true') return 0;
+  return 1;
+};

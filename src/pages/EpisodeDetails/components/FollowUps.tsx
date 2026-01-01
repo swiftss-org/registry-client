@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { useFollowUp, useGetSurgeons } from 'hooks/api/patientHooks';
 import { FollowUpAPI, FollowUpForm, SelectOption } from 'models/apiTypes';
-import { followUpFormValidation } from 'pages/EpisodeDetails/utils';
+import { followUpFormValidation, getBooleanValue } from 'pages/EpisodeDetails/utils';
 import { BOOLEAN_OPTIONS, FOLLOW_UP_PAIN_OPTIONS } from 'pages/RegisterEpisode/constants';
 import { getSurgeonOptionsSorted } from 'pages/RegisterEpisode/utils';
 import { useParams } from 'react-router-dom';
@@ -73,13 +73,12 @@ const FollowUps: FC<{
         date: followUp.date || '',
         attendees: followUp.attendees ? followUp.attendees.map((a: { id: number }) => a.id) : [],
         pain_severity: followUp.pain_severity || '',
-        mesh_awareness: followUp.mesh_awareness !== undefined ? (followUp.mesh_awareness ? 0 : 1) : '',
-        seroma: followUp.seroma !== undefined ? (followUp.seroma ? 0 : 1) : '',
-        infection: followUp.infection !== undefined ? (followUp.infection ? 0 : 1) : '',
-        numbness: followUp.numbness !== undefined ? (followUp.numbness ? 0 : 1) : '',
-        recurrence: followUp.recurrence !== undefined ? (followUp.recurrence ? 0 : 1) : '',
-        further_surgery_need:
-          followUp.further_surgery_need !== undefined ? (followUp.further_surgery_need ? 0 : 1) : '',
+        mesh_awareness: getBooleanValue(followUp.mesh_awareness),
+        seroma: getBooleanValue(followUp.seroma),
+        infection: getBooleanValue(followUp.infection),
+        numbness: getBooleanValue(followUp.numbness),
+        recurrence: getBooleanValue(followUp.recurrence),
+        further_surgery_need: getBooleanValue(followUp.further_surgery_need),
         surgery_comments_box: followUp.surgery_comments_box || '',
       });
     } else {

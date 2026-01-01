@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { useDischarge } from 'hooks/api/patientHooks';
 import { DischargeAPI, SelectOption } from 'models/apiTypes';
-import { dischargeFormValidation } from 'pages/EpisodeDetails/utils';
+import { dischargeFormValidation, getBooleanValue } from 'pages/EpisodeDetails/utils';
 import { BOOLEAN_OPTIONS } from 'pages/RegisterEpisode/constants';
 import { useParams } from 'react-router-dom';
 
@@ -63,7 +63,7 @@ const Discharge: FC<{
     if (discharge) {
       setFormState({
         date: discharge.date || '',
-        aware_of_mesh: discharge.aware_of_mesh !== undefined ? (discharge.aware_of_mesh ? 0 : 1) : '',
+        aware_of_mesh: getBooleanValue(discharge.aware_of_mesh),
         discharge_duration: discharge.discharge_duration || '',
         infection: discharge.infection ? discharge.infection.split(',') : [],
         comments: discharge.comments || '',
