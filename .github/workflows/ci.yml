@@ -50,7 +50,7 @@ jobs:
     
     services:
       registry-api:
-        image: ghcr.io/swiftss-org/registry-api:latest
+        image: ghcr.io/swiftss-org/registry-api:main
         ports:
           - 8000:8000
         env:
