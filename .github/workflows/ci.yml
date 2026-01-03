@@ -17,6 +17,17 @@ on:
       - 'dependabot/**'
 
 jobs:
+  debug-registry-api:
+    name: Debug registry-api
+    runs-on: ubuntu-latest
+    if: failure() # or always()
+    needs: e2e-test
+    steps:
+      - name: Pull logs
+        run: |
+          docker logs registry-api || true
+          docker inspect --format='{{json .State.Health.Log}}' registry=api || true
+
   test:
     name: Run Tests
     runs-on: ubuntu-latest
