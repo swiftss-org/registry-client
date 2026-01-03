@@ -50,13 +50,18 @@ jobs:
     
     services:
       postgres:
-        image: postgres:15
+        image: postgres:18
         env:
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: admin
           POSTGRES_DB: tmh_registry
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U admin -d tmh_registry"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
       registry-api:
         image: ghcr.io/swiftss-org/registry-api:main
         ports:
@@ -70,8 +75,6 @@ jobs:
           POSTGRES_HOST: postgres
           SECRET_KEY: test-secret-key-for-ci
           DEBUG: 'True'
-        depends_on:
-          - postgres
         options: >-
           --health-cmd "curl -f http://localhost:8000/api/health || exit 1"
           --health-interval 10s
@@ -100,9 +103,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-
-#      - name: Bring backend up
-#        run: docker compose -f docker-compose.yml up -d
 
       - name: Wait for backend API
         run: |
