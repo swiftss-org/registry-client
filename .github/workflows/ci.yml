@@ -49,15 +49,29 @@ jobs:
       - test
     
     services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: tmh_registry
+        ports:
+          - 5432:5432
       registry-api:
         image: ghcr.io/swiftss-org/registry-api:main
         ports:
           - 8000:8000
         env:
           DJANGO_SETTINGS_MODULE: core.settings
-          DATABASE_URL: sqlite:///db.sqlite3
+          DATABASE_URL: postgres://admin:admin@postgres:5432/tmh_registry
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: tmh_registry
+          POSTGRES_HOST: postgres
           SECRET_KEY: test-secret-key-for-ci
           DEBUG: 'True'
+        depends_on:
+          - postgres
         options: >-
           --health-cmd "curl -f http://localhost:8000/api/health || exit 1"
           --health-interval 10s
@@ -86,6 +100,9 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
+
+#      - name: Bring backend up
+#        run: docker compose -f docker-compose.yml up -d
 
       - name: Wait for backend API
         run: |
