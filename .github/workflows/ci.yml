@@ -17,17 +17,6 @@ on:
       - 'dependabot/**'
 
 jobs:
-  debug-registry-api:
-    name: Debug registry-api
-    runs-on: ubuntu-latest
-    if: failure() # or always()
-    needs: e2e-test
-    steps:
-      - name: Pull logs
-        run: |
-          docker logs registry-api || true
-          docker inspect --format='{{json .State.Health.Log}}' registry=api || true
-
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -86,7 +75,7 @@ jobs:
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
           SECRET_KEY: test-secret-key-for-ci
-          DEBUG: 'True'
+          DEBUG: "true"
         options: >-
           --health-cmd "curl -f http://localhost:8000/api/health || exit 1"
           --health-interval 10s
