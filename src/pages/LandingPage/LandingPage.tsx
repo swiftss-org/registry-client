@@ -50,50 +50,50 @@ const LandingPage: React.FC = () => {
   const sortedEpisodes = ownedEpisodes
     ? [...ownedEpisodes].sort((a: OwnedEpisodeAPI, b: OwnedEpisodeAPI) => {
 
-        // Custom sorting for follow_up_dates
-        if (sortConfig.key === 'follow_up_dates') {
-          const aFollowUps = a.follow_up_dates.length;
-          const bFollowUps = b.follow_up_dates.length;
-          return sortConfig.direction === 'ascending'
-            ? aFollowUps - bFollowUps
-            : bFollowUps - aFollowUps;
-        }
+      // Custom sorting for follow_up_dates
+      if (sortConfig.key === 'follow_up_dates') {
+        const aFollowUps = a.follow_up_dates.length;
+        const bFollowUps = b.follow_up_dates.length;
+        return sortConfig.direction === 'ascending'
+          ? aFollowUps - bFollowUps
+          : bFollowUps - aFollowUps;
+      }
 
-        // Custom sorting for discharge status
-        if (sortConfig.key === 'discharged') {
-          const aHasDischarge = a.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
-          const bHasDischarge = b.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
-          return sortConfig.direction === 'ascending' ? aHasDischarge - bHasDischarge : bHasDischarge - aHasDischarge;
-        }
+      // Custom sorting for discharge status
+      if (sortConfig.key === 'discharged') {
+        const aHasDischarge = a.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
+        const bHasDischarge = b.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
+        return sortConfig.direction === 'ascending' ? aHasDischarge - bHasDischarge : bHasDischarge - aHasDischarge;
+      }
 
-        // Fallback to other sorting keys
-        const aValue = a[sortConfig.key] ?? '';
-        const bValue = b[sortConfig.key] ?? '';
+      // Fallback to other sorting keys
+      const aValue = a[sortConfig.key] ?? '';
+      const bValue = b[sortConfig.key] ?? '';
 
-        if (aValue < bValue) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-        return 0;
-      })
+      if (aValue < bValue) {
+        return sortConfig.direction === 'ascending' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    })
     : [];
 
   const handleRowClick = (episode: OwnedEpisodeAPI) => {
     const { hospital_id, patient_id, id } = episode;
-    navigate(urls.episodeDetails(String(hospital_id), String(patient_id), String(id)));
+    navigate(urls.episodeDetails(hospital_id, patient_id, id));
   };
 
   const [dismissedIds, setDismissedIds] = useState<number[]>([]);
 
   const { data: announcementsResponse, error: announcementsError } = useGetAnnouncements();
- const announcements = Array.isArray(announcementsResponse)
-  ? announcementsResponse
-  : announcementsResponse?.results ?? [];
+  const announcements = Array.isArray(announcementsResponse)
+    ? announcementsResponse
+    : announcementsResponse?.results ?? [];
 
   const dismissAnnouncement = (id: number) => {
-  setDismissedIds((prev) => [...prev, id]);
+    setDismissedIds((prev) => [...prev, id]);
   };
 
   return (
@@ -141,7 +141,7 @@ const LandingPage: React.FC = () => {
               </button>
               <div>{announcement.announcement_text}</div>
             </div>
-        ))}
+          ))}
         <DashboardText>
           This is your personalized landing page with key insights on the episodes you have performed.
         </DashboardText>

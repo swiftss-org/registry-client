@@ -50,7 +50,7 @@ export type HospitalsAPI = {
   hospital_id?: number;
   name?: string;
   address?: string;
-  patient_hospital_id?: number;
+  patient_hospital_id?: number; // String in DB, but explicitly cast to int in backend serializers
 };
 
 export type EpisodesAPI = {
@@ -139,7 +139,7 @@ export type DischargeAPI = {
   date: string;
   aware_of_mesh: boolean;
   infection: string;
-  discharge_duration?: string;
+  discharge_duration?: number;
   comments?: string;
 };
 
@@ -208,9 +208,9 @@ export type PatientAPI = {
   full_name: string;
   national_id: string;
   age: number;
-  day_of_birth: string;
-  month_of_birth: string;
-  year_of_birth: string;
+  day_of_birth: number;
+  month_of_birth: number;
+  year_of_birth: number;
   gender: 'Male' | 'Female';
   phone_1: string;
   phone_2: string;
@@ -266,7 +266,7 @@ export type OwnedEpisodeAPI = {
 export type UnlinkedPatient = {
   id: string;
   full_name: string;
-  hospital_id: string;
+  hospital_id: number;
   patient_hospital_id: string;
 };
 

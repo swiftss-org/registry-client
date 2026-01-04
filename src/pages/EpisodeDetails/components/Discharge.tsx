@@ -64,7 +64,7 @@ const Discharge: FC<{
       setFormState({
         date: discharge.date || '',
         aware_of_mesh: getBooleanValue(discharge.aware_of_mesh),
-        discharge_duration: discharge.discharge_duration || '',
+        discharge_duration: discharge.discharge_duration !== undefined ? String(discharge.discharge_duration) : '',
         infection: discharge.infection ? discharge.infection.split(',') : [],
         comments: discharge.comments || '',
       });
