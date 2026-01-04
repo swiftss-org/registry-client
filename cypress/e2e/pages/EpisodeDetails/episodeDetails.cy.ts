@@ -325,8 +325,6 @@ describe('Episode Details Page', () => {
                     cy.get('main > div > div > div:nth-child(4) > h3 > button').click();
 
                     // Verify follow-up details are visible
-    //                 cy.scrollTo('bottom', { ensureScrollable: false })
-
                     cy.get('#follow_up_date').should('have.text', '2023-02-15').and('be.visible');
                     cy.get('#pain_severity').should('have.text', 'No Pain').and('be.visible');
                     cy.get('#mesh_awareness').should('have.text', 'Yes').and('be.visible');
@@ -345,6 +343,329 @@ describe('Episode Details Page', () => {
                     cy.get('main > div > div > button > svg').first().click();
                     cy.url().should('include', '/patients/1/101?tab=episodes');
                     cy.url().should('not.include', '/episodes/888');
+                });
+            });
+        });
+
+        describe('Write Scenarios', () => {
+            beforeEach(() => {
+                cy.window().then((win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                });
+
+                cy.intercept('GET', `**/episodes/${episodeId}/`, {
+                    statusCode: 200,
+                    body: {
+                        id: 888,
+                        episode_type: 'Primary Inguinal',
+                        surgery_date: '2023-01-15',
+                        cepod: 'Elective',
+                        side: 'Left',
+                        occurence: 'Primary',
+                        type: 'Inguinal',
+                        size: 'Medium',
+                        complexity: 'Simple',
+                        mesh_type: 'Synthetic',
+                        diathermy_used: true,
+                        antibiotic_used: true,
+                        antibiotic_type: 'Cephalosporin',
+                        comments: 'Test surgery comments',
+                        anaesthetic_type: 'General',
+                        surgeons: [
+                            {
+                                id: 1,
+                                user: {
+                                    email: 'surgeon@example.com',
+                                    first_name: 'John',
+                                    last_name: 'Doe'
+                                },
+                                level: 'Consultant'
+                            }
+                        ]
+                    }
+                }).as('getEpisode');
+
+                cy.intercept('GET', `**/medical-personnel/**`, {
+                    statusCode: 200,
+                    body: {
+                        results: [
+                            { id: 1, user: { first_name: 'John', last_name: 'Doe' }, level: 'Consultant' },
+                            { id: 2, user: { first_name: 'Jane', last_name: 'Smith' }, level: 'Consultant' }
+                        ]
+                    }
+                }).as('getMedicalPersonnel');
+            });
+
+            it('should allow adding a new Discharge', () => {
+                cy.intercept('GET', `**/episodes/${episodeId}/discharge/`, {
+                    statusCode: 200,
+                    body: {}
+                }).as('getDischargeEmpty');
+
+                cy.intercept('GET', `**/episodes/${episodeId}/follow-ups/`, {
+                    statusCode: 200,
+                    body: []
+                }).as('getFollowUpsEmpty');
+
+                cy.intercept('POST', '**/discharges/', {
+                    statusCode: 201,
+                    body: { id: 10 }
+                }).as('addDischarge');
+
+                cy.visit(`/patients/1/101/episodes/${episodeId}`);
+                cy.wait(['@getEpisode', '@getDischargeEmpty', '@getFollowUpsEmpty', '@getMedicalPersonnel']);
+
+                // Expand Add New Discharge
+                cy.contains('Add New Discharge').click();
+
+                // Fill form
+                cy.get('#date').type('2023-01-16');
+                cy.selectMuiOption('#aware_of_mesh-select', 'Yes');
+                cy.get('#discharge_duration').type('2');
+                cy.get('#infection-none').check();
+                cy.get('#comments').type('Discharged with no issues');
+
+                // Submit
+                cy.contains('button', 'Save changes').click();
+
+                cy.wait('@addDischarge').then((interception) => {
+                    expect(interception.request.body).to.include({
+                        episode_id: 888,
+                        date: '2023-01-16',
+                        discharge_duration: 2,
+                        aware_of_mesh: true,
+                        comments: 'Discharged with no issues',
+                        infection: 'None'
+                    });
+                });
+            });
+
+            it('should allow adding a new Follow Up', () => {
+                cy.intercept('GET', `**/episodes/${episodeId}/discharge/`, {
+                    statusCode: 200,
+                    body: {
+                        id: 10,
+                        infection: 'None',
+                        date: '2023-01-16',
+                        aware_of_mesh: true,
+                    }
+                }).as('getDischarge');
+
+                cy.intercept('GET', `**/episodes/${episodeId}/follow-ups/`, {
+                    statusCode: 200,
+                    body: []
+                }).as('getFollowUpsEmpty');
+
+                cy.intercept('POST', '**/follow-ups/', {
+                    statusCode: 201,
+                    body: { id: 51 }
+                }).as('addFollowUp');
+
+                cy.visit(`/patients/1/101/episodes/${episodeId}`);
+                cy.wait(['@getEpisode', '@getDischarge', '@getFollowUpsEmpty', '@getMedicalPersonnel']);
+
+                // Expand Add New Follow Up
+                cy.contains('Add New Follow Up').click();
+
+                // Fill form
+                cy.get('#follow-up-date').type('2023-02-15');
+
+                // Add Surgeon
+                cy.contains('Add Surgeon').click();
+                cy.selectMuiOption('#surgeon-0', 'John Doe');
+
+                cy.selectMuiOption('#pain_severity-select', 'No Pain');
+                cy.selectMuiOption('#mesh_awareness-select', 'Yes');
+                cy.selectMuiOption('#seroma-select', 'Yes');
+                cy.selectMuiOption('#infection-select', 'Yes');
+                cy.selectMuiOption('#numbness-select', 'Yes');
+                cy.selectMuiOption('#recurrence-select', 'Yes');
+                cy.selectMuiOption('#further_surgery_need-select', 'Yes');
+
+                cy.get('#surgery_comments_box').type('Everything looks good');
+
+                // Submit
+                cy.get('button').contains('Save changes').click();
+
+                cy.wait('@addFollowUp').then((interception) => {
+                    expect(interception.request.body).to.deep.include({
+                        episode_id: 888,
+                        date: '2023-02-15',
+                        pain_severity: 'No Pain',
+                        mesh_awareness: true,
+                        seroma: true,
+                        infection: true,
+                        numbness: true,
+                        recurrence: true,
+                        further_surgery_need: true,
+                        surgery_comments_box: 'Everything looks good',
+                    });
+                    expect(interception.request.body.attendee_ids).to.include(1);
+                });
+            });
+        });
+    });
+
+    describe('Input Validation', () => {
+        beforeEach(() => {
+            cy.window().then((win) => {
+                win.localStorage.setItem('token-registry', 'fake-token');
+            });
+
+            cy.intercept('GET', `**/episodes/${episodeId}/`, {
+                statusCode: 200,
+                body: {
+                    id: 888,
+                    episode_type: 'Primary Inguinal',
+                    surgery_date: '2023-01-15',
+                    surgeons: [],
+                    diathermy_used: false,
+                    antibiotic_used: false,
+                }
+            }).as('getEpisode');
+
+            cy.intercept('GET', `**/medical-personnel/**`, {
+                statusCode: 200,
+                body: {
+                    results: [
+                        { id: 1, user: { first_name: 'John', last_name: 'Doe' }, level: 'Consultant' },
+                    ]
+                }
+            }).as('getMedicalPersonnel');
+
+            cy.intercept('GET', `**/episodes/${episodeId}/discharge/`, {
+                statusCode: 200,
+                body: {}
+            }).as('getDischargeEmpty');
+
+            cy.intercept('GET', `**/episodes/${episodeId}/follow-ups/`, {
+                statusCode: 200,
+                body: []
+            }).as('getFollowUpsEmpty');
+
+            cy.visit(`/patients/1/101/episodes/${episodeId}`);
+            cy.wait(['@getEpisode', '@getDischargeEmpty', '@getFollowUpsEmpty']);
+        });
+
+        describe('Discharge', () => {
+            beforeEach(() => {
+                cy.contains('Add New Discharge').click();
+            });
+
+            it('should validate Discharge Date is required', () => {
+                cy.get('#date').focus().blur();
+                cy.contains('Discharge date is required. Please select a date.').should('exist');
+            });
+
+            it('should validate Antibiotics given on discharge is required', () => {
+                cy.get('#aware_of_mesh-select').focus().blur();
+                cy.contains('Antibiotics given on discharge is required.').should('exist');
+            });
+
+            it('should validate Discharge Duration is required when Antibiotics are given', () => {
+                cy.selectMuiOption('#aware_of_mesh-select', 'Yes');
+                cy.get('#discharge_duration').focus().blur();
+                cy.contains('Discharge duration is required.').should('exist');
+            });
+
+            it('should validate Post-operative complications are required', () => {
+                // Blur does not work for checkboxes in the same way, so we click Save to trigger validation
+                cy.contains('button', 'Save changes').click();
+                cy.contains("Please record the post-operative complication above. If there wasn't any then select the option 'None'").should('exist');
+            });
+
+            it('should show error when discharge date is in the future', () => {
+                const futureDate = new Date();
+                futureDate.setDate(futureDate.getDate() + 1);
+                const futureDateStr = futureDate.toISOString().split('T')[0];
+
+                cy.get('#date').type(futureDateStr).blur();
+                cy.contains('Discharge date cannot be set in the future.').should('exist');
+            });
+
+            it('should validate an empty Discharge form', () => {
+                cy.contains('button', 'Save changes').click();
+                cy.contains('Discharge date is required. Please select a date.').should('exist');
+                cy.contains('Antibiotics given on discharge is required.').should('exist');
+                cy.contains("Please record the post-operative complication above. If there wasn't any then select the option 'None'").should('exist');
+            });
+        });
+
+        describe('Follow-up', () => {
+            beforeEach(() => {
+                cy.contains('Add New Follow Up').click();
+                cy.wait('@getMedicalPersonnel');
+            });
+
+            it('should validate Follow-up Date is required', () => {
+                cy.get('#follow-up-date').focus().blur();
+                cy.contains('Follow up date is required. Please select a date.').should('exist');
+            });
+
+            it('should validate Surgeon is required', () => {
+                cy.contains('Add New Follow Up').parents('.MuiAccordion-root').within(() => {
+                    cy.contains('button', 'Save changes').click();
+                });
+                cy.contains('Surgeon is required.').should('exist');
+            });
+
+            it('should validate Pain Severity is required', () => {
+                cy.get('#pain_severity-select').focus().blur();
+                cy.contains('Pain severity is required.').should('exist');
+            });
+
+            it('should validate Mesh Awareness is required', () => {
+                cy.get('#mesh_awareness-select').focus().blur();
+                cy.contains('Mesh awareness is required.').should('exist');
+            });
+
+            it('should validate Seroma is required', () => {
+                cy.get('#seroma-select').focus().blur();
+                cy.contains('Seroma is required.').should('exist');
+            });
+
+            it('should validate Infection is required', () => {
+                cy.get('#infection-select').focus().blur();
+                cy.contains('Infection is required.').should('exist');
+            });
+
+            it('should validate Numbness is required', () => {
+                cy.get('#numbness-select').focus().blur();
+                cy.contains('Numbness is required.').should('exist');
+            });
+
+            it('should validate Recurrence is required', () => {
+                cy.get('#recurrence-select').focus().blur();
+                cy.contains('Recurrence is required.').should('exist');
+            });
+
+            it('should validate Need for further surgery? is required', () => {
+                cy.get('#further_surgery_need-select').focus().blur();
+                cy.contains('Need for further surgery? is required.').should('exist');
+            });
+
+            it('should show error when follow-up date is in the future', () => {
+                const futureDate = new Date();
+                futureDate.setDate(futureDate.getDate() + 1);
+                const futureDateStr = futureDate.toISOString().split('T')[0];
+
+                cy.get('#follow-up-date').type(futureDateStr).blur();
+                cy.contains('Follow up date cannot be set in the future.').should('exist');
+            });
+
+            it('should validate an empty Follow-up form', () => {
+                cy.contains('Add New Follow Up').parents('.MuiAccordion-root').within(() => {
+                    cy.contains('button', 'Save changes').click();
+
+                    cy.contains('Follow up date is required. Please select a date.').should('exist');
+                    cy.contains('Surgeon is required.').should('exist');
+                    cy.contains('Pain severity is required.').should('exist');
+                    cy.contains('Mesh awareness is required.').should('exist');
+                    cy.contains('Seroma is required.').should('exist');
+                    cy.contains('Infection is required.').should('exist');
+                    cy.contains('Numbness is required.').should('exist');
+                    cy.contains('Recurrence is required.').should('exist');
+                    cy.contains('Need for further surgery? is required.').should('exist');
                 });
             });
         });

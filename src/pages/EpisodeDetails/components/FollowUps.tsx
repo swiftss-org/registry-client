@@ -88,9 +88,42 @@ const FollowUps: FC<{
   }, [followUp]);
 
   const validate = (values: FollowUpFormState) => {
-    // Mapping back to the structure expected by validation utils if needed
-    // Assuming followUpFormValidation expects basic key-value pairs
-    return followUpFormValidation(values as unknown as FollowUpForm);
+    // Mapping back to the structure expected by validation utils (FollowUpForm)
+    const validationValues: FollowUpForm = {
+      date: values.date,
+      mesh_awareness:
+        values.mesh_awareness !== ''
+          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.mesh_awareness) as SelectOption)
+          : (undefined as unknown as SelectOption),
+      seroma:
+        values.seroma !== ''
+          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.seroma) as SelectOption)
+          : (undefined as unknown as SelectOption),
+      infection:
+        values.infection !== ''
+          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.infection) as SelectOption)
+          : (undefined as unknown as SelectOption),
+      numbness:
+        values.numbness !== ''
+          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.numbness) as SelectOption)
+          : (undefined as unknown as SelectOption),
+      recurrence:
+        values.recurrence !== ''
+          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.recurrence) as SelectOption)
+          : (undefined as unknown as SelectOption),
+      further_surgery_need:
+        values.further_surgery_need !== ''
+          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.further_surgery_need) as SelectOption)
+          : (undefined as unknown as SelectOption),
+      pain_severity: FOLLOW_UP_PAIN_OPTIONS.find((o: SelectOption) => o.label === values.pain_severity) as SelectOption,
+      surgery_comments_box: values.surgery_comments_box,
+      attendees: values.attendees.map((id) => {
+        const option = surgeonOptions.find((o: SelectOption) => o.value === id);
+        return { label: option?.label || '', value: id };
+      }),
+    };
+
+    return followUpFormValidation(validationValues);
   };
 
   useEffect(() => {
@@ -112,6 +145,7 @@ const FollowUps: FC<{
       newAttendees[index] = value;
       return { ...prev, attendees: newAttendees };
     });
+    setTouched((prev) => ({ ...prev, attendees: true }));
   };
 
   const handleAddAttendee = () => {
@@ -227,6 +261,9 @@ const FollowUps: FC<{
               Add Surgeon
             </Button>
           )}
+          {touched.attendees && errors.attendees && (
+            <FormHelperText error sx={{ mt: 1 }}>{errors.attendees}</FormHelperText>
+          )}
         </Box>
 
         <Box>
@@ -254,39 +291,153 @@ const FollowUps: FC<{
           </FormControl>
         </Box>
 
-        {(
-          [
-            { label: 'Mesh Awareness', field: 'mesh_awareness' },
-            { label: 'Seroma', field: 'seroma' },
-            { label: 'Infection', field: 'infection' },
-            { label: 'Numbness', field: 'numbness' },
-            { label: 'Recurrence', field: 'recurrence' },
-            { label: 'Need for further surgery?', field: 'further_surgery_need' },
-          ] as const
-        ).map(({ label, field }) => (
-          <Box key={field}>
-            <FormControl fullWidth error={touched[field] && !!errors[field]}>
-              <InputLabel id={`${field}-label`}>{label}</InputLabel>
-              <Select
-                disabled={!canSubmit}
-                id={`${field}-select`}
-                labelId={`${field}-label`}
-                value={formState[field]}
-                label={label}
-                inputProps={{ id: field }}
-                onChange={(e) => handleChange(field, e.target.value as string | number)}
-                onBlur={() => handleBlur(field)}
-              >
-                {BOOLEAN_OPTIONS.map((option: SelectOption) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-              {touched[field] && errors[field] && <FormHelperText>{errors[field]}</FormHelperText>}
-            </FormControl>
-          </Box>
-        ))}
+        <Box>
+          <FormControl fullWidth error={touched.mesh_awareness && !!errors.mesh_awareness}>
+            <InputLabel id="mesh_awareness-label">Mesh Awareness</InputLabel>
+            <Select
+              disabled={!canSubmit}
+              id="mesh_awareness-select"
+              labelId="mesh_awareness-label"
+              value={formState.mesh_awareness}
+              label="Mesh Awareness"
+              inputProps={{ id: 'mesh_awareness' }}
+              onChange={(e) => handleChange('mesh_awareness', e.target.value as number)}
+              onBlur={() => handleBlur('mesh_awareness')}
+            >
+              {BOOLEAN_OPTIONS.map((option: SelectOption) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <MenuItem key={String(option.value)} value={option.value as any}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.mesh_awareness && errors.mesh_awareness && (
+              <FormHelperText>{errors.mesh_awareness}</FormHelperText>
+            )}
+          </FormControl>
+        </Box>
+
+        <Box>
+          <FormControl fullWidth error={touched.seroma && !!errors.seroma}>
+            <InputLabel id="seroma-label">Seroma</InputLabel>
+            <Select
+              disabled={!canSubmit}
+              id="seroma-select"
+              labelId="seroma-label"
+              value={formState.seroma}
+              label="Seroma"
+              inputProps={{ id: 'seroma' }}
+              onChange={(e) => handleChange('seroma', e.target.value as number)}
+              onBlur={() => handleBlur('seroma')}
+            >
+              {BOOLEAN_OPTIONS.map((option: SelectOption) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <MenuItem key={String(option.value)} value={option.value as any}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.seroma && errors.seroma && <FormHelperText>{errors.seroma}</FormHelperText>}
+          </FormControl>
+        </Box>
+
+        <Box>
+          <FormControl fullWidth error={touched.infection && !!errors.infection}>
+            <InputLabel id="infection-label">Infection</InputLabel>
+            <Select
+              disabled={!canSubmit}
+              id="infection-select"
+              labelId="infection-label"
+              value={formState.infection}
+              label="Infection"
+              inputProps={{ id: 'infection' }}
+              onChange={(e) => handleChange('infection', e.target.value as number)}
+              onBlur={() => handleBlur('infection')}
+            >
+              {BOOLEAN_OPTIONS.map((option: SelectOption) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <MenuItem key={String(option.value)} value={option.value as any}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.infection && errors.infection && <FormHelperText>{errors.infection}</FormHelperText>}
+          </FormControl>
+        </Box>
+
+        <Box>
+          <FormControl fullWidth error={touched.numbness && !!errors.numbness}>
+            <InputLabel id="numbness-label">Numbness</InputLabel>
+            <Select
+              disabled={!canSubmit}
+              id="numbness-select"
+              labelId="numbness-label"
+              value={formState.numbness}
+              label="Numbness"
+              inputProps={{ id: 'numbness' }}
+              onChange={(e) => handleChange('numbness', e.target.value as number)}
+              onBlur={() => handleBlur('numbness')}
+            >
+              {BOOLEAN_OPTIONS.map((option: SelectOption) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <MenuItem key={String(option.value)} value={option.value as any}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.numbness && errors.numbness && <FormHelperText>{errors.numbness}</FormHelperText>}
+          </FormControl>
+        </Box>
+
+        <Box>
+          <FormControl fullWidth error={touched.recurrence && !!errors.recurrence}>
+            <InputLabel id="recurrence-label">Recurrence</InputLabel>
+            <Select
+              disabled={!canSubmit}
+              id="recurrence-select"
+              labelId="recurrence-label"
+              value={formState.recurrence}
+              label="Recurrence"
+              inputProps={{ id: 'recurrence' }}
+              onChange={(e) => handleChange('recurrence', e.target.value as number)}
+              onBlur={() => handleBlur('recurrence')}
+            >
+              {BOOLEAN_OPTIONS.map((option: SelectOption) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <MenuItem key={String(option.value)} value={option.value as any}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.recurrence && errors.recurrence && <FormHelperText>{errors.recurrence}</FormHelperText>}
+          </FormControl>
+        </Box>
+
+        <Box>
+          <FormControl fullWidth error={touched.further_surgery_need && !!errors.further_surgery_need}>
+            <InputLabel id="further_surgery_need-label">Need for further surgery?</InputLabel>
+            <Select
+              disabled={!canSubmit}
+              id="further_surgery_need-select"
+              labelId="further_surgery_need-label"
+              value={formState.further_surgery_need}
+              label="Need for further surgery?"
+              inputProps={{ id: 'further_surgery_need' }}
+              onChange={(e) => handleChange('further_surgery_need', e.target.value as number)}
+              onBlur={() => handleBlur('further_surgery_need')}
+            >
+              {BOOLEAN_OPTIONS.map((option: SelectOption) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <MenuItem key={String(option.value)} value={option.value as any}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.further_surgery_need && errors.further_surgery_need && (
+              <FormHelperText>{errors.further_surgery_need}</FormHelperText>
+            )}
+          </FormControl>
+        </Box>
 
         <Box>
           <FormControl fullWidth error={touched.surgery_comments_box && !!errors.surgery_comments_box}>
@@ -321,8 +472,8 @@ const FollowUps: FC<{
         >
           Save changes
         </Button>
-      </Stack>
-    </Box>
+      </Stack >
+    </Box >
   );
 };
 
