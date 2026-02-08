@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - uses: actions/setup-node@v6
         with:
-          node-version: '25'
+          node-version: '22'
 
       - run: yarn install
       - run: yarn test --passWithNoTests
@@ -66,19 +66,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Inject Extracted Data 💾
+      - name: Inject Extracted Data
         run: |
           # We use psql on the host to reach the postgres service container via localhost:5432
           PGPASSWORD=admin psql -h localhost -U admin -d tmh_registry < plans/registry_db_export_20260104_192711.sql
 
-      - name: Login to GitHub Container Registry 🔑
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Start Registry API 🚀
+      - name: Start Registry API
         run: |
           docker run -d --name registry-api \
             --network host \
@@ -108,7 +108,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '25'
+          node-version: '22'
 
       - name: Install dependencies
         run: yarn install
@@ -145,7 +145,7 @@ jobs:
           path: cypress/screenshots
           retention-days: 7
 
-      - name: Upload Cypress videos 📹
+      - name: Upload Cypress videos
         if: always()
         uses: actions/upload-artifact@v5
         with:
