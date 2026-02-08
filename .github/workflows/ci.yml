@@ -67,7 +67,7 @@ jobs:
         ports:
           - 8000:8000
         env:
-          DJANGO_SETTINGS_MODULE: core.settings
+          DJANGO_SETTINGS_MODULE: config.settings.test
           DATABASE_URL: postgres://admin:admin@postgres:5432/tmh_registry
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: admin
@@ -76,6 +76,7 @@ jobs:
           POSTGRES_PORT: 5432
           SECRET_KEY: test-secret-key-for-ci
           DEBUG: "true"
+          DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,registry-api
         options: >-
           --health-cmd "curl -f http://localhost:8000/api/health || exit 1"
           --health-interval 10s
