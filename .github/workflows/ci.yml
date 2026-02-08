@@ -67,7 +67,7 @@ jobs:
         ports:
           - 8000:8000
         env:
-          DJANGO_SETTINGS_MODULE: config.settings.test
+          DJANGO_SETTINGS_MODULE: config.settings.local
           DATABASE_URL: postgres://admin:admin@postgres:5432/tmh_registry
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: admin
