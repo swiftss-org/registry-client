@@ -67,7 +67,7 @@ jobs:
         ports:
           - 8000:5000
         env:
-          DJANGO_SETTINGS_MODULE: config.settings.test
+          DJANGO_SETTINGS_MODULE: config.settings.production
           DATABASE_URL: postgres://admin:admin@postgres:5432/tmh_registry
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: admin
@@ -83,7 +83,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
+# --health-cmd "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')\""
+# --health-cmd "curl -f http://localhost:5000/api/health || (echo 'Health check failed with status $?' && curl -v http://localhost:5000/api/health; exit 1)"
     steps:
       - name: Checkout
         uses: actions/checkout@v6
