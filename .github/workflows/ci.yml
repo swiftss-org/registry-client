@@ -78,7 +78,7 @@ jobs:
           DEBUG: "true"
           DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,registry-api
         options: >-
-          --health-cmd "curl -f http://localhost:8000/api/health || exit 1"
+          --health-cmd "curl -f http://localhost:8000/api/health || (echo 'Health check failed with status $?' && curl -v http://localhost:8000/api/health; exit 1)"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
