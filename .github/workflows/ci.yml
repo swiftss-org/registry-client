@@ -68,12 +68,8 @@ jobs:
 
       - name: Inject Extracted Data 💾
         run: |
-          # 1. Get the container ID for the postgres service
-          POSTGRES_CONTAINER=$(docker ps --filter "label=com.github.actions.service=postgres" --format "{{.ID}}")
-          
-          # 2. Inject the SQL dump
-          # Note: We use -i to pipe the file content into psql inside the container
-          docker exec -i $POSTGRES_CONTAINER psql -U admin -d tmh_registry < plans/registry_db_export_20260104_192711.sql
+          # We use psql on the host to reach the postgres service container via localhost:5432
+          PGPASSWORD=admin psql -h localhost -U admin -d tmh_registry < plans/registry_db_export_20260104_192711.sql
 
       - name: Start Registry API 🚀
         run: |
