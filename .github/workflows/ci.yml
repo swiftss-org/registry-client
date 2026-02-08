@@ -74,17 +74,15 @@ jobs:
           POSTGRES_DB: tmh_registry
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
-          SECRET_KEY: test-secret-key-for-ci
+          DJANGO_SECRET_KEY: test-secret-key-for-ci
           DEBUG: "true"
           DJANGO_ALLOWED_HOSTS: "*"
         options: >-
           --entrypoint /start
-          --health-cmd "curl -f http://localhost:5000/api/health || (echo 'Health check failed with status $?' && curl -v http://localhost:5000/api/health; exit 1)"
+          --health-cmd "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-# --health-cmd "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')\""
-# --health-cmd "curl -f http://localhost:5000/api/health || (echo 'Health check failed with status $?' && curl -v http://localhost:5000/api/health; exit 1)"
     steps:
       - name: Checkout
         uses: actions/checkout@v6
