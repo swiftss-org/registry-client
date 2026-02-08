@@ -71,6 +71,13 @@ jobs:
           # We use psql on the host to reach the postgres service container via localhost:5432
           PGPASSWORD=admin psql -h localhost -U admin -d tmh_registry < plans/registry_db_export_20260104_192711.sql
 
+      - name: Login to GitHub Container Registry 🔑
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Start Registry API 🚀
         run: |
           docker run -d --name registry-api \
