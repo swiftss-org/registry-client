@@ -116,7 +116,7 @@ jobs:
       - name: Wait for backend API
         run: |
           # Note: Since we use --network host, the API is listening on port 5000 directly
-          timeout 60 bash -c 'until curl -f http://localhost:5000/api/health; do sleep 2; done'
+          timeout 60 bash -c 'until curl -f http://localhost:5000/admin; do sleep 2; done'
 
       - name: Build frontend
         run: yarn build
