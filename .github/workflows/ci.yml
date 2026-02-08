@@ -74,12 +74,11 @@ jobs:
           POSTGRES_DB: tmh_registry
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
-          DJANGO_SECRET_KEY: test-secret-key-for-ci
-          DEBUG: "true"
-          DJANGO_ALLOWED_HOSTS: "*"
+          DJANGO_DEBUG: "true"
+          DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0,*"
         options: >-
           --entrypoint /start
-          --health-cmd "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')\""
+          --health-cmd "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/api/health')\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
