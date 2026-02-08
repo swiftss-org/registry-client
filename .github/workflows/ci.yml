@@ -62,29 +62,34 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
-      registry-api:
-        image: ghcr.io/swiftss-org/registry-api:main
-        ports:
-          - 8000:5000
-        env:
-          DJANGO_SETTINGS_MODULE: config.settings.test
-          DATABASE_URL: postgres://admin:admin@postgres:5432/tmh_registry
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: admin
-          POSTGRES_DB: tmh_registry
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
-          DJANGO_DEBUG: "true"
-          DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0,*"
-        options: >-
-          --entrypoint /start
-          --health-cmd "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/admin')\""
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Inject Extracted Data 💾
+        run: |
+          # 1. Get the container ID for the postgres service
+          POSTGRES_CONTAINER=$(docker ps --filter "label=com.github.actions.service=postgres" --format "{{.ID}}")
+          
+          # 2. Inject the SQL dump
+          # Note: We use -i to pipe the file content into psql inside the container
+          docker exec -i $POSTGRES_CONTAINER psql -U admin -d tmh_registry < plans/registry_db_export_20260104_192711.sql
+
+      - name: Start Registry API 🚀
+        run: |
+          docker run -d --name registry-api \
+            --network host \
+            -e DJANGO_SETTINGS_MODULE=config.settings.test \
+            -e DATABASE_URL=postgres://admin:admin@localhost:5432/tmh_registry \
+            -e POSTGRES_USER=admin \
+            -e POSTGRES_PASSWORD=admin \
+            -e POSTGRES_DB=tmh_registry \
+            -e POSTGRES_HOST=localhost \
+            -e POSTGRES_PORT=5432 \
+            -e DJANGO_DEBUG="true" \
+            -e DJANGO_ALLOWED_HOSTS="localhost,127.0.0.1,0.0.0.0,*" \
+            ghcr.io/swiftss-org/registry-api:main \
+            /start
 
       - name: Get yarn cache
         id: yarn-cache
@@ -107,12 +112,14 @@ jobs:
 
       - name: Wait for backend API
         run: |
-          timeout 60 bash -c 'until curl -f http://localhost:8000/api/health; do sleep 2; done'
+          # Note: Since we use --network host, the API is listening on port 5000 directly
+          timeout 60 bash -c 'until curl -f http://localhost:5000/api/health; do sleep 2; done'
 
       - name: Build frontend
         run: yarn build
         env:
           CI: false
+          REACT_APP_API_BASE_URL: http://localhost:5000
 
       - name: Serve frontend
         run: |
@@ -125,6 +132,7 @@ jobs:
         run: yarn test:e2e
         env:
           CYPRESS_BASE_URL: http://localhost:3000
+          CYPRESS_API_URL: http://localhost:5000
 
       - name: Upload Cypress screenshots
         if: failure()
