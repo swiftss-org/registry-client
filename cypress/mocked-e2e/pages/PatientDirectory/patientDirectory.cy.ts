@@ -69,13 +69,12 @@ describe('Patient Directory Page', () => {
                 }
             });
         }).as('getPatients');
-
-        cy.visit('/patients');
-
-        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
     });
 
     it('should display patients list', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         cy.contains('Patients directory').should('be.visible');
         cy.contains('General Hospital').should('be.visible');
         cy.contains('Patients 1-3 out of 3').should('be.visible');
@@ -100,6 +99,9 @@ describe('Patient Directory Page', () => {
     });
 
     it('should filter by hospital', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         // Change hospital filter
         cy.contains('General Hospital').click();
         cy.contains('City Hospital').click();
@@ -111,11 +113,17 @@ describe('Patient Directory Page', () => {
     });
 
     it('should navigate to register patient', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         cy.get('main button[id="add_patient"]').click();
         cy.url().should('include', '/patients/register');
     });
 
     it('should sort the patients by name back and forth', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="full_name"]').check();
 
@@ -136,6 +144,9 @@ describe('Patient Directory Page', () => {
     });
 
     it('should sort the patients by date back and forth', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         cy.get('main svg[data-testid="SortIcon"]').click();
         cy.get('input[value="created_at"]').check();
 
@@ -156,6 +167,9 @@ describe('Patient Directory Page', () => {
     });
 
     it('should search for a patient by name', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         cy.get('div[data-testid="search-field"] input').type('John Doe').type('{enter}');
         cy.contains('John Doe').should('exist')
         cy.contains('Jane Smith').should('not.exist')
@@ -163,6 +177,9 @@ describe('Patient Directory Page', () => {
     });
 
     it('should search for a patient by gender', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         cy.get('div[data-testid="search-field"] input').type('Male').type('{enter}');
         cy.contains('John Doe').should('exist')
         cy.contains('Test Patient').should('exist')
@@ -170,6 +187,9 @@ describe('Patient Directory Page', () => {
     });
 
     it('should search for a patient by national id', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         cy.get('div[data-testid="search-field"] input').type('123456789').type('{enter}');
         cy.contains('John Doe').should('exist')
         cy.contains('Test Patient').should('not.exist')
@@ -177,6 +197,9 @@ describe('Patient Directory Page', () => {
     });
 
     it('should navigate to patient details on card click', () => {
+        cy.visit('/patients');
+        cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
+
         // Prevent uncaught exceptions from failing the test
         cy.on('uncaught:exception', (err, runnable) => {
             return false;

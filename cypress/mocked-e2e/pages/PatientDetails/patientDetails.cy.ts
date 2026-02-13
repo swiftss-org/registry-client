@@ -114,7 +114,7 @@ describe('Patient Details Page', () => {
                 }
             }).as('getPatientWithoutEpisodes');
 
-            cy.reload();
+            cy.visit('/patients/1/101');
             cy.wait(['@getPatientWithoutEpisodes']);
 
             cy.contains('Episodes').click();

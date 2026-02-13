@@ -14,16 +14,6 @@ describe('Register Patient Page', () => {
                 count: 2
             }
         }).as('getHospitals');
-
-        // Visit the page with token pre-set
-        cy.visit('/patients/register', {
-            onBeforeLoad: (win) => {
-                win.localStorage.setItem('token-registry', 'fake-token');
-            }
-        });
-
-        // Wait for hospitals to load
-        cy.wait('@getHospitals');
     });
 
     describe('Happy Path', () => {
@@ -33,6 +23,16 @@ describe('Register Patient Page', () => {
                 statusCode: 201,
                 body: { id: 123 }
             }).as('registerPatient');
+
+            // Visit the page with token pre-set
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+
+            // Wait for hospitals to load
+            cy.wait('@getHospitals');
 
             // 1. Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
@@ -90,12 +90,26 @@ describe('Register Patient Page', () => {
     describe('Input Validation', () => {
 
         it('should validate Hospital drop down is required', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             cy.get('#hospital').focus().blur();
 
             cy.contains('Hospital field is required').should('exist');
         });
 
         it('should validate First Name is required', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
 
@@ -106,6 +120,13 @@ describe('Register Patient Page', () => {
         });
 
         it('should validate Last Name is required', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
@@ -117,6 +138,13 @@ describe('Register Patient Page', () => {
         });
 
         it('should validate Year of Birth is required', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
@@ -127,6 +155,13 @@ describe('Register Patient Page', () => {
         });
 
         it('should validate Patient Hospital ID is required', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
@@ -138,6 +173,13 @@ describe('Register Patient Page', () => {
         });
 
         it('should validate Gender is required', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
@@ -153,6 +195,13 @@ describe('Register Patient Page', () => {
         });
 
         it('should validate Phone #1 is required', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
             cy.get('#first_name').type('John');
@@ -166,6 +215,13 @@ describe('Register Patient Page', () => {
         });
 
         it('should validate phone number input (numbers only)', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Based on "parseOnlyNumbers" in code
             cy.get('#phone1').type('abc');
             cy.get('#phone1').should('have.value', '');
@@ -175,6 +231,13 @@ describe('Register Patient Page', () => {
         });
 
         it('should validate an empty submitted form', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             cy.contains('button', 'Add new patient').click();
 
             cy.contains('Hospital field is required').should('exist');
@@ -189,6 +252,13 @@ describe('Register Patient Page', () => {
 
     describe('Edge Cases', () => {
         it('should warn when leaving with unsaved changes', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
             // Make form dirty
             cy.get('#first_name').type('Dirty');
 

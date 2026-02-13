@@ -4,7 +4,6 @@ describe('Settings Page', () => {
         cy.window().then((win) => {
             win.localStorage.setItem('token-registry', 'fake-token');
         });
-        cy.visit('/settings');
     });
 
     describe('Change Password', () => {
@@ -14,6 +13,8 @@ describe('Settings Page', () => {
                 statusCode: 200,
                 body: { token: 'new-token' }
             }).as('changePassword');
+
+            cy.visit('/settings');
 
             // Fill form
             cy.get('#old_password').type('oldPass123');
@@ -41,6 +42,8 @@ describe('Settings Page', () => {
                 body: { old_password: ['Wrong password'] }
             }).as('changePasswordFail');
 
+            cy.visit('/settings');
+
             cy.get('#old_password').type('wrongPass');
             cy.get('#new_password1').type('newPass123');
             cy.get('#new_password2').type('newPass123');
@@ -53,6 +56,7 @@ describe('Settings Page', () => {
         });
 
         it('should password fields be required', () => {
+            cy.visit('/settings');
             cy.get('#change-password-button').click();
 
             cy.contains('Old password is required').should('be.visible');
@@ -61,6 +65,7 @@ describe('Settings Page', () => {
         });
 
         it('should verify if user want to leave dirty form', () => {
+            cy.visit('/settings');
             cy.get('#old_password').type('oldPass123');
 
             cy.get('main > div > div > button').click();

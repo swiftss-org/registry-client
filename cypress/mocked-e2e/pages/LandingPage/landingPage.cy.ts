@@ -139,7 +139,7 @@ describe('Landing Page', () => {
                 body: []
             }).as('getEmptyEpisodes');
 
-            cy.reload();
+            cy.visit('/landing');
             cy.wait('@getEmptyEpisodes');
 
             // Should display without errors
@@ -153,7 +153,7 @@ describe('Landing Page', () => {
                 body: []
             }).as('getNoUnlinked');
 
-            cy.reload();
+            cy.visit('/landing');
             cy.wait('@getNoUnlinked');
 
             // Should handle empty state gracefully
@@ -166,7 +166,7 @@ describe('Landing Page', () => {
                 body: { detail: 'Internal server error' }
             }).as('getSummaryError');
 
-            cy.reload();
+            cy.visit('/landing');
             cy.wait('@getSummaryError');
 
             // Should handle error without crashing the entire page
@@ -182,7 +182,7 @@ describe('Landing Page', () => {
                 }
             }).as('getNoAnnouncements');
 
-            cy.reload();
+            cy.visit('/landing');
             cy.wait('@getNoAnnouncements');
 
             // Page should load without announcements section or show empty state

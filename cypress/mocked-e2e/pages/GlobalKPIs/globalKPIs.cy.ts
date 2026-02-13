@@ -63,7 +63,7 @@ describe('Global KPIs Page', () => {
                 });
             }).as('getZeroStats');
 
-            cy.reload();
+            cy.visit('/globalKPIs');
             cy.wait('@getZeroStats');
 
             // Should display 0 without errors
@@ -76,7 +76,7 @@ describe('Global KPIs Page', () => {
                 body: { detail: 'Internal server error' }
             }).as('getStatsError');
 
-            cy.reload();
+            cy.visit('/globalKPIs');
             cy.wait('@getStatsError');
 
             // Should handle error without crashing
@@ -91,7 +91,7 @@ describe('Global KPIs Page', () => {
                 });
             }).as('getEmptyStats');
 
-            cy.reload();
+            cy.visit('/globalKPIs');
             cy.wait('@getEmptyStats');
 
             // Should handle empty data gracefully
@@ -103,7 +103,7 @@ describe('Global KPIs Page', () => {
                 forceNetworkError: true
             }).as('getStatsNetworkError');
 
-            cy.reload();
+            cy.visit('/globalKPIs');
             cy.wait('@getStatsNetworkError');
 
             // Should handle network error gracefully
@@ -118,7 +118,7 @@ describe('Global KPIs Page', () => {
                 });
             }).as('getLargeStats');
 
-            cy.reload();
+            cy.visit('/globalKPIs');
             cy.wait('@getLargeStats');
 
             // Should display large numbers correctly

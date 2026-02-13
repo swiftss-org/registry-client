@@ -142,7 +142,7 @@ describe('Register Episode Page', () => {
     describe('Input Validation', () => {
         it('should validate Hospital is required', () => {
             cy.intercept('GET', '**/patients/101/', { id: 101, first_name: 'John', last_name: 'Doe', hospital_mappings: [] }).as('getPatientWithoutHospitals');
-            cy.reload();
+            cy.visit('/patients/1/101/add-episode');
 
             cy.wait('@getPatientWithoutHospitals');
 

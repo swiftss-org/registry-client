@@ -62,7 +62,7 @@ describe('Login Page', () => {
                 }
             }).as('signIn');
 
-            cy.reload();
+            cy.visit('/login');
 
             cy.get('#username').type('testuser');
             cy.get('#password').type('password123');
