@@ -102,10 +102,10 @@ const EpisodeDetails: React.FC = () => {
             variant="outlined"
             elevation={0}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="surgery-summary">
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography fontWeight={600}>Surgery</Typography>
-                <CheckCircleIcon color="success" fontSize="small" />
+                <CheckCircleIcon color="success" fontSize="small" data-testid="surgery-check-icon" />
               </Box>
             </AccordionSummary>
             <AccordionDetails>
@@ -120,13 +120,13 @@ const EpisodeDetails: React.FC = () => {
             variant="outlined"
             elevation={0}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="discharge-summary">
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography fontWeight={600}>
                   {discharge?.infection !== undefined ? `Discharge - ${discharge.date}` : 'Add New Discharge'}
                 </Typography>
                 {discharge?.infection !== undefined && (
-                  <CheckCircleIcon color="success" fontSize="small" />
+                  <CheckCircleIcon color="success" fontSize="small" data-testid="discharge-check-icon" />
                 )}
               </Box>
             </AccordionSummary>
@@ -148,10 +148,10 @@ const EpisodeDetails: React.FC = () => {
               variant="outlined"
               elevation={0}
             >
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid={`follow-up-summary-${index}`}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Typography fontWeight={600}>Follow Up - {followUp.date}</Typography>
-                  <CheckCircleIcon color="success" fontSize="small" />
+                  <CheckCircleIcon color="success" fontSize="small" data-testid={`follow-up-check-icon-${index}`} />
                 </Box>
               </AccordionSummary>
               <AccordionDetails>
