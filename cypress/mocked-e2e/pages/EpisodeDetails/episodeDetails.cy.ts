@@ -71,9 +71,9 @@ describe('Episode Details Page', () => {
                     cy.visit(`/patients/1/101/episodes/${episodeId}`);
                     cy.wait(['@getEpisode', '@getDischarge', '@getFollowUps', '@getMedicalPersonnel']);
 
-                    cy.get('.MuiAccordionSummary-root').contains('Surgery').parent().find('svg[data-testid="CheckCircleIcon"]').should('exist');
-                    cy.get('.MuiAccordionSummary-root').contains('Discharge').parent().find('svg[data-testid="CheckCircleIcon"]').should('exist');
-                    cy.get('.MuiAccordionSummary-root').contains('Follow Up').parent().find('svg[data-testid="CheckCircleIcon"]').should('not.exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Surgery').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Discharge').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Follow Up').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('not.exist');
                 });
 
                 it('should display episode details when the episode had Surgery but not Discharge nor Follow Up', () => {
@@ -127,9 +127,9 @@ describe('Episode Details Page', () => {
                     cy.visit(`/patients/1/101/episodes/${episodeId}`);
                     cy.wait(['@getEpisode', '@getDischarge', '@getFollowUps', '@getMedicalPersonnel']);
 
-                    cy.get('.MuiAccordionSummary-root').contains('Surgery').parent().find('svg[data-testid="CheckCircleIcon"]').should('exist');
-                    cy.get('.MuiAccordionSummary-root').contains('Discharge').parent().find('svg[data-testid="CheckCircleIcon"]').should('not.exist');
-                    cy.get('.MuiAccordionSummary-root').contains('Follow Up').parent().find('svg[data-testid="CheckCircleIcon"]').should('not.exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Surgery').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Discharge').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('not.exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Follow Up').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('not.exist');
                 });
             });
 
@@ -238,9 +238,9 @@ describe('Episode Details Page', () => {
                     cy.get('main').contains('Episode Details').should('be.visible');
                     cy.get('main').contains('Primary Inguinal').should('be.visible');
                     cy.get('main').contains('2023-01-15').should('be.visible');
-                    cy.get('.MuiAccordionSummary-root').contains('Surgery').parent().find('svg[data-testid="CheckCircleIcon"]').should('exist');
-                    cy.get('.MuiAccordionSummary-root').contains('Discharge').parent().find('svg[data-testid="CheckCircleIcon"]').should('exist');
-                    cy.get('.MuiAccordionSummary-root').contains('Follow Up').parent().find('svg[data-testid="CheckCircleIcon"]').should('exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Surgery').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Discharge').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('exist');
+                    cy.get('.MuiAccordionSummary-root').contains('Follow Up').closest('.MuiAccordionSummary-root').find('svg[data-testid="CheckCircleIcon"]').should('exist');
                 });
 
                 it('should expand and display surgery details', () => {
