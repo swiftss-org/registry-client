@@ -8,7 +8,7 @@ export default defineConfig({
         viewportHeight: 720,
         specPattern: [
             'cypress/mocked-e2e/**/*.cy.{js,jsx,ts,tsx}',
-            'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+            'cypress/user-journey-e2e/**/*.cy.{js,jsx,ts,tsx}',
         ],
         setupNodeEvents(on, config) {
             on('task', {
