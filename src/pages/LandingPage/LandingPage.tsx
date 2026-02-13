@@ -136,6 +136,7 @@ const LandingPage: React.FC = () => {
                   color: '#0d629e',
                 }}
                 aria-label="Dismiss"
+                data-testid="dismiss-announcement"
               >
                 ×
               </button>
@@ -152,12 +153,14 @@ const LandingPage: React.FC = () => {
         {/* Render surgeon summary data */}
         {surgeonEpisodeSummary ? (
           <DashboardText>
-            <p>Number of episodes: {surgeonEpisodeSummary.episode_count}</p>
+            <p>Number of episodes: <span data-testid="episode-count">{surgeonEpisodeSummary.episode_count}</span></p>
             <p>
               Last episode:{' '}
-              {surgeonEpisodeSummary.last_episode_date
-                ? new Date(surgeonEpisodeSummary.last_episode_date).toLocaleDateString()
-                : 'N/A'}
+              <span data-testid="last-episode-date">
+                {surgeonEpisodeSummary.last_episode_date
+                  ? new Date(surgeonEpisodeSummary.last_episode_date).toLocaleDateString()
+                  : 'N/A'}
+              </span>
             </p>
           </DashboardText>
         ) : (
@@ -182,7 +185,7 @@ const LandingPage: React.FC = () => {
               <h2>Patients without Episodes Registered in Your Hospital</h2>
             </DashboardTextHeader>
             <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }} data-testid="unlinked-patients-table">
                 <thead>
                   <tr>
                     <th style={{ border: '1px solid lightgrey', padding: '8px' }}>Patient Name</th>
@@ -225,12 +228,13 @@ const LandingPage: React.FC = () => {
                   episode.
                 </p>
               </DashboardText>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }} data-testid="owned-episodes-table">
                 <thead>
                   <tr>
                     <th
                       onClick={() => handleSort('surgery_date')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-surgery-date"
                     >
                       Surgery Date{' '}
                       {sortConfig.key === 'surgery_date'
@@ -242,6 +246,7 @@ const LandingPage: React.FC = () => {
                     <th
                       onClick={() => handleSort('patient_name')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-patient-name"
                     >
                       Patient Name{' '}
                       {sortConfig.key === 'patient_name'
@@ -253,6 +258,7 @@ const LandingPage: React.FC = () => {
                     <th
                       onClick={() => handleSort('follow_up_dates')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-follow-ups"
                     >
                       Follow-ups{' '}
                       {sortConfig.key === 'follow_up_dates'
@@ -264,6 +270,7 @@ const LandingPage: React.FC = () => {
                     <th
                       onClick={() => handleSort('discharged')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-discharged"
                     >
                       Discharged{' '}
                       {sortConfig.key === 'discharged'

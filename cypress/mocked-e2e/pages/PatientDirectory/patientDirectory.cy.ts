@@ -124,8 +124,8 @@ describe('Patient Directory Page', () => {
         cy.visit('/patients');
         cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
 
-        cy.get('main svg[data-testid="SortIcon"]').click();
-        cy.get('input[value="full_name"]').check();
+        cy.get('[data-testid="sort-icon"]').click();
+        cy.get('[data-testid="sort-name-asc"]').click();
 
         cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('Jane Smith').should('exist');
@@ -133,8 +133,8 @@ describe('Patient Directory Page', () => {
             cy.wrap($rows).children().eq(2).contains('Test Patient').should('exist');
         });
 
-        cy.get('main svg[data-testid="SortIcon"]').click();
-        cy.get('input[value="-full_name"]').check();
+        cy.get('[data-testid="sort-icon"]').click();
+        cy.get('[data-testid="sort-name-desc"]').click();
 
         cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('Test Patient').should('exist');
@@ -147,8 +147,8 @@ describe('Patient Directory Page', () => {
         cy.visit('/patients');
         cy.wait(['@getPatients', '@getHospitals', '@getPreferredHospital']);
 
-        cy.get('main svg[data-testid="SortIcon"]').click();
-        cy.get('input[value="created_at"]').check();
+        cy.get('[data-testid="sort-icon"]').click();
+        cy.get('[data-testid="sort-date-asc"]').click();
 
         cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('John Doe').should('exist');
@@ -156,8 +156,8 @@ describe('Patient Directory Page', () => {
             cy.wrap($rows).children().eq(2).contains('Jane Smith').should('exist');
         });
 
-        cy.get('main svg[data-testid="SortIcon"]').click();
-        cy.get('input[value="-created_at"]').check();
+        cy.get('[data-testid="sort-icon"]').click();
+        cy.get('[data-testid="sort-date-desc"]').click();
 
         cy.contains('John Doe').scrollIntoView().should('be.visible').parent().parent().then(($rows) => {
             cy.wrap($rows).children().eq(0).contains('Jane Smith').should('exist');

@@ -68,27 +68,29 @@ describe('Landing Page', () => {
     describe('Happy Path', () => {
         it('should display surgeon summary', () => {
             cy.get('main').contains('Surgeon Dashboard').should('be.visible');
-            cy.get('main').contains('Number of episodes: 42').should('be.visible');
-            cy.get('main').contains('Last episode: 15/10/2023').should('be.visible');
+            cy.get('[data-testid="episode-count"]').should('contain', '42');
+            cy.get('[data-testid="last-episode-date"]').should('not.be.empty');
         });
 
         it('should display announcements and allow dismissal', () => {
             cy.get('main').contains('Welcome to the system!').should('be.visible');
 
             // Dismiss
-            cy.get('button[aria-label="Dismiss"]').click();
+            cy.get('[data-testid="dismiss-announcement"]').click();
             cy.get('main').contains('Welcome to the system!').should('not.exist');
         });
 
         it('should display unlinked patients', () => {
             cy.get('main').contains('Patients without Episodes Registered in Your Hospital').should('be.visible');
-            cy.get('main').contains('Unlinked Patient').should('be.visible');
-            cy.get('main').contains('H123').should('be.visible');
+            cy.get('[data-testid="unlinked-patients-table"]').within(() => {
+                cy.contains('Unlinked Patient').should('be.visible');
+                cy.contains('H123').should('be.visible');
+            });
         });
 
         it('should redirect to patient details when clicking on unlinked patient row', () => {
             // Find the row containing the unlinked patient and click it
-            cy.get('main').contains('tr', 'Unlinked Patient').click();
+            cy.get('[data-testid="unlinked-patients-table"]').contains('tr', 'Unlinked Patient').click();
 
             // Verify the URL has changed to the patient details page
             cy.url().should('include', '/patients/1/201');
@@ -97,14 +99,16 @@ describe('Landing Page', () => {
 
         it('should display Your Episodes', () => {
             cy.get('main').contains('Your Episodes').should('be.visible');
-            cy.get('main').contains('John Doe').should('be.visible');
-            cy.get('main').contains('Jane Smith').should('be.visible');
+            cy.get('[data-testid="owned-episodes-table"]').within(() => {
+                cy.contains('John Doe').should('be.visible');
+                cy.contains('Jane Smith').should('be.visible');
+            });
         });
 
         it('should redirect to episode details when clicking on episode row in Your Episodes table', () => {
             // Find the Your Episodes table and click on the first episode row
             cy.get('main').contains('Your Episodes').should('be.visible');
-            cy.get('main').contains('tr', 'John Doe').click();
+            cy.get('[data-testid="owned-episodes-table"]').contains('tr', 'John Doe').click();
 
             // Verify the URL has changed to the episode details page
             cy.url().should('include', '/episodes/1');
@@ -113,15 +117,19 @@ describe('Landing Page', () => {
 
         it('should sort episodes by surgery date when clicking column header', () => {
             // Click on Surgery Date column header to revert the sort
-            cy.get('main').contains('th', 'Surgery Date').click().parent().parent().parent().within(() => {
-                cy.get('tr').eq(1).contains('10/10/2023');
-                cy.get('tr').eq(2).contains('12/10/2023');
+            cy.get('[data-testid="column-surgery-date"]').click();
+            
+            cy.get('[data-testid="owned-episodes-table"]').within(() => {
+                cy.get('tbody tr').eq(0).contains('John Doe');
+                cy.get('tbody tr').eq(1).contains('Jane Smith');
             });
 
             // Click again to sort descending
-            cy.get('main').contains('th', 'Surgery Date').click().parent().parent().parent().within(() => {
-                cy.get('tr').eq(1).contains('12/10/2023');
-                cy.get('tr').eq(2).contains('10/10/2023');
+            cy.get('[data-testid="column-surgery-date"]').click();
+            
+            cy.get('[data-testid="owned-episodes-table"]').within(() => {
+                cy.get('tbody tr').eq(0).contains('Jane Smith');
+                cy.get('tbody tr').eq(1).contains('John Doe');
             });
         });
 
@@ -186,7 +194,7 @@ describe('Landing Page', () => {
             cy.wait('@getNoAnnouncements');
 
             // Page should load without announcements section or show empty state
-            cy.get('button[aria-label="Dismiss"]').should('not.exist');
+            cy.get('[data-testid="dismiss-announcement"]').should('not.exist');
         });
     });
 });

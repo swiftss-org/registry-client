@@ -78,12 +78,12 @@ const SortingOptions: React.FC<Props> = ({
             <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1 }}>
               <FormControlLabel
                 value="full_name"
-                control={<Radio size="small" />}
+                control={<Radio size="small" data-testid="sort-name-asc" />}
                 label="Name A-Z"
               />
               <FormControlLabel
                 value="-full_name"
-                control={<Radio size="small" />}
+                control={<Radio size="small" data-testid="sort-name-desc" />}
                 label="Name Z-A"
               />
             </Box>
@@ -96,12 +96,12 @@ const SortingOptions: React.FC<Props> = ({
             <Box sx={{ display: 'flex', flexDirection: 'column', ml: 1 }}>
               <FormControlLabel
                 value="-created_at"
-                control={<Radio size="small" />}
+                control={<Radio size="small" data-testid="sort-date-desc" />}
                 label="Newest to oldest"
               />
               <FormControlLabel
                 value="created_at"
-                control={<Radio size="small" />}
+                control={<Radio size="small" data-testid="sort-date-asc" />}
                 label="Oldest to newest"
               />
             </Box>

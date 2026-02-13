@@ -112,7 +112,7 @@ describe('Login Page', () => {
             // Expect notification or error message
             cy.contains('Invalid credential combination.').should('be.visible');
 
-            cy.get('svg[data-testid="CloseIcon"]').click();
+            cy.get('[data-testid="notification-alert"]').find('button[aria-label="Close"]').click();
 
             cy.contains('Invalid credential combination.').should('not.exist');
         });

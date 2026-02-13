@@ -178,7 +178,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             </MenuItem>
           ))}
         </Select>
-        <IconButton onClick={() => setShowSortingOptions(!showSortingOptions)}>
+        <IconButton onClick={() => setShowSortingOptions(!showSortingOptions)} data-testid="sort-icon">
           <SortIcon />
         </IconButton>
       </Box>

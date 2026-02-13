@@ -35,6 +35,7 @@ const Notifications: React.FC = () => {
       ref={ref}
       severity={notification.type}
       onClose={removeNotification}
+      data-testid="notification-alert"
       sx={{
         borderRadius: '8px',
         scrollMargin: '40px',
