@@ -1,8 +1,9 @@
 import { defineConfig } from 'cypress';
-import { resetDatabase, queryDatabase } from './cypress/test-utils/db';
+import { loadDatabase, resetDatabase, queryDatabase } from './cypress/test-utils/db';
 
 export default defineConfig({
     e2e: {
+        allowCypressEnv: false,
         baseUrl: 'http://localhost:3000',
         viewportWidth: 1280,
         viewportHeight: 720,
@@ -14,6 +15,9 @@ export default defineConfig({
             on('task', {
                 'db:reset': async () => {
                     return await resetDatabase();
+                },
+                'db:load': async () => {
+                    return await loadDatabase();
                 },
                 'db:query': async (sql: string) => {
                     return await queryDatabase(sql);

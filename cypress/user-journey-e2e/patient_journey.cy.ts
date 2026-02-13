@@ -16,9 +16,15 @@ describe('Patient Journey (Real DB)', () => {
     before(() => {
         // Reset the database before the suite
         cy.task('db:reset');
+        cy.task('db:load');
     });
 
     it('should register a new patient and verify them in the directory', () => {
+        // Verify Data was loaded
+        cy.task('db:query', 'SELECT username FROM auth_user').then((registeredUsers) => {
+            console.log('Registered Users in the DB:', registeredUsers);
+        });
+
         // 1. Login
         cy.visit('/login');
         cy.get('#username').type('admin@admin.com');

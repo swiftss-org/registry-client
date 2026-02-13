@@ -1,4 +1,6 @@
 import { Client } from 'pg';
+import { readFile } from 'fs/promises';
+import path from 'path';
 
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
@@ -7,6 +9,146 @@ const dbConfig = {
     password: process.env.DB_PASSWORD || 'admin',
     database: process.env.DB_NAME || 'tmh_registry',
 };
+
+/**
+ * Loads the test database values from the fixtures/test_data.json file
+ * and inserts it into the test database.
+ */
+export async function loadDatabase() {
+    const client = new Client(dbConfig);
+
+    const fixturePath = path.resolve(__dirname, '../fixtures/test_data.json');
+    const rawData = await readFile(fixturePath, 'utf-8');
+    const records: Array<{
+        model: string;
+        pk: number | string;
+        fields: Record<string, unknown>;
+    }> = JSON.parse(rawData);
+
+    const modelToTable: Record<string, string> = {
+        'sites.site': 'django_site',
+    };
+
+    const pkColumnMap: Record<string, string> = {
+        'authtoken.token': 'key',
+    };
+
+    const many2manyRelationExtractors: Array<{
+        model: string;
+        field: string;
+        table: string;
+        columns: [string, string];
+    }> = [
+        {
+            model: 'registry.episode',
+            field: 'surgeons',
+            table: 'registry_episode_surgeons',
+            columns: ['episode_id', 'medicalpersonnel_id'],
+        },
+        {
+            model: 'registry.followup',
+            field: 'attendees',
+            table: 'registry_followup_attendees',
+            columns: ['followup_id', 'medicalpersonnel_id'],
+        },
+    ];
+
+    const m2mRows: Array<{
+        table: string;
+        columns: [string, string];
+        leftId: number | string;
+        rightId: number | string;
+    }> = [];
+
+    const toTableName = (model: string) => modelToTable[model] ?? model.replace('.', '_');
+    const toPkColumn = (model: string) => pkColumnMap[model] ?? 'id';
+
+    const buildInsert = (table: string, data: Record<string, unknown>) => {
+        const columns = Object.keys(data);
+        const values = columns.map((key) => data[key] ?? null);
+        const placeholders = columns.map((_, index) => `$${index + 1}`).join(', ');
+        const sql = `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${placeholders});`;
+        return { sql, values };
+    };
+
+    try {
+        await client.connect();
+        await client.query('BEGIN');
+
+        const tablesToTruncate = [
+            'registry_followup_attendees',
+            'registry_episode_surgeons',
+            'registry_followup',
+            'registry_discharge',
+            'registry_episode',
+            'registry_patienthospitalmapping',
+            'registry_patient',
+            'registry_preferredhospital',
+            'registry_hospitalregionmapping',
+            'registry_regionzonemapping',
+            'registry_hospital',
+            'registry_region',
+            'registry_zone',
+            'users_medicalpersonnel',
+            'authtoken_token',
+            'django_site',
+            'auth_user',
+        ];
+
+        await client.query(
+            `TRUNCATE TABLE ${tablesToTruncate.join(', ')} RESTART IDENTITY CASCADE;`
+        );
+
+        for (const record of records) {
+            const table = toTableName(record.model);
+            const pkColumn = toPkColumn(record.model);
+
+            const cleanedFields = { ...record.fields } as Record<string, unknown>;
+
+            for (const extractor of many2manyRelationExtractors) {
+                if (record.model === extractor.model && Array.isArray(cleanedFields[extractor.field])) {
+                    const items = cleanedFields[extractor.field] as Array<number | string>;
+                    for (const rightId of items) {
+                        m2mRows.push({
+                            table: extractor.table,
+                            columns: extractor.columns,
+                            leftId: record.pk,
+                            rightId,
+                        });
+                    }
+                    delete cleanedFields[extractor.field];
+                }
+            }
+
+            if (record.model === 'auth.user') {
+                delete cleanedFields.groups;
+                delete cleanedFields.user_permissions;
+            }
+
+            const row = { [pkColumn]: record.pk, ...cleanedFields };
+            const { sql, values } = buildInsert(table, row);
+            await client.query(sql, values);
+        }
+
+        for (const row of m2mRows) {
+            const { sql, values } = buildInsert(row.table, {
+                [row.columns[0]]: row.leftId,
+                [row.columns[1]]: row.rightId,
+            });
+            await client.query(sql, values);
+        }
+
+        await client.query('COMMIT');
+        console.log('Database loaded successfully');
+        return null;
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error loading database:', err);
+        throw err;
+    } finally {
+        await client.end();
+    }
+}
 
 /**
  * Resets the database by truncating transactional tables.
