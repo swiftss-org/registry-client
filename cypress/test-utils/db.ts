@@ -24,6 +24,7 @@ export async function loadDatabase() {
         pk: number | string;
         fields: Record<string, unknown>;
     }> = JSON.parse(rawData);
+    console.log('DB json file is parsed')
 
     const modelToTable: Record<string, string> = {
         'sites.site': 'django_site',
@@ -53,6 +54,48 @@ export async function loadDatabase() {
         },
     ];
 
+    const tableColumnsCache = new Map<string, Set<string>>();
+
+    const getTableColumns = async (table: string) => {
+        if (tableColumnsCache.has(table)) {
+            return tableColumnsCache.get(table)!;
+        }
+        const result = await client.query(
+            `
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_schema = 'public' AND table_name = $1
+            `,
+            [table]
+        );
+        const columns = new Set(result.rows.map((row) => row.column_name));
+        tableColumnsCache.set(table, columns);
+        return columns;
+    };
+
+    const remapFieldsBySchema = async (
+        table: string,
+        fields: Record<string, unknown>
+    ): Promise<Record<string, unknown>> => {
+        const columns = await getTableColumns(table);
+        const remapped: Record<string, unknown> = {};
+
+        for (const [key, value] of Object.entries(fields)) {
+            if (columns.has(key)) {
+                remapped[key] = value;
+                continue;
+            }
+            const fkKey = `${key}_id`;
+            if (columns.has(fkKey)) {
+                remapped[fkKey] = value;
+                continue;
+            }
+            remapped[key] = value;
+        }
+
+        return remapped;
+    };
+
     const m2mRows: Array<{
         table: string;
         columns: [string, string];
@@ -70,10 +113,13 @@ export async function loadDatabase() {
         const sql = `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${placeholders});`;
         return { sql, values };
     };
+    console.log('Many to Many Relationships were built')
 
     try {
+        console.log('Connecting to the test DB...')
         await client.connect();
         await client.query('BEGIN');
+        console.log('Connected to the test DB and Commit was opened')
 
         const tablesToTruncate = [
             'registry_followup_attendees',
@@ -98,10 +144,12 @@ export async function loadDatabase() {
         await client.query(
             `TRUNCATE TABLE ${tablesToTruncate.join(', ')} RESTART IDENTITY CASCADE;`
         );
+        console.log('Counters were reset')
 
         for (const record of records) {
             const table = toTableName(record.model);
             const pkColumn = toPkColumn(record.model);
+            console.log(`${table} is being populated...`)
 
             const cleanedFields = { ...record.fields } as Record<string, unknown>;
 
@@ -125,7 +173,8 @@ export async function loadDatabase() {
                 delete cleanedFields.user_permissions;
             }
 
-            const row = { [pkColumn]: record.pk, ...cleanedFields };
+            const remappedFields = await remapFieldsBySchema(table, cleanedFields);
+            const row = { [pkColumn]: record.pk, ...remappedFields };
             const { sql, values } = buildInsert(table, row);
             await client.query(sql, values);
         }
