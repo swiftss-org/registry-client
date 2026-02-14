@@ -40,7 +40,39 @@ const pushBufferedError = (prefix: string, payload: unknown) => {
   __browserErrors__.push(`${prefix} ${message}`);
 };
 
+// Sanity marker so CI logs prove this support file is loaded.
+beforeEach(() => {
+  cy.task('log', 'CI DEBUG - Cypress support diagnostics active', { log: false });
+});
+
 Cypress.on('window:before:load', (win) => {
+  // Instrument storage writes so we can see if the app ever tries to persist the token.
+  const instrumentStorage = (storage: Storage, label: 'localStorage' | 'sessionStorage') => {
+    const origSetItem = storage.setItem.bind(storage);
+    const origRemoveItem = storage.removeItem.bind(storage);
+    const origClear = storage.clear.bind(storage);
+
+    storage.setItem = (key: string, value: string) => {
+      pushBufferedError('STORAGE setItem:', { storage: label, key, valuePreview: String(value).slice(0, 12) });
+      return origSetItem(key, value);
+    };
+    storage.removeItem = (key: string) => {
+      pushBufferedError('STORAGE removeItem:', { storage: label, key });
+      return origRemoveItem(key);
+    };
+    storage.clear = () => {
+      pushBufferedError('STORAGE clear:', { storage: label });
+      return origClear();
+    };
+  };
+
+  try {
+    instrumentStorage(win.localStorage, 'localStorage');
+    instrumentStorage(win.sessionStorage, 'sessionStorage');
+  } catch (e) {
+    pushBufferedError('STORAGE instrumentation failed:', e);
+  }
+
   win.addEventListener('error', (event) => {
     pushBufferedError('BROWSER error:', {
       message: event.message,
