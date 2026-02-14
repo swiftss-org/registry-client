@@ -137,7 +137,7 @@ describe('Patient Journey (Real DB)', () => {
       // Debug: Check preferred hospitals in DB for debugging
       cy.task(
         'db:query',
-        'SELECT id, medical_personnel, hospital FROM registry_preferredhospital'
+        'SELECT id, medical_personnel_id, hospital_id FROM registry_preferredhospital'
       ).then((rows: any) => {
         const msg = 'CI DEBUG - Preferred Hospitals in DB: ' + JSON.stringify(rows);
         cy.log(msg);
