@@ -319,6 +319,7 @@ export async function createUser(options: {
     firstName?: string;
     lastName?: string;
     medicalPersonnelLevel?: string;
+    hospitalId?: number;
 }) {
     const {
         username,
@@ -327,7 +328,8 @@ export async function createUser(options: {
         isSuperuser = true,
         firstName = 'Test',
         lastName = 'User',
-        medicalPersonnelLevel = 'LEAD_SURGEON'
+        medicalPersonnelLevel = 'LEAD_SURGEON',
+        hospitalId = 2,
     } = options;
 
     const client = new Client(dbConfig);
@@ -349,15 +351,22 @@ export async function createUser(options: {
 
         const userId = userRes.rows[0].id;
 
-        // Insert into users_medicalpersonnel if level is provided
-        if (medicalPersonnelLevel) {
-            await client.query(
-                `INSERT INTO users_medicalpersonnel (user_id, level) VALUES ($1, $2)`,
-                [userId, medicalPersonnelLevel]
-            );
-        }
+        // Insert into users_medicalpersonnel and preferred hospital if level is provided
+      if (medicalPersonnelLevel) {
+        const mpRes = await client.query(
+          `INSERT INTO users_medicalpersonnel (user_id, level) VALUES ($1, $2) RETURNING id`,
+          [userId, medicalPersonnelLevel]
+        );
+        const medicalPersonnelId = mpRes.rows[0].id;
 
-        await client.query('COMMIT');
+        await client.query(
+          `INSERT INTO registry_preferredhospital (medical_personnel_id, hospital_id) VALUES ($1, $2)`,
+          [medicalPersonnelId, hospitalId]
+        );
+      }
+
+
+      await client.query('COMMIT');
         console.log(`User ${username} created successfully with ID ${userId}`);
         return { id: userId, username };
     } catch (err) {
