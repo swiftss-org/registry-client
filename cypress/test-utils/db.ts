@@ -275,6 +275,11 @@ export async function resetDatabase() {
         // CASCADE handles foreign key references
         const truncateQuery = `TRUNCATE TABLE ${tables.join(', ')} RESTART IDENTITY CASCADE;`;
         await client.query(truncateQuery);
+        // log the size of every table that was truncated
+        for (const table of tables) {
+            const res = await client.query(`SELECT COUNT(*) FROM ${table}`);
+            console.log(`Table ${table} has ${res.rows[0].count} rows`);
+        }
 
         console.log('Database reset successfully');
         return null;
@@ -322,7 +327,7 @@ export async function createUser(options: {
         isSuperuser = true,
         firstName = 'Test',
         lastName = 'User',
-        medicalPersonnelLevel = 'Lead Surgeon'
+        medicalPersonnelLevel = 'LEAD_SURGEON'
     } = options;
 
     const client = new Client(dbConfig);
