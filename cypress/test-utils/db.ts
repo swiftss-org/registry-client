@@ -278,7 +278,7 @@ export async function resetDatabase() {
         // log the size of every table that was truncated
         for (const table of tables) {
             const res = await client.query(`SELECT COUNT(*) FROM ${table}`);
-            console.log(`Table ${table} has ${res.rows[0].count} rows`);
+//             console.log(`Table ${table} has ${res.rows[0].count} rows`);
         }
 
         console.log('Database reset successfully');
