@@ -76,28 +76,22 @@ Cypress.on('uncaught:exception', (err) => {
 
 afterEach(() => {
   if (__browserErrors__.length) {
-    // eslint-disable-next-line no-console
-    console.log('--- Buffered browser errors (for CI) ---');
+    cy.task('log', '--- Buffered browser errors (for CI) ---', { log: false });
     for (const line of __browserErrors__) {
-      // eslint-disable-next-line no-console
-      console.log(line);
+      cy.task('log', line, { log: false });
     }
-    // eslint-disable-next-line no-console
-    console.log('--- End buffered browser errors ---');
+    cy.task('log', '--- End buffered browser errors ---', { log: false });
     __browserErrors__.length = 0;
   }
 });
 
 Cypress.on('fail', (err) => {
   if (__browserErrors__.length) {
-    // eslint-disable-next-line no-console
-    console.log('--- Buffered browser errors (for CI) ---');
+    cy.task('log', '--- Buffered browser errors (for CI) ---', { log: false });
     for (const line of __browserErrors__) {
-      // eslint-disable-next-line no-console
-      console.log(line);
+      cy.task('log', line, { log: false });
     }
-    // eslint-disable-next-line no-console
-    console.log('--- End buffered browser errors ---');
+    cy.task('log', '--- End buffered browser errors ---', { log: false });
     __browserErrors__.length = 0;
   }
   throw err;
