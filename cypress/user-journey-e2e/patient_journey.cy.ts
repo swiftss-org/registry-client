@@ -20,15 +20,13 @@ describe('Patient Journey (Real DB)', () => {
     });
 
     it('should register a new patient and verify them in the directory', () => {
-        // Verify Data was loaded
-        cy.task('db:query', 'SELECT username FROM auth_user').then((registeredUsers) => {
-            console.log('Registered Users in the DB:', registeredUsers);
-        });
+        // Intercept registration request
+        cy.intercept('POST', '**/patients/').as('registerPatient');
 
         // 1. Login
         cy.visit('/login');
         cy.get('#username').type('admin@admin.com');
-        cy.get('#password').type('admin'); // Assuming 'admin' is the password for the seeded user
+        cy.get('#password').type('admin');
         cy.get('button[type="submit"]').click();
 
         cy.url().should('include', '/landing');
@@ -57,13 +55,25 @@ describe('Patient Journey (Real DB)', () => {
         // 4. Submit
         cy.contains('button', 'Add new patient').click();
 
+        // Wait for the request and check the status
+        cy.wait('@registerPatient').then((interception) => {
+            cy.log('Registration Response Status: ' + interception.response?.statusCode);
+            expect(interception.response?.statusCode).to.eq(201);
+        });
+
         // 5. Verify redirection to Patient Directory
         cy.url().should('match', /\/patients$/);
 
+        // Wait for the directory to load and show the default hospital
+        // This ensures the first-load initialization logic is complete before we change it.
+        cy.get('#center').should('be.visible').contains('Royal London Hospital');
+
         // 6. Ensure the correct hospital is selected in the filter
-        // The filter shows the hospital name. We click it to open and select General Hospital.
-        cy.get('main').contains('Hospital').parent().click();
-        cy.get('[role="listbox"]').contains(testPatient.hospital).click();
+        // The filter shows the hospital name. We use the custom selectMuiOption command.
+        cy.selectMuiOption('#center', testPatient.hospital);
+
+        // Verify the selection "stuck" and is now the test hospital
+        cy.get('#center').contains(testPatient.hospital).should('be.visible');
 
         // 7. Verify patient appears in the directory
         cy.contains(testPatient.firstName).should('be.visible');
@@ -73,7 +83,7 @@ describe('Patient Journey (Real DB)', () => {
         cy.contains(`${testPatient.firstName} ${testPatient.lastName}`).click();
 
         // 9. Verify details page
-        cy.url().should('match', /\/patients\/\d+$/);
+        cy.url().should('match', /\/patients\/\d+\/\d+$/);
         cy.contains(testPatient.firstName).should('be.visible');
         cy.contains(testPatient.lastName).should('be.visible');
         cy.contains(testPatient.nationalId.toString()).should('be.visible');
