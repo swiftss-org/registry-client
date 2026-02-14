@@ -17,8 +17,10 @@
 import './commands';
 
 // Buffer browser-side errors so we can print them on test failure.
-// Calling cy.task directly from global event handlers can be flaky because it may fire
-// outside an active Cypress command chain.
+// Note: Cypress.env() is disabled in this repo (allowCypressEnv=false),
+// so we use an in-module buffer.
+const __browserErrors__: string[] = [];
+
 const pushBufferedError = (prefix: string, payload: unknown) => {
   const safeStringify = (value: unknown) => {
     try {
@@ -35,9 +37,7 @@ const pushBufferedError = (prefix: string, payload: unknown) => {
         ? `${payload.name}: ${payload.message}\n${payload.stack ?? ''}`
         : safeStringify(payload);
 
-  const existing = (Cypress.env('__browserErrors') as string[] | undefined) ?? [];
-  existing.push(`${prefix} ${message}`);
-  Cypress.env('__browserErrors', existing);
+  __browserErrors__.push(`${prefix} ${message}`);
 };
 
 Cypress.on('window:before:load', (win) => {
@@ -75,11 +75,10 @@ Cypress.on('uncaught:exception', (err) => {
 });
 
 Cypress.on('fail', (err) => {
-  const buffered = (Cypress.env('__browserErrors') as string[] | undefined) ?? [];
-  if (buffered.length) {
+  if (__browserErrors__.length) {
     // eslint-disable-next-line no-console
     console.log('--- Buffered browser errors (for CI) ---');
-    for (const line of buffered) {
+    for (const line of __browserErrors__) {
       // eslint-disable-next-line no-console
       console.log(line);
     }
