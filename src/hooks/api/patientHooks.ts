@@ -193,8 +193,8 @@ export const useRegisterPatient = () => {
         patient_hospital_id: params.patientHospitalId,
         gender: params.gender,
         address: params.address,
-        phone_1: params.phone1,
-        phone_2: params.phone2,
+        phone_1: params.phone1 ? String(params.phone1) : '',
+        phone_2: params.phone2 ? String(params.phone2) : '',
       });
       return request();
     },
