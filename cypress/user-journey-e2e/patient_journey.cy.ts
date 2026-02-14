@@ -43,9 +43,12 @@ describe('Patient Journey (Real DB)', () => {
       });
 
       // 2. Login
-      cy.clearLocalStorage();
-      cy.window().then((win) => win.sessionStorage.clear());
-      cy.visit('/login');
+      cy.visit('/login', {
+        onBeforeLoad(win) {
+          win.localStorage.clear();
+          win.sessionStorage.clear();
+        },
+      });
 
       // Debug: Print URL, storage, and cookies after visiting /login
       cy.url().then((url) => {
@@ -80,7 +83,7 @@ describe('Patient Journey (Real DB)', () => {
 
       // Wait for login and log the response
       cy.wait('@login', { timeout: 15000 }).then((interception) => {
-          const reqUrl = 'CI DEBUG - Login Request URL: ' + interception.request.url;
+        const reqUrl = 'CI DEBUG - Login Request URL: ' + interception.request.url;
         const statusMsg = 'CI DEBUG - Login Response Status: ' + interception.response?.statusCode;
         const bodyMsg =
           'CI DEBUG - Login Response Body: ' + JSON.stringify(interception.response?.body);
@@ -92,16 +95,20 @@ describe('Patient Journey (Real DB)', () => {
         cy.task('log', bodyMsg);
       });
 
-      // Wait a bit for React state to update
-      cy.wait(500);
-
-      // Print browser console errors after login
-      cy.window().then((win) => {
-        if (win.console && win.console.error) {
-          // This will only print errors that happened after this point
-          cy.task('log', 'CI DEBUG - No browser console error hook available');
-        }
-      });
+      // Wait until token is actually stored (localStorage OR sessionStorage)
+      cy.window({ timeout: 15000 })
+        .its('localStorage')
+        .invoke('getItem', 'token-registry')
+        .then((localToken) => {
+          if (localToken) return;
+          cy.window({ timeout: 15000 })
+            .its('sessionStorage')
+            .invoke('getItem', 'token-registry')
+            .should((sessionToken) => {
+              expect(sessionToken, 'token-registry in browser storage').to.be.a('string');
+              expect(sessionToken, 'token-registry in browser storage').to.not.equal('');
+            });
+        });
 
       // Debug: Print localStorage and sessionStorage after login
       cy.window().then((win) => {
@@ -111,19 +118,9 @@ describe('Patient Journey (Real DB)', () => {
         cy.log('CI DEBUG - sessionStorage token: ' + sessionToken);
         cy.task('log', 'CI DEBUG - localStorage token: ' + localToken);
         cy.task('log', 'CI DEBUG - sessionStorage token: ' + sessionToken);
-        // If token is missing, set it manually from the login response
         if (!localToken && !sessionToken) {
-            cy.log('CI DEBUG - TOKEN is missing after login');
-            cy.task('log', 'CI DEBUG - TOKEN is missing after login');
-//           cy.get('@login').then((interception) => {
-//             const token = interception.response?.body?.token;
-//             if (token) {
-//               win.localStorage.setItem('token-registry', token);
-//               cy.log('CI DEBUG - Manually set token in localStorage');
-//               cy.task('log', 'CI DEBUG - Manually set token in localStorage');
-//               win.location.reload();
-//             }
-//           });
+          cy.log('CI DEBUG - TOKEN is missing after login');
+          cy.task('log', 'CI DEBUG - TOKEN is missing after login');
         }
       });
 
