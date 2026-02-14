@@ -80,9 +80,12 @@ describe('Patient Journey (Real DB)', () => {
 
       // Wait for login and log the response
       cy.wait('@login', { timeout: 15000 }).then((interception) => {
+          const reqUrl = 'CI DEBUG - Login Request URL: ' + interception.request.url;
         const statusMsg = 'CI DEBUG - Login Response Status: ' + interception.response?.statusCode;
         const bodyMsg =
           'CI DEBUG - Login Response Body: ' + JSON.stringify(interception.response?.body);
+        cy.log(reqUrl);
+        cy.task('log', reqUrl);
         cy.log(statusMsg);
         cy.task('log', statusMsg);
         cy.log(bodyMsg);
