@@ -22,16 +22,32 @@ describe('Patient Journey (Real DB)', () => {
     });
 
     it('should register a new patient and verify them in the directory', () => {
-        // Intercept registration request
+        // Intercept registration and login requests
         cy.intercept('POST', '**/patients/').as('registerPatient');
+        cy.intercept('POST', '**/sign-in/').as('login');
 
         // 1. Login
         cy.visit('/login');
-        cy.get('#username').type('admin@admin.com');
+
+        // Debug: Check users in DB for debugging
+        cy.task('db:query', 'SELECT count(*) FROM auth_user').then((res: any) => {
+            cy.log('Total users in DB: ' + res[0].count);
+        });
+        cy.task('db:query', 'SELECT id, username, is_active, is_staff FROM auth_user').then((rows: any) => {
+            cy.log('Users in DB: ' + JSON.stringify(rows));
+        });
+
+        cy.get('#username', { timeout: 10000 }).should('be.visible').type('admin@admin.com');
         cy.get('#password').type('admin');
         cy.get('button[type="submit"]').click();
 
-        cy.url().should('include', '/landing');
+        // Wait for login and log the response
+        cy.wait('@login').then((interception) => {
+            cy.log('Login Response Status: ' + interception.response?.statusCode);
+            cy.log('Login Response Body: ' + JSON.stringify(interception.response?.body));
+        });
+
+        cy.url().should('include', '/landing', { timeout: 10000 });
 
         // 2. Navigate to Register Patient
         cy.visit('/patients/register');
