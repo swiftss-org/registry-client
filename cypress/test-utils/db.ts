@@ -24,7 +24,6 @@ export async function loadDatabase() {
         pk: number | string;
         fields: Record<string, unknown>;
     }> = JSON.parse(rawData);
-    console.log('DB json file is parsed')
 
     const modelToTable: Record<string, string> = {
         'sites.site': 'django_site',
@@ -113,13 +112,10 @@ export async function loadDatabase() {
         const sql = `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${placeholders});`;
         return { sql, values };
     };
-    console.log('Many to Many Relationships were built')
 
     try {
-        console.log('Connecting to the test DB...')
         await client.connect();
         await client.query('BEGIN');
-        console.log('Connected to the test DB and Commit was opened')
 
         const tablesToTruncate = [
             'registry_followup_attendees',
@@ -144,7 +140,6 @@ export async function loadDatabase() {
         await client.query(
             `TRUNCATE TABLE ${tablesToTruncate.join(', ')} RESTART IDENTITY CASCADE;`
         );
-        console.log('Counters were reset')
 
         for (const record of records) {
             const table = toTableName(record.model);
