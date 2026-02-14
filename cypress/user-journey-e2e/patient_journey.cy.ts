@@ -31,10 +31,14 @@ describe('Patient Journey (Real DB)', () => {
 
         // Debug: Check users in DB for debugging
         cy.task('db:query', 'SELECT count(*) FROM auth_user').then((res: any) => {
-            cy.log('Total users in DB: ' + res[0].count);
+            const msg = 'CI DEBUG - Total users in DB: ' + res[0].count;
+            cy.log(msg);
+            cy.task('log', msg);
         });
-        cy.task('db:query', 'SELECT id, username, is_active, is_staff FROM auth_user').then((rows: any) => {
-            cy.log('Users in DB: ' + JSON.stringify(rows));
+        cy.task('db:query', 'SELECT id, username, is_active, is_staff, password FROM auth_user').then((rows: any) => {
+            const msg = 'CI DEBUG - Users in DB: ' + JSON.stringify(rows);
+            cy.log(msg);
+            cy.task('log', msg);
         });
 
         cy.get('#username', { timeout: 10000 }).should('be.visible').type('admin@admin.com');
@@ -42,9 +46,13 @@ describe('Patient Journey (Real DB)', () => {
         cy.get('button[type="submit"]').click();
 
         // Wait for login and log the response
-        cy.wait('@login').then((interception) => {
-            cy.log('Login Response Status: ' + interception.response?.statusCode);
-            cy.log('Login Response Body: ' + JSON.stringify(interception.response?.body));
+        cy.wait('@login', { timeout: 10000 }).then((interception) => {
+            const statusMsg = 'CI DEBUG - Login Response Status: ' + interception.response?.statusCode;
+            const bodyMsg = 'CI DEBUG - Login Response Body: ' + JSON.stringify(interception.response?.body);
+            cy.log(statusMsg);
+            cy.task('log', statusMsg);
+            cy.log(bodyMsg);
+            cy.task('log', bodyMsg);
         });
 
         cy.url().should('include', '/landing', { timeout: 10000 });
@@ -77,7 +85,9 @@ describe('Patient Journey (Real DB)', () => {
 
         // Wait for the request and check the status
         cy.wait('@registerPatient', { timeout: 10000 }).then((interception) => {
-            cy.log('Registration Response Status: ' + interception.response?.statusCode);
+            const msg = 'CI DEBUG - Registration Response Status: ' + interception.response?.statusCode;
+            cy.log(msg);
+            cy.task('log', msg);
             expect(interception.response?.statusCode).to.eq(201);
 
             // 5. DB Verification - check the data is stored correctly
@@ -85,7 +95,6 @@ describe('Patient Journey (Real DB)', () => {
             cy.task('db:query', `SELECT * FROM registry_patient WHERE national_id = '${nationalId}'`).then((rows: any) => {
                 expect(rows).to.have.length(1);
                 const patient = rows[0];
-                // Note: full_name is likely constructed as "First Middle Last" if Middle is present
                 expect(patient.full_name).to.eq(`${testPatient.firstName} ${testPatient.middleName} ${testPatient.lastName}`);
                 expect(patient.national_id).to.eq(nationalId);
                 expect(typeof patient.national_id).to.eq('string');
@@ -113,7 +122,6 @@ describe('Patient Journey (Real DB)', () => {
         cy.contains(testPatient.lastName).should('be.visible');
 
         // 9. Click on the patient to go to details
-        // We use the full name as it appears in the list
         cy.contains(`${testPatient.firstName} ${testPatient.middleName} ${testPatient.lastName}`).click();
 
         // 10. Verify details page

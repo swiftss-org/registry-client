@@ -22,6 +22,10 @@ export default defineConfig({
                 'db:query': async (sql: string) => {
                     return await queryDatabase(sql);
                 },
+                'log': (message: string) => {
+                    console.log(message);
+                    return null;
+                },
             });
         },
     },

@@ -17,7 +17,7 @@ const dbConfig = {
 export async function loadDatabase() {
     const client = new Client(dbConfig);
 
-    const fixturePath = path.resolve(__dirname, '../fixtures/test_data.json');
+    const fixturePath = path.resolve(process.cwd(), 'cypress/fixtures/test_data.json');
     const rawData = await readFile(fixturePath, 'utf-8');
     const records: Array<{
         model: string;
@@ -243,12 +243,32 @@ export async function resetDatabase() {
         await client.connect();
 
         const tables = [
-            'registry_patient',
-            'registry_episode',
-            'registry_discharge',
+            'registry_followup_attendees',
+            'registry_episode_surgeons',
             'registry_followup',
+            'registry_discharge',
+            'registry_episode',
             'registry_patienthospitalmapping',
-            'registry_announcement'
+            'registry_patient',
+            'registry_preferredhospital',
+            'registry_hospitalregionmapping',
+            'registry_regionzonemapping',
+            'registry_hospital',
+            'registry_region',
+            'registry_zone',
+            'users_medicalpersonnel',
+            'authtoken_token',
+            'django_site',
+            'auth_user',
+            'registry_announcement',
+            'django_session',
+            'django_admin_log',
+            'django_content_type',
+            'auth_permission',
+            'auth_group',
+            'auth_group_permissions',
+            'auth_user_groups',
+            'auth_user_user_permissions'
         ];
 
         // RESTART IDENTITY resets serial/auto-increment columns to 1
