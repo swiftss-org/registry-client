@@ -144,7 +144,6 @@ export async function loadDatabase() {
         for (const record of records) {
             const table = toTableName(record.model);
             const pkColumn = toPkColumn(record.model);
-            console.log(`${table} is being populated...`)
 
             const cleanedFields = { ...record.fields } as Record<string, unknown>;
 
