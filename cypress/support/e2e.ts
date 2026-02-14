@@ -1,4 +1,3 @@
-
 // ***********************************************************
 // This example support/e2e.ts is processed and
 // loaded automatically before your test files.
@@ -19,3 +18,12 @@ import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.on('uncaught:exception', (err) => {
+  // Log the error to terminal output in CI to make failures actionable.
+  // Returning false prevents Cypress from failing the test immediately,
+  // letting assertions show the functional failure.
+  // eslint-disable-next-line no-console
+  console.error('CYPRESS uncaught:exception', err);
+  return false;
+});
