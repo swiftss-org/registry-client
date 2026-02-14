@@ -127,6 +127,24 @@ describe('Patient Journey (Real DB)', () => {
       // 2. Navigate to Register Patient
       cy.visit('/patients/register');
 
+      cy.task(
+        'db:query',
+        'SELECT id, username FROM auth_user'
+      ).then((rows: any) => {
+        const msg = 'CI DEBUG - Medical Personnel in DB: ' + JSON.stringify(rows);
+        cy.log(msg);
+        cy.task('log', msg);
+      });
+
+      cy.task(
+        'db:query',
+        'SELECT id, user_id FROM users_medicalpersonnel'
+      ).then((rows: any) => {
+        const msg = 'CI DEBUG - Medical Personnel in DB: ' + JSON.stringify(rows);
+        cy.log(msg);
+        cy.task('log', msg);
+      });
+
       // Debug: Check hospitals in DB for debugging
       cy.task('db:query', 'SELECT id, name FROM registry_hospital').then((rows: any) => {
         const msg = 'CI DEBUG - Hospitals in DB: ' + JSON.stringify(rows);
