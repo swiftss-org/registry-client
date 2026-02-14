@@ -110,15 +110,17 @@ describe('Patient Journey (Real DB)', () => {
         cy.task('log', 'CI DEBUG - sessionStorage token: ' + sessionToken);
         // If token is missing, set it manually from the login response
         if (!localToken && !sessionToken) {
-          cy.get('@login').then((interception) => {
-            const token = interception.response?.body?.token;
-            if (token) {
-              win.localStorage.setItem('token-registry', token);
-              cy.log('CI DEBUG - Manually set token in localStorage');
-              cy.task('log', 'CI DEBUG - Manually set token in localStorage');
-              win.location.reload();
-            }
-          });
+            cy.log('CI DEBUG - TOKEN is missing after login');
+            cy.task('log', 'CI DEBUG - TOKEN is missing after login');
+//           cy.get('@login').then((interception) => {
+//             const token = interception.response?.body?.token;
+//             if (token) {
+//               win.localStorage.setItem('token-registry', token);
+//               cy.log('CI DEBUG - Manually set token in localStorage');
+//               cy.task('log', 'CI DEBUG - Manually set token in localStorage');
+//               win.location.reload();
+//             }
+//           });
         }
       });
 
