@@ -38,7 +38,7 @@ export const useSignIn = () => {
       navigate(urls.landingPage(), { replace: true });
     },
     onError: (errors) => {
-      setNotification('Invalid credential combination.', 'error');
+      setNotification(`Invalid credential combination. ${errors.toJSON()}`, 'error');
       console.log(errors);
     },
   });

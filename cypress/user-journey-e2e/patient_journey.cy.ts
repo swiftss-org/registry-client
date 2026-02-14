@@ -81,6 +81,17 @@ describe('Patient Journey (Real DB)', () => {
             cy.task('log', bodyMsg);
         });
 
+        // Wait a bit for React state to update
+        cy.wait(500);
+
+        // Print browser console errors after login
+        cy.window().then((win) => {
+            if (win.console && win.console.error) {
+                // This will only print errors that happened after this point
+                cy.task('log', 'CI DEBUG - No browser console error hook available');
+            }
+        });
+
         // Debug: Print localStorage and sessionStorage after login
         cy.window().then((win) => {
             const localToken = win.localStorage.getItem('token-registry');
@@ -89,11 +100,17 @@ describe('Patient Journey (Real DB)', () => {
             cy.log('CI DEBUG - sessionStorage token: ' + sessionToken);
             cy.task('log', 'CI DEBUG - localStorage token: ' + localToken);
             cy.task('log', 'CI DEBUG - sessionStorage token: ' + sessionToken);
-            // If token is only in sessionStorage, copy it to localStorage to simulate persistent login
-            if (!localToken && sessionToken) {
-                win.localStorage.setItem('token-registry', sessionToken);
-                cy.log('CI DEBUG - Copied token from sessionStorage to localStorage');
-                cy.task('log', 'CI DEBUG - Copied token from sessionStorage to localStorage');
+            // If token is missing, set it manually from the login response
+            if (!localToken && !sessionToken) {
+                cy.get('@login').then((interception) => {
+                    const token = interception.response?.body?.token;
+                    if (token) {
+                        win.localStorage.setItem('token-registry', token);
+                        cy.log('CI DEBUG - Manually set token in localStorage');
+                        cy.task('log', 'CI DEBUG - Manually set token in localStorage');
+                        win.location.reload();
+                    }
+                });
             }
         });
 
