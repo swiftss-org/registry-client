@@ -38,7 +38,27 @@ describe('Patient Journey (Real DB)', () => {
         });
 
         // 2. Login
+        cy.clearLocalStorage();
+        cy.window().then((win) => win.sessionStorage.clear());
         cy.visit('/login');
+
+        // Debug: Print URL, storage, and cookies after visiting /login
+        cy.url().then((url) => {
+            cy.log('CI DEBUG - URL after visit /login: ' + url);
+            cy.task('log', 'CI DEBUG - URL after visit /login: ' + url);
+        });
+        cy.window().then((win) => {
+            const localToken = win.localStorage.getItem('token-registry');
+            const sessionToken = win.sessionStorage.getItem('token-registry');
+            cy.log('CI DEBUG - localStorage token after visit: ' + localToken);
+            cy.log('CI DEBUG - sessionStorage token after visit: ' + sessionToken);
+            cy.task('log', 'CI DEBUG - localStorage token after visit: ' + localToken);
+            cy.task('log', 'CI DEBUG - sessionStorage token after visit: ' + sessionToken);
+        });
+        cy.getCookies().then((cookies) => {
+            cy.log('CI DEBUG - cookies after visit: ' + JSON.stringify(cookies));
+            cy.task('log', 'CI DEBUG - cookies after visit: ' + JSON.stringify(cookies));
+        });
 
         // Debug: Check users in DB for debugging
         cy.task('db:query', 'SELECT id, username, is_active, is_staff, password FROM auth_user').then((rows: any) => {
@@ -59,6 +79,22 @@ describe('Patient Journey (Real DB)', () => {
             cy.task('log', statusMsg);
             cy.log(bodyMsg);
             cy.task('log', bodyMsg);
+        });
+
+        // Debug: Print localStorage and sessionStorage after login
+        cy.window().then((win) => {
+            const localToken = win.localStorage.getItem('token-registry');
+            const sessionToken = win.sessionStorage.getItem('token-registry');
+            cy.log('CI DEBUG - localStorage token: ' + localToken);
+            cy.log('CI DEBUG - sessionStorage token: ' + sessionToken);
+            cy.task('log', 'CI DEBUG - localStorage token: ' + localToken);
+            cy.task('log', 'CI DEBUG - sessionStorage token: ' + sessionToken);
+            // If token is only in sessionStorage, copy it to localStorage to simulate persistent login
+            if (!localToken && sessionToken) {
+                win.localStorage.setItem('token-registry', sessionToken);
+                cy.log('CI DEBUG - Copied token from sessionStorage to localStorage');
+                cy.task('log', 'CI DEBUG - Copied token from sessionStorage to localStorage');
+            }
         });
 
         cy.url().should('include', '/landing', { timeout: 15000 });

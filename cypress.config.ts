@@ -3,7 +3,7 @@ import { loadDatabase, resetDatabase, queryDatabase, createUser } from './cypres
 
 export default defineConfig({
     e2e: {
-        allowCypressEnv: true,
+        allowCypressEnv: false,
         baseUrl: 'http://localhost:3000',
         viewportWidth: 1280,
         viewportHeight: 720,
