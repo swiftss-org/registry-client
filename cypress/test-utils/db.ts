@@ -1,7 +1,7 @@
 import { Client } from 'pg';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { formatDjangoPassword } from './auth';
+import crypto from 'crypto';
 
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
@@ -362,4 +362,29 @@ export async function createUser(options: {
     } finally {
         await client.end();
     }
+}
+
+/**
+ * Formats a password in a way that Django's PBKDF2PasswordHasher can understand.
+ * Format: algorithm$iterations$salt$hash
+ *
+ * @param password The plain text password to hash
+ * @param salt The salt to use (defaults to 'standard_salt' for consistency with existing test data)
+ * @param iterations Number of iterations (defaults to 260000)
+ * @returns The formatted Django password string
+ */
+export function formatDjangoPassword(
+    password: string,
+    salt: string = 'standard_salt',
+    iterations: number = 260000
+): string {
+    const hash = crypto.pbkdf2Sync(
+        password,
+        salt,
+        iterations,
+        32,
+        'sha256'
+    ).toString('base64');
+
+    return `pbkdf2_sha256$${iterations}$${salt}$${hash}`;
 }
