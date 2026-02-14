@@ -74,6 +74,20 @@ Cypress.on('uncaught:exception', (err) => {
   return false;
 });
 
+afterEach(() => {
+  if (__browserErrors__.length) {
+    // eslint-disable-next-line no-console
+    console.log('--- Buffered browser errors (for CI) ---');
+    for (const line of __browserErrors__) {
+      // eslint-disable-next-line no-console
+      console.log(line);
+    }
+    // eslint-disable-next-line no-console
+    console.log('--- End buffered browser errors ---');
+    __browserErrors__.length = 0;
+  }
+});
+
 Cypress.on('fail', (err) => {
   if (__browserErrors__.length) {
     // eslint-disable-next-line no-console
@@ -84,6 +98,7 @@ Cypress.on('fail', (err) => {
     }
     // eslint-disable-next-line no-console
     console.log('--- End buffered browser errors ---');
+    __browserErrors__.length = 0;
   }
   throw err;
 });
