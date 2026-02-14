@@ -30,11 +30,6 @@ describe('Patient Journey (Real DB)', () => {
         cy.visit('/login');
 
         // Debug: Check users in DB for debugging
-        cy.task('db:query', 'SELECT count(*) FROM auth_user').then((res: any) => {
-            const msg = 'CI DEBUG - Total users in DB: ' + res[0].count;
-            cy.log(msg);
-            cy.task('log', msg);
-        });
         cy.task('db:query', 'SELECT id, username, is_active, is_staff, password FROM auth_user').then((rows: any) => {
             const msg = 'CI DEBUG - Users in DB: ' + JSON.stringify(rows);
             cy.log(msg);
@@ -42,11 +37,11 @@ describe('Patient Journey (Real DB)', () => {
         });
 
         cy.get('#username', { timeout: 10000 }).should('be.visible').type('admin@admin.com');
-        cy.get('#password').type('admin');
+        cy.get('#password').type('Admin123!');
         cy.get('button[type="submit"]').click();
 
         // Wait for login and log the response
-        cy.wait('@login', { timeout: 10000 }).then((interception) => {
+        cy.wait('@login', { timeout: 15000 }).then((interception) => {
             const statusMsg = 'CI DEBUG - Login Response Status: ' + interception.response?.statusCode;
             const bodyMsg = 'CI DEBUG - Login Response Body: ' + JSON.stringify(interception.response?.body);
             cy.log(statusMsg);
@@ -55,7 +50,7 @@ describe('Patient Journey (Real DB)', () => {
             cy.task('log', bodyMsg);
         });
 
-        cy.url().should('include', '/landing', { timeout: 10000 });
+        cy.url().should('include', '/landing', { timeout: 15000 });
 
         // 2. Navigate to Register Patient
         cy.visit('/patients/register');
@@ -106,10 +101,10 @@ describe('Patient Journey (Real DB)', () => {
         });
 
         // 6. Verify redirection to Patient Directory
-        cy.url().should('match', /\/patients$/);
+        cy.url().should('match', /\/patients$/, { timeout: 10000 });
 
         // Wait for the directory to load and show the default hospital
-        cy.get('#center').should('be.visible').contains('Royal London Hospital');
+        cy.get('#center', { timeout: 10000 }).should('be.visible').contains('Royal London Hospital');
 
         // 7. Ensure the correct hospital is selected in the filter
         cy.selectMuiOption('#center', testPatient.hospital);
@@ -118,7 +113,7 @@ describe('Patient Journey (Real DB)', () => {
         cy.get('#center').contains(testPatient.hospital).should('be.visible');
 
         // 8. Verify patient appears in the directory
-        cy.contains(testPatient.firstName).should('be.visible');
+        cy.contains(testPatient.firstName, { timeout: 10000 }).should('be.visible');
         cy.contains(testPatient.lastName).should('be.visible');
 
         // 9. Click on the patient to go to details

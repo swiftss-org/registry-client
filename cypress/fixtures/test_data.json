@@ -3,7 +3,7 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$260000$static_salt$Kx+OeC6emsJ697bsSUQxGCbE6qyu4sDTQR30Pl5XFTs=",
+      "password": "pbkdf2_sha256$260000$standard_salt$n/QTqNeFzYn4WpXdrdETfqoR+CVJTWNgxUiU2NZXYVY=",
       "last_login": "2025-12-26T19:07:40.276Z",
       "is_superuser": true,
       "username": "admin@admin.com",
@@ -21,7 +21,7 @@
     "model": "auth.user",
     "pk": 4,
     "fields": {
-      "password": "pbkdf2_sha256$260000$static_salt$Kx+OeC6emsJ697bsSUQxGCbE6qyu4sDTQR30Pl5XFTs=",
+      "password": "pbkdf2_sha256$260000$standard_salt$n/QTqNeFzYn4WpXdrdETfqoR+CVJTWNgxUiU2NZXYVY=",
       "last_login": null,
       "is_superuser": false,
       "username": "szigyi",
