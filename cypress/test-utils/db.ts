@@ -40,19 +40,19 @@ export async function loadDatabase() {
         table: string;
         columns: [string, string];
     }> = [
-        {
-            model: 'registry.episode',
-            field: 'surgeons',
-            table: 'registry_episode_surgeons',
-            columns: ['episode_id', 'medicalpersonnel_id'],
-        },
-        {
-            model: 'registry.followup',
-            field: 'attendees',
-            table: 'registry_followup_attendees',
-            columns: ['followup_id', 'medicalpersonnel_id'],
-        },
-    ];
+            {
+                model: 'registry.episode',
+                field: 'surgeons',
+                table: 'registry_episode_surgeons',
+                columns: ['episode_id', 'medicalpersonnel_id'],
+            },
+            {
+                model: 'registry.followup',
+                field: 'attendees',
+                table: 'registry_followup_attendees',
+                columns: ['followup_id', 'medicalpersonnel_id'],
+            },
+        ];
 
     const tableColumnsCache = new Map<string, Set<string>>();
 
@@ -185,6 +185,45 @@ export async function loadDatabase() {
                 [row.columns[1]]: row.rightId,
             });
             await client.query(sql, values);
+        }
+
+        // Update sequences for tables where we inserted with explicit IDs
+        // This prevents IntegrityError when tests try to insert new records
+        const sequenceResets = [
+            'registry_patient',
+            'registry_episode',
+            'registry_discharge',
+            'registry_followup',
+            'registry_patienthospitalmapping',
+            'registry_hospital',
+            'registry_zone',
+            'registry_region',
+            'registry_hospitalregionmapping',
+            'registry_regionzonemapping',
+            'registry_preferredhospital',
+            'users_medicalpersonnel',
+            'auth_user',
+            'django_site',
+            'authtoken_token',
+        ];
+
+        for (const table of sequenceResets) {
+            // Skip tables that use non-standard primary keys
+            if (table === 'authtoken_token') continue;
+
+            try {
+                // Set sequence to MAX(id) + 1
+                await client.query(`
+                    SELECT setval(
+                        pg_get_serial_sequence('${table}', 'id'),
+                        COALESCE((SELECT MAX(id) FROM ${table}), 0) + 1,
+                        false
+                    );
+                `);
+            } catch (err) {
+                // Some tables might not have an id column or sequence, that's okay
+                console.log(`Skipping sequence reset for ${table}:`, err);
+            }
         }
 
         await client.query('COMMIT');
