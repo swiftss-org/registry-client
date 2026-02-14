@@ -26,7 +26,18 @@ describe('Patient Journey (Real DB)', () => {
         cy.intercept('POST', '**/patients/').as('registerPatient');
         cy.intercept('POST', '**/sign-in/').as('login');
 
-        // 1. Login
+        // 1. Setup dynamic admin account
+        const adminEmail = `admin_${timestamp}@admin.com`;
+        const adminPassword = 'AdminPassword123!';
+
+        cy.task('db:createUser', {
+            username: adminEmail,
+            password: adminPassword,
+            firstName: 'Dynamic',
+            lastName: 'Admin'
+        });
+
+        // 2. Login
         cy.visit('/login');
 
         // Debug: Check users in DB for debugging
@@ -36,8 +47,8 @@ describe('Patient Journey (Real DB)', () => {
             cy.task('log', msg);
         });
 
-        cy.get('#username', { timeout: 10000 }).should('be.visible').type('admin@admin.com');
-        cy.get('#password').type('Admin123!');
+        cy.get('#username', { timeout: 10000 }).should('be.visible').type(adminEmail);
+        cy.get('#password').type(adminPassword);
         cy.get('button[type="submit"]').click();
 
         // Wait for login and log the response

@@ -1,6 +1,7 @@
 import { Client } from 'pg';
 import { readFile } from 'fs/promises';
 import path from 'path';
+import { formatDjangoPassword } from './auth';
 
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
@@ -296,6 +297,67 @@ export async function queryDatabase(sql: string) {
         return res.rows;
     } catch (err) {
         console.error('Error executing query:', err);
+        throw err;
+    } finally {
+        await client.end();
+    }
+}
+
+/**
+ * Creates a user in the auth_user table and optionally a related medical personnel record.
+ */
+export async function createUser(options: {
+    username: string;
+    password?: string;
+    isStaff?: boolean;
+    isSuperuser?: boolean;
+    firstName?: string;
+    lastName?: string;
+    medicalPersonnelLevel?: string;
+}) {
+    const {
+        username,
+        password = 'Password123!',
+        isStaff = true,
+        isSuperuser = true,
+        firstName = 'Test',
+        lastName = 'User',
+        medicalPersonnelLevel = 'Lead Surgeon'
+    } = options;
+
+    const client = new Client(dbConfig);
+    const hashedPassword = formatDjangoPassword(password);
+    const now = new Date().toISOString();
+
+    try {
+        await client.connect();
+        await client.query('BEGIN');
+
+        // Insert into auth_user
+        const userRes = await client.query(
+            `INSERT INTO auth_user (
+                password, is_superuser, username, first_name, last_name, 
+                email, is_staff, is_active, date_joined
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+            [hashedPassword, isSuperuser, username, firstName, lastName, username, isStaff, true, now]
+        );
+
+        const userId = userRes.rows[0].id;
+
+        // Insert into users_medicalpersonnel if level is provided
+        if (medicalPersonnelLevel) {
+            await client.query(
+                `INSERT INTO users_medicalpersonnel (user_id, level) VALUES ($1, $2)`,
+                [userId, medicalPersonnelLevel]
+            );
+        }
+
+        await client.query('COMMIT');
+        console.log(`User ${username} created successfully with ID ${userId}`);
+        return { id: userId, username };
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error creating user:', err);
         throw err;
     } finally {
         await client.end();

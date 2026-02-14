@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress';
-import { loadDatabase, resetDatabase, queryDatabase } from './cypress/test-utils/db';
+import { loadDatabase, resetDatabase, queryDatabase, createUser } from './cypress/test-utils/db';
 
 export default defineConfig({
     e2e: {
@@ -21,6 +21,9 @@ export default defineConfig({
                 },
                 'db:query': async (sql: string) => {
                     return await queryDatabase(sql);
+                },
+                'db:createUser': async (options: any) => {
+                    return await createUser(options);
                 },
                 'log': (message: string) => {
                     console.log(message);
