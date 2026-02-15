@@ -34,7 +34,7 @@ describe('Patient Journey (Real DB)', () => {
         firstName: 'Dynamic',
         lastName: 'Admin',
         hospitalId: hospitalId,
-        isStaff: true,
+        isStaff: false,
         isActive: true,
       });
 

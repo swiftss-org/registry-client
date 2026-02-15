@@ -28,7 +28,7 @@ describe('Find Patient Journey (Real DB)', () => {
             firstName: 'Dynamic',
             lastName: 'Admin',
             hospitalId: hospitalId,
-            isStaff: true,
+            isStaff: false,
             isActive: true,
             medicalPersonnelLevel: 'LEAD_SURGEON'
         });

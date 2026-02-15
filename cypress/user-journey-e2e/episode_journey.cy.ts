@@ -1,10 +1,3 @@
-// Login as lead surgeon
-// Register new episode for an existing patient
-// Verify the new episode on the Episode details page
-// Add a new Discharge to the episode
-// Verify the saved discharge on the Episode Details page
-// Add a new Follow Up to the episode
-// Verify the followup on the Episode Details page
 describe('Episode Journey (Real DB)', () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const hospitalId = 1; // Royal London Hospital (from test_data.json)
@@ -72,7 +65,7 @@ describe('Episode Journey (Real DB)', () => {
             firstName: 'Test',
             lastName: 'Surgeon',
             hospitalId: hospitalId,
-            isStaff: true,
+            isStaff: false,
             isActive: true,
             medicalPersonnelLevel: 'LEAD_SURGEON'
         });
