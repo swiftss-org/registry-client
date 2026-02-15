@@ -417,7 +417,7 @@ describe('Episode Details Page', () => {
                 cy.contains('Add New Discharge').click();
 
                 // Fill form
-                cy.get('#date').type('2023-01-16');
+                cy.get('#discharge_date').type('2023-01-16');
                 cy.selectMuiOption('#aware_of_mesh-select', 'Yes');
                 cy.get('#discharge_duration').type('2');
                 cy.get('#infection-none').check();
@@ -551,7 +551,7 @@ describe('Episode Details Page', () => {
             });
 
             it('should validate Discharge Date is required', () => {
-                cy.get('#date').focus().blur();
+                cy.get('#discharge_date').focus().blur();
                 cy.contains('Discharge date is required. Please select a date.').should('exist');
             });
 
@@ -577,7 +577,7 @@ describe('Episode Details Page', () => {
                 futureDate.setDate(futureDate.getDate() + 1);
                 const futureDateStr = futureDate.toISOString().split('T')[0];
 
-                cy.get('#date').type(futureDateStr).blur();
+                cy.get('#discharge_date').type(futureDateStr).blur();
                 cy.contains('Discharge date cannot be set in the future.').should('exist');
             });
 
