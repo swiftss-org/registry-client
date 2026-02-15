@@ -712,7 +712,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                   <AddIcon />
                 </IconButton>
               ) : (
-                <IconButton classes="DeleteIcon" onClick={() => removeSurgeon(index)} color="error" sx={{ mt: 1 }}>
+                <IconButton onClick={() => removeSurgeon(index)} color="error" sx={{ mt: 1 }}>
                   <DeleteIcon />
                 </IconButton>
               )}
