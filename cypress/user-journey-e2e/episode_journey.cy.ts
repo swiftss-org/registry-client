@@ -129,7 +129,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#AddIcon').click();
         cy.selectMuiOption('#surgeon-selector-1', 'Admin Ad');
         cy.get('#AddIcon').click();
-        cy.get('#DeleteIcon').click();
+        cy.get('[data-testid="DeleteIcon"]').eq(1).click();
 
         cy.get('#comments').type(episodeData.comments);
 
