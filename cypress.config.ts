@@ -6,6 +6,7 @@ import { loadDatabase, resetDatabase, queryDatabase, createUser } from './cypres
 
 export default defineConfig({
     e2e: {
+        chromeWebSecurity: false,
         allowCypressEnv: false,
         baseUrl: 'http://localhost:3000',
         supportFile: 'cypress/support/e2e.ts',
