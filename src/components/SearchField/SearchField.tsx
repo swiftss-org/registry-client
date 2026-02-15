@@ -1,4 +1,4 @@
-import React, { FC, FormEvent } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 
 import SearchIcon from '@mui/icons-material/Search';
 import { TextField, InputAdornment } from '@mui/material';
@@ -21,7 +21,7 @@ const SearchField: FC<Props> = ({ onSearch, placeholder }) => {
           </InputAdornment>
         ),
       }}
-      onInput={(event: FormEvent<HTMLInputElement>) => onSearch(event?.currentTarget?.value)}
+      onChange={(event: ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
     />
   );
 };

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
@@ -26,9 +26,13 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
 
   const { level } = useUserType();
 
-  const handleSearchTerm = (term: string) => {
-    setSearchTerm(term);
-  };
+   const handleSearchTerm = useMemo(
+      () =>
+        debounce((term: string) => {
+          setSearchTerm(term);
+        }, 200),
+      []
+    );
 
   return (
     <MainContainer {...responsiveProps} isDesktop={isDesktop}>
@@ -46,7 +50,7 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
           {location.pathname === '/patients' && (
             <SearchField
               placeholder={'Search by name, gender, patient ID...'}
-              onSearch={debounce(handleSearchTerm, 200)}
+              onSearch={handleSearchTerm}
             />
           )}
         </TopBar>
