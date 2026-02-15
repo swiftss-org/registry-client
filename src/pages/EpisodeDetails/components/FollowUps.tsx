@@ -207,7 +207,7 @@ const FollowUps: FC<{
         <Box>
           <TextField
             id="follow-up-date"
-            label="Date"
+            label="Follow Up Date"
             type="date"
             disabled={!canSubmit}
             required={canSubmit}

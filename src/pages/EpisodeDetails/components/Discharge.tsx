@@ -159,9 +159,9 @@ const Discharge: FC<{
       <Stack spacing={3}>
         <Box>
           <TextField
-            id="date"
+            id="discharge_date"
             disabled={!canSubmit}
-            label="Date"
+            label="Discharge Date"
             type="date"
             required={canSubmit}
             variant="outlined"
