@@ -40,7 +40,8 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const token = getUserStorageItem(__TOKEN__);
   const isStaff = getUserStorageItem('is_staff') === 'true';
   const isSuperuser = getUserStorageItem('is_superuser') === 'true';
-  return token && (isStaff || isSuperuser) ? <>{children}</> : <Navigate to={urls.login()} />;
+  const username = getUserStorageItem('username');
+  return token && ((isStaff || isSuperuser) && username == 'admin') ? <>{children}</> : <Navigate to={urls.login()} />;
 };
 
 const router = createBrowserRouter([

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any */
-// @ts-nocheck
 import { defineConfig } from 'cypress';
 
 import { loadDatabase, resetDatabase, queryDatabase, createUser } from './cypress/test-utils/db';
@@ -29,11 +27,7 @@ export default defineConfig({
                 },
                 'db:createUser': async (options: unknown) => {
                     return await createUser(options as any);
-                },
-                'log': (message: string) => {
-                    console.log(message);
-                    return null;
-                },
+                }
             });
         },
     },

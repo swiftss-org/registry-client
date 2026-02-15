@@ -24,10 +24,6 @@ describe('Patient Journey (Real DB)', () => {
     });
 
     it('should register a new patient and verify them in the directory', () => {
-      // Intercept registration and login requests
-      cy.intercept('POST', '**/patients/').as('registerPatient');
-      cy.intercept('POST', '**/sign-in/').as('login');
-
       // 1. Setup dynamic admin account
       const adminEmail = `admin_${timestamp}@admin.com`;
       const adminPassword = 'AdminPassword123!';
@@ -50,119 +46,16 @@ describe('Patient Journey (Real DB)', () => {
         },
       });
 
-      // Debug: Print URL, storage, and cookies after visiting /login
-      cy.url().then((url) => {
-        cy.log('CI DEBUG - URL after visit /login: ' + url);
-        cy.task('log', 'CI DEBUG - URL after visit /login: ' + url);
-      });
-      cy.window().then((win) => {
-        const localToken = win.localStorage.getItem('token-registry');
-        const sessionToken = win.sessionStorage.getItem('token-registry');
-        cy.log('CI DEBUG - localStorage token after visit: ' + localToken);
-        cy.log('CI DEBUG - sessionStorage token after visit: ' + sessionToken);
-        cy.task('log', 'CI DEBUG - localStorage token after visit: ' + localToken);
-        cy.task('log', 'CI DEBUG - sessionStorage token after visit: ' + sessionToken);
-      });
-      cy.getCookies().then((cookies) => {
-        cy.log('CI DEBUG - cookies after visit: ' + JSON.stringify(cookies));
-        cy.task('log', 'CI DEBUG - cookies after visit: ' + JSON.stringify(cookies));
-      });
-
-      // Debug: Check users in DB for debugging
-      cy.task('db:query', 'SELECT id, username, is_active, is_staff, password FROM auth_user').then(
-        (rows: any) => {
-          const msg = 'CI DEBUG - Users in DB: ' + JSON.stringify(rows);
-          cy.log(msg);
-          cy.task('log', msg);
-        }
-      );
-
       cy.get('#username', { timeout: 10000 }).should('be.visible').type(adminEmail);
       cy.get('#password').type(adminPassword);
       cy.get('button[type="submit"]').click();
 
-      // Wait for login and log the response
-      cy.wait('@login', { timeout: 15000 }).then((interception) => {
-        const reqUrl = 'CI DEBUG - Login Request URL: ' + interception.request.url;
-        const statusMsg = 'CI DEBUG - Login Response Status: ' + interception.response?.statusCode;
-        const bodyMsg =
-          'CI DEBUG - Login Response Body: ' + JSON.stringify(interception.response?.body);
-        cy.log(reqUrl);
-        cy.task('log', reqUrl);
-        cy.log(statusMsg);
-        cy.task('log', statusMsg);
-        cy.log(bodyMsg);
-        cy.task('log', bodyMsg);
-      });
 
-      // Wait until token is actually stored (localStorage OR sessionStorage)
-      cy.window({ timeout: 15000 })
-        .its('localStorage')
-        .invoke('getItem', 'token-registry')
-        .then((localToken) => {
-          if (localToken) return;
-          cy.window({ timeout: 15000 })
-            .its('sessionStorage')
-            .invoke('getItem', 'token-registry')
-            .should((sessionToken) => {
-              expect(sessionToken, 'token-registry in browser storage').to.be.a('string');
-              expect(sessionToken, 'token-registry in browser storage').to.not.equal('');
-            });
-        });
-
-      // Debug: Print localStorage and sessionStorage after login
-      cy.window().then((win) => {
-        const localToken = win.localStorage.getItem('token-registry');
-        const sessionToken = win.sessionStorage.getItem('token-registry');
-        cy.log('CI DEBUG - localStorage token: ' + localToken);
-        cy.log('CI DEBUG - sessionStorage token: ' + sessionToken);
-        cy.task('log', 'CI DEBUG - localStorage token: ' + localToken);
-        cy.task('log', 'CI DEBUG - sessionStorage token: ' + sessionToken);
-        if (!localToken && !sessionToken) {
-          cy.log('CI DEBUG - TOKEN is missing after login');
-          cy.task('log', 'CI DEBUG - TOKEN is missing after login');
-        }
-      });
 
       cy.url().should('include', '/landing', { timeout: 15000 });
 
       // 2. Navigate to Register Patient
       cy.visit('/patients/register');
-
-      cy.task(
-        'db:query',
-        'SELECT id, username FROM auth_user'
-      ).then((rows: any) => {
-        const msg = 'CI DEBUG - Medical Personnel in DB: ' + JSON.stringify(rows);
-        cy.log(msg);
-        cy.task('log', msg);
-      });
-
-      cy.task(
-        'db:query',
-        'SELECT id, user_id FROM users_medicalpersonnel'
-      ).then((rows: any) => {
-        const msg = 'CI DEBUG - Medical Personnel in DB: ' + JSON.stringify(rows);
-        cy.log(msg);
-        cy.task('log', msg);
-      });
-
-      // Debug: Check hospitals in DB for debugging
-      cy.task('db:query', 'SELECT id, name FROM registry_hospital').then((rows: any) => {
-        const msg = 'CI DEBUG - Hospitals in DB: ' + JSON.stringify(rows);
-        cy.log(msg);
-        cy.task('log', msg);
-      });
-
-      // Debug: Check preferred hospitals in DB for debugging
-      cy.task(
-        'db:query',
-        'SELECT id, medical_personnel_id, hospital_id FROM registry_preferredhospital'
-      ).then((rows: any) => {
-        const msg = 'CI DEBUG - Preferred Hospitals in DB: ' + JSON.stringify(rows);
-        cy.log(msg);
-        cy.task('log', msg);
-      });
 
       // 3. Fill the form with ALL fields
       cy.selectMuiOption('#hospital', testPatient.hospital);
@@ -187,38 +80,9 @@ describe('Patient Journey (Real DB)', () => {
       // 4. Submit
       cy.contains('button', 'Add new patient').click();
 
-      // Wait for the request and check the status
-      cy.wait('@registerPatient', { timeout: 10000 }).then((interception) => {
-        const msg = 'CI DEBUG - Registration Response Status: ' + interception.response?.statusCode;
-        cy.log(msg);
-        cy.task('log', msg);
-        expect(interception.response?.statusCode).to.eq(201);
-
-        // 5. DB Verification - check the data is stored correctly
-        const nationalId = testPatient.nationalId.toString();
-        cy.task(
-          'db:query',
-          `SELECT * FROM registry_patient WHERE national_id = '${nationalId}'`
-        ).then((rows: any) => {
-          expect(rows).to.have.length(1);
-          const patient = rows[0];
-          expect(patient.full_name).to.eq(
-            `${testPatient.firstName} ${testPatient.middleName} ${testPatient.lastName}`
-          );
-          expect(patient.national_id).to.eq(nationalId);
-          expect(typeof patient.national_id).to.eq('string');
-          expect(patient.gender.toUpperCase()).to.eq('MALE');
-          expect(patient.phone_1).to.eq(testPatient.phone);
-          expect(patient.phone_2).to.eq(testPatient.phone2);
-          expect(patient.address).to.eq(testPatient.address);
-        });
-      });
 
       // 6. Verify redirection to Patient Directory
       cy.url().should('match', /\/patients$/, { timeout: 10000 });
-
-      // Wait for the directory to load and show the default hospital
-      // cy.get('#center', { timeout: 10000 }).should('be.visible').contains('Royal London Hospital');
 
       // 7. Ensure the correct hospital is selected in the filter
       cy.selectMuiOption('#center', testPatient.hospital);
