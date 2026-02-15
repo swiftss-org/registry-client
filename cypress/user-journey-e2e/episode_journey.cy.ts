@@ -56,7 +56,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.task('db:load');
     });
 
-    it('should register a new episode, discharge, and follow-up', () => {
+    it('should register a new episode, discharge, and follow-up and verify them in the episode details', () => {
         // Intercept requests for stability
         cy.intercept('POST', '**/episodes/').as('createEpisode');
         cy.intercept('POST', '**/discharges/').as('createDischarge');
@@ -126,10 +126,10 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#_24hrs_post_op_iv').check();
 
         cy.selectMuiOption('#surgeon-selector-0', 'Test Surgeon');
-        cy.get('[data-testid="AddIcon"]').click();
+        cy.get('#AddIcon').click();
         cy.selectMuiOption('#surgeon-selector-1', 'Admin Ad');
-        cy.get('[data-testid="AddIcon"]').click();
-        cy.get('[data-testid="DeleteIcon"]').eq(1).click();
+        cy.get('#AddIcon').click();
+        cy.get('#DeleteIcon').eq(1).click();
 
         cy.get('#comments').type(episodeData.comments);
 

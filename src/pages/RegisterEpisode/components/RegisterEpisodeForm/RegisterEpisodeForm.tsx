@@ -708,11 +708,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                 </FormHelperText>
               </FormControl>
               {index === 0 ? (
-                <IconButton onClick={addSurgeon} color="primary" sx={{ mt: 1 }}>
+                <IconButton id="AddIcon" onClick={addSurgeon} color="primary" sx={{ mt: 1 }}>
                   <AddIcon />
                 </IconButton>
               ) : (
-                <IconButton onClick={() => removeSurgeon(index)} color="error" sx={{ mt: 1 }}>
+                <IconButton id="DeleteIcon" onClick={() => removeSurgeon(index)} color="error" sx={{ mt: 1 }}>
                   <DeleteIcon />
                 </IconButton>
               )}

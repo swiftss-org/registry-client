@@ -50,8 +50,6 @@ describe('Patient Journey (Real DB)', () => {
       cy.get('#password').type(adminPassword);
       cy.get('button[type="submit"]').click();
 
-
-
       cy.url().should('include', '/landing', { timeout: 15000 });
 
       // 2. Navigate to Register Patient
