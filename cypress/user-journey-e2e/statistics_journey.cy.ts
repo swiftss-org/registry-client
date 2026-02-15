@@ -34,7 +34,7 @@ describe('Statistics Journey (Real DB)', () => {
         cy.url().should('include', '/landing', { timeout: 15000 });
 
         cy.contains('Number of episodes: 7').should('be.visible');
-        cy.contains('Last episode: 30/12/2025').should('be.visible');
+        cy.contains('Last episode: 2025-12-30').should('be.visible');
         cy.get('[data-testid="unlinked-patients-table"]').should('contain', 'SAfsg adsgeger');
         cy.get('[data-testid="unlinked-patients-table"]').should('contain', 'tjytujtuyj rbrthrt');
     });

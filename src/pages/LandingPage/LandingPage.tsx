@@ -158,7 +158,7 @@ const LandingPage: React.FC = () => {
               Last episode:{' '}
               <span data-testid="last-episode-date">
                 {surgeonEpisodeSummary.last_episode_date
-                  ? new Date(surgeonEpisodeSummary.last_episode_date).toLocaleDateString()
+                  ? new Date(surgeonEpisodeSummary.last_episode_date).toISOString().split('T')[0]
                   : 'N/A'}
               </span>
             </p>
