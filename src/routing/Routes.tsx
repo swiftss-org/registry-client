@@ -23,25 +23,17 @@ const LoginButMaybeAlreadySignedInRoute = () => {
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
     const token = getUserStorageItem(__TOKEN__);
-    const level = getUserStorageItem('user_level');
-    if (!token) {
-        return <Navigate to={urls.login()} />;
-    }
-    if (rest.path === '/' || !Component) {
-      return <Navigate to={urls.patients()} />;
-    }
-    if (rest.path === '/nationalKPIs' && level !== 'NATIONAL_LEAD') {
-      return <Navigate to={urls.landingPage()} />; // redirect unauthorized users
-    }
-    return <>{children}</>;
+    return token ? <>{children}</> : <Navigate to={urls.login()} />;
 };
 
-const AdminRoute = ({ children }: { children: React.ReactNode }) => {
-  const token = getUserStorageItem(__TOKEN__);
-  const isStaff = getUserStorageItem('is_staff') === 'true';
-  const isSuperuser = getUserStorageItem('is_superuser') === 'true';
-  const username = getUserStorageItem('username');
-  return token && ((isStaff || isSuperuser) && username == 'admin') ? <>{children}</> : <Navigate to={urls.login()} />;
+const NationalLeadRoute = ({ children }: { children: React.ReactNode }) => {
+    const token = getUserStorageItem(__TOKEN__);
+    const level = getUserStorageItem('user_level');
+    if (token && level == 'NATIONAL_LEAD') {
+        return <>{children}</>;
+    } else {
+        return <Navigate to={urls.login()} />;
+    }
 };
 
 const router = createBrowserRouter([
@@ -75,7 +67,7 @@ const router = createBrowserRouter([
   },
   {
     path: urls.nationalKPIs(),
-    element: <PrivateRoute><NationalKPIs /></PrivateRoute>,
+    element: <NationalLeadRoute><NationalKPIs /></NationalLeadRoute>,
   },
   {
     path: urls.landingPage(),
