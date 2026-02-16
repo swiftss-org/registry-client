@@ -7,7 +7,7 @@ const PUT = 'put';
 const PATCH = 'patch';
 const DELETE = 'delete';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
 
 export const METHODS = { GET, POST, PUT, DELETE, PATCH };
 

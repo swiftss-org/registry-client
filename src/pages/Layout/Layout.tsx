@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
-import { IconButton } from '@orfium/ictinus';
+import MenuIcon from '@mui/icons-material/Menu';
+import { IconButton } from '@mui/material';
 import { TopBar } from 'App.style';
 import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
 import { useUserType } from 'hooks/useUserType';
 import { debounce } from 'lodash';
-import { useHistory } from 'react-router';
+import { useLocation } from 'react-router';
 
+import { Header, Main, MainContainer, SideNav } from './Layout.style';
 import Drawer from '../../components/Drawer';
 import SearchField from '../../components/SearchField';
-import { Header, Main, MainContainer, SideNav } from './Layout.style';
 
 interface Props {
   /** Component to load */
@@ -21,30 +22,35 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
   const { responsiveProps, expanded, setExpanded, isDesktop } = useResponsiveLayout();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const history = useHistory();
+  const location = useLocation();
 
   const { level } = useUserType();
 
-  const handleSearchTerm = (term: string) => {
-    setSearchTerm(term);
-  };
+   const handleSearchTerm = useMemo(
+      () =>
+        debounce((term: string) => {
+          setSearchTerm(term);
+        }, 200),
+      []
+    );
 
   return (
     <MainContainer {...responsiveProps} isDesktop={isDesktop}>
       <Header>
         <TopBar>
           <IconButton
-            transparent
-            size="lg"
-            name="menu"
-            color="darkGray-200"
-            type="primary"
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
             onClick={() => setExpanded((prevState) => !prevState)}
-          />
-          {history.location.pathname === '/patients' && (
+          >
+            <MenuIcon />
+          </IconButton>
+          {location.pathname === '/patients' && (
             <SearchField
               placeholder={'Search by name, gender, patient ID...'}
-              onSearch={debounce(handleSearchTerm, 200)}
+              onSearch={handleSearchTerm}
             />
           )}
         </TopBar>

@@ -1,20 +1,16 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { InlineNotification } from '@orfium/ictinus';
-import { NotificationTypes } from '@orfium/ictinus/dist/components/Notification/Notification';
+import { Alert } from '@mui/material';
+import { resetNotifications } from 'providers/Notifications/actions';
+import { useNotifications } from 'providers/Notifications/NotificationProvider';
 
-import { resetNotifications } from '../../providers/Notifications/actions';
-import { useNotifications } from '../../providers/Notifications/NotificationProvider';
-import { NotificationWrapper } from './Notifications.styles';
-
-export interface NotificationType {
+export type NotificationType = {
   message: string;
-  type: NotificationTypes;
+  type: 'success' | 'error' | 'warning' | 'info';
   isGlobal: boolean;
   isPreview?: boolean;
   id: number;
-}
+};
 
 const Notifications: React.FC = () => {
   const [notification, dispatch] = useNotifications();
@@ -30,21 +26,24 @@ const Notifications: React.FC = () => {
     }
   }, [notification]);
 
+  if (!notification) {
+    return null;
+  }
+
   return (
-    <>
-      {notification && (
-        <NotificationWrapper ref={ref}>
-          <InlineNotification
-            styleType={'outlined'}
-            withIcon
-            message={notification.message}
-            type={notification.type}
-            primaryCTALabel="Action"
-            closeCTA={() => removeNotification()}
-          />
-        </NotificationWrapper>
-      )}
-    </>
+    <Alert
+      ref={ref}
+      severity={notification.type}
+      onClose={removeNotification}
+      data-testid="notification-alert"
+      sx={{
+        borderRadius: '8px',
+        scrollMargin: '40px',
+        mb: 2,
+      }}
+    >
+      {notification.message}
+    </Alert>
   );
 };
 

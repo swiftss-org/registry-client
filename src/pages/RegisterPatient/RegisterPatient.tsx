@@ -1,24 +1,21 @@
-/** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 
-import { Button, Icon } from '@orfium/ictinus';
-import { IconWrapper } from 'App.style';
-import { ButtonContainer, PageTitle, PageWrapper } from 'common.style';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Button, Container, IconButton, Paper, Typography } from '@mui/material';
 import ConfirmationModal from 'components/ConfirmationModal';
-import { Form } from 'react-final-form';
-import { useHistory } from 'react-router';
+import { useGetHospitals, useRegisterPatient } from 'hooks/api/patientHooks';
+import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
+import { useNavigate } from 'react-router';
 import urls from 'routing/urls';
 
-import { useGetHospitals, useRegisterPatient } from '../../hooks/api/patientHooks';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import RegisterPatientForm from './components/RegisterPatientForm';
 import { RegisterPatientFormType } from './types';
-import { patientFormValidation } from './utils';
 
 const RegisterPatient: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
   const { data: hospitals } = useGetHospitals({ offset: 0, limit: 100 });
-  const { mutate, isLoading } = useRegisterPatient();
+  const { mutate, isPending } = useRegisterPatient();
 
   const handleSubmit = (form: RegisterPatientFormType) => {
     mutate(form);
@@ -27,61 +24,43 @@ const RegisterPatient: React.FC = () => {
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
-    <>
-      <PageWrapper isDesktop={isDesktop}>
-        <PageTitle>
-          <IconWrapper>
-            <Icon
-              name="fatArrowLeft"
-              size={24}
-              color={'lightGray-700'}
-              onClick={() => {
-                if (isFormDirty) {
-                  setShowWarningModal(true);
-                } else {
-                  history.push(urls.patients());
-                }
-              }}
-            />
-          </IconWrapper>
-          Add new patient
-        </PageTitle>
-        <Form onSubmit={handleSubmit} validate={patientFormValidation}>
-          {({ handleSubmit, values, submitting, dirty }) => {
-            if (dirty) {
-              setIsFormDirty(true);
+    <Container
+      maxWidth="md"
+      sx={{
+        pb: isDesktop ? 4 : 10,
+        pt: 2,
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
+        <IconButton
+          data-testid="back-button"
+          edge="start"
+          onClick={() => {
+            if (isFormDirty) {
+              setShowWarningModal(true);
+            } else {
+              navigate(urls.patients());
             }
-
-            return (
-              <form
-                onSubmit={handleSubmit}
-                css={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: isDesktop ? '100%' : 'calc(100vh)',
-                  overflow: 'hidden',
-                }}
-              >
-                <RegisterPatientForm values={values} hospitals={hospitals?.results ?? []} />
-                <ButtonContainer isDesktop={isDesktop}>
-                  <Button
-                    color={'blue-500'}
-                    buttonType="submit"
-                    disabled={isLoading || submitting}
-                    block
-                    size="md"
-                  >
-                    Add new patient
-                  </Button>
-                </ButtonContainer>
-              </form>
-            );
           }}
-        </Form>
-      </PageWrapper>
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h5" component="h1" fontWeight={700} color="text.primary">
+          Add new patient
+        </Typography>
+      </Box>
+      <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, mb: 2 }}>
+        <RegisterPatientForm
+          hospitals={hospitals?.results ?? []}
+          onSubmit={handleSubmit}
+          onDirtyChange={setIsFormDirty}
+        />
+      </Paper>
       {showWarningModal && (
         <ConfirmationModal
           onClose={() => {
@@ -89,13 +68,47 @@ const RegisterPatient: React.FC = () => {
           }}
           title={'Cancel new addition?'}
           subtitle={
-            'Are you sure you want to cancel adding a new patient? All information you’ve entered will be lost!'
+            "Are you sure you want to cancel adding a new patient? All information you’ve entered will be lost!"
           }
           buttonText={'Yes, cancel new addition'}
-          onClick={() => history.push('/patients')}
+          onClick={() => navigate(urls.patients())}
         />
       )}
-    </>
+      <Box
+        sx={{
+          position: isDesktop ? 'static' : 'fixed',
+          bottom: isDesktop ? 'auto' : 0,
+          left: isDesktop ? 'auto' : 0,
+          right: isDesktop ? 'auto' : 0,
+          p: isDesktop ? 0 : 2,
+          bgcolor: isDesktop ? 'transparent' : 'background.paper',
+          borderTop: isDesktop ? 'none' : 1,
+          borderColor: 'divider',
+          zIndex: 1000,
+          display: 'flex',
+          justifyContent: isDesktop ? 'flex-end' : 'stretch'
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          form="register-patient-form"
+          disabled={isPending}
+          fullWidth={!isDesktop}
+          size="large"
+          startIcon={<AddCircleIcon />}
+          sx={{
+            borderRadius: isDesktop ? '28px' : '8px',
+            px: isDesktop ? 3 : 2,
+            py: 1.5,
+            boxShadow: isDesktop ? 3 : 'none',
+          }}
+        >
+          Add new patient
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

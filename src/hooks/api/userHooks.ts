@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { useMutation } from '@tanstack/react-query';
 import { setAxiosToken } from 'api/axiosInstances';
 import userAPI from 'api/userAPI';
 import { AxiosError } from 'axios';
@@ -6,19 +7,18 @@ import { useSetNotification } from 'hooks/useSetNotification';
 import { LoginFormType, LoginResponse, ChangePasswordFormType, ChangePasswordResponse } from 'models/apiTypes';
 import { resetNotifications } from 'providers/Notifications/actions';
 import { useNotifications } from 'providers/Notifications/NotificationProvider';
-import { useMutation } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 import { __EMAIL__, __TOKEN__ } from 'utils/constants';
 import { setUserStorageItem } from 'utils/storage';
 
 export const useSignIn = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const setNotification = useSetNotification();
   const [, notificationDispatch] = useNotifications();
 
-  return useMutation<LoginResponse, AxiosError, LoginFormType>(
-    (params) => {
+  return useMutation<LoginResponse, AxiosError, LoginFormType>({
+    mutationFn: (params) => {
       const { request } = userAPI.single.signIn({
         username: params.username,
         password: params.password,
@@ -26,36 +26,31 @@ export const useSignIn = () => {
       });
       return request();
     },
-    {
-      onSuccess: async (data, variables) => {
-        notificationDispatch(resetNotifications());
-        setUserStorageItem(__TOKEN__, data?.token ?? '', !variables.rememberMe);
-        setUserStorageItem(__EMAIL__, data?.user.email ?? '');
-        setUserStorageItem('username', data?.user.username ?? '');
-        setAxiosToken(data?.token ?? '');
-
-        const medicalPersonnel = data?.user.medical_personnel ?? null;
-
-        setUserStorageItem('user_level', medicalPersonnel?.level ?? '');
-        setUserStorageItem('user_level_display', medicalPersonnel?.level_display ?? '');
-
-        history.replace(urls.landingPage());
-      },
-      onError: (errors) => {
-        setNotification('Invalid credential combination.', 'error');
-        console.log(errors);
-      },
-    }
-  );
+    onSuccess: async (data, variables) => {
+      notificationDispatch(resetNotifications());
+      setUserStorageItem(__TOKEN__, data?.token ?? '', !variables.rememberMe);
+      setUserStorageItem(__EMAIL__, data?.user.email ?? '');
+      setUserStorageItem('username', data?.user.username ?? '');
+      setAxiosToken(data?.token ?? '');
+      const medicalPersonnel = data?.user.medical_personnel ?? null;
+      setUserStorageItem('user_level', medicalPersonnel?.level ?? '');
+      setUserStorageItem('user_level_display', medicalPersonnel?.level_display ?? '');
+      navigate(urls.landingPage(), { replace: true });
+    },
+    onError: (errors) => {
+      setNotification('Invalid credential combination.', 'error');
+      console.log(errors);
+    },
+  });
 };
 
 export const useChangePassword = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const setNotification = useSetNotification();
   const [, notificationDispatch] = useNotifications();
 
-  return useMutation<ChangePasswordResponse, AxiosError, ChangePasswordFormType>(
-    (params) => {
+  return useMutation<ChangePasswordResponse, Record<string, string[] | string>, ChangePasswordFormType>({
+    mutationFn: (params) => {
       const { request } = userAPI.single.changePassword({
         old_password: params.old_password,
         new_password1: params.new_password1,
@@ -63,24 +58,26 @@ export const useChangePassword = () => {
       });
       return request();
     },
-    {
-      onSuccess: async (data) => {
-        notificationDispatch(resetNotifications());
-        setAxiosToken(data?.token ?? '');
+    onSuccess: async (data) => {
+      notificationDispatch(resetNotifications());
+      setAxiosToken(data?.token ?? '');
 
-        // change token in either local or session
-        // based on weather remember me was checked during login or not
-        (
-          localStorage.getItem(__TOKEN__) ? localStorage : sessionStorage
-        ).setItem(__TOKEN__, data?.token ?? '');
+      // change token in either local or session
+      // based on weather remember me was checked during login or not
+      (
+        localStorage.getItem(__TOKEN__) ? localStorage : sessionStorage
+      ).setItem(__TOKEN__, data?.token ?? '');
 
-        setNotification('Password changed.', 'success');
-        history.replace(urls.settings());
-      },
-      onError: (errors) => {
-        setNotification('Invalid credential combination.', 'error');
-        console.log(errors);
-      },
-    }
-  );
+      setNotification('Password changed.', 'success');
+      navigate(urls.landingPage(), { replace: true });
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to change password.';
+      setNotification(errorMessage, 'error');
+    },
+  });
 };

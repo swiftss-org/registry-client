@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import { scrollBar } from '../../../../common.style';
-import { flex } from '../../../../theme/functions';
 
 export const FormHeadingContainer = styled.div`
   display: flex;
@@ -27,7 +26,7 @@ export const SelectWrapper = styled.div`
 `;
 
 export const ArrayContainer = styled.div`
-  ${flex};
+  display: flex;
   gap: 12px;
   justify-content: space-between;
 `;

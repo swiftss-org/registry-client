@@ -1,9 +1,6 @@
 import '@emotion/react';
-import { Theme as OrfiumIctinus } from '@orfium/ictinus';
-
-import { Theme as SystemTheme } from './globals'; // DEFINE HERE YOUR THEME
+import { Theme as MuiTheme } from '@mui/material/styles';
 
 declare module '@emotion/react' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface Theme extends SystemTheme, OrfiumIctinus {}
+  export interface Theme extends MuiTheme {}
 }

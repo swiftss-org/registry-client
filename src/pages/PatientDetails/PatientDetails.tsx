@@ -1,81 +1,136 @@
-/** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Button, Icon } from '@orfium/ictinus';
-import { IconWrapper } from 'App.style';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {
+  Button,
+  IconButton,
+  Container,
+  Box,
+  Typography,
+  Paper,
+  Tabs as MuiTabs,
+  Tab,
+  CircularProgress
+} from '@mui/material';
 import { useGetHospital, useGetPatient } from 'hooks/api/patientHooks';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import urls from 'routing/urls';
 
-import { ButtonContainer, PageTitle, PageWrapper } from '../../common.style';
-import { Tabs } from '../../components/Tabs';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
-import urls from '../../routing/urls';
 import EpisodeList from './components/EpisodeList';
 import GeneralInformation from './components/GeneralInformation';
-import { ComponentWrapper } from './PatientDetails.style';
-
-const tabs = [
-  { label: 'General Information', value: 'info' },
-  { label: 'Episodes', value: 'episodes' },
-];
 
 const PatientDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') === 'episodes' ? 1 : 0;
+  const navigate = useNavigate();
 
-  const match = useRouteMatch<{ hospitalID?: string; patientID?: string }>();
-  const [activeTab, setActiveTab] = useState('info');
-  const history = useHistory();
-
-  const { hospitalID, patientID } = match.params;
+  const { hospitalID, patientID } = useParams<{ hospitalID?: string; patientID?: string }>();
 
   const { data: patient, isLoading: isPatientLoading } = useGetPatient(patientID ?? '');
   const { data: hospital, isLoading: isHospitalLoading } = useGetHospital(hospitalID ?? '');
 
   const isLoading = isHospitalLoading || isPatientLoading;
 
+  const handleTabChange = (__event: React.SyntheticEvent, newValue: number) => {
+    setSearchParams({ tab: newValue === 1 ? 'episodes' : 'general' }, { replace: true });
+  };
+
   return (
-    <PageWrapper isDesktop={isDesktop}>
-      <PageTitle>
-        <IconWrapper>
-          <Icon
-            name="fatArrowLeft"
-            size={24}
-            color={'lightGray-700'}
-            onClick={() => {
-              history.push(urls.patients());
-            }}
-          />
-        </IconWrapper>
-        Patient Details
-      </PageTitle>
-      <Tabs
-        matchActiveDataType={activeTab}
-        onTabClick={(tabId) => {
-          setActiveTab(tabId);
+    <Container
+      maxWidth="md"
+      sx={{
+        pb: isDesktop ? 4 : 10,
+        pt: 2,
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
+        <IconButton
+          edge="start"
+          onClick={() => {
+            navigate(urls.patients());
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h5" component="h1" fontWeight={700}>
+          Patient Details
+        </Typography>
+      </Box>
+
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+        <MuiTabs value={activeTab} onChange={handleTabChange} aria-label="patient details tabs">
+          <Tab label="General Information" />
+          <Tab label="Episodes" />
+        </MuiTabs>
+      </Box>
+
+      <Paper
+        elevation={0}
+        sx={{
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 2,
+          flexGrow: 1,
+          mb: 2,
+          display: 'flex',
+          flexDirection: 'column'
         }}
-        tabs={tabs}
-        shouldDisplayTabs
-      />
-      <ComponentWrapper>
-        {activeTab === 'info' ? (
-          <GeneralInformation patient={patient} hospital={hospital} />
+      >
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+            <CircularProgress />
+          </Box>
         ) : (
-          <EpisodeList patient={patient} />
+          <>
+            {activeTab === 0 && <GeneralInformation patient={patient} hospital={hospital} />}
+            {activeTab === 1 && <EpisodeList patient={patient} />}
+          </>
         )}
-      </ComponentWrapper>
-      <ButtonContainer isDesktop={isDesktop}>
+      </Paper>
+
+      <Box
+        sx={{
+          position: isDesktop ? 'static' : 'fixed',
+          bottom: isDesktop ? 'auto' : 0,
+          left: isDesktop ? 'auto' : 0,
+          right: isDesktop ? 'auto' : 0,
+          p: isDesktop ? 0 : 2,
+          bgcolor: isDesktop ? 'transparent' : 'background.paper',
+          borderTop: isDesktop ? 'none' : 1,
+          borderColor: 'divider',
+          zIndex: 1000,
+          display: 'flex',
+          justifyContent: isDesktop ? 'flex-end' : 'stretch'
+        }}
+      >
         <Button
-          color={'blue-500'}
-          buttonType="button"
+          variant="contained"
+          color="primary"
           disabled={isLoading}
-          block
-          size="md"
-          onClick={() => history.push(`${history.location.pathname}/add-episode`)}
+          fullWidth={!isDesktop}
+          size="large"
+          startIcon={<AddCircleIcon />}
+          onClick={() => {
+            if (hospitalID && patientID) {
+              navigate(urls.addEpisode(hospitalID, patientID));
+            }
+          }}
+          sx={{
+            borderRadius: isDesktop ? '28px' : '8px',
+            px: isDesktop ? 3 : 2,
+            py: 1.5,
+            boxShadow: isDesktop ? 3 : 'none',
+          }}
         >
           Register new episode
         </Button>
-      </ButtonContainer>
-    </PageWrapper>
+      </Box>
+    </Container>
   );
 };
 

@@ -1,0 +1,543 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$standard_salt$n/QTqNeFzYn4WpXdrdETfqoR+CVJTWNgxUiU2NZXYVY=",
+      "last_login": "2025-12-26T19:07:40.276Z",
+      "is_superuser": true,
+      "username": "admin@admin.com",
+      "first_name": "Admin",
+      "last_name": "Ad",
+      "email": "admin@admin.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-04-21T11:35:58Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$standard_salt$n/QTqNeFzYn4WpXdrdETfqoR+CVJTWNgxUiU2NZXYVY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "szigyi",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-08-22T12:21:01.198Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "sites.site",
+    "pk": 1,
+    "fields": {
+      "domain": "example.com",
+      "name": "TMH Registry"
+    }
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "f607c88d04e19e6c7be9ae7f3f0a0b71f8b486e3",
+    "fields": {
+      "user": 4,
+      "created": "2025-08-22T12:26:53.947Z"
+    }
+  },
+  {
+    "model": "users.medicalpersonnel",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "level": "Lead Surgeon"
+    }
+  },
+  {
+    "model": "users.medicalpersonnel",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "level": "LEAD_SURGEON"
+    }
+  },
+  {
+    "model": "registry.hospital",
+    "pk": 1,
+    "fields": {
+      "name": "Royal London Hospital",
+      "address": "London"
+    }
+  },
+  {
+    "model": "registry.hospital",
+    "pk": 2,
+    "fields": {
+      "name": "General Hospital",
+      "address": null
+    }
+  },
+  {
+    "model": "registry.patient",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-04-21",
+      "updated_at": "2025-04-21",
+      "full_name": "Szabolcs Szilagyi",
+      "national_id": null,
+      "day_of_birth": 1,
+      "month_of_birth": 1,
+      "year_of_birth": 1999,
+      "gender": "MALE",
+      "phone_1": "075555555",
+      "phone_2": null,
+      "address": null
+    }
+  },
+  {
+    "model": "registry.patient",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-04-25",
+      "updated_at": "2025-04-25",
+      "full_name": "skjnskjv ksjnvksv",
+      "national_id": null,
+      "day_of_birth": null,
+      "month_of_birth": null,
+      "year_of_birth": 1990,
+      "gender": "FEMALE",
+      "phone_1": "9723873845634",
+      "phone_2": null,
+      "address": null
+    }
+  },
+  {
+    "model": "registry.patient",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-12-20",
+      "updated_at": "2025-12-20",
+      "full_name": "SAfsg adsgeger",
+      "national_id": "0",
+      "day_of_birth": 0,
+      "month_of_birth": 0,
+      "year_of_birth": 1998,
+      "gender": "MALE",
+      "phone_1": "238742385462",
+      "phone_2": "0",
+      "address": ""
+    }
+  },
+  {
+    "model": "registry.patient",
+    "pk": 4,
+    "fields": {
+      "created_at": "2025-12-20",
+      "updated_at": "2025-12-20",
+      "full_name": "tjytujtuyj rbrthrt",
+      "national_id": "1234",
+      "day_of_birth": 0,
+      "month_of_birth": 0,
+      "year_of_birth": 2003,
+      "gender": "FEMALE",
+      "phone_1": "1232354346",
+      "phone_2": "123456789123456",
+      "address": ""
+    }
+  },
+  {
+    "model": "registry.patienthospitalmapping",
+    "pk": 1,
+    "fields": {
+      "patient": 1,
+      "hospital": 1,
+      "patient_hospital_id": "5615432161"
+    }
+  },
+  {
+    "model": "registry.patienthospitalmapping",
+    "pk": 2,
+    "fields": {
+      "patient": 2,
+      "hospital": 1,
+      "patient_hospital_id": "2872348654932856"
+    }
+  },
+  {
+    "model": "registry.patienthospitalmapping",
+    "pk": 3,
+    "fields": {
+      "patient": 3,
+      "hospital": 1,
+      "patient_hospital_id": "223433"
+    }
+  },
+  {
+    "model": "registry.patienthospitalmapping",
+    "pk": 4,
+    "fields": {
+      "patient": 4,
+      "hospital": 1,
+      "patient_hospital_id": "1111111"
+    }
+  },
+  {
+    "model": "registry.preferredhospital",
+    "pk": 2,
+    "fields": {
+      "medical_personnel": 4,
+      "hospital": 1
+    }
+  },
+  {
+    "model": "registry.episode",
+    "pk": 1,
+    "fields": {
+      "patient_hospital_mapping": 1,
+      "created": "2025-04-21T13:06:45.040Z",
+      "surgery_date": "2025-04-21",
+      "episode_type": "INGUINAL",
+      "cepod": "PLANNED",
+      "side": "LEFT",
+      "occurence": "PRIMARY",
+      "type": "DIRECT",
+      "size": "VERY_SMALL",
+      "complexity": "INCARCERATED",
+      "mesh_type": "TNMHP",
+      "anaesthetic_type": "LOCAL",
+      "diathermy_used": false,
+      "antibiotic_used": false,
+      "antibiotic_type": "",
+      "comments": "",
+      "surgeons": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.episode",
+    "pk": 2,
+    "fields": {
+      "patient_hospital_mapping": 1,
+      "created": "2025-04-21T21:15:32.982Z",
+      "surgery_date": "2025-04-21",
+      "episode_type": "INGUINAL",
+      "cepod": "PLANNED",
+      "side": "NA",
+      "occurence": "PRIMARY",
+      "type": "NA",
+      "size": "VERY_SMALL",
+      "complexity": "SIMPLE",
+      "mesh_type": "TNMHP",
+      "anaesthetic_type": "LOCAL",
+      "diathermy_used": true,
+      "antibiotic_used": true,
+      "antibiotic_type": "IV at start / before surgery",
+      "comments": "",
+      "surgeons": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.episode",
+    "pk": 3,
+    "fields": {
+      "patient_hospital_mapping": 2,
+      "created": "2025-04-25T14:34:54.053Z",
+      "surgery_date": "2025-04-25",
+      "episode_type": "FEMORAL",
+      "cepod": "PLANNED",
+      "side": "NA",
+      "occurence": "PRIMARY",
+      "type": "NA",
+      "size": "VERY_SMALL",
+      "complexity": "SIMPLE",
+      "mesh_type": "TNMHP",
+      "anaesthetic_type": "LOCAL",
+      "diathermy_used": true,
+      "antibiotic_used": false,
+      "antibiotic_type": "",
+      "comments": "",
+      "surgeons": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.episode",
+    "pk": 4,
+    "fields": {
+      "patient_hospital_mapping": 2,
+      "created": "2025-04-28T19:33:01.420Z",
+      "surgery_date": "2025-04-28",
+      "episode_type": "INGUINAL",
+      "cepod": "PLANNED",
+      "side": "NA",
+      "occurence": "PRIMARY",
+      "type": "NA",
+      "size": "VERY_SMALL",
+      "complexity": "SIMPLE",
+      "mesh_type": "TNMHP",
+      "anaesthetic_type": "LOCAL",
+      "diathermy_used": true,
+      "antibiotic_used": false,
+      "antibiotic_type": "",
+      "comments": "",
+      "surgeons": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.episode",
+    "pk": 5,
+    "fields": {
+      "patient_hospital_mapping": 1,
+      "created": "2025-06-10T06:50:35.341Z",
+      "surgery_date": "2025-06-10",
+      "episode_type": "INGUINAL",
+      "cepod": "PLANNED",
+      "side": "NA",
+      "occurence": "PRIMARY",
+      "type": "DIRECT",
+      "size": "VERY_SMALL",
+      "complexity": "SIMPLE",
+      "mesh_type": "TNMHP",
+      "anaesthetic_type": "LOCAL",
+      "diathermy_used": false,
+      "antibiotic_used": false,
+      "antibiotic_type": "",
+      "comments": "",
+      "surgeons": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.episode",
+    "pk": 6,
+    "fields": {
+      "patient_hospital_mapping": 2,
+      "created": "2025-10-06T20:44:03.324Z",
+      "surgery_date": "2025-10-06",
+      "episode_type": "INCISIONAL",
+      "cepod": "EMERGENCY",
+      "side": "LEFT",
+      "occurence": "RECURRENT",
+      "type": "DIRECT",
+      "size": "SMALL",
+      "complexity": "INCARCERATED",
+      "mesh_type": "KCMC",
+      "anaesthetic_type": "SPINAL",
+      "diathermy_used": false,
+      "antibiotic_used": false,
+      "antibiotic_type": "",
+      "comments": "",
+      "surgeons": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.episode",
+    "pk": 7,
+    "fields": {
+      "patient_hospital_mapping": 1,
+      "created": "2025-12-30T18:26:01.214Z",
+      "surgery_date": "2025-12-30",
+      "episode_type": "FEMORAL",
+      "cepod": "EMERGENCY",
+      "side": "LEFT",
+      "occurence": "RECURRENT",
+      "type": "DIRECT",
+      "size": "SMALL",
+      "complexity": "INCARCERATED",
+      "mesh_type": "KCMC",
+      "anaesthetic_type": "SPINAL",
+      "diathermy_used": false,
+      "antibiotic_used": false,
+      "antibiotic_type": "none",
+      "comments": "fxfcddsg",
+      "surgeons": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.discharge",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-04-21",
+      "updated_at": "2025-04-21",
+      "episode": 1,
+      "date": "2025-04-21",
+      "aware_of_mesh": false,
+      "infection": "Haematoma",
+      "discharge_duration": null,
+      "comments": ""
+    }
+  },
+  {
+    "model": "registry.discharge",
+    "pk": 5,
+    "fields": {
+      "created_at": "2025-04-25",
+      "updated_at": "2025-04-25",
+      "episode": 3,
+      "date": "2025-04-25",
+      "aware_of_mesh": true,
+      "infection": "None",
+      "discharge_duration": 5,
+      "comments": ""
+    }
+  },
+  {
+    "model": "registry.discharge",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-04-28",
+      "updated_at": "2025-04-28",
+      "episode": 4,
+      "date": "2025-04-28",
+      "aware_of_mesh": true,
+      "infection": "None",
+      "discharge_duration": 5,
+      "comments": ""
+    }
+  },
+  {
+    "model": "registry.discharge",
+    "pk": 9,
+    "fields": {
+      "created_at": "2025-06-10",
+      "updated_at": "2025-06-10",
+      "episode": 5,
+      "date": "2025-06-10",
+      "aware_of_mesh": false,
+      "infection": "None",
+      "discharge_duration": null,
+      "comments": ""
+    }
+  },
+  {
+    "model": "registry.discharge",
+    "pk": 13,
+    "fields": {
+      "created_at": "2025-10-06",
+      "updated_at": "2025-10-06",
+      "episode": 6,
+      "date": "2025-10-06",
+      "aware_of_mesh": false,
+      "infection": "Bleeding,Urinary Retention",
+      "discharge_duration": null,
+      "comments": ""
+    }
+  },
+  {
+    "model": "registry.discharge",
+    "pk": 14,
+    "fields": {
+      "created_at": "2025-12-30",
+      "updated_at": "2025-12-30",
+      "episode": 2,
+      "date": "2025-12-30",
+      "aware_of_mesh": true,
+      "infection": "Bleeding,Haematoma,Return to theatre,Death",
+      "discharge_duration": 2,
+      "comments": ""
+    }
+  },
+  {
+    "model": "registry.discharge",
+    "pk": 15,
+    "fields": {
+      "created_at": "2025-12-30",
+      "updated_at": "2025-12-30",
+      "episode": 7,
+      "date": "2025-12-30",
+      "aware_of_mesh": false,
+      "infection": "None",
+      "discharge_duration": null,
+      "comments": "Commmmm"
+    }
+  },
+  {
+    "model": "registry.followup",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-04-21",
+      "updated_at": "2025-04-21",
+      "episode": 1,
+      "date": "2025-04-21",
+      "pain_severity": "MINIMAL",
+      "mesh_awareness": true,
+      "seroma": false,
+      "infection": true,
+      "numbness": false,
+      "recurrence": true,
+      "further_surgery_need": false,
+      "surgery_comments_box": "",
+      "attendees": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.followup",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-04-28",
+      "updated_at": "2025-04-28",
+      "episode": 4,
+      "date": "2025-04-28",
+      "pain_severity": "MINIMAL",
+      "mesh_awareness": true,
+      "seroma": true,
+      "infection": true,
+      "numbness": true,
+      "recurrence": true,
+      "further_surgery_need": true,
+      "surgery_comments_box": "yes",
+      "attendees": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "registry.zone",
+    "pk": 1,
+    "fields": {
+      "name": "England"
+    }
+  },
+  {
+    "model": "registry.region",
+    "pk": 1,
+    "fields": {
+      "name": "UK"
+    }
+  },
+  {
+    "model": "registry.hospitalregionmapping",
+    "pk": 1,
+    "fields": {
+      "hospital": 1,
+      "region": 1
+    }
+  },
+  {
+    "model": "registry.regionzonemapping",
+    "pk": 1,
+    "fields": {
+      "region": 1,
+      "zone": 1
+    }
+  }
+]

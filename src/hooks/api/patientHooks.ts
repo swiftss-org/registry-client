@@ -1,7 +1,7 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ReactQueryKeys } from 'hooks/constants';
-import { useMutation, useQuery } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
 import {
@@ -33,110 +33,77 @@ import { RegisterPatientFormType } from '../../pages/RegisterPatient/types';
 import urls from '../../routing/urls';
 
 export const useGetHospitals = (params?: PaginationParams) => {
-  return useQuery<HospitalsResponse, AxiosError, HospitalsResponse>(
-    ReactQueryKeys.HospitalsQuery,
-    async () => {
+  return useQuery<HospitalsResponse, AxiosError>({
+    queryKey: [ReactQueryKeys.HospitalsQuery, params],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getHospitals(params);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetPreferredHospital = () => {
-  return useQuery<PreferredHospital, AxiosError, PreferredHospital>(
-    ReactQueryKeys.PreferredHospitalQuery,
-    async () => {
-      const { request }  = patientsAPI.single.getPreferredHospital();
+  return useQuery<PreferredHospital, AxiosError>({
+    queryKey: [ReactQueryKeys.PreferredHospitalQuery],
+    queryFn: async () => {
+      const { request } = patientsAPI.single.getPreferredHospital();
       return await request();
     },
-    {
-      onError: (error) => {
-        console.error("Error fetching preferred hospital:", error);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetSurgeonEpisodeSummary = () => {
-  return useQuery<SurgeonEpisodeSummaryAPI, AxiosError, SurgeonEpisodeSummaryAPI>(
-    ReactQueryKeys.SurgeonEpisodeSummaryQuery,
-    async () => {
+  return useQuery<SurgeonEpisodeSummaryAPI, AxiosError>({
+    queryKey: [ReactQueryKeys.SurgeonEpisodeSummaryQuery],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getSurgeonEpisodeSummary();
       return await request();
     },
-    {
-      onError: (error) => {
-        console.error("Error fetching surgeon episode stats:", error);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
-export const useGetEpisodeStats = (
-  period?: string,
-  groupBy?: 'hospital'
-) => {
-  return useQuery<EpisodeStatsAPI, AxiosError>(
-    [ReactQueryKeys.EpisodeStatsQuery, period, groupBy],
-    async () => {
+export const useGetEpisodeStats = (period?: string, groupBy?: 'hospital') => {
+  return useQuery<EpisodeStatsAPI, AxiosError>({
+    queryKey: [ReactQueryKeys.EpisodeStatsQuery, period, groupBy],
+    queryFn: async () => {
       const params: Record<string, string> = {};
       if (period) params.period = period;
       if (groupBy) params.group_by = groupBy;
-
       const { request } = patientsAPI.single.getEpisodeStats(params);
       return await request();
     },
-    {
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetOwnedEpisodes = () => {
-  return useQuery<OwnedEpisodeAPI[], AxiosError>(
-    ReactQueryKeys.OwnedEpisodesQuery,
-    async () => {
+  return useQuery<OwnedEpisodeAPI[], AxiosError>({
+    queryKey: [ReactQueryKeys.OwnedEpisodesQuery],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getOwnedEpisodes();
       return await request();
     },
-    {
-      onError: (error: AxiosError) => {
-        console.error("Error fetching owned episodes:", error);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetHospital = (id: string) => {
-  return useQuery<HospitalsAPI, AxiosError, HospitalsAPI>(
-    [ReactQueryKeys.HospitalsQuery, id],
-    async () => {
+  return useQuery<HospitalsAPI, AxiosError>({
+    queryKey: [ReactQueryKeys.HospitalsQuery, id],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getHospital(id);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetPatients = (params?: PatientsPayload) => {
-  return useQuery<PatientsResponse, AxiosError, PatientsResponse>(
-    [
+  return useQuery<PatientsResponse, AxiosError>({
+    queryKey: [
       ReactQueryKeys.PatientsQuery,
       params?.hospital_id,
       params?.limit,
@@ -144,74 +111,58 @@ export const useGetPatients = (params?: PatientsPayload) => {
       params?.search_term,
       params?.ordering,
     ],
-    async () => {
+    queryFn: async () => {
       if (params?.hospital_id === undefined) {
         return undefined;
       }
       const { request } = patientsAPI.single.getPatients(params);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetUnlinkedPatients = () => {
-  return useQuery<UnlinkedPatientsResponse, AxiosError>(
-    ReactQueryKeys.UnlinkedPatientsQuery,
-    async () => {
+  return useQuery<UnlinkedPatientsResponse, AxiosError>({
+    queryKey: [ReactQueryKeys.UnlinkedPatientsQuery],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getUnlinkedPatients();
       return await request();
     },
-    {
-      onError: (error: AxiosError) => {
-        console.error("Error fetching unlinked patients:", error);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetSurgeons = (params?: PaginationParams) => {
-  return useQuery<SurgeonsResponse, AxiosError, SurgeonsResponse>(
-    [ReactQueryKeys.SurgeonsQuery, params?.limit, params?.offset, params?.ordering],
-    async () => {
+  return useQuery<SurgeonsResponse, AxiosError>({
+    queryKey: [
+      ReactQueryKeys.SurgeonsQuery,
+      params?.limit,
+      params?.offset,
+      params?.ordering,
+    ],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getSurgeons(params);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetPatient = (id: string) => {
-  return useQuery<PatientAPI, AxiosError, PatientAPI>(
-    [ReactQueryKeys.PatientsQuery, id],
-    async () => {
+  return useQuery<PatientAPI, AxiosError>({
+    queryKey: [ReactQueryKeys.PatientsQuery, id],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getPatient(id);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useCreateHospitalMapping = () => {
-  return useMutation<PatientAPI, AxiosError, HospitalMappingPayload>(
-    async ({ patient_id, hospital_id, patient_hospital_id }) => {
+  return useMutation<PatientAPI, AxiosError, HospitalMappingPayload>({
+    mutationFn: async ({ patient_id, hospital_id, patient_hospital_id }) => {
       const { request } = patientsAPI.single.createHospitalMapping({
         patient_hospital_id,
         patient_id,
@@ -219,24 +170,21 @@ export const useCreateHospitalMapping = () => {
       });
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-    }
-  );
+  });
 };
 
 export const useRegisterPatient = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  return useMutation<RegisterPatientPayload, AxiosError, RegisterPatientFormType>(
-    (params) => {
+  return useMutation<
+    RegisterPatientPayload,
+    AxiosError,
+    RegisterPatientFormType
+  >({
+    mutationFn: (params) => {
       const { request } = patientsAPI.single.registerPatient({
         hospital_id: params.hospital.value,
-        full_name: `${params.firstName}${params.middleName ? ' ' + params.middleName : ''} ${
-          params.lastName
-        }`,
+        full_name: `${params.firstName}${params.middleName ? ' ' + params.middleName : ''} ${params.lastName}`,
         year_of_birth: params.yearOfBirth,
         month_of_birth: params.monthOfBirth,
         day_of_birth: params.dayOfBirth,
@@ -245,27 +193,29 @@ export const useRegisterPatient = () => {
         patient_hospital_id: params.patientHospitalId,
         gender: params.gender,
         address: params.address,
-        phone_1: params.phone1,
-        phone_2: params.phone2,
+        phone_1: params.phone1 ? String(params.phone1) : '',
+        phone_2: params.phone2 ? String(params.phone2) : '',
       });
       return request();
     },
-    {
-      onSuccess: () => {
-        history.replace(urls.patients());
-      },
-      onError: (errors) => {
-        console.log(errors);
-      },
-    }
-  );
+    onSuccess: () => {
+      navigate(urls.patients(), { replace: true });
+    },
+  });
 };
 
-export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
-  const history = useHistory();
+export const useRegisterEpisode = (
+  hospitalID?: string,
+  patientID?: string,
+) => {
+  const navigate = useNavigate();
 
-  return useMutation<RegisterEpisodePayload, AxiosError, RegisterEpisodeFormType>(
-    (params) => {
+  return useMutation<
+    RegisterEpisodePayload,
+    AxiosError,
+    RegisterEpisodeFormType
+  >({
+    mutationFn: (params) => {
       const payload = {
         hospital_id: params?.hospital?.value,
         patient_id: parseInt(patientID ?? '0'),
@@ -273,7 +223,8 @@ export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
         diathermy_used: params?.diathermyUsed?.label === 'Yes',
         antibiotic_used: params?.antibioticUsed?.label === 'Yes',
         antibiotic_type: params?.antibioticType,
-        surgeon_ids: params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
+        surgeon_ids:
+          params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
         comments: params?.comments,
         mesh_type: params?.meshType?.label,
         episode_type: params?.episodeType.label,
@@ -290,68 +241,51 @@ export const useRegisterEpisode = (hospitalID?: string, patientID?: string) => {
 
       return request();
     },
-    {
-      onSuccess: () => {
-        history.replace(`${urls.patients()}/${hospitalID}/${patientID}`);
-      },
-      onError: (errors) => {
-        console.log(errors);
-      },
-    }
-  );
+    onSuccess: () => {
+      navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
+    },
+  });
 };
 
 export const useGetEpisode = (id: string) => {
-  return useQuery<EpisodesAPI, AxiosError, EpisodesAPI>(
-    [ReactQueryKeys.EpisodesQuery, id],
-    async () => {
+  return useQuery<EpisodesAPI, AxiosError>({
+    queryKey: [ReactQueryKeys.EpisodesQuery, id],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getEpisode(id);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetEpisodeDischarge = (id: string) => {
-  return useQuery<DischargeAPI, AxiosError, DischargeAPI>(
-    [ReactQueryKeys.EpisodesQuery, id, 'discharge'],
-    async () => {
+  return useQuery<DischargeAPI, AxiosError>({
+    queryKey: [ReactQueryKeys.EpisodesQuery, id, 'discharge'],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getEpisodeDischarge(id);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useGetEpisodeFollowUps = (id: string) => {
-  return useQuery<FollowUpAPI, AxiosError, FollowUpAPI[]>(
-    [ReactQueryKeys.EpisodesQuery, id, 'follow-up'],
-    async () => {
+  return useQuery<FollowUpAPI, AxiosError, FollowUpAPI[]>({
+    queryKey: [ReactQueryKeys.EpisodesQuery, id, 'follow-up'],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getEpisodeFollowUps(id);
       return await request();
     },
-    {
-      onError: (errors) => {
-        console.log(errors);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };
 
 export const useDischarge = (episodeID: string) => {
-  return useMutation<DischargeAPI, AxiosError, DischargeForm>(
-    (params) => {
+  const navigate = useNavigate();
+  const { hospitalID, patientID } = useParams<{ hospitalID: string; patientID: string }>();
+
+  return useMutation<DischargeAPI, AxiosError, DischargeForm>({
+    mutationFn: (params) => {
       const payload = {
         episode_id: parseInt(episodeID),
         date: params?.date,
@@ -365,31 +299,32 @@ export const useDischarge = (episodeID: string) => {
 
       return request();
     },
-    {
-      onSuccess: () => {
+    onSuccess: () => {
+      if (hospitalID && patientID) {
+        navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
+      } else {
         window.location.reload();
-      },
-      onError: (errors) => {
-        console.log(errors);
-      },
-    }
-  );
+      }
+    },
+  });
 };
 
 export const useFollowUp = (episodeID: string) => {
-  return useMutation<FollowUpPayload, AxiosError, FollowUpForm>(
-    (params) => {
+  return useMutation<FollowUpPayload, AxiosError, FollowUpForm>({
+    mutationFn: (params) => {
       const payload = {
         episode_id: parseInt(episodeID),
         date: params?.date,
-        attendee_ids: params?.attendees?.map((attendee) => attendee?.value) ?? ['1'],
+        attendee_ids:
+          params?.attendees?.map((attendee) => attendee?.value) ?? ['1'],
         mesh_awareness: params?.mesh_awareness.label === 'Yes',
         seroma: params?.seroma.label === 'Yes',
         infection: params?.infection.label === 'Yes',
         numbness: params?.numbness.label === 'Yes',
         recurrence: params?.recurrence.label === 'Yes',
         pain_severity: params?.pain_severity.label,
-        further_surgery_need: params?.further_surgery_need.label === 'Yes',
+        further_surgery_need:
+          params?.further_surgery_need.label === 'Yes',
         surgery_comments_box: params?.surgery_comments_box,
       };
 
@@ -397,29 +332,19 @@ export const useFollowUp = (episodeID: string) => {
 
       return request();
     },
-    {
-      onSuccess: () => {
-        window.location.reload();
-      },
-      onError: (errors) => {
-        console.log(errors);
-      },
-    }
-  );
+    onSuccess: () => {
+      window.location.reload();
+    },
+  });
 };
 
 export const useGetAnnouncements = () => {
-  return useQuery<AnnouncementsResponse, AxiosError, AnnouncementsResponse>(
-    ReactQueryKeys.AnnouncementsQuery,
-    async () => {
+  return useQuery<AnnouncementsResponse, AxiosError>({
+    queryKey: [ReactQueryKeys.AnnouncementsQuery],
+    queryFn: async () => {
       const { request } = patientsAPI.single.getAnnouncements();
       return await request();
     },
-    {
-      onError: (error) => {
-        console.error("Error fetching announcements:", error);
-      },
-      retry: false,
-    }
-  );
+    retry: false,
+  });
 };

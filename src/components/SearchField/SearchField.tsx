@@ -1,6 +1,7 @@
-import React, { FC, FormEvent } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 
-import { Icon, TextField } from '@orfium/ictinus';
+import SearchIcon from '@mui/icons-material/Search';
+import { TextField, InputAdornment } from '@mui/material';
 
 interface Props {
   placeholder: string;
@@ -11,10 +12,16 @@ const SearchField: FC<Props> = ({ onSearch, placeholder }) => {
   return (
     <TextField
       data-testid="search-field"
-      styleType={'filled'}
+      variant={"filled"}
       placeholder={placeholder}
-      leftIcon={<Icon name={'search'} color={'black'} />}
-      onInput={(event: FormEvent<HTMLInputElement>) => onSearch(event?.currentTarget?.value)}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+      onChange={(event: ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
     />
   );
 };

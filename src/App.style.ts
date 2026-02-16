@@ -1,11 +1,9 @@
 import styled from '@emotion/styled';
 
-import { appTheme } from './theme/globals';
-
 export const AppWrapper = styled.div<{ isDesktop: boolean }>`
   background-color: white;
   color: black;
-  font-family: ${appTheme.fontFamily};
+  font-family: 'Roboto', sans-serif;
   height: calc(100vh);
   overflow: hidden;
   position: relative;

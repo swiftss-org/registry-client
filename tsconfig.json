@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES6",
+    "lib": ["dom", "ES6", "dom.iterable", "esnext"],
     "rootDir": "./src",
     "baseUrl": "./src",
     "allowJs": true,
@@ -16,9 +16,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": [
+      "node"
+    ]
   },
   "include": [
-    "src"
+    "src",
+    "src/theme/emotion.d.ts",
+    "src/theme/mui.d.ts"
   ]
 }

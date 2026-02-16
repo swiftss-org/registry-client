@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
 
-import { Button } from '@orfium/ictinus';
+import { Button } from '@mui/material';
 import {
   useGetSurgeonEpisodeSummary,
   useGetOwnedEpisodes,
   useGetUnlinkedPatients,
   useGetPreferredHospital, useGetAnnouncements,
 } from 'hooks/api/patientHooks';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 
+import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
 import {
   ButtonContainer, PageTitle,
   PageWrapper,
 } from '../../common.style';
 import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import { OwnedEpisodeAPI } from '../../models/apiTypes';
-import { DashboardText, DashboardTextHeader, DashboardWrapper } from './LandingPage.style';
 
 
 const LandingPage: React.FC = () => {
   const { data: surgeonEpisodeSummary, error: surgeonError } = useGetSurgeonEpisodeSummary();
   const { data: ownedEpisodes = [], error: episodesError } = useGetOwnedEpisodes();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isDesktop } = useResponsiveLayout();
 
   const { data: preferredHospital, isLoading: isLoadingHospital, error: hospitalError } = useGetPreferredHospital();
@@ -50,50 +50,50 @@ const LandingPage: React.FC = () => {
   const sortedEpisodes = ownedEpisodes
     ? [...ownedEpisodes].sort((a: OwnedEpisodeAPI, b: OwnedEpisodeAPI) => {
 
-        // Custom sorting for follow_up_dates
-        if (sortConfig.key === 'follow_up_dates') {
-          const aFollowUps = a.follow_up_dates.length;
-          const bFollowUps = b.follow_up_dates.length;
-          return sortConfig.direction === 'ascending'
-            ? aFollowUps - bFollowUps
-            : bFollowUps - aFollowUps;
-        }
+      // Custom sorting for follow_up_dates
+      if (sortConfig.key === 'follow_up_dates') {
+        const aFollowUps = a.follow_up_dates.length;
+        const bFollowUps = b.follow_up_dates.length;
+        return sortConfig.direction === 'ascending'
+          ? aFollowUps - bFollowUps
+          : bFollowUps - aFollowUps;
+      }
 
-        // Custom sorting for discharge status
-        if (sortConfig.key === 'discharged') {
-          const aHasDischarge = a.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
-          const bHasDischarge = b.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
-          return sortConfig.direction === 'ascending' ? aHasDischarge - bHasDischarge : bHasDischarge - aHasDischarge;
-        }
+      // Custom sorting for discharge status
+      if (sortConfig.key === 'discharged') {
+        const aHasDischarge = a.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
+        const bHasDischarge = b.discharge !== null ? 1 : 0; // 1 if has discharge, 0 if not
+        return sortConfig.direction === 'ascending' ? aHasDischarge - bHasDischarge : bHasDischarge - aHasDischarge;
+      }
 
-        // Fallback to other sorting keys
-        const aValue = a[sortConfig.key] ?? '';
-        const bValue = b[sortConfig.key] ?? '';
+      // Fallback to other sorting keys
+      const aValue = a[sortConfig.key] ?? '';
+      const bValue = b[sortConfig.key] ?? '';
 
-        if (aValue < bValue) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-        return 0;
-      })
+      if (aValue < bValue) {
+        return sortConfig.direction === 'ascending' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    })
     : [];
 
   const handleRowClick = (episode: OwnedEpisodeAPI) => {
     const { hospital_id, patient_id, id } = episode;
-    history.push(`${urls.patients()}/${hospital_id}/${patient_id}${urls.episodes()}/${id}`);
+    navigate(urls.episodeDetails(hospital_id, patient_id, id));
   };
 
   const [dismissedIds, setDismissedIds] = useState<number[]>([]);
 
   const { data: announcementsResponse, error: announcementsError } = useGetAnnouncements();
- const announcements = Array.isArray(announcementsResponse)
-  ? announcementsResponse
-  : announcementsResponse?.results ?? [];
+  const announcements = Array.isArray(announcementsResponse)
+    ? announcementsResponse
+    : announcementsResponse?.results ?? [];
 
   const dismissAnnouncement = (id: number) => {
-  setDismissedIds((prev) => [...prev, id]);
+    setDismissedIds((prev) => [...prev, id]);
   };
 
   return (
@@ -136,12 +136,13 @@ const LandingPage: React.FC = () => {
                   color: '#0d629e',
                 }}
                 aria-label="Dismiss"
+                data-testid="dismiss-announcement"
               >
                 ×
               </button>
               <div>{announcement.announcement_text}</div>
             </div>
-        ))}
+          ))}
         <DashboardText>
           This is your personalized landing page with key insights on the episodes you have performed.
         </DashboardText>
@@ -152,12 +153,14 @@ const LandingPage: React.FC = () => {
         {/* Render surgeon summary data */}
         {surgeonEpisodeSummary ? (
           <DashboardText>
-            <p>Number of episodes: {surgeonEpisodeSummary.episode_count}</p>
+            <p>Number of episodes: <span data-testid="episode-count">{surgeonEpisodeSummary.episode_count}</span></p>
             <p>
               Last episode:{' '}
-              {surgeonEpisodeSummary.last_episode_date
-                ? new Date(surgeonEpisodeSummary.last_episode_date).toLocaleDateString()
-                : 'N/A'}
+              <span data-testid="last-episode-date">
+                {surgeonEpisodeSummary.last_episode_date
+                  ? new Date(surgeonEpisodeSummary.last_episode_date).toISOString().split('T')[0]
+                  : 'N/A'}
+              </span>
             </p>
           </DashboardText>
         ) : (
@@ -182,7 +185,7 @@ const LandingPage: React.FC = () => {
               <h2>Patients without Episodes Registered in Your Hospital</h2>
             </DashboardTextHeader>
             <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }} data-testid="unlinked-patients-table">
                 <thead>
                   <tr>
                     <th style={{ border: '1px solid lightgrey', padding: '8px' }}>Patient Name</th>
@@ -194,7 +197,7 @@ const LandingPage: React.FC = () => {
                     <tr
                       key={patient.id}
                       onClick={() =>
-                        history.push(`${urls.patients()}/${patient.hospital_id}/${patient.id}`)
+                        navigate(urls.patientDetails(patient.hospital_id, patient.id))
                       }
                       style={{
                         backgroundColor: '#fc7c7c',
@@ -225,12 +228,13 @@ const LandingPage: React.FC = () => {
                   episode.
                 </p>
               </DashboardText>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }} data-testid="owned-episodes-table">
                 <thead>
                   <tr>
                     <th
                       onClick={() => handleSort('surgery_date')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-surgery-date"
                     >
                       Surgery Date{' '}
                       {sortConfig.key === 'surgery_date'
@@ -242,6 +246,7 @@ const LandingPage: React.FC = () => {
                     <th
                       onClick={() => handleSort('patient_name')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-patient-name"
                     >
                       Patient Name{' '}
                       {sortConfig.key === 'patient_name'
@@ -253,6 +258,7 @@ const LandingPage: React.FC = () => {
                     <th
                       onClick={() => handleSort('follow_up_dates')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-follow-ups"
                     >
                       Follow-ups{' '}
                       {sortConfig.key === 'follow_up_dates'
@@ -264,6 +270,7 @@ const LandingPage: React.FC = () => {
                     <th
                       onClick={() => handleSort('discharged')}
                       style={{ border: '1px solid lightgrey', padding: '8px', cursor: 'pointer' }}
+                      data-testid="column-discharged"
                     >
                       Discharged{' '}
                       {sortConfig.key === 'discharged'
@@ -314,11 +321,10 @@ const LandingPage: React.FC = () => {
       </DashboardWrapper>
       <ButtonContainer isDesktop={isDesktop}>
         <Button
-          buttonType="button"
-          block
-          filled
-          size="md"
-          onClick={() => history.push(urls.patients())}
+          variant="contained"
+          fullWidth
+          size="medium"
+          onClick={() => navigate(urls.patients())}
         >
           Go to Patient Directory
         </Button>

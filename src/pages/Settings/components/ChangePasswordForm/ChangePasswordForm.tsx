@@ -1,138 +1,163 @@
-/** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Button, TextField } from '@orfium/ictinus';
-import { FieldsContainer, FieldWrapper, LongFieldWrapper } from 'common.style';
-import { useChangePassword } from 'hooks/api/userHooks';
+import { Box, Button, TextField } from '@mui/material';
 import { ChangePasswordFormType } from 'models/apiTypes';
-import { Field, Form } from 'react-final-form';
-import { useHistory } from 'react-router-dom';
 
 import { useSetNotification } from '../../../../hooks/useSetNotification';
-import { ButtonContainer } from '../../../Login/components/LoginForm/LoginForm.style';
 
-const ChangePasswordForm: React.FC = () => {
-  const { mutateAsync, isLoading } = useChangePassword();
+type Props = {
+  onSubmit: (data: ChangePasswordFormType) => void;
+  isPending: boolean;
+  onDirtyChange?: (isDirty: boolean) => void;
+};
+
+const ChangePasswordForm: React.FC<Props> = ({ onSubmit, isPending, onDirtyChange }) => {
+  const [values, setValues] = useState<ChangePasswordFormType>({
+    old_password: '',
+    new_password1: '',
+    new_password2: ''
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const setNotification = useSetNotification();
 
-  const history = useHistory();
+  useEffect(() => {
+    const isDirty = Object.values(values).some(val => val !== '');
+    if (onDirtyChange) onDirtyChange(isDirty);
+  }, [values, onDirtyChange]);
 
-  const handleSubmit = (form: ChangePasswordFormType) => {
-    return new Promise((resolve) => {
-      mutateAsync(form)
-        .then(() => {
-          setNotification('Password changed successfully', 'success', true, true);
-          history.push('/');
-          resolve(true);
-        })
-        .catch((error) => {
-          resolve(error.errors);
-        });
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const validationErrors = validate(values);
+    setErrors(validationErrors);
+  };
+
+  const validate = (currentValues: ChangePasswordFormType) => {
+    const newErrors: Record<string, string> = {};
+    if (!currentValues.old_password) {
+      newErrors.old_password = 'Old password is required';
+    }
+    if (!currentValues.new_password1) {
+      newErrors.new_password1 = 'New password is required';
+    }
+    if (!currentValues.new_password2) {
+      newErrors.new_password2 = 'Please confirm your new password';
+    } else if (currentValues.new_password1 !== currentValues.new_password2) {
+      newErrors.new_password2 = 'Passwords do not match';
+    }
+    return newErrors;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors = validate(values);
+    if (Object.keys(newErrors).length === 0) {
+      onSubmit(values);
+    } else {
+      setErrors(newErrors);
+      setTouched({
+        old_password: true,
+        new_password1: true,
+        new_password2: true
+      });
+      setNotification('Please fix the errors in the form.', 'error');
+    }
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      {({ handleSubmit, submitting }) => (
-        <form style={{ height: '100%' }} onSubmit={handleSubmit}>
-          <FieldsContainer withMargin>
-            <LongFieldWrapper>
-              <FieldWrapper>
-                <Field name="old_password" parse={(value) => value}>
-                  {(props) => {
-                    const hasError =
-                      props.meta.touched &&
-                      props.meta.invalid &&
-                      (props.meta.submitError || props.meta.error);
+    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, maxWidth: 400, mx: 'auto' }}>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="old_password"
+        label="Old Password"
+        type="password"
+        id="old_password"
+        autoComplete="current-password"
+        value={values.old_password}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.old_password && !!errors.old_password}
+        helperText={touched.old_password && errors.old_password}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="new_password1"
+        label="New Password"
+        type="password"
+        id="new_password1"
+        value={values.new_password1}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.new_password1 && !!errors.new_password1}
+        helperText={touched.new_password1 && errors.new_password1}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        name="new_password2"
+        label="Confirm New Password"
+        type="password"
+        id="new_password2"
+        value={values.new_password2}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.new_password2 && !!errors.new_password2}
+        helperText={touched.new_password2 && errors.new_password2}
+      />
 
-                    return (
-                      <TextField
-                        id="old_password"
-                        label="Old password"
-                        styleType="outlined"
-                        size="md"
-                        status={hasError && 'error'}
-                        hintMsg={hasError && (props.meta.error || props.meta.submitError)}
-                        type="password"
-                        {...props.input}
-                      />
-                    );
-                  }}
-                </Field>
-              </FieldWrapper>
-            </LongFieldWrapper>
-          </FieldsContainer>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          p: 2,
+          bgcolor: 'background.paper',
+          borderTop: 1,
+          borderColor: 'divider',
+          display: { xs: 'flex', md: 'none' },
+          zIndex: 1000,
+        }}
+      >
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          disabled={isPending}
+          size="large"
+        >
+          Change Password
+        </Button>
+      </Box>
 
-          <FieldsContainer withMargin>
-            <LongFieldWrapper>
-              <FieldWrapper>
-                <Field name="new_password1" parse={(value) => value}>
-                  {(props) => {
-                    const hasError =
-                      props.meta.touched &&
-                      props.meta.invalid &&
-                      (props.meta.submitError || props.meta.error);
-                    return (
-                      <TextField
-                        id="new_password1"
-                        label="New password"
-                        styleType="outlined"
-                        size="md"
-                        status={hasError && 'error'}
-                        hintMsg={hasError && (props.meta.error || props.meta.submitError)}
-                        type="password"
-                        {...props.input}
-                      />
-                    );
-                  }}
-                </Field>
-              </FieldWrapper>
-            </LongFieldWrapper>
-          </FieldsContainer>
-
-          <FieldsContainer withMargin>
-            <LongFieldWrapper>
-              <FieldWrapper>
-                <Field name="new_password2" parse={(value) => value}>
-                  {(props) => {
-                    const hasError =
-                      props.meta.touched &&
-                      props.meta.invalid &&
-                      (props.meta.submitError || props.meta.error);
-                    return (
-                      <TextField
-                        id="new_password2"
-                        label="New password (again)"
-                        styleType="outlined"
-                        size="md"
-                        status={hasError && 'error'}
-                        hintMsg={hasError && (props.meta.error || props.meta.submitError)}
-                        type="password"
-                        {...props.input}
-                      />
-                    );
-                  }}
-                </Field>
-              </FieldWrapper>
-            </LongFieldWrapper>
-          </FieldsContainer>
-
-          <ButtonContainer>
-            <Button
-              block
-              color={'blue-500'}
-              disabled={isLoading || submitting}
-              filled
-              size="lg"
-              buttonType="submit"
-            >
-              Change Password
-            </Button>
-          </ButtonContainer>
-        </form>
-      )}
-    </Form>
+      <Box sx={{ display: { xs: 'none', md: 'block' }, mt: 3 }}>
+        <Button
+          id="change-password-button"
+          type="submit"
+          fullWidth
+          variant="contained"
+          disabled={isPending}
+          size="large"
+        >
+          Change Password
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

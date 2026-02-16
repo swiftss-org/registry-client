@@ -1,8 +1,5 @@
 import React, { useState, useMemo } from 'react';
 
-import { PageTitle, PageWrapper } from '../../common.style';
-import { useGetEpisodeStats } from '../../hooks/api/patientHooks';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 import {
   TableWrapper,
   TableHeader,
@@ -12,6 +9,9 @@ import {
   TableScrollContainer,
   KPIsContentWrapper,
 } from './NationalKPIs.style';
+import { PageTitle, PageWrapper } from '../../common.style';
+import { useGetEpisodeStats } from '../../hooks/api/patientHooks';
+import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
 
 type SortColumn = 'hospital_name' | 'total' | 'pastYear' | 'pastMonth' | 'pastWeek' | 'lastEpisodeDate' | 'patientsWithoutEpisode';
 type SortDirection = 'asc' | 'desc';
@@ -44,14 +44,19 @@ const NationalKPIs: React.FC = () => {
       })) ?? [];
 
     const sorted = [...data].sort((a, b) => {
-      let aValue = (a as any)[sortColumn];
-      let bValue = (b as any)[sortColumn];
+      let aValue = a[sortColumn];
+      let bValue = b[sortColumn];
 
       if (sortColumn === 'lastEpisodeDate') {
         const aDate = aValue ? new Date(aValue).getTime() : 0;
         const bDate = bValue ? new Date(bValue).getTime() : 0;
         return sortDirection === 'asc' ? aDate - bDate : bDate - aDate;
       }
+
+      // Handle nulls/undefined values to satisfy TypeScript
+      if (aValue === bValue) return 0;
+      if (aValue === null || aValue === undefined) return 1;
+      if (bValue === null || bValue === undefined) return -1;
 
       // String sorting
       if (typeof aValue === 'string') aValue = aValue.toLowerCase();

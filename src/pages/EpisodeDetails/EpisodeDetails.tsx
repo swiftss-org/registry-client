@@ -1,93 +1,184 @@
-/** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 
-import { Icon } from '@orfium/ictinus';
-import { IconWrapper } from 'App.style';
-import { useHistory, useRouteMatch } from 'react-router-dom';
-
-import { PageTitle } from '../../common.style';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Container,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import {
   useGetEpisode,
   useGetEpisodeDischarge,
   useGetEpisodeFollowUps,
-} from '../../hooks/api/patientHooks';
-import { useResponsiveLayout } from '../../hooks/useResponsiveSidebar';
-import urls from '../../routing/urls';
-import {
-  Heading,
-  Subheading,
-  TextWrapper,
-} from '../PatientDetails/components/EpisodeList/EpisodeCard/EpisodeCard.style';
-import ExpandableContainer from './components/ExpandableContainer';
-import Discharge from './components/ExpandableContainer/components/Discharge';
-import FollowUps from './components/ExpandableContainer/components/FollowUps';
-import Surgery from './components/ExpandableContainer/components/Surgery';
-import { Container, PageWrapper } from './EpisodeDetails.style';
+} from 'hooks/api/patientHooks';
+import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
+import { useNavigate, useParams } from 'react-router-dom';
+import urls from 'routing/urls';
+
+import Discharge from './components/Discharge';
+import DischargeReadOnly from './components/DischargeReadOnly';
+import FollowUpReadOnly from './components/FollowUpReadOnly';
+import FollowUps from './components/FollowUps';
+import SurgeryReadOnly from './components/SurgeryReadOnly';
 
 const EpisodeDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
-  const history = useHistory();
-  const match = useRouteMatch<{ hospitalID: string; patientID: string; episodeID: string }>();
-  const { hospitalID, patientID, episodeID } = match.params;
+  const navigate = useNavigate();
+  const { hospitalID, patientID, episodeID } = useParams<{
+    hospitalID: string;
+    patientID: string;
+    episodeID: string;
+  }>();
+
+  if (!hospitalID || !patientID || !episodeID) {
+    throw new Error('Missing required route parameters');
+  }
 
   const { data: episode } = useGetEpisode(episodeID);
   const { data: followUps } = useGetEpisodeFollowUps(episodeID);
   const { data: discharge } = useGetEpisodeDischarge(episodeID);
 
-  return (
-    <PageWrapper isDesktop={isDesktop}>
-      <PageTitle>
-        <IconWrapper>
-          <Icon
-            name="fatArrowLeft"
-            size={24}
-            color={'lightGray-700'}
-            onClick={() => {
-              history.replace(`${urls.patients()}/${hospitalID}/${patientID}`);
-            }}
-          />
-        </IconWrapper>
-        Episode Details
-      </PageTitle>
-      {episode && (
-        <Container>
-          <TextWrapper>
-            <Heading>{episode.episode_type}</Heading>
-            <Subheading>{episode.surgery_date}</Subheading>
-          </TextWrapper>
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/*// @ts-ignore*/}
-          <ExpandableContainer isDone title={'Surgery'} component={Surgery} episode={episode} />
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/*// @ts-ignore*/}
-          <ExpandableContainer
-            isDone={discharge?.infection !== undefined}
-            title={'Discharge'}
-            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-            /*// @ts-ignore*/
-            component={Discharge}
-            discharge={discharge}
-          />
+  const [expanded, setExpanded] = useState<string | false>();
 
+  const handleChange = (panel: string) => (__event: SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  return (
+    <Container
+      maxWidth="md"
+      sx={{
+        pb: isDesktop ? 4 : 10,
+        pt: 2,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
+        <IconButton
+          edge="start"
+          onClick={() => {
+            navigate(urls.patientDetails(hospitalID, patientID, 'episodes'));
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h5" component="h1" fontWeight={700} color="text.primary">
+          Episode Details
+        </Typography>
+      </Box>
+
+      {episode && (
+        <Stack spacing={2}>
+          <Paper elevation={0} variant="outlined" sx={{ p: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 4 }}>
+              <Box>
+                <Typography variant="overline" color="text.secondary">
+                  Episode Type
+                </Typography>
+                <Typography variant="h6">{episode.episode_type}</Typography>
+              </Box>
+              <Box>
+                <Typography variant="overline" color="text.secondary">
+                  Surgery Date
+                </Typography>
+                <Typography variant="h6">{episode.surgery_date}</Typography>
+              </Box>
+            </Box>
+          </Paper>
+
+          {/* Surgery Section */}
+          <Accordion
+            expanded={expanded === 'surgery'}
+            onChange={handleChange('surgery')}
+            variant="outlined"
+            elevation={0}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="surgery-summary">
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography fontWeight={600}>Surgery</Typography>
+                <CheckCircleIcon color="success" fontSize="small" data-testid="surgery-check-icon" />
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              <SurgeryReadOnly episode={episode} />
+            </AccordionDetails>
+          </Accordion>
+
+          {/* Discharge Section */}
+          <Accordion
+            expanded={expanded === 'discharge'}
+            onChange={handleChange('discharge')}
+            variant="outlined"
+            elevation={0}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="discharge-summary">
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography fontWeight={600}>
+                  {discharge?.infection !== undefined ? `Discharge - ${discharge.date}` : 'Add New Discharge'}
+                </Typography>
+                {discharge?.infection !== undefined && (
+                  <CheckCircleIcon color="success" fontSize="small" data-testid="discharge-check-icon" />
+                )}
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              {discharge?.infection !== undefined ? (
+                <DischargeReadOnly discharge={discharge} />
+              ) : (
+                <Discharge discharge={discharge!} />
+              )}
+            </AccordionDetails>
+          </Accordion>
+
+          {/* Existing FollowUps */}
           {followUps?.map((followUp, index) => (
-            <ExpandableContainer
+            <Accordion
               key={`follow_up_${index}`}
-              title={'Follow Up'}
-              isDone
-              /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-              /*// @ts-ignore*/
-              component={FollowUps}
-              /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-              /*// @ts-ignore*/
-              followUp={followUp}
-            />
+              expanded={expanded === `follow_up_${index}`}
+              onChange={handleChange(`follow_up_${index}`)}
+              variant="outlined"
+              elevation={0}
+            >
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid={`follow-up-summary-${index}`}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography fontWeight={600}>Follow Up - {followUp.date}</Typography>
+                  <CheckCircleIcon color="success" fontSize="small" data-testid={`follow-up-check-icon-${index}`} />
+                </Box>
+              </AccordionSummary>
+              <AccordionDetails>
+                <FollowUpReadOnly followUp={followUp} />
+              </AccordionDetails>
+            </Accordion>
           ))}
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/*// @ts-ignore*/}
-          <ExpandableContainer isDone={false} title={'Follow Up'} component={FollowUps} />
-        </Container>
+
+          {/* New FollowUp */}
+          <Accordion
+            expanded={expanded === 'new_follow_up'}
+            onChange={handleChange('new_follow_up')}
+            variant="outlined"
+            elevation={0}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography fontWeight={600}>Add New Follow Up</Typography>
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              <FollowUps />
+            </AccordionDetails>
+          </Accordion>
+        </Stack>
       )}
-    </PageWrapper>
+    </Container>
   );
 };
 

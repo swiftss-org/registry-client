@@ -1,42 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import useLocationToGetCurrentMenuItem from '@orfium/ictinus/dist/hooks/useLocationToGetCurrentMenuItem';
+import { Box, List, Typography } from '@mui/material';
+import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
 
-import { useIsLoggedIn } from '../../../hooks/useIsLoggedIn';
-import { Props } from '../Drawer';
+import { Props as DrawerProps } from '../Drawer';
 import MenuItem from './MenuItem/MenuItem';
-import { Container, PlaceholderContainer, PlaceholderText } from './Navigation.style';
+import useCurrentMenuItem from './useCurrentMenuItem';
 
-type NavigationProps = Props;
-
-const Navigation: React.FC<NavigationProps> = ({ menuItems, expanded, handleClick }) => {
-  const [, setOpenMenuItems] = useState<string[]>([]);
-  const [currentMenuItem] = useLocationToGetCurrentMenuItem(menuItems, setOpenMenuItems);
+const Navigation: React.FC<DrawerProps> = ({ menuItems, expanded, handleClick }) => {
+  const currentMenuItem = useCurrentMenuItem(menuItems);
   const { isLoggedIn } = useIsLoggedIn();
 
   return (
-    <Container expanded={expanded}>
+    <Box sx={{ width: '100%', position: 'relative' }}>
       {isLoggedIn ? (
-        menuItems.map(
-          (menuItem) =>
-            menuItem.visible && (
-              <MenuItem
-                handleClick={handleClick}
-                key={menuItem.url}
-                isCurrent={currentMenuItem === menuItem.url}
-                {...menuItem}
-              />
-            )
-        )
+        <List disablePadding>
+          {menuItems.map(
+            (menuItem) =>
+              menuItem.visible && (
+                <MenuItem
+                  handleClick={handleClick}
+                  key={menuItem.url}
+                  isCurrent={currentMenuItem === menuItem.url}
+                  expanded={expanded}
+                  {...menuItem}
+                />
+              )
+          )}
+        </List>
       ) : (
-        <PlaceholderContainer>
-          <PlaceholderText>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3,
+            p: 2,
+          }}
+        >
+          <Typography variant="body1">
             For more options please go to sign in page and use your credentials to enter the
             application.
-          </PlaceholderText>
-        </PlaceholderContainer>
+          </Typography>
+        </Box>
       )}
-    </Container>
+    </Box>
   );
 };
 

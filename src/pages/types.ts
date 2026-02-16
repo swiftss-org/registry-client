@@ -5,3 +5,8 @@ export type ResponsiveProps = {
   isXLargeDesktop: boolean;
   isExpanded?: boolean;
 };
+
+export interface FilterOption {
+  label: string;
+  value: string | number;
+}

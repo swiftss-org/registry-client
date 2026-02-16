@@ -1,52 +1,92 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 
-import { Icon } from '@orfium/ictinus';
-import { IconWrapper } from 'App.style';
-import { PageTitle, PageWrapper } from 'common.style';
-import { Tabs } from 'components/Tabs';
-import { useResponsiveLayout } from 'hooks/useResponsiveSidebar';
-import { useHistory } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {
+  Box,
+  Container,
+  IconButton,
+  Paper,
+  Tab,
+  Tabs as MuiTabs,
+  Typography
+} from '@mui/material';
+import ConfirmationModal from 'components/ConfirmationModal';
+import Notifications from 'components/Notifications';
+import { useChangePassword } from 'hooks/api/userHooks';
+import { useNavigate } from 'react-router-dom';
 import urls from 'routing/urls';
 
-import { ComponentWrapper } from '../PatientDetails/PatientDetails.style';
 import ChangePasswordForm from './components/ChangePasswordForm';
 
 const tabs = [{ label: 'Change Password', value: 'change-password' }];
 
 const Settings: React.FC = () => {
-  const { isDesktop } = useResponsiveLayout();
-
   const [activeTab, setActiveTab] = useState('change-password');
-  const history = useHistory();
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const navigate = useNavigate();
+
+  const { mutate: changePassword, isPending: isChangePasswordPending } = useChangePassword();
 
   return (
-    <PageWrapper isDesktop={isDesktop}>
-      <PageTitle>
-        <IconWrapper>
-          <Icon
-            name="fatArrowLeft"
-            size={24}
-            color={'lightGray-700'}
-            onClick={() => {
-              history.push(urls.patients());
-            }}
-          />
-        </IconWrapper>
-        Settings
-      </PageTitle>
-      <Tabs
-        matchActiveDataType={activeTab}
-        onTabClick={(tabId) => {
-          setActiveTab(tabId);
-        }}
-        tabs={tabs}
-        shouldDisplayTabs
-      />
-      <ComponentWrapper>
-        {activeTab === 'change-password' ? <ChangePasswordForm /> : <div />}
-      </ComponentWrapper>
-    </PageWrapper>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Notifications />
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <IconButton
+          onClick={() => {
+            if (isFormDirty) {
+              setShowWarningModal(true);
+            } else {
+              navigate(urls.patients());
+            }
+          }}
+          edge="start"
+          sx={{ mr: 2 }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h4" component="h1" fontWeight="bold">
+          Settings
+        </Typography>
+      </Box>
+
+      <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <MuiTabs
+            value={activeTab}
+            onChange={(__, newValue) => setActiveTab(newValue)}
+            aria-label="settings tabs"
+            sx={{ px: 2 }}
+          >
+            {tabs.map((tab) => (
+              <Tab key={tab.value} label={tab.label} value={tab.value} />
+            ))}
+          </MuiTabs>
+        </Box>
+
+        <Box sx={{ p: 4 }}>
+          {activeTab === 'change-password' ? (
+            <ChangePasswordForm onSubmit={changePassword} isPending={isChangePasswordPending} onDirtyChange={setIsFormDirty} />
+          ) : (
+            <div />
+          )}
+        </Box>
+      </Paper>
+      {showWarningModal && (
+        <ConfirmationModal
+          onClose={() => {
+            setShowWarningModal(false);
+          }}
+          title={'Are you sure you want to leave this page?'}
+          subtitle={
+            "You have unsaved changes. If you leave this page, your changes will be lost."
+          }
+          buttonText={'Yes, leave page'}
+          onClick={() => navigate(urls.patients())}
+        />
+      )}
+    </Container>
   );
 };
 

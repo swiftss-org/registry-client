@@ -32,3 +32,10 @@ You can run against a different registry-api backend by changing  `BASE_URL` in 
 ~~~
 const BASE_URL = 'http://localhost:8000/api';
 ~~~
+
+
+## Next steps for Devs
+- Cross validate the names and types of the apiTypes, all data sent and received to, from the backend https://github.com/swiftss-org/registry-api/ scanning the registry-api as well
+- Is the National ID required on the Register patient Form? Is it required in the DB inside https://github.com/swiftss-org/registry-api/? It looks like as I can't record a second row if I omit the National ID.
+- Show the loading animation when data is still loading on all pages
+- Add Notification messages for successful actions - make sure it only appears after a successful action but if the action fails it should show an error notification

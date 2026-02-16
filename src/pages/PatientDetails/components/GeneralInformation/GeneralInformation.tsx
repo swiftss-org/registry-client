@@ -1,93 +1,73 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { TextField } from '@orfium/ictinus';
+import { Box, Grid, Paper } from '@mui/material';
+import { DetailItem, SectionTitle } from 'components/Display';
 import { HospitalsAPI, PatientAPI } from 'models/apiTypes';
-
-import { FieldsContainer } from '../../../../common.style';
-import { Container } from './GeneralInformation.style';
 
 type Props = {
   patient?: PatientAPI;
   hospital?: HospitalsAPI;
 };
+
 const GeneralInformation: React.FC<Props> = ({ patient, hospital }) => {
-  const hospitalPatientID = patient?.hospital_mappings.find(
-    (value) => value.hospital_id === hospital?.id
+  const hospitalPatientID = patient?.hospital_mappings?.find(
+    (mapping) => mapping.hospital_id === hospital?.id
   )?.patient_hospital_id;
 
   return (
-    <Container>
-      <TextField
-        locked
-        label="Full Name"
-        styleType="outlined"
-        size="md"
-        value={patient?.full_name}
-      />
+    <Box sx={{ p: 4, bgcolor: 'background.default' }}>
+      <Grid container spacing={4}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Paper variant="outlined" sx={{ p: 2, height: '100%', borderRadius: 2 }}>
+            <SectionTitle title="Personal Details" />
+            <Grid container spacing={1.5}>
+              <Grid size={{ xs: 12 }}>
+                <DetailItem id="full_name" label="Full Name" value={patient?.full_name || ''} />
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <DetailItem id="gender" label="Gender" value={patient?.gender || ''} />
+              </Grid>
+              <Grid size={{ xs: 6, md: 3 }}>
+                <DetailItem id="year_of_birth" label="Year of Birth" value={patient?.year_of_birth || ''} />
+              </Grid>
+              <Grid size={{ xs: 6, md: 3 }}>
+                <DetailItem id="month_of_birth" label="Month of Birth" value={patient?.month_of_birth || ''} />
+              </Grid>
+              <Grid size={{ xs: 6, md: 3 }}>
+                <DetailItem id="age" label="Age" value={patient?.age || ''} />
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <DetailItem id="national_id" label="National ID" value={patient?.national_id || ''} />
+              </Grid>
+            </Grid>
+            <br />
+          </Paper>
+        </Grid>
 
-      <TextField locked label="Gender" styleType="outlined" size="md" value={patient?.gender} />
-      <FieldsContainer>
-        <TextField
-          locked
-          id="year_of_birth"
-          label="Year Of Birth"
-          styleType="outlined"
-          type="number"
-          size="md"
-          value={patient?.year_of_birth}
-        />
-        <TextField
-          disabled
-          id="age"
-          label="Age"
-          type="number"
-          styleType="outlined"
-          size="md"
-          value={patient?.age}
-        />
-      </FieldsContainer>
-      <TextField
-        id="national_id"
-        label="National ID"
-        styleType="outlined"
-        size="md"
-        locked
-        value={patient?.national_id}
-      />
-      <TextField
-        id="hospital"
-        label="Hospital"
-        styleType="outlined"
-        size="md"
-        locked
-        value={hospital?.name}
-      />
-      <TextField
-        id="patient_hospital_id"
-        label="Patient Hospital ID"
-        styleType="outlined"
-        size="md"
-        locked
-        value={hospitalPatientID}
-      />
-      <TextField
-        id="patient_phone_number_1"
-        label="Patient Phone number 1"
-        styleType="outlined"
-        size="md"
-        locked
-        value={patient?.phone_1}
-      />
-      <TextField
-        id="patient_phone_number_2"
-        label="Patient Phone number 2"
-        styleType="outlined"
-        size="md"
-        locked
-        value={patient?.phone_2}
-      />
-    </Container>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Paper variant="outlined" sx={{ p: 2, height: '100%', borderRadius: 2 }}>
+            <SectionTitle title="Hospital & Contact" />
+            <Grid container spacing={1.5}>
+              <Grid size={{ xs: 12 }}>
+                <DetailItem id="hospital" label="Hospital" value={hospital?.name || ''} />
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <DetailItem id="patient_hospital_id" label="Patient Hospital ID" value={hospitalPatientID || ''} />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <DetailItem id="phone_1" label="Primary Phone" value={patient?.phone_1 || ''} />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <DetailItem id="phone_2" label="Secondary Phone" value={patient?.phone_2 || ''} />
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <DetailItem id="address" label="Address" value={patient?.address || ''} />
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

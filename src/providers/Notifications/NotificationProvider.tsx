@@ -1,9 +1,9 @@
-import React, { Dispatch, FC, useContext, useReducer } from 'react';
+import React, { Dispatch, FC, useContext, useReducer, PropsWithChildren } from 'react';
 
 import { NotificationType } from 'components/Notifications/Notifications';
 
 import { RESET, SET_NOTIFICATION } from './actions';
-import { NotificationAction, NotificationReducerType } from './types';
+import { NotificationAction } from './types';
 
 const NotificationsContext = React.createContext<
   [NotificationType | undefined, Dispatch<NotificationAction>]
@@ -31,8 +31,8 @@ export const useNotifications = (): [
   return context;
 };
 
-const NotificationsProvider: FC = ({ children }) => {
-  const [notifications, dispatch] = useReducer<NotificationReducerType>(
+const NotificationsProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [notifications, dispatch] = useReducer(
     notificationReducer,
     undefined
   );

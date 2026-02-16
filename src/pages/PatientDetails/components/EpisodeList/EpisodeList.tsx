@@ -1,22 +1,28 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react';
 
+import { Stack, Box, Typography } from '@mui/material';
 import { PatientAPI } from 'models/apiTypes';
 
 import EpisodeCard from './EpisodeCard';
-import { Container, EmptyState } from './EpisodeList.style';
 
 type Props = {
   patient?: PatientAPI;
 };
+
 const EpisodeList: React.FC<Props> = ({ patient }) => {
-  return patient?.episodes.length === 0 ? (
-    <EmptyState>
-      <div>There are no episodes to display</div>
-    </EmptyState>
-  ) : (
-    <Container>
-      {patient?.episodes
+  if (!patient || !patient.episodes || patient.episodes.length === 0) {
+    return (
+      <Box sx={{ p: 4, textAlign: 'center' }}>
+        <Typography variant="body1" color="text.secondary">
+          There are no episodes to display
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Stack spacing={1} sx={{ p: 2 }}>
+      {patient.episodes
         .sort((a, b) => (new Date(a.surgery_date) <= new Date(b.surgery_date) ? 1 : -1))
         .map((episode, index) => (
           <EpisodeCard
@@ -26,7 +32,7 @@ const EpisodeList: React.FC<Props> = ({ patient }) => {
             type={episode.episode_type}
           />
         ))}
-    </Container>
+    </Stack>
   );
 };
 

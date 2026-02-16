@@ -1,10 +1,9 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { Icon } from '@orfium/ictinus';
-import { useHistory } from 'react-router-dom';
-
-import { Container, Heading, Subheading, TextWrapper } from './EpisodeCard.style';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Box, Typography, Paper } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import urls from 'routing/urls';
 
 type Props = {
   type?: string;
@@ -13,20 +12,42 @@ type Props = {
 };
 
 const EpisodeCard: React.FC<Props> = ({ type, date, episodeID }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const { hospitalID, patientID } = useParams<{ hospitalID: string; patientID: string }>();
 
   const handleClick = () => {
-    history.push(`${history.location.pathname}/episodes/${episodeID}`);
+    if (hospitalID && patientID && episodeID) {
+      navigate(urls.episodeDetails(hospitalID, patientID, episodeID.toString()));
+    }
   };
 
   return (
-    <Container onClick={handleClick}>
-      <TextWrapper>
-        <Heading>{type}</Heading>
-        <Subheading>{date}</Subheading>
-      </TextWrapper>
-      <Icon name={'chevronSmallRight'} color={'lightGrey'} variant={400} size={24} />
-    </Container>
+    <Paper
+      elevation={0}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        p: 2,
+        cursor: 'pointer',
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 2,
+        '&:hover': {
+          bgcolor: 'action.hover'
+        }
+      }}
+      onClick={handleClick}
+    >
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography variant="subtitle1" fontWeight={600} color="text.primary">
+          {type}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {date}
+        </Typography>
+      </Box>
+      <ChevronRightIcon color="action" />
+    </Paper>
   );
 };
 

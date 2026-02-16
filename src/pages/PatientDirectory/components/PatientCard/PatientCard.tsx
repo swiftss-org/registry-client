@@ -1,11 +1,11 @@
-/** @jsxImportSource @emotion/react */
+
 import React from 'react';
 
-import { useTheme, Icon } from '@orfium/ictinus';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PersonIcon from '@mui/icons-material/Person';
+import { Box, Paper, Typography } from '@mui/material';
 import { PatientAPI } from 'models/apiTypes';
-import { useHistory } from 'react-router-dom';
-
-import { CardContainer, IdLabel, IdValue, Subtitle, Title } from './PatientCard.style';
+import { useNavigate } from 'react-router-dom';
 
 type Props = PatientAPI & { selectedHospital?: number };
 
@@ -18,37 +18,68 @@ const PatientCard: React.FC<Props> = ({
   hospital_mappings,
   selectedHospital,
 }) => {
-  const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    history.push(`/patients/${selectedHospital}/${id}`);
+    navigate(`/patients/${selectedHospital}/${id}`);
   };
 
   return (
-    <CardContainer key={'patient_' + national_id} onClick={handleClick}>
-      <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <Icon name="user" color={theme.utils.getColor('blue', 400)} size={24} />
-        <Icon name="fatArrowRight" color={theme.utils.getColor('cyan', 200)} size={24} />
-      </div>
-      <Title>{full_name}</Title>
-      <Subtitle>
+    <Paper
+      elevation={0}
+      onClick={handleClick}
+      sx={{
+        border: '1px solid',
+        borderColor: 'primary.main',
+        borderRadius: 1,
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 2,
+        transition: 'all 0.1s ease-in-out',
+        '&:hover': {
+          bgcolor: 'grey.100',
+        },
+        '&:active': {
+          bgcolor: 'grey.200',
+        },
+        mb: 1
+      }}
+    >
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+        <PersonIcon sx={{ color: 'primary.dark', fontSize: 24 }} />
+        <ArrowForwardIcon sx={{ color: 'primary.light', fontSize: 24 }} />
+      </Box>
+
+      <Typography variant="h6" sx={{ color: 'primary.dark', fontWeight: 700, mb: 1 }}>
+        {full_name}
+      </Typography>
+
+      <Typography variant="body2" sx={{ color: 'primary.dark', fontWeight: 500, mb: 2 }}>
         {gender}, {age}
-      </Subtitle>
-      <div css={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <IdLabel>Patient Hospital ID:</IdLabel>
-        <IdValue>
+      </Typography>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+        <Typography variant="caption" sx={{ color: 'grey.500' }}>
+          Patient Hospital ID:
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'primary.dark', fontWeight: 700 }}>
           {
             hospital_mappings.find((hospital) => hospital?.hospital_id === selectedHospital)
               ?.patient_hospital_id
           }
-        </IdValue>
-      </div>
-      <div css={{ display: 'flex', justifyContent: 'space-between' }}>
-        <IdLabel>National ID:</IdLabel>
-        <IdValue>{national_id}</IdValue>
-      </div>
-    </CardContainer>
+        </Typography>
+      </Box>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography variant="caption" sx={{ color: 'grey.500' }}>
+          National ID:
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'primary.dark', fontWeight: 700 }}>
+          {national_id}
+        </Typography>
+      </Box>
+    </Paper>
   );
 };
 
