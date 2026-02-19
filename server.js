@@ -24,7 +24,7 @@ app.use(express.static(path.join(path.resolve(), 'build')));
 
 // resolve all requests to the index.html file
 // eslint-disable-next-line
-app.get('*', function (req, res) {
+app.get(/.*/, function (req, res) {
   res.sendFile(path.join(path.resolve(), 'build/index.html'));
 });
 
