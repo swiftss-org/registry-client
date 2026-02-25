@@ -75,15 +75,87 @@ describe('Register Patient Page', () => {
 
             // Verify request
             cy.wait('@registerPatient').then((interception) => {
-                expect(interception.request.body).to.include({
-                    year_of_birth: 1990,
-                    gender: 'male'
+                expect(interception.request.body).to.deep.equal({
+                    address: '123 Main St',
+                    age: expectedAge,
+                    day_of_birth: 15,
+                    full_name: 'John D Doe',
+                    gender: 'male',
+                    hospital_id: 1,
+                    month_of_birth: 5,
+                    national_id: '123456789',
+                    patient_hospital_id: 'HOSP123',
+                    phone_1: '5550101',
+                    phone_2: '5550102',
+                    year_of_birth: 1990
                 });
             });
 
             // Verify redirection
             cy.url().should('include', '/patients');
             cy.url().should('not.include', '/register');
+        });
+    });
+
+    describe('Regression tests', () => {
+        it('should omit optional numbers in the payload and send no extraneous 0s', () => {
+            // Mock the Register API
+            cy.intercept('POST', '**/patients/', {
+                statusCode: 201,
+                body: { id: 124 }
+            }).as('registerPatientEmptyOptionals');
+
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+
+            cy.wait('@getHospitals');
+
+            // 1. Select Hospital
+            cy.selectMuiOption('#hospital', 'General Hospital');
+
+            // 2. Personal Details (No Middle Name)
+            cy.get('#first_name').type('Jane');
+            cy.get('#last_name').type('Smith');
+
+            // 3. Birth Date (Year only)
+            cy.get('#year_of_birth').type('1985');
+            cy.get('#year_of_birth').blur();
+
+            const currentYear = new Date().getFullYear();
+            const expectedAge = currentYear - 1985;
+            cy.get('#age').should('have.value', expectedAge.toString());
+
+            // 4. Other fields (No National ID)
+            cy.get('#patient_hospital_id').type('HOSP456');
+
+            // 5. Gender
+            cy.get('input[value="Female"]').check();
+
+            // 6. Contact Details (No Phone 2, No Address)
+            cy.get('#phone1').type('5559999');
+
+            // 7. Submit
+            cy.contains('button', 'Add new patient').click();
+
+            // Verify request contains no 0s where undefined is expected
+            cy.wait('@registerPatientEmptyOptionals').then((interception) => {
+                expect(interception.request.body).to.deep.equal({
+                    hospital_id: 1,
+                    full_name: 'Jane Smith',
+                    year_of_birth: 1985,
+                    age: expectedAge,
+                    patient_hospital_id: 'HOSP456',
+                    gender: 'female',
+                    phone_1: '5559999',
+                    address: '',
+                });
+            });
+
+            // Verify redirection
+            cy.url().should('include', '/patients');
         });
     });
 

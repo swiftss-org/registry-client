@@ -194,7 +194,7 @@ export const useRegisterPatient = () => {
         gender: params.gender,
         address: params.address,
         phone_1: params.phone1 ? String(params.phone1) : '',
-        phone_2: params.phone2 ? String(params.phone2) : '',
+        phone_2: params.phone2 ? String(params.phone2) : undefined,
       });
       return request();
     },
