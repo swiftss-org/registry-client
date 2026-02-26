@@ -49,7 +49,7 @@ const RegisterEpisode: React.FC = () => {
       createMapping({
         patient_id: parseInt(patientID ?? ''),
         hospital_id: form.hospital.value,
-        patient_hospital_id: form.patientHospitalId.toString(),
+        patient_hospital_id: form.patientHospitalId,
       }).then(() => registerEpisode(form));
     } else {
       registerEpisode(form);
@@ -119,10 +119,10 @@ const RegisterEpisode: React.FC = () => {
           subtitle="Are you sure you want to cancel registering an episode? All information you've entered will be lost!"
           buttonText="Yes, cancel new registration"
           onClick={() => {
-              const targetUrl = (hospitalID && patientID) ? urls.patientDetails(hospitalID, patientID) : urls.patients();
-              navigate(targetUrl);
-            }
-        }
+            const targetUrl = (hospitalID && patientID) ? urls.patientDetails(hospitalID, patientID) : urls.patients();
+            navigate(targetUrl);
+          }
+          }
         />
       )}
       <Box

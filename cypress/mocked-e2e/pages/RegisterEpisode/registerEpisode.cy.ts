@@ -119,7 +119,7 @@ describe('Register Episode Page', () => {
 
                 // Verify hospital mapping
                 expect(interception[1].request.body).to.include({
-                    patient_hospital_id: '234',
+                    patient_hospital_id: 234,
                     hospital_id: 1
                 });
             });

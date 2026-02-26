@@ -87,49 +87,56 @@ const FollowUps: FC<{
     }
   }, [followUp]);
 
-  const validate = (values: FollowUpFormState) => {
-    // Mapping back to the structure expected by validation utils (FollowUpForm)
-    const validationValues: FollowUpForm = {
-      date: values.date,
-      mesh_awareness:
-        values.mesh_awareness !== ''
-          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.mesh_awareness) as SelectOption)
-          : (undefined as unknown as SelectOption),
-      seroma:
-        values.seroma !== ''
-          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.seroma) as SelectOption)
-          : (undefined as unknown as SelectOption),
-      infection:
-        values.infection !== ''
-          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.infection) as SelectOption)
-          : (undefined as unknown as SelectOption),
-      numbness:
-        values.numbness !== ''
-          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.numbness) as SelectOption)
-          : (undefined as unknown as SelectOption),
-      recurrence:
-        values.recurrence !== ''
-          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.recurrence) as SelectOption)
-          : (undefined as unknown as SelectOption),
-      further_surgery_need:
-        values.further_surgery_need !== ''
-          ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.further_surgery_need) as SelectOption)
-          : (undefined as unknown as SelectOption),
-      pain_severity: FOLLOW_UP_PAIN_OPTIONS.find((o: SelectOption) => o.label === values.pain_severity) as SelectOption,
-      surgery_comments_box: values.surgery_comments_box,
-      attendees: values.attendees.map((id) => {
-        const option = surgeonOptions.find((o: SelectOption) => o.value === id);
-        return { label: option?.label || '', value: id };
-      }),
-    };
+  const validate = React.useCallback(
+    (values: FollowUpFormState) => {
+      // Mapping back to the structure expected by validation utils (FollowUpForm)
+      const validationValues: FollowUpForm = {
+        date: values.date,
+        mesh_awareness:
+          values.mesh_awareness !== ''
+            ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.mesh_awareness) as SelectOption)
+            : (undefined as unknown as SelectOption),
+        seroma:
+          values.seroma !== ''
+            ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.seroma) as SelectOption)
+            : (undefined as unknown as SelectOption),
+        infection:
+          values.infection !== ''
+            ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.infection) as SelectOption)
+            : (undefined as unknown as SelectOption),
+        numbness:
+          values.numbness !== ''
+            ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.numbness) as SelectOption)
+            : (undefined as unknown as SelectOption),
+        recurrence:
+          values.recurrence !== ''
+            ? (BOOLEAN_OPTIONS.find((o: SelectOption) => o.value === values.recurrence) as SelectOption)
+            : (undefined as unknown as SelectOption),
+        further_surgery_need:
+          values.further_surgery_need !== ''
+            ? (BOOLEAN_OPTIONS.find(
+              (o: SelectOption) => o.value === values.further_surgery_need
+            ) as SelectOption)
+            : (undefined as unknown as SelectOption),
+        pain_severity: FOLLOW_UP_PAIN_OPTIONS.find(
+          (o: SelectOption) => o.label === values.pain_severity
+        ) as SelectOption,
+        surgery_comments_box: values.surgery_comments_box,
+        attendees: values.attendees.map((id) => {
+          const option = surgeonOptions.find((o: SelectOption) => o.value === id);
+          return { label: option?.label || '', value: id };
+        }),
+      };
 
-    return followUpFormValidation(validationValues);
-  };
+      return followUpFormValidation(validationValues);
+    },
+    [surgeonOptions]
+  );
 
   useEffect(() => {
     const validationErrors = validate(formState);
     setErrors(validationErrors || {});
-  }, [formState]);
+  }, [formState, validate]);
 
   const handleChange = (field: keyof FollowUpFormState, value: string | number) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
