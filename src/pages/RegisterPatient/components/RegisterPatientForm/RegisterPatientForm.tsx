@@ -98,8 +98,8 @@ const RegisterPatientForm: React.FC<Props> = ({
             onSubmit({
                 ...values,
                 hospital: { value: Number(values.hospital), label: '' },
-                patientHospitalId: values.patientHospitalId,
-                nationalId: values.nationalId ? values.nationalId : undefined,
+                patientHospitalId: Number(values.patientHospitalId),
+                nationalId: values.nationalId ? Number(values.nationalId) : undefined,
                 yearOfBirth: Number(values.yearOfBirth),
                 monthOfBirth: values.monthOfBirth ? Number(values.monthOfBirth) : undefined,
                 dayOfBirth: values.dayOfBirth ? Number(values.dayOfBirth) : undefined,
@@ -261,6 +261,7 @@ const RegisterPatientForm: React.FC<Props> = ({
                                 id="national_id"
                                 label="National ID"
                                 name="nationalId"
+                                type="number"
                                 value={values.nationalId}
                                 onChange={handleChange}
                                 fullWidth
@@ -271,6 +272,7 @@ const RegisterPatientForm: React.FC<Props> = ({
                                 id="patient_hospital_id"
                                 label="Patient Hospital ID"
                                 name="patientHospitalId"
+                                type="number"
                                 value={values.patientHospitalId}
                                 onChange={handleChange}
                                 onBlur={handleBlur}

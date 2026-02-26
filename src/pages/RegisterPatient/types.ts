@@ -5,8 +5,8 @@ export type RegisterPatientFormType = {
   firstName: string;
   middleName: string;
   lastName: string;
-  patientHospitalId: string;
-  nationalId?: string;
+  patientHospitalId: number;
+  nationalId?: number;
   yearOfBirth: number;
   monthOfBirth?: number;
   dayOfBirth?: number;
