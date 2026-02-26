@@ -98,16 +98,16 @@ const RegisterPatientForm: React.FC<Props> = ({
             onSubmit({
                 ...values,
                 hospital: { value: Number(values.hospital), label: '' },
-                patientHospitalId: Number(values.patientHospitalId),
-                nationalId: Number(values.nationalId),
+                patientHospitalId: values.patientHospitalId,
+                nationalId: values.nationalId ? values.nationalId : undefined,
                 yearOfBirth: Number(values.yearOfBirth),
-                monthOfBirth: Number(values.monthOfBirth),
-                dayOfBirth: Number(values.dayOfBirth),
+                monthOfBirth: values.monthOfBirth ? Number(values.monthOfBirth) : undefined,
+                dayOfBirth: values.dayOfBirth ? Number(values.dayOfBirth) : undefined,
                 age: values.yearOfBirth
                     ? new Date().getFullYear() - Number(values.yearOfBirth)
                     : 0,
                 phone1: Number(values.phone1),
-                phone2: Number(values.phone2),
+                phone2: values.phone2 ? Number(values.phone2) : undefined,
                 gender: values.gender.toLowerCase() as 'male' | 'female',
             } as RegisterPatientFormType);
         } else {
@@ -261,7 +261,6 @@ const RegisterPatientForm: React.FC<Props> = ({
                                 id="national_id"
                                 label="National ID"
                                 name="nationalId"
-                                type="number"
                                 value={values.nationalId}
                                 onChange={handleChange}
                                 fullWidth
@@ -272,7 +271,6 @@ const RegisterPatientForm: React.FC<Props> = ({
                                 id="patient_hospital_id"
                                 label="Patient Hospital ID"
                                 name="patientHospitalId"
-                                type="number"
                                 value={values.patientHospitalId}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
