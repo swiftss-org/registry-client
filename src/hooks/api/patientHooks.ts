@@ -162,7 +162,9 @@ export const useGetPatient = (id: string) => {
 };
 
 export const useCreateHospitalMapping = () => {
-  return useMutation<PatientAPI, AxiosError, HospitalMappingPayload>({
+  const setNotification = useSetNotification();
+
+  return useMutation<PatientAPI, Record<string, string[] | string>, HospitalMappingPayload>({
     mutationFn: async ({ patient_id, hospital_id, patient_hospital_id }) => {
       const { request } = patientsAPI.single.createHospitalMapping({
         patient_hospital_id,
@@ -170,6 +172,12 @@ export const useCreateHospitalMapping = () => {
         hospital_id,
       });
       return await request();
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0 ? errorMessages.join(' ') : 'Failed to create hospital mapping.';
+      setNotification(errorMessage, 'error');
     },
   });
 };
@@ -306,7 +314,7 @@ export const useDischarge = (episodeID: string) => {
   const setNotification = useSetNotification();
   const { hospitalID, patientID } = useParams<{ hospitalID: string; patientID: string }>();
 
-  return useMutation<DischargeAPI, AxiosError, DischargeForm>({
+  return useMutation<DischargeAPI, Record<string, string[] | string>, DischargeForm>({
     mutationFn: (params) => {
       const payload = {
         episode_id: parseInt(episodeID),
@@ -329,6 +337,14 @@ export const useDischarge = (episodeID: string) => {
         window.location.reload();
       }
     },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save discharge.';
+      setNotification(errorMessage, 'error');
+    },
   });
 };
 
@@ -336,7 +352,7 @@ export const useFollowUp = (episodeID: string) => {
   const queryClient = useQueryClient();
   const setNotification = useSetNotification();
 
-  return useMutation<FollowUpPayload, AxiosError, FollowUpForm>({
+  return useMutation<FollowUpPayload, Record<string, string[] | string>, FollowUpForm>({
     mutationFn: (params) => {
       const payload = {
         episode_id: parseInt(episodeID),
@@ -363,6 +379,14 @@ export const useFollowUp = (episodeID: string) => {
     onSuccess: () => {
       setNotification('Follow up has been successfully saved', 'success');
       queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.EpisodesQuery, episodeID, 'follow-up'] });
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save follow up.';
+      setNotification(errorMessage, 'error');
     },
   });
 };

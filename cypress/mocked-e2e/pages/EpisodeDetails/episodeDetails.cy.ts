@@ -764,6 +764,48 @@ describe('Episode Details Page', () => {
             cy.get('#antibiotic_type').should('have.text', '—');
             cy.get('#surgeon_0').should('not.exist');
         });
+    });
+
+    describe('Error Handling', () => {
+        beforeEach(() => {
+            cy.window().then((win) => {
+                win.localStorage.setItem('token-registry', 'fake-token');
+            });
+
+            cy.intercept('GET', `**/episodes/${episodeId}/`, {
+                statusCode: 200,
+                body: {
+                    id: 888,
+                    episode_type: 'Primary Inguinal',
+                    surgery_date: '2023-01-15',
+                    surgeons: [],
+                    diathermy_used: false,
+                    antibiotic_used: false,
+                }
+            }).as('getEpisode');
+
+            cy.intercept('GET', `**/medical-personnel/**`, {
+                statusCode: 200,
+                body: {
+                    results: [
+                        { id: 1, user: { first_name: 'John', last_name: 'Doe' }, level: 'Consultant' },
+                    ]
+                }
+            }).as('getMedicalPersonnel');
+
+            cy.intercept('GET', `**/episodes/${episodeId}/discharge/`, {
+                statusCode: 200,
+                body: {}
+            }).as('getDischargeEmpty');
+
+            cy.intercept('GET', `**/episodes/${episodeId}/follow-ups/`, {
+                statusCode: 200,
+                body: []
+            }).as('getFollowUpsEmpty');
+
+            cy.visit(`/patients/1/101/episodes/${episodeId}`);
+            cy.wait(['@getEpisode', '@getDischargeEmpty', '@getFollowUpsEmpty']);
+        });
 
         it('should handle API errors gracefully', () => {
             cy.intercept('GET', `**/episodes/${episodeId}/`, {
@@ -781,6 +823,48 @@ describe('Episode Details Page', () => {
             cy.get('main > div > div > button').click();
             cy.url().should('include', '/patients/1/101');
             cy.url().should('not.include', '/episodes/888');
+        });
+
+        it('should show error notification when Discharge fails with 500', () => {
+            cy.intercept('POST', '**/discharges/', {
+                statusCode: 500,
+                body: { detail: 'Internal Server Error' }
+            }).as('addDischargeError');
+
+            cy.contains('Add Discharge').click();
+            cy.get('#discharge_date').type('2023-01-16');
+            cy.selectMuiOption('#aware_of_mesh-select', 'No');
+            cy.get('#infection-none').check();
+            cy.contains('button', 'Save Discharge').click();
+
+            cy.wait('@addDischargeError');
+            cy.contains('[data-testid="notification-alert"]', 'Internal Server Error').should('be.visible');
+        });
+
+        it('should show error notification when Follow Up fails with 400 validation error', () => {
+            cy.intercept('POST', '**/follow-ups/', {
+                statusCode: 400,
+                body: {
+                    date: ['Invalid date format'],
+                    pain_severity: ['Severity is required']
+                }
+            }).as('addFollowUpError');
+
+            cy.contains('Add Follow Up').click();
+            cy.get('#follow-up-date').type('2023-02-15');
+            cy.contains('Add Surgeon').click();
+            cy.selectMuiOption('#surgeon-0', 'John Doe');
+            cy.selectMuiOption('#pain_severity-select', 'No Pain');
+            cy.selectMuiOption('#mesh_awareness-select', 'Yes');
+            cy.selectMuiOption('#seroma-select', 'Yes');
+            cy.selectMuiOption('#infection-select', 'Yes');
+            cy.selectMuiOption('#numbness-select', 'Yes');
+            cy.selectMuiOption('#recurrence-select', 'Yes');
+            cy.selectMuiOption('#further_surgery_need-select', 'Yes');
+            cy.get('button').contains('Save Follow Up').click();
+
+            cy.wait('@addFollowUpError');
+            cy.contains('[data-testid="notification-alert"]', 'Invalid date format Severity is required').should('be.visible');
         });
     });
 });
