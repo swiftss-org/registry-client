@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ReactQueryKeys } from 'hooks/constants';
+import { useSetNotification } from 'hooks/useSetNotification';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
@@ -161,7 +162,9 @@ export const useGetPatient = (id: string) => {
 };
 
 export const useCreateHospitalMapping = () => {
-  return useMutation<PatientAPI, AxiosError, HospitalMappingPayload>({
+  const setNotification = useSetNotification();
+
+  return useMutation<PatientAPI, Record<string, string[] | string>, HospitalMappingPayload>({
     mutationFn: async ({ patient_id, hospital_id, patient_hospital_id }) => {
       const { request } = patientsAPI.single.createHospitalMapping({
         patient_hospital_id,
@@ -170,15 +173,22 @@ export const useCreateHospitalMapping = () => {
       });
       return await request();
     },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0 ? errorMessages.join(' ') : 'Failed to create hospital mapping.';
+      setNotification(errorMessage, 'error');
+    },
   });
 };
 
 export const useRegisterPatient = () => {
   const navigate = useNavigate();
+  const setNotification = useSetNotification();
 
   return useMutation<
     RegisterPatientPayload,
-    AxiosError,
+    Record<string, string[] | string>,
     RegisterPatientFormType
   >({
     mutationFn: (params) => {
@@ -199,7 +209,16 @@ export const useRegisterPatient = () => {
       return request();
     },
     onSuccess: () => {
+      setNotification('Patient has been successfully saved', 'success');
       navigate(urls.patients(), { replace: true });
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save patient.';
+      setNotification(errorMessage, 'error');
     },
   });
 };
@@ -209,10 +228,11 @@ export const useRegisterEpisode = (
   patientID?: string,
 ) => {
   const navigate = useNavigate();
+  const setNotification = useSetNotification();
 
   return useMutation<
     RegisterEpisodePayload,
-    AxiosError,
+    Record<string, string[] | string>,
     RegisterEpisodeFormType
   >({
     mutationFn: (params) => {
@@ -225,7 +245,7 @@ export const useRegisterEpisode = (
         antibiotic_type: params?.antibioticType,
         surgeon_ids:
           params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
-        comments: params?.comments,
+        ...(params?.comments?.trim() ? { comments: params.comments.trim() } : {}),
         mesh_type: params?.meshType?.label,
         episode_type: params?.episodeType.label,
         type: params.type?.label,
@@ -242,7 +262,16 @@ export const useRegisterEpisode = (
       return request();
     },
     onSuccess: () => {
+      setNotification('Episode has been successfully saved', 'success');
       navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save episode.';
+      setNotification(errorMessage, 'error');
     },
   });
 };
@@ -282,16 +311,17 @@ export const useGetEpisodeFollowUps = (id: string) => {
 
 export const useDischarge = (episodeID: string) => {
   const navigate = useNavigate();
+  const setNotification = useSetNotification();
   const { hospitalID, patientID } = useParams<{ hospitalID: string; patientID: string }>();
 
-  return useMutation<DischargeAPI, AxiosError, DischargeForm>({
+  return useMutation<DischargeAPI, Record<string, string[] | string>, DischargeForm>({
     mutationFn: (params) => {
       const payload = {
         episode_id: parseInt(episodeID),
         date: params?.date,
         discharge_duration: params?.discharge_duration,
         aware_of_mesh: params?.aware_of_mesh.label === 'Yes',
-        comments: params?.comments,
+        ...(params?.comments?.trim() ? { comments: params.comments.trim() } : {}),
         infection: params?.infection || '',
       };
 
@@ -300,17 +330,29 @@ export const useDischarge = (episodeID: string) => {
       return request();
     },
     onSuccess: () => {
+      setNotification('Discharge has been successfully saved', 'success');
       if (hospitalID && patientID) {
         navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
       } else {
         window.location.reload();
       }
     },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save discharge.';
+      setNotification(errorMessage, 'error');
+    },
   });
 };
 
 export const useFollowUp = (episodeID: string) => {
-  return useMutation<FollowUpPayload, AxiosError, FollowUpForm>({
+  const queryClient = useQueryClient();
+  const setNotification = useSetNotification();
+
+  return useMutation<FollowUpPayload, Record<string, string[] | string>, FollowUpForm>({
     mutationFn: (params) => {
       const payload = {
         episode_id: parseInt(episodeID),
@@ -325,7 +367,9 @@ export const useFollowUp = (episodeID: string) => {
         pain_severity: params?.pain_severity.label,
         further_surgery_need:
           params?.further_surgery_need.label === 'Yes',
-        surgery_comments_box: params?.surgery_comments_box,
+        ...(params?.surgery_comments_box?.trim()
+          ? { surgery_comments_box: params.surgery_comments_box.trim() }
+          : {}),
       };
 
       const { request } = patientsAPI.single.followUpPatient(payload);
@@ -333,7 +377,16 @@ export const useFollowUp = (episodeID: string) => {
       return request();
     },
     onSuccess: () => {
-      window.location.reload();
+      setNotification('Follow up has been successfully saved', 'success');
+      queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.EpisodesQuery, episodeID, 'follow-up'] });
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save follow up.';
+      setNotification(errorMessage, 'error');
     },
   });
 };

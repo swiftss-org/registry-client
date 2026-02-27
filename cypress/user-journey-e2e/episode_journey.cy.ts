@@ -93,7 +93,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(patientName).should('be.visible');
 
         // 4. Register new episode
-        cy.contains('button', 'Register new episode').click();
+        cy.contains('button', 'Add episode').click();
         cy.url().should('include', '/add-episode');
 
         // Fill Episode Form
@@ -125,13 +125,16 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#comments').type(episodeData.comments);
 
         // Submit Episode
-        cy.contains('button', 'Register an Episode').click();
+        cy.contains('button', 'Save Episode').click();
 
         // Wait for creation
         cy.wait('@createEpisode').its('response.statusCode').should('eq', 201);
 
         // 5. Verify the new episode on the Episode details page
         cy.url().should('match', /patients\/1\/1\?tab=episodes$/, { timeout: 10000 });
+
+        // Verify notification
+        cy.contains('[data-testid="notification-alert"]', 'Episode has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details (usually by date or type)
         cy.contains(episodeData.date).click();
@@ -159,21 +162,24 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(episodeData.comments).should('exist');
 
         // 6. Add a new Discharge
-        cy.contains('button', 'Add New Discharge').click();
+        cy.contains('button', 'Add Discharge').click();
 
         // Fill Discharge Form (often a modal or inline form)
         cy.get('#discharge_date').type(dischargeData.date);
         cy.selectMuiOption('#aware_of_mesh-select', dischargeData.awareOfMesh);
-        cy.get('#discharge_duration').type(dischargeData.discharge_duration)
+        cy.get('#discharge_duration').type(dischargeData.discharge_duration.toString())
         cy.contains('Bleeding').click();
         cy.contains('Urinary Retention').click();
         cy.get('#comments').type(dischargeData.comments);
 
         // Submit Discharge
-        cy.contains('button', 'Save changes').click();
+        cy.contains('button', 'Save Discharge').click();
 
         // Wait for request
         cy.wait('@createDischarge').its('response.statusCode').should('eq', 201);
+
+        // Verify notification
+        cy.contains('[data-testid="notification-alert"]', 'Discharge has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
         cy.wait(1000);
@@ -188,7 +194,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(dischargeData.infection).should('exist');
 
         // 8. Add a new Follow Up
-        cy.contains('button', 'Add New Follow Up').click();
+        cy.contains('button', 'Add Follow Up').click();
 
         // Fill Follow Up Form
         cy.get('#follow-up-date').type(followUpData.date);
@@ -208,10 +214,13 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#surgery_comments_box').type(followUpData.comments);
 
         // Submit Follow Up
-        cy.contains('button', 'Save changes').click();
+        cy.contains('button', 'Save Follow Up').click();
 
         // Wait for request
         cy.wait('@createFollowUp').its('response.statusCode').should('eq', 201);
+
+        // Verify notification
+        cy.contains('[data-testid="notification-alert"]', 'Follow up has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
         cy.wait(1000);
@@ -223,5 +232,120 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(followUpData.date).should('be.visible');
         cy.contains(followUpData.painSeverity).should('be.visible');
         cy.contains(followUpData.comments).should('exist');
+    });
+
+    it('should register a MINIMAL episode, discharge, and follow-up and verify them in the episode details', () => {
+        const minEpisodeDate = '2026-02-24';
+        const minDischargeDate = '2026-02-25';
+        const minFollowUpDate = '2026-02-26';
+
+        // Intercept requests for stability
+        cy.intercept('POST', '**/episodes/').as('createEpisode');
+        cy.intercept('POST', '**/discharges/').as('createDischarge');
+        cy.intercept('POST', '**/follow-ups/').as('createFollowUp');
+
+        // Setup dynamic surgeon account
+        const surgeonEmail = `surgeon_min_${timestamp}@hospital.com`;
+        const surgeonPassword = 'SurgeonPassword123!';
+
+        cy.task('db:createUser', {
+            username: surgeonEmail,
+            password: surgeonPassword,
+            firstName: 'Min',
+            lastName: 'Surgeon',
+            hospitalId: hospitalId,
+            isStaff: false,
+            isActive: true,
+            medicalPersonnelLevel: 'LEAD_SURGEON'
+        });
+
+        // Login
+        cy.visit('/login', {
+            onBeforeLoad(win) {
+                win.localStorage.clear();
+                win.sessionStorage.clear();
+            },
+        });
+
+        cy.get('#username').should('be.visible').type(surgeonEmail);
+        cy.get('#password').type(surgeonPassword);
+        cy.get('button[type="submit"]').click();
+        cy.url().should('include', '/landing', { timeout: 15000 });
+
+        // Navigate to the existing patient's details
+        cy.visit(`/patients/${hospitalId}/${patientId}`);
+        cy.contains(patientName).should('be.visible');
+
+        // Register new episode (MINIMAL)
+        cy.contains('button', 'Add episode').click();
+        cy.url().should('include', '/add-episode');
+
+        // Fill ONLY Required Episode Fields
+        cy.get('input[type="date"]').type(minEpisodeDate);
+
+        // Use General Hospital to trigger mapping creation (matching the working test pattern)
+        // cy.selectMuiOption('#hospital', 'General Hospital');
+        // cy.get('#patient_hospital_id').should('be.visible').type(`${timestamp}`);
+
+        cy.selectMuiOption('#episode_type', 'Inguinal Mesh Hernia Repair');
+        cy.selectMuiOption('#cepod', 'Planned');
+        cy.selectMuiOption('#side', 'Left');
+        cy.selectMuiOption('#occurence', 'Primary');
+        cy.selectMuiOption('#type', 'Direct');
+        cy.selectMuiOption('#size', 'Medium');
+        cy.selectMuiOption('#complexity', 'Simple');
+        cy.selectMuiOption('#mesh_type', 'TNMHP');
+        cy.selectMuiOption('#anaesthetic_type', 'Local Anaesthetic');
+        cy.selectMuiOption('#diathermy_used', 'No');
+        cy.selectMuiOption('#antibiotic_used', 'No');
+
+        cy.selectMuiOption('#surgeon-selector-0', 'Min Surgeon');
+
+        // Submit Episode
+        cy.contains('button', 'Save Episode').should('not.be.disabled').click();
+        cy.wait('@createEpisode').its('response.statusCode').should('eq', 201);
+
+        // Add a new Discharge (MINIMAL)
+        cy.contains(minEpisodeDate).click();
+        cy.contains('button', 'Add Discharge').click();
+
+        cy.get('#discharge_date').type(minDischargeDate);
+        cy.selectMuiOption('#aware_of_mesh-select', 'No');
+        cy.contains('None').click();
+
+        // Submit Discharge
+        cy.contains('button', 'Save Discharge').should('not.be.disabled').click();
+        cy.wait('@createDischarge').its('response.statusCode').should('eq', 201);
+
+        // Add a new Follow Up (MINIMAL)
+        cy.wait(1000);
+        cy.contains(minEpisodeDate).click();
+        cy.contains('button', 'Add Follow Up').click();
+
+        cy.get('#follow-up-date').type(minFollowUpDate);
+        cy.contains('Add Surgeon').click();
+        cy.selectMuiOption('#surgeon-0', 'Min Surgeon');
+
+        cy.selectMuiOption('#pain_severity-select', 'Minimal');
+        cy.selectMuiOption('#mesh_awareness-select', 'Yes');
+        cy.selectMuiOption('#seroma-select', 'No');
+        cy.selectMuiOption('#infection-select', 'No');
+        cy.selectMuiOption('#numbness-select', 'No');
+        cy.selectMuiOption('#recurrence-select', 'No');
+        cy.selectMuiOption('#further_surgery_need-select', 'No');
+
+        // Submit Follow Up
+        cy.contains('button', 'Save Follow Up').should('not.be.disabled').click();
+        cy.wait('@createFollowUp').its('response.statusCode').should('eq', 201);
+
+        // Verify minimal details
+        cy.wait(1000);
+        cy.contains(minEpisodeDate).click();
+        cy.get('[data-testid="surgery-summary"]').click();
+        cy.contains('Min Surgeon').should('exist');
+        cy.get('[data-testid="discharge-summary"]').click();
+        cy.contains(minDischargeDate).should('be.visible');
+        cy.get('[data-testid="follow-up-summary-0"]').click();
+        cy.contains(minFollowUpDate).should('be.visible');
     });
 });

@@ -477,7 +477,7 @@ const FollowUps: FC<{
           fullWidth
           size="medium"
         >
-          Save changes
+          Save Follow Up
         </Button>
       </Stack >
     </Box >

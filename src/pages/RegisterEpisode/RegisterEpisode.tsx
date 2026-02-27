@@ -4,6 +4,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Container, IconButton, Paper, Typography } from '@mui/material';
 import ConfirmationModal from 'components/ConfirmationModal';
+import Notifications from 'components/Notifications';
 import {
   useCreateHospitalMapping,
   useGetHospital,
@@ -71,6 +72,7 @@ const RegisterEpisode: React.FC = () => {
         flexDirection: 'column'
       }}
     >
+      <Notifications />
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
         <IconButton
           data-testid="back-button"
@@ -156,7 +158,7 @@ const RegisterEpisode: React.FC = () => {
             boxShadow: isDesktop ? 3 : 'none',
           }}
         >
-          Register an Episode
+          Save Episode
         </Button>
       </Box>
     </Container>

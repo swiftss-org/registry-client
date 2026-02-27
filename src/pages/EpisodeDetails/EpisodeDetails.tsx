@@ -28,6 +28,7 @@ import DischargeReadOnly from './components/DischargeReadOnly';
 import FollowUpReadOnly from './components/FollowUpReadOnly';
 import FollowUps from './components/FollowUps';
 import SurgeryReadOnly from './components/SurgeryReadOnly';
+import Notifications from '../../components/Notifications';
 
 const EpisodeDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
@@ -62,6 +63,7 @@ const EpisodeDetails: React.FC = () => {
         flexDirection: 'column',
       }}
     >
+      <Notifications />
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
         <IconButton
           edge="start"
@@ -123,7 +125,7 @@ const EpisodeDetails: React.FC = () => {
             <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="discharge-summary">
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography fontWeight={600}>
-                  {discharge?.infection !== undefined ? `Discharge - ${discharge.date}` : 'Add New Discharge'}
+                  {discharge?.infection !== undefined ? `Discharge - ${discharge.date}` : 'Add Discharge'}
                 </Typography>
                 {discharge?.infection !== undefined && (
                   <CheckCircleIcon color="success" fontSize="small" data-testid="discharge-check-icon" />
@@ -169,7 +171,7 @@ const EpisodeDetails: React.FC = () => {
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography fontWeight={600}>Add New Follow Up</Typography>
+                <Typography fontWeight={600}>Add Follow Up</Typography>
               </Box>
             </AccordionSummary>
             <AccordionDetails>

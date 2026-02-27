@@ -87,7 +87,7 @@ describe('Register Episode Page', () => {
             cy.contains('Successfull surgery').should('be.visible');
 
             // Submit
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.wait(['@registerEpisode', '@registerPatientHospitalMapping']).then((interception) => {
                 // Verify all episode fields
@@ -127,6 +127,9 @@ describe('Register Episode Page', () => {
             // Redirect check
             cy.url().should('include', '/patients/1/101');
             cy.contains('button[role="tab"]', 'Episodes').should('have.attr', 'aria-selected', 'true');
+
+            // Verify notification
+            cy.contains('[data-testid="notification-alert"]', 'Episode has been successfully saved').should('be.visible');
         });
 
         it('should pre-select the hospital of the patient', () => {
@@ -237,7 +240,7 @@ describe('Register Episode Page', () => {
             cy.get('body').click();
             cy.get('.MuiPopover-root').should('not.exist');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.contains('Surgeon field is required').should('exist');
         });
@@ -245,7 +248,7 @@ describe('Register Episode Page', () => {
         it('should validate all field before submitting the form', () => {
             cy.selectMuiOption('#hospital', 'General Hospital');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.contains('Patient Hospital ID field is required').should('exist');
             cy.contains('Episode Type field is required').should('exist');
@@ -307,13 +310,47 @@ describe('Register Episode Page', () => {
             cy.selectMuiOption('#surgeon-selector-0', 'Dr. Surgeon');
             cy.get('#comments').type('Successfull surgery');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.wait('@registerEpisodeError');
 
-            // Should stay on the same page and potentially show error message
+            // Should stay on the same page and show error message
             cy.url().should('include', '/add-episode');
-            // TODO when error handling is better cy.contains('Error message.').should('exist');
+            cy.contains('[data-testid="notification-alert"]', 'Internal Server Error').should('be.visible');
+        });
+
+        it('should handle field-specific server errors correctly', () => {
+            // Mock field errors
+            cy.intercept('POST', '**/episodes/', {
+                statusCode: 400,
+                body: {
+                    surgery_date: ['Date must be valid'],
+                    anaesthetic_type: ['Type must be set']
+                }
+            }).as('registerEpisodeFieldErrors');
+
+            // Fill all required fields
+            cy.selectMuiOption('#episode_type', 'Femoral Mesh Hernia Repair');
+            cy.get('#surgery_date').type('2023-11-20');
+            cy.selectMuiOption('#cepod', 'Emergency');
+            cy.selectMuiOption('#side', 'Right');
+            cy.selectMuiOption('#occurence', 'Recurrent');
+            cy.selectMuiOption('#type', 'Indirect');
+            cy.selectMuiOption('#size', 'Very Large (>4 finger breadths)');
+            cy.selectMuiOption('#complexity', 'Irreducible');
+            cy.selectMuiOption('#mesh_type', 'TNMHP Mesh');
+            cy.selectMuiOption('#anaesthetic_type', 'Local Anaesthetic');
+            cy.selectMuiOption('#diathermy_used', 'Yes');
+            cy.selectMuiOption('#antibiotic_used', 'No');
+            cy.selectMuiOption('#surgeon-selector-0', 'Dr. Surgeon');
+            cy.get('#comments').type('Surgery with errors');
+
+            cy.contains('button', 'Save Episode').click();
+
+            cy.wait('@registerEpisodeFieldErrors');
+
+            // Verify notification contains both error messages
+            cy.contains('[data-testid="notification-alert"]', 'Date must be valid Type must be set').should('be.visible');
         });
 
         it('should handle special characters in comments', () => {
@@ -338,7 +375,7 @@ describe('Register Episode Page', () => {
             // Enter comments with special characters
             cy.get('#comments').type('Patient had: <script>alert("test")</script> & "quoted" text');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.wait('@registerEpisode').then((interception) => {
                 expect(interception.request.body.comments).to.equal('Patient had: <script>alert("test")</script> & "quoted" text');
