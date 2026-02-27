@@ -105,7 +105,7 @@ const RegisterPatient: React.FC = () => {
             boxShadow: isDesktop ? 3 : 'none',
           }}
         >
-          Add new patient
+          Save patient
         </Button>
       </Box>
     </Container>

@@ -413,8 +413,8 @@ describe('Episode Details Page', () => {
                 cy.visit(`/patients/1/101/episodes/${episodeId}`);
                 cy.wait(['@getEpisode', '@getDischargeEmpty', '@getFollowUpsEmpty', '@getMedicalPersonnel']);
 
-                // Expand Add New Discharge
-                cy.contains('Add New Discharge').click();
+                // Expand Add Discharge
+                cy.contains('Add Discharge').click();
 
                 // Fill form
                 cy.get('#discharge_date').type('2023-01-16');
@@ -424,7 +424,7 @@ describe('Episode Details Page', () => {
                 cy.get('#comments').type('Discharged with no issues');
 
                 // Submit
-                cy.contains('button', 'Save changes').click();
+                cy.contains('button', 'Save Discharge').click();
 
                 cy.wait('@addDischarge').then((interception) => {
                     expect(interception.request.body).to.include({
@@ -463,7 +463,7 @@ describe('Episode Details Page', () => {
                 cy.wait(['@getEpisode', '@getDischarge', '@getFollowUpsEmpty', '@getMedicalPersonnel']);
 
                 // Expand Add New Follow Up
-                cy.contains('Add New Follow Up').click();
+                cy.contains('Add Follow Up').click();
 
                 // Fill form
                 cy.get('#follow-up-date').type('2023-02-15');
@@ -483,7 +483,7 @@ describe('Episode Details Page', () => {
                 cy.get('#surgery_comments_box').type('Everything looks good');
 
                 // Submit
-                cy.get('button').contains('Save changes').click();
+                cy.get('button').contains('Save Follow Up').click();
 
                 cy.wait('@addFollowUp').then((interception) => {
                     expect(interception.request.body).to.deep.include({
@@ -547,7 +547,7 @@ describe('Episode Details Page', () => {
 
         describe('Discharge', () => {
             beforeEach(() => {
-                cy.contains('Add New Discharge').click();
+                cy.contains('Add Discharge').click();
             });
 
             it('should validate Discharge Date is required', () => {
@@ -568,7 +568,7 @@ describe('Episode Details Page', () => {
 
             it('should validate Post-operative complications are required', () => {
                 // Blur does not work for checkboxes in the same way, so we click Save to trigger validation
-                cy.contains('button', 'Save changes').click();
+                cy.contains('button', 'Save Discharge').click();
                 cy.contains("Please record the post-operative complication above. If there wasn't any then select the option 'None'").should('exist');
             });
 
@@ -582,7 +582,7 @@ describe('Episode Details Page', () => {
             });
 
             it('should validate an empty Discharge form', () => {
-                cy.contains('button', 'Save changes').click();
+                cy.contains('button', 'Save Discharge').click();
                 cy.contains('Discharge date is required. Please select a date.').should('exist');
                 cy.contains('Antibiotics given on discharge is required.').should('exist');
                 cy.contains("Please record the post-operative complication above. If there wasn't any then select the option 'None'").should('exist');
@@ -591,7 +591,7 @@ describe('Episode Details Page', () => {
 
         describe('Follow-up', () => {
             beforeEach(() => {
-                cy.contains('Add New Follow Up').click();
+                cy.contains('Add Follow Up').click();
                 cy.wait('@getMedicalPersonnel');
             });
 
@@ -601,8 +601,8 @@ describe('Episode Details Page', () => {
             });
 
             it('should validate Surgeon is required', () => {
-                cy.contains('Add New Follow Up').parents('.MuiAccordion-root').within(() => {
-                    cy.contains('button', 'Save changes').click();
+                cy.contains('Add Follow Up').parents('.MuiAccordion-root').within(() => {
+                    cy.contains('button', 'Save Follow Up').click();
                 });
                 cy.contains('Surgeon is required.').should('exist');
             });
@@ -652,8 +652,8 @@ describe('Episode Details Page', () => {
             });
 
             it('should validate an empty Follow-up form', () => {
-                cy.contains('Add New Follow Up').parents('.MuiAccordion-root').within(() => {
-                    cy.contains('button', 'Save changes').click();
+                cy.contains('Add Follow Up').parents('.MuiAccordion-root').within(() => {
+                    cy.contains('button', 'Save Follow Up').click();
 
                     cy.contains('Follow up date is required. Please select a date.').should('exist');
                     cy.contains('Surgeon is required.').should('exist');

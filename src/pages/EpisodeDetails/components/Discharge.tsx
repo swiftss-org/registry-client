@@ -280,7 +280,7 @@ const Discharge: FC<{
           fullWidth
           size="medium"
         >
-          Save changes
+          Save Discharge
         </Button>
       </Stack >
     </Box >

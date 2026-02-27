@@ -76,7 +76,7 @@ describe('Patient Journey (Real DB)', () => {
     cy.get('#address').type(testPatient.address);
 
     // 4. Submit
-    cy.contains('button', 'Add new patient').click();
+    cy.contains('button', 'Save patient').click();
 
 
     // 6. Verify redirection to Patient Directory

@@ -93,7 +93,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(patientName).should('be.visible');
 
         // 4. Register new episode
-        cy.contains('button', 'Register new episode').click();
+        cy.contains('button', 'Add episode').click();
         cy.url().should('include', '/add-episode');
 
         // Fill Episode Form
@@ -125,7 +125,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#comments').type(episodeData.comments);
 
         // Submit Episode
-        cy.contains('button', 'Register an Episode').click();
+        cy.contains('button', 'Save Episode').click();
 
         // Wait for creation
         cy.wait('@createEpisode').its('response.statusCode').should('eq', 201);
@@ -162,7 +162,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(episodeData.comments).should('exist');
 
         // 6. Add a new Discharge
-        cy.contains('button', 'Add New Discharge').click();
+        cy.contains('button', 'Add Discharge').click();
 
         // Fill Discharge Form (often a modal or inline form)
         cy.get('#discharge_date').type(dischargeData.date);
@@ -173,7 +173,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#comments').type(dischargeData.comments);
 
         // Submit Discharge
-        cy.contains('button', 'Save changes').click();
+        cy.contains('button', 'Save Discharge').click();
 
         // Wait for request
         cy.wait('@createDischarge').its('response.statusCode').should('eq', 201);
@@ -194,7 +194,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(dischargeData.infection).should('exist');
 
         // 8. Add a new Follow Up
-        cy.contains('button', 'Add New Follow Up').click();
+        cy.contains('button', 'Add Follow Up').click();
 
         // Fill Follow Up Form
         cy.get('#follow-up-date').type(followUpData.date);
@@ -214,7 +214,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#surgery_comments_box').type(followUpData.comments);
 
         // Submit Follow Up
-        cy.contains('button', 'Save changes').click();
+        cy.contains('button', 'Save Follow Up').click();
 
         // Wait for request
         cy.wait('@createFollowUp').its('response.statusCode').should('eq', 201);

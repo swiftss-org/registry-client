@@ -88,7 +88,7 @@ describe('Patient Details Page', () => {
     });
 
     it('should navigate to register episode', () => {
-        cy.contains('button', 'Register new episode').click();
+        cy.contains('button', 'Add episode').click();
 
         cy.url().should('include', '/add-episode');
     });

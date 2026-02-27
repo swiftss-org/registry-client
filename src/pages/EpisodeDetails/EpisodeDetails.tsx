@@ -125,7 +125,7 @@ const EpisodeDetails: React.FC = () => {
             <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="discharge-summary">
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography fontWeight={600}>
-                  {discharge?.infection !== undefined ? `Discharge - ${discharge.date}` : 'Add New Discharge'}
+                  {discharge?.infection !== undefined ? `Discharge - ${discharge.date}` : 'Add Discharge'}
                 </Typography>
                 {discharge?.infection !== undefined && (
                   <CheckCircleIcon color="success" fontSize="small" data-testid="discharge-check-icon" />
@@ -171,7 +171,7 @@ const EpisodeDetails: React.FC = () => {
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography fontWeight={600}>Add New Follow Up</Typography>
+                <Typography fontWeight={600}>Add Follow Up</Typography>
               </Box>
             </AccordionSummary>
             <AccordionDetails>

@@ -156,7 +156,7 @@ const RegisterEpisode: React.FC = () => {
             boxShadow: isDesktop ? 3 : 'none',
           }}
         >
-          Register an Episode
+          Save Episode
         </Button>
       </Box>
     </Container>

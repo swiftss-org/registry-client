@@ -129,7 +129,7 @@ const PatientDetails: React.FC = () => {
             boxShadow: isDesktop ? 3 : 'none',
           }}
         >
-          Register new episode
+          Add episode
         </Button>
       </Box>
     </Container>

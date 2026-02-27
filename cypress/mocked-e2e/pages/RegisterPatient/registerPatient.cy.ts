@@ -71,7 +71,7 @@ describe('Register Patient Page', () => {
             cy.get('#address').type('123 Main St');
 
             // 7. Submit
-            cy.contains('button', 'Add new patient').click();
+            cy.contains('button', 'Save patient').click();
 
             // Verify request
             cy.wait('@registerPatient').then((interception) => {
@@ -141,7 +141,7 @@ describe('Register Patient Page', () => {
             cy.get('#phone1').type('5559999');
 
             // 7. Submit
-            cy.contains('button', 'Add new patient').click();
+            cy.contains('button', 'Save patient').click();
 
             // Verify request contains no 0s where undefined is expected
             cy.wait('@registerPatientEmptyOptionals').then((interception) => {
@@ -264,7 +264,7 @@ describe('Register Patient Page', () => {
             cy.get('#phone1').type('5550101');
 
             // Attempt to submit without selecting gender
-            cy.contains('button', 'Add new patient').click();
+            cy.contains('button', 'Save patient').click();
             // Gender validation message is often custom, check utils.ts or UI
             cy.contains('Gender field is required. Please select the gender above.').should('exist');
         });
@@ -313,7 +313,7 @@ describe('Register Patient Page', () => {
             });
             cy.wait('@getHospitals');
 
-            cy.contains('button', 'Add new patient').click();
+            cy.contains('button', 'Save patient').click();
 
             cy.contains('Hospital field is required').should('exist');
             cy.contains('First name field is required').should('exist');

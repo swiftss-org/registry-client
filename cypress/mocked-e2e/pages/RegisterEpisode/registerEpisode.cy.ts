@@ -87,7 +87,7 @@ describe('Register Episode Page', () => {
             cy.contains('Successfull surgery').should('be.visible');
 
             // Submit
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.wait(['@registerEpisode', '@registerPatientHospitalMapping']).then((interception) => {
                 // Verify all episode fields
@@ -240,7 +240,7 @@ describe('Register Episode Page', () => {
             cy.get('body').click();
             cy.get('.MuiPopover-root').should('not.exist');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.contains('Surgeon field is required').should('exist');
         });
@@ -248,7 +248,7 @@ describe('Register Episode Page', () => {
         it('should validate all field before submitting the form', () => {
             cy.selectMuiOption('#hospital', 'General Hospital');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.contains('Patient Hospital ID field is required').should('exist');
             cy.contains('Episode Type field is required').should('exist');
@@ -310,7 +310,7 @@ describe('Register Episode Page', () => {
             cy.selectMuiOption('#surgeon-selector-0', 'Dr. Surgeon');
             cy.get('#comments').type('Successfull surgery');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.wait('@registerEpisodeError');
 
@@ -341,7 +341,7 @@ describe('Register Episode Page', () => {
             // Enter comments with special characters
             cy.get('#comments').type('Patient had: <script>alert("test")</script> & "quoted" text');
 
-            cy.contains('button', 'Register an Episode').click();
+            cy.contains('button', 'Save Episode').click();
 
             cy.wait('@registerEpisode').then((interception) => {
                 expect(interception.request.body.comments).to.equal('Patient had: <script>alert("test")</script> & "quoted" text');
