@@ -297,7 +297,7 @@ export const useDischarge = (episodeID: string) => {
         date: params?.date,
         discharge_duration: params?.discharge_duration,
         aware_of_mesh: params?.aware_of_mesh.label === 'Yes',
-        comments: params?.comments,
+        ...(params?.comments?.trim() ? { comments: params.comments.trim() } : {}),
         infection: params?.infection || '',
       };
 
@@ -335,7 +335,9 @@ export const useFollowUp = (episodeID: string) => {
         pain_severity: params?.pain_severity.label,
         further_surgery_need:
           params?.further_surgery_need.label === 'Yes',
-        surgery_comments_box: params?.surgery_comments_box,
+        ...(params?.surgery_comments_box?.trim()
+          ? { surgery_comments_box: params.surgery_comments_box.trim() }
+          : {}),
       };
 
       const { request } = patientsAPI.single.followUpPatient(payload);

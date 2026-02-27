@@ -174,7 +174,7 @@ export type RegisterEpisodePayload = {
   diathermy_used: boolean;
   antibiotic_used: boolean;
   antibiotic_type?: string;
-  comments?: string;
+  comments?: string | null;
   anaesthetic_type: string;
   surgeon_ids: number[];
 };
