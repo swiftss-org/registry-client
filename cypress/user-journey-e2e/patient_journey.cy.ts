@@ -110,4 +110,89 @@ describe('Patient Journey (Real DB)', () => {
     cy.contains(testPatient.phone).should('be.visible');
     cy.contains(testPatient.phone2).should('be.visible');
   });
+
+  it('should register a MINIMAL patient and verify them in the directory', () => {
+    // 1. Setup dynamic admin account
+    const adminEmail = `admin_minimal_${timestamp}@admin.com`;
+    const adminPassword = 'AdminPassword123!';
+    testPatient.nationalId = 772203263;
+
+    cy.task('db:createUser', {
+      username: adminEmail,
+      password: adminPassword,
+      firstName: 'Minimal',
+      lastName: 'Admin',
+      hospitalId: 1,
+      isStaff: false,
+      isActive: true,
+    });
+
+    // 2. Login
+    cy.visit('/login', {
+      onBeforeLoad(win) {
+        win.localStorage.clear();
+        win.sessionStorage.clear();
+      },
+    });
+
+    cy.get('#username', { timeout: 10000 }).should('be.visible').type(adminEmail);
+    cy.get('#password').type(adminPassword);
+    cy.get('button[type="submit"]').click();
+
+    cy.url().should('include', '/landing', { timeout: 15000 });
+
+    // 2. Navigate to Register Patient
+    cy.visit('/patients/register');
+
+    // 3. Fill the form with ALL fields
+    cy.selectMuiOption('#hospital', 'Royal London Hospital');
+
+    cy.get('#first_name').type(testPatient.firstName);
+    cy.get('#last_name').type(testPatient.lastName);
+
+    cy.get('#year_of_birth').type(testPatient.yob);
+    cy.get('#month_of_birth').type(testPatient.month);
+    cy.get('#day_of_birth').type(testPatient.day);
+
+    cy.get('#national_id').type(testPatient.nationalId.toString());
+    cy.get('#patient_hospital_id').type(testPatient.hospitalId.toString());
+
+    cy.get('input[value="Male"]').check();
+
+    cy.get('#phone1').type(testPatient.phone);
+    cy.get('#address').type(testPatient.address);
+
+    // 4. Submit
+    cy.contains('button', 'Save patient').click();
+
+
+    // 6. Verify redirection to Patient Directory
+    cy.url().should('match', /\/patients$/, { timeout: 10000 });
+
+    // Verify notification
+    cy.contains('[data-testid="notification-alert"]', 'Patient has been successfully saved').should('be.visible');
+
+    // 7. Ensure the correct hospital is selected in the filter
+    cy.selectMuiOption('#center', 'Royal London Hospital');
+
+    // Verify the selection "stuck" and is now the test hospital
+    cy.get('#center').contains('Royal London Hospital').should('be.visible');
+
+    // 8. Verify patient appears in the directory
+    cy.contains(testPatient.firstName, { timeout: 10000 }).should('be.visible');
+    cy.contains(testPatient.lastName).should('be.visible');
+
+    // 9. Click on the patient to go to details
+    cy.contains(
+      `${testPatient.firstName} ${testPatient.lastName}`
+    ).click();
+
+    // 10. Verify details page
+    cy.url().should('match', /\/patients\/\d+\/\d+$/);
+    cy.contains(testPatient.firstName).should('be.visible');
+    cy.contains(testPatient.lastName).should('be.visible');
+    cy.contains(testPatient.nationalId.toString()).should('be.visible');
+    cy.contains(testPatient.address).should('be.visible');
+    cy.contains(testPatient.phone).should('be.visible');
+  });
 });
