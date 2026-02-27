@@ -20,6 +20,7 @@ import urls from 'routing/urls';
 
 import EpisodeList from './components/EpisodeList';
 import GeneralInformation from './components/GeneralInformation';
+import Notifications from '../../components/Notifications';
 
 const PatientDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
@@ -48,6 +49,7 @@ const PatientDetails: React.FC = () => {
         flexDirection: 'column'
       }}
     >
+      <Notifications />
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
         <IconButton
           edge="start"

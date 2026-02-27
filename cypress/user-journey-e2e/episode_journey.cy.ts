@@ -133,6 +133,9 @@ describe('Episode Journey (Real DB)', () => {
         // 5. Verify the new episode on the Episode details page
         cy.url().should('match', /patients\/1\/1\?tab=episodes$/, { timeout: 10000 });
 
+        // Verify notification
+        cy.contains('[data-testid="notification-alert"]', 'Episode has been successfully saved').should('be.visible');
+
         // Click on the episode to go to its details (usually by date or type)
         cy.contains(episodeData.date).click();
 
@@ -164,7 +167,7 @@ describe('Episode Journey (Real DB)', () => {
         // Fill Discharge Form (often a modal or inline form)
         cy.get('#discharge_date').type(dischargeData.date);
         cy.selectMuiOption('#aware_of_mesh-select', dischargeData.awareOfMesh);
-        cy.get('#discharge_duration').type(dischargeData.discharge_duration)
+        cy.get('#discharge_duration').type(dischargeData.discharge_duration.toString())
         cy.contains('Bleeding').click();
         cy.contains('Urinary Retention').click();
         cy.get('#comments').type(dischargeData.comments);
@@ -174,6 +177,9 @@ describe('Episode Journey (Real DB)', () => {
 
         // Wait for request
         cy.wait('@createDischarge').its('response.statusCode').should('eq', 201);
+
+        // Verify notification
+        cy.contains('[data-testid="notification-alert"]', 'Discharge has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
         cy.wait(1000);
@@ -212,6 +218,9 @@ describe('Episode Journey (Real DB)', () => {
 
         // Wait for request
         cy.wait('@createFollowUp').its('response.statusCode').should('eq', 201);
+
+        // Verify notification
+        cy.contains('[data-testid="notification-alert"]', 'Follow up has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
         cy.wait(1000);

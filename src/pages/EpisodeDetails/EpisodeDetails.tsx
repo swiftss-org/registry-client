@@ -28,6 +28,7 @@ import DischargeReadOnly from './components/DischargeReadOnly';
 import FollowUpReadOnly from './components/FollowUpReadOnly';
 import FollowUps from './components/FollowUps';
 import SurgeryReadOnly from './components/SurgeryReadOnly';
+import Notifications from '../../components/Notifications';
 
 const EpisodeDetails: React.FC = () => {
   const { isDesktop } = useResponsiveLayout();
@@ -62,6 +63,7 @@ const EpisodeDetails: React.FC = () => {
         flexDirection: 'column',
       }}
     >
+      <Notifications />
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
         <IconButton
           edge="start"

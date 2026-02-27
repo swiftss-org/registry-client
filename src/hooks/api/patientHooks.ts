@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ReactQueryKeys } from 'hooks/constants';
+import { useSetNotification } from 'hooks/useSetNotification';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import patientsAPI from '../../api/patientsAPI';
@@ -175,6 +176,7 @@ export const useCreateHospitalMapping = () => {
 
 export const useRegisterPatient = () => {
   const navigate = useNavigate();
+  const setNotification = useSetNotification();
 
   return useMutation<
     RegisterPatientPayload,
@@ -199,6 +201,7 @@ export const useRegisterPatient = () => {
       return request();
     },
     onSuccess: () => {
+      setNotification('Patient has been successfully saved', 'success');
       navigate(urls.patients(), { replace: true });
     },
   });
@@ -209,6 +212,7 @@ export const useRegisterEpisode = (
   patientID?: string,
 ) => {
   const navigate = useNavigate();
+  const setNotification = useSetNotification();
 
   return useMutation<
     RegisterEpisodePayload,
@@ -242,6 +246,7 @@ export const useRegisterEpisode = (
       return request();
     },
     onSuccess: () => {
+      setNotification('Episode has been successfully saved', 'success');
       navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
     },
   });
@@ -282,6 +287,7 @@ export const useGetEpisodeFollowUps = (id: string) => {
 
 export const useDischarge = (episodeID: string) => {
   const navigate = useNavigate();
+  const setNotification = useSetNotification();
   const { hospitalID, patientID } = useParams<{ hospitalID: string; patientID: string }>();
 
   return useMutation<DischargeAPI, AxiosError, DischargeForm>({
@@ -300,6 +306,7 @@ export const useDischarge = (episodeID: string) => {
       return request();
     },
     onSuccess: () => {
+      setNotification('Discharge has been successfully saved', 'success');
       if (hospitalID && patientID) {
         navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
       } else {
@@ -310,6 +317,9 @@ export const useDischarge = (episodeID: string) => {
 };
 
 export const useFollowUp = (episodeID: string) => {
+  const queryClient = useQueryClient();
+  const setNotification = useSetNotification();
+
   return useMutation<FollowUpPayload, AxiosError, FollowUpForm>({
     mutationFn: (params) => {
       const payload = {
@@ -333,7 +343,8 @@ export const useFollowUp = (episodeID: string) => {
       return request();
     },
     onSuccess: () => {
-      window.location.reload();
+      setNotification('Follow up has been successfully saved', 'success');
+      queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.EpisodesQuery, episodeID, 'follow-up'] });
     },
   });
 };

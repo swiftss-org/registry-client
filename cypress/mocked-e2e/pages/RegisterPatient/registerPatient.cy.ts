@@ -94,6 +94,9 @@ describe('Register Patient Page', () => {
             // Verify redirection
             cy.url().should('include', '/patients');
             cy.url().should('not.include', '/register');
+
+            // Verify notification
+            cy.contains('[data-testid="notification-alert"]', 'Patient has been successfully saved').should('be.visible');
         });
     });
 
