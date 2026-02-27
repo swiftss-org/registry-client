@@ -8,6 +8,7 @@ import {
   TextField
 } from '@mui/material';
 import { LoginFormType } from 'models/apiTypes';
+import { scrollToError } from 'utils/formUtils';
 
 type Props = {
   onSubmit: (data: LoginFormType) => void;
@@ -60,6 +61,8 @@ const LoginForm: React.FC<Props> = ({ onSubmit, isPending }) => {
         username: true,
         password: true
       });
+
+      scrollToError(newErrors);
     }
   };
 

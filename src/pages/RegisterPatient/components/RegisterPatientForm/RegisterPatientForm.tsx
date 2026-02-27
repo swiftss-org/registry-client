@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 
 import { HospitalsAPI } from '../../../../models/apiTypes';
+import { scrollToError } from '../../../../utils/formUtils';
 import { RegisterPatientFormType } from '../../types';
 
 type Props = {
@@ -117,6 +118,8 @@ const RegisterPatientForm: React.FC<Props> = ({
                 allTouched[key] = true;
             });
             setTouched(allTouched);
+
+            scrollToError(newErrors);
         }
     };
 

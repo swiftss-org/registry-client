@@ -21,6 +21,7 @@ import { followUpFormValidation, getBooleanValue } from 'pages/EpisodeDetails/ut
 import { BOOLEAN_OPTIONS, FOLLOW_UP_PAIN_OPTIONS } from 'pages/RegisterEpisode/constants';
 import { getSurgeonOptionsSorted } from 'pages/RegisterEpisode/utils';
 import { useParams } from 'react-router-dom';
+import { scrollToError } from 'utils/formUtils';
 
 interface FollowUpFormState {
   date: string;
@@ -203,6 +204,8 @@ const FollowUps: FC<{
       };
 
       mutate(payload);
+    } else {
+      scrollToError(validationErrors);
     }
   };
 
@@ -214,6 +217,7 @@ const FollowUps: FC<{
         <Box>
           <TextField
             id="follow-up-date"
+            name="date"
             label="Follow Up Date"
             type="date"
             disabled={!canSubmit}
@@ -239,6 +243,7 @@ const FollowUps: FC<{
                   <Select
                     labelId={`surgeon-label-${index}`}
                     id={`surgeon-${index}`}
+                    name={index === 0 ? 'attendees' : undefined}
                     value={attendeeId === 0 ? '' : attendeeId}
                     label="Surgeon"
                     onChange={(e) => handleAttendeeChange(index, Number(e.target.value))}
@@ -279,6 +284,7 @@ const FollowUps: FC<{
             <Select
               disabled={!canSubmit}
               id="pain_severity-select"
+              name="pain_severity"
               labelId="pain_severity-label"
               value={formState.pain_severity}
               label="Pain Severity"
@@ -304,6 +310,7 @@ const FollowUps: FC<{
             <Select
               disabled={!canSubmit}
               id="mesh_awareness-select"
+              name="mesh_awareness"
               labelId="mesh_awareness-label"
               value={formState.mesh_awareness}
               label="Mesh Awareness"
@@ -330,6 +337,7 @@ const FollowUps: FC<{
             <Select
               disabled={!canSubmit}
               id="seroma-select"
+              name="seroma"
               labelId="seroma-label"
               value={formState.seroma}
               label="Seroma"
@@ -354,6 +362,7 @@ const FollowUps: FC<{
             <Select
               disabled={!canSubmit}
               id="infection-select"
+              name="infection"
               labelId="infection-label"
               value={formState.infection}
               label="Infection"
@@ -378,6 +387,7 @@ const FollowUps: FC<{
             <Select
               disabled={!canSubmit}
               id="numbness-select"
+              name="numbness"
               labelId="numbness-label"
               value={formState.numbness}
               label="Numbness"
@@ -402,6 +412,7 @@ const FollowUps: FC<{
             <Select
               disabled={!canSubmit}
               id="recurrence-select"
+              name="recurrence"
               labelId="recurrence-label"
               value={formState.recurrence}
               label="Recurrence"
@@ -426,6 +437,7 @@ const FollowUps: FC<{
             <Select
               disabled={!canSubmit}
               id="further_surgery_need-select"
+              name="further_surgery_need"
               labelId="further_surgery_need-label"
               value={formState.further_surgery_need}
               label="Need for further surgery?"
@@ -450,6 +462,7 @@ const FollowUps: FC<{
           <FormControl fullWidth error={touched.surgery_comments_box && !!errors.surgery_comments_box}>
             <TextareaAutosize
               id="surgery_comments_box"
+              name="surgery_comments_box"
               minRows={3}
               placeholder="Comments"
               style={{

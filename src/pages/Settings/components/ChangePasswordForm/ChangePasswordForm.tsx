@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Box, Button, TextField } from '@mui/material';
 import { ChangePasswordFormType } from 'models/apiTypes';
+import { scrollToError } from 'utils/formUtils';
 
 import { useSetNotification } from '../../../../hooks/useSetNotification';
 
@@ -71,6 +72,8 @@ const ChangePasswordForm: React.FC<Props> = ({ onSubmit, isPending, onDirtyChang
         new_password2: true
       });
       setNotification('Please fix the errors in the form.', 'error');
+
+      scrollToError(newErrors);
     }
   };
 

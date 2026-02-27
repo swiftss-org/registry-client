@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 
 import { HospitalsAPI, PatientAPI, SurgeonsAPI } from '../../../../models/apiTypes';
+import { scrollToError } from '../../../../utils/formUtils';
 import { FilterOption } from '../../../types';
 import {
   ANAESTHETIC_TYPE_OPTIONS,
@@ -221,6 +222,8 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         allTouched[`surgeons[${index}]`] = true;
       });
       setTouched(allTouched);
+
+      scrollToError(newErrors);
     }
   };
 
@@ -685,6 +688,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
                 <InputLabel>Surgeon</InputLabel>
                 <Select
                   id={`surgeon-${index}`}
+                  name={`surgeons[${index}]`}
                   value={surgeon.value === -1 ? '' : surgeon.value}
                   label="Surgeon"
                   onChange={(e: SelectChangeEvent<number>) => {

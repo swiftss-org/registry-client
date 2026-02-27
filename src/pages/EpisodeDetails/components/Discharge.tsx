@@ -21,6 +21,7 @@ import { DischargeAPI, SelectOption } from 'models/apiTypes';
 import { dischargeFormValidation, getBooleanValue } from 'pages/EpisodeDetails/utils';
 import { BOOLEAN_OPTIONS } from 'pages/RegisterEpisode/constants';
 import { useParams } from 'react-router-dom';
+import { scrollToError } from 'utils/formUtils';
 
 const POST_OPERATIVE_COMPLICATIONS = [
   'None',
@@ -148,6 +149,8 @@ const Discharge: FC<{
         infection: formState.infection.length > 0 ? formState.infection.join(',') : 'none',
         comments: formState.comments,
       });
+    } else {
+      scrollToError(validationErrors);
     }
   };
 
@@ -160,6 +163,7 @@ const Discharge: FC<{
         <Box>
           <TextField
             id="discharge_date"
+            name="date"
             disabled={!canSubmit}
             label="Discharge Date"
             type="date"
@@ -183,6 +187,7 @@ const Discharge: FC<{
               disabled={!canSubmit}
               labelId="aware_of_mesh-label"
               id="aware_of_mesh-select"
+              name="aware_of_mesh"
               label="Antibiotics given on discharge"
               variant="outlined"
               size="medium"
@@ -208,6 +213,7 @@ const Discharge: FC<{
           <Box>
             <TextField
               id="discharge_duration"
+              name="discharge_duration"
               disabled={!canSubmit}
               label="Discharge Duration (days)"
               required={canSubmit}
@@ -253,6 +259,7 @@ const Discharge: FC<{
           <FormControl fullWidth error={touched.comments && !!errors.comments}>
             <TextareaAutosize
               id="comments"
+              name="comments"
               minRows={3}
               placeholder="Comments"
               style={{
