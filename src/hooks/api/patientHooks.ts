@@ -180,7 +180,7 @@ export const useRegisterPatient = () => {
 
   return useMutation<
     RegisterPatientPayload,
-    AxiosError,
+    Record<string, string[] | string>,
     RegisterPatientFormType
   >({
     mutationFn: (params) => {
@@ -204,6 +204,14 @@ export const useRegisterPatient = () => {
       setNotification('Patient has been successfully saved', 'success');
       navigate(urls.patients(), { replace: true });
     },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save patient.';
+      setNotification(errorMessage, 'error');
+    },
   });
 };
 
@@ -216,7 +224,7 @@ export const useRegisterEpisode = (
 
   return useMutation<
     RegisterEpisodePayload,
-    AxiosError,
+    Record<string, string[] | string>,
     RegisterEpisodeFormType
   >({
     mutationFn: (params) => {
@@ -229,7 +237,7 @@ export const useRegisterEpisode = (
         antibiotic_type: params?.antibioticType,
         surgeon_ids:
           params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
-        comments: params?.comments,
+        ...(params?.comments?.trim() ? { comments: params.comments.trim() } : {}),
         mesh_type: params?.meshType?.label,
         episode_type: params?.episodeType.label,
         type: params.type?.label,
@@ -248,6 +256,14 @@ export const useRegisterEpisode = (
     onSuccess: () => {
       setNotification('Episode has been successfully saved', 'success');
       navigate(urls.patientDetails(hospitalID ?? '', patientID ?? '', 'episodes'), { replace: true });
+    },
+    onError: (error) => {
+      const errorMessages = Object.values(error).flat();
+      const errorMessage =
+        errorMessages.length > 0
+          ? errorMessages.join(' ')
+          : 'Failed to save episode.';
+      setNotification(errorMessage, 'error');
     },
   });
 };
