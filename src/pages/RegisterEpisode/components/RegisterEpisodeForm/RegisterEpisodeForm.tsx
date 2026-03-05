@@ -164,7 +164,11 @@ const RegisterEpisodeForm: React.FC<Props> = ({
     const newErrors: Record<string, string> = {};
 
     if (!values.hospital || values.hospital.value < 0) newErrors.hospital = 'Hospital field is required';
-    if (isNewHospital && !values.patientHospitalId) newErrors.patientHospitalId = 'Patient Hospital ID field is required';
+    if (isNewHospital && !values.patientHospitalId) {
+      newErrors.patientHospitalId = 'Patient Hospital ID field is required';
+    } else if (values.patientHospitalId && !/^\d+$/.test(values.patientHospitalId)) {
+      newErrors.patientHospitalId = 'Patient Hospital ID field must be a number';
+    }
     if (!values.episodeType || values.episodeType.value < 0) newErrors.episodeType = 'Episode Type field is required';
     if (!values.cepod || values.cepod.value < 0) newErrors.cepod = 'CEPOD field is required';
     if (!values.side || values.side.value < 0) newErrors.side = 'Side field is required';
@@ -207,7 +211,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
     if (Object.keys(newErrors).length === 0) {
       onSubmit({
         ...values,
-        patientHospitalId: Number(values.patientHospitalId),
+        patientHospitalId: values.patientHospitalId,
         antibioticType:
           values.antibioticType.length > 0 ? values.antibioticType.join(',') : 'none',
         surgeons: surgeonsList.filter((s) => s.value >= 0),
@@ -288,7 +292,6 @@ const RegisterEpisodeForm: React.FC<Props> = ({
             id="patient_hospital_id"
             label="Patient Hospital ID"
             name="patientHospitalId"
-            type="number"
             value={values.patientHospitalId}
             onChange={handleChange}
             onBlur={handleBlur}

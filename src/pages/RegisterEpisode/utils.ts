@@ -37,6 +37,8 @@ export const episodeFormValidation = (values: RegisterEpisodeFormType, isNewHosp
 
   if (isNewHospital && !values.patientHospitalId) {
     errors.patientHospitalId = REQUIRED_FIELD_MSG;
+  } else if (values.patientHospitalId && !/^\d+$/.test(values.patientHospitalId)) {
+    errors.patientHospitalId = 'Patient Hospital ID field must be a number';
   }
 
   if (!values.episodeType && typeof values.episodeType !== 'object') {

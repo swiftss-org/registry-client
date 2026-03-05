@@ -37,6 +37,7 @@ describe('Register Patient Page', () => {
             // 1. Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
             cy.contains('General Hospital').should('be.visible');
+            cy.get('#patient_hospital_id').type('123');
 
             // 2. Personal Details
             cy.get('#first_name').type('John');
@@ -47,7 +48,7 @@ describe('Register Patient Page', () => {
             cy.get('#year_of_birth').type('1990');
             cy.get('#year_of_birth').blur();
 
-            cy.get('#month_of_birth').type('5');
+            cy.get('#month_of_birth').type('05');
             cy.get('#month_of_birth').blur();
 
             cy.get('#day_of_birth').type('15');
@@ -60,7 +61,6 @@ describe('Register Patient Page', () => {
 
             // 4. Other fields
             cy.get('#national_id').type('123456789');
-            cy.get('#patient_hospital_id').type('HOSP123');
 
             // 5. Gender
             cy.get('input[value="Male"]').check();
@@ -83,8 +83,8 @@ describe('Register Patient Page', () => {
                     gender: 'male',
                     hospital_id: 1,
                     month_of_birth: 5,
-                    national_id: 123456789,
-                    patient_hospital_id: 123,
+                    national_id: '123456789',
+                    patient_hospital_id: '123',
                     phone_1: '5550101',
                     phone_2: '5550102',
                     year_of_birth: 1990
@@ -118,6 +118,7 @@ describe('Register Patient Page', () => {
 
             // 1. Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.get('#patient_hospital_id').type('456');
 
             // 2. Personal Details (No Middle Name)
             cy.get('#first_name').type('Jane');
@@ -132,7 +133,6 @@ describe('Register Patient Page', () => {
             cy.get('#age').should('have.value', expectedAge.toString());
 
             // 4. Other fields (No National ID)
-            cy.get('#patient_hospital_id').type('HOSP456');
 
             // 5. Gender
             cy.get('input[value="Female"]').check();
@@ -150,7 +150,7 @@ describe('Register Patient Page', () => {
                     full_name: 'Jane Smith',
                     year_of_birth: 1985,
                     age: expectedAge,
-                    patient_hospital_id: 456,
+                    patient_hospital_id: '456',
                     gender: 'female',
                     phone_1: '5559999',
                     address: '',
@@ -159,6 +159,88 @@ describe('Register Patient Page', () => {
 
             // Verify redirection
             cy.url().should('include', '/patients');
+        });
+
+        it('should keep leading zeros for national_id, patient_hospital_id, phone_1 and phone_2 input fields', () => {
+            // Mock the Register API
+            cy.intercept('POST', '**/patients/', {
+                statusCode: 201,
+                body: { id: 123 }
+            }).as('registerPatient');
+
+            // Visit the page with token pre-set
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+
+            // Wait for hospitals to load
+            cy.wait('@getHospitals');
+
+            // 1. Select Hospital
+            cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.contains('General Hospital').should('be.visible');
+            cy.get('#patient_hospital_id').type('0123');
+
+            // 2. Personal Details
+            cy.get('#first_name').type('John');
+            cy.get('#middle_name').type('D');
+            cy.get('#last_name').type('Doe');
+
+            // 3. Birth Date
+            cy.get('#year_of_birth').type('1990');
+            cy.get('#year_of_birth').blur();
+
+            cy.get('#month_of_birth').type('05');
+            cy.get('#month_of_birth').blur();
+
+            cy.get('#day_of_birth').type('15');
+            cy.get('#day_of_birth').blur();
+
+            // Verify Age calculated
+            const currentYear = new Date().getFullYear();
+            const expectedAge = currentYear - 1990;
+            cy.get('#age').should('have.value', expectedAge.toString());
+
+            // 4. Other fields
+            cy.get('#national_id').type('003456789');
+
+            // 5. Gender
+            cy.get('input[value="Male"]').check();
+
+            // 6. Contact Details
+            cy.get('#phone1').type('005550101');
+            cy.get('#phone2').type('005550102');
+            cy.get('#address').type('123 Main St');
+
+            // 7. Submit
+            cy.contains('button', 'Save patient').click();
+
+            // Verify request
+            cy.wait('@registerPatient').then((interception) => {
+                expect(interception.request.body).to.deep.equal({
+                    address: '123 Main St',
+                    age: expectedAge,
+                    day_of_birth: 15,
+                    full_name: 'John D Doe',
+                    gender: 'male',
+                    hospital_id: 1,
+                    month_of_birth: 5,
+                    national_id: '003456789',
+                    patient_hospital_id: '0123',
+                    phone_1: '005550101',
+                    phone_2: '005550102',
+                    year_of_birth: 1990
+                });
+            });
+
+            // Verify redirection
+            cy.url().should('include', '/patients');
+            cy.url().should('not.include', '/register');
+
+            // Verify notification
+            cy.contains('[data-testid="notification-alert"]', 'Patient has been successfully saved').should('be.visible');
         });
     });
 
@@ -177,6 +259,40 @@ describe('Register Patient Page', () => {
             cy.contains('Hospital field is required').should('exist');
         });
 
+        it('should validate Patient Hospital ID is required when hospital is selected', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
+            // Select Hospital
+            cy.selectMuiOption('#hospital', 'General Hospital');
+
+            cy.get('#patient_hospital_id').type('{enter}');
+            cy.get('#patient_hospital_id').blur();
+
+            cy.contains('Patient Hospital ID field is required').should('exist');
+        });
+
+        it('should validate Patient Hospital ID is a number', () => {
+            cy.visit('/patients/register', {
+                onBeforeLoad: (win) => {
+                    win.localStorage.setItem('token-registry', 'fake-token');
+                }
+            });
+            cy.wait('@getHospitals');
+
+            // Select Hospital
+            cy.selectMuiOption('#hospital', 'General Hospital');
+
+            cy.get('#patient_hospital_id').type('abc');
+            cy.get('#patient_hospital_id').blur();
+
+            cy.contains('Patient Hospital ID field must be a number').should('exist');
+        });
+
         it('should validate First Name is required', () => {
             cy.visit('/patients/register', {
                 onBeforeLoad: (win) => {
@@ -187,6 +303,7 @@ describe('Register Patient Page', () => {
 
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.get('#patient_hospital_id').type('0123');
 
             cy.get('#first_name').type('{enter}');
             cy.get('#first_name').blur();
@@ -204,6 +321,7 @@ describe('Register Patient Page', () => {
 
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.get('#patient_hospital_id').type('0123');
             cy.get('#first_name').type('John');
 
             cy.get('#last_name').type('{enter}');
@@ -222,29 +340,12 @@ describe('Register Patient Page', () => {
 
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.get('#patient_hospital_id').type('0123');
             cy.get('#first_name').type('John');
             cy.get('#last_name').type('Doe');
 
             cy.get('#year_of_birth').focus().blur();
             cy.contains('Year of birth field is required').should('exist');
-        });
-
-        it('should validate Patient Hospital ID is required', () => {
-            cy.visit('/patients/register', {
-                onBeforeLoad: (win) => {
-                    win.localStorage.setItem('token-registry', 'fake-token');
-                }
-            });
-            cy.wait('@getHospitals');
-
-            // Select Hospital
-            cy.selectMuiOption('#hospital', 'General Hospital');
-            cy.get('#first_name').type('John');
-            cy.get('#last_name').type('Doe');
-            cy.get('#year_of_birth').type('1990');
-
-            cy.get('#patient_hospital_id').focus().blur();
-            cy.contains('Patient Hospital ID field is required').should('exist');
         });
 
         it('should validate Gender is required', () => {
@@ -257,10 +358,10 @@ describe('Register Patient Page', () => {
 
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.get('#patient_hospital_id').type('0123');
             cy.get('#first_name').type('John');
             cy.get('#last_name').type('Doe');
             cy.get('#year_of_birth').type('1990');
-            cy.get('#patient_hospital_id').type('123456');
             cy.get('#phone1').type('5550101');
 
             // Attempt to submit without selecting gender
@@ -279,30 +380,14 @@ describe('Register Patient Page', () => {
 
             // Select Hospital
             cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.get('#patient_hospital_id').type('123456');
             cy.get('#first_name').type('John');
             cy.get('#last_name').type('Doe');
             cy.get('#year_of_birth').type('1990');
-            cy.get('#patient_hospital_id').type('123456');
             cy.get('input[value="Male"]').check();
 
             cy.get('#phone1').focus().blur();
             cy.contains('Phone #1 field is required').should('exist');
-        });
-
-        it('should validate phone number input (numbers only)', () => {
-            cy.visit('/patients/register', {
-                onBeforeLoad: (win) => {
-                    win.localStorage.setItem('token-registry', 'fake-token');
-                }
-            });
-            cy.wait('@getHospitals');
-
-            // Based on "parseOnlyNumbers" in code
-            cy.get('#phone1').type('abc');
-            cy.get('#phone1').should('have.value', '');
-
-            cy.get('#phone1').type('123');
-            cy.get('#phone1').should('have.value', '123');
         });
 
         it('should validate an empty submitted form', () => {

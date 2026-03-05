@@ -24,8 +24,8 @@ describe('Register Episode Page', () => {
             cy.selectMuiOption('#hospital', 'General Hospital');
             cy.contains('General Hospital').should('be.visible');
 
-            cy.get('#patient_hospital_id').click().type('234');
-            cy.get('#patient_hospital_id').should('have.value', '234');
+            cy.get('#patient_hospital_id').click().type('0234');
+            cy.get('#patient_hospital_id').should('have.value', '0234');
 
             // Select Episode Type
             cy.selectMuiOption('#episode_type', 'Femoral Mesh Hernia Repair');
@@ -119,7 +119,7 @@ describe('Register Episode Page', () => {
 
                 // Verify hospital mapping
                 expect(interception[1].request.body).to.include({
-                    patient_hospital_id: 234,
+                    patient_hospital_id: '0234',
                     hospital_id: 1
                 });
             });
@@ -152,6 +152,35 @@ describe('Register Episode Page', () => {
             cy.get('#hospital').focus().blur();
 
             cy.contains('Hospital field is required').should('exist');
+        });
+
+        it('should validate Patient Hospital ID is required when hospital is not assigned to the patient', () => {
+            cy.intercept('GET', '**/patients/101/', { id: 101, first_name: 'John', last_name: 'Doe', hospital_mappings: [] }).as('getPatientWithoutHospitals');
+            cy.visit('/patients/1/101/add-episode');
+
+            cy.wait('@getPatientWithoutHospitals');
+
+            cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.contains('General Hospital').should('be.visible');
+
+            cy.get('#patient_hospital_id').focus().blur();
+
+            cy.contains('Patient Hospital ID field is required').should('exist');
+        });
+
+        it('should validate Patient Hospital ID is a number', () => {
+            cy.intercept('GET', '**/patients/101/', { id: 101, first_name: 'John', last_name: 'Doe', hospital_mappings: [] }).as('getPatientWithoutHospitals');
+            cy.visit('/patients/1/101/add-episode');
+
+            cy.wait('@getPatientWithoutHospitals');
+
+            cy.selectMuiOption('#hospital', 'General Hospital');
+            cy.contains('General Hospital').should('be.visible');
+
+            cy.get('#patient_hospital_id').type('abc');
+            cy.get('#patient_hospital_id').blur();
+
+            cy.contains('Patient Hospital ID field must be a number').should('exist');
         });
 
         it('should validate CEPOD is required', () => {

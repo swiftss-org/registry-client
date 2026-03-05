@@ -40,6 +40,8 @@ export const patientFormValidation = (values: RegisterPatientFormType) => {
 
   if (!values.phone1) {
     errors.phone1 = REQUIRED_FIELD_MSG;
+  } else if (!/^\d+$/.test(values.phone1)) {
+    errors.phone1 = 'Phone #1 field must be a number';
   }
 
   return errors;
