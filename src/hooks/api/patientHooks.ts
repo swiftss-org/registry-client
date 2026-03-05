@@ -167,7 +167,7 @@ export const useCreateHospitalMapping = () => {
   return useMutation<PatientAPI, Record<string, string[] | string>, HospitalMappingPayload>({
     mutationFn: async ({ patient_id, hospital_id, patient_hospital_id }) => {
       const { request } = patientsAPI.single.createHospitalMapping({
-        patient_hospital_id,
+        patient_hospital_id: String(patient_hospital_id),
         patient_id,
         hospital_id,
       });
@@ -203,8 +203,8 @@ export const useRegisterPatient = () => {
         patient_hospital_id: params.patientHospitalId,
         gender: params.gender,
         address: params.address,
-        phone_1: params.phone1 ? String(params.phone1) : '',
-        phone_2: params.phone2 ? String(params.phone2) : undefined,
+        phone_1: params.phone1 || '',
+        phone_2: params.phone2 || undefined,
       });
       return request();
     },

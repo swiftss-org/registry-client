@@ -72,13 +72,14 @@ const RegisterPatientForm: React.FC<Props> = ({
         if (!values.hospital) newErrors.hospital = 'Hospital field is required';
         if (!values.firstName) newErrors.firstName = 'First name field is required';
         if (!values.lastName) newErrors.lastName = 'Last name field is required';
-        if (!values.patientHospitalId)
-            newErrors.patientHospitalId = 'Patient Hospital ID field is required';
+        if (!values.patientHospitalId) newErrors.patientHospitalId = 'Patient Hospital ID field is required';
         if (!values.yearOfBirth) newErrors.yearOfBirth = 'Year of birth field is required';
         if (!values.gender) newErrors.gender = 'Gender field is required. Please select the gender above.';
         if (!values.phone1) newErrors.phone1 = 'Phone #1 field is required';
         if (values.phone1.length > 16) newErrors.phone1 = 'Phone #1 can not be longer than 16 digits';
         if (values.phone2.length > 16) newErrors.phone2 = 'Phone #2 can not be longer than 16 digits';
+        if (values.nationalId && !/^\d+$/.test(values.nationalId)) newErrors.nationalId = 'National ID field must be a number';
+        if (values.patientHospitalId && !/^\d+$/.test(values.patientHospitalId)) newErrors.patientHospitalId = 'Patient Hospital ID field must be a number';
 
         return newErrors;
     };
@@ -99,16 +100,16 @@ const RegisterPatientForm: React.FC<Props> = ({
             onSubmit({
                 ...values,
                 hospital: { value: Number(values.hospital), label: '' },
-                patientHospitalId: Number(values.patientHospitalId),
-                nationalId: values.nationalId ? Number(values.nationalId) : undefined,
+                patientHospitalId: values.patientHospitalId,
+                nationalId: values.nationalId || undefined,
                 yearOfBirth: Number(values.yearOfBirth),
                 monthOfBirth: values.monthOfBirth ? Number(values.monthOfBirth) : undefined,
                 dayOfBirth: values.dayOfBirth ? Number(values.dayOfBirth) : undefined,
                 age: values.yearOfBirth
                     ? new Date().getFullYear() - Number(values.yearOfBirth)
                     : 0,
-                phone1: Number(values.phone1),
-                phone2: values.phone2 ? Number(values.phone2) : undefined,
+                phone1: values.phone1,
+                phone2: values.phone2 || undefined,
                 gender: values.gender.toLowerCase() as 'male' | 'female',
             } as RegisterPatientFormType);
         } else {
@@ -156,6 +157,20 @@ const RegisterPatientForm: React.FC<Props> = ({
                     </Select>
                     <FormHelperText>{errors.hospital}</FormHelperText>
                 </FormControl>
+
+                <TextField
+                    id="patient_hospital_id"
+                    label="Patient Hospital ID"
+                    name="patientHospitalId"
+                    value={values.patientHospitalId}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.patientHospitalId && !!errors.patientHospitalId}
+                    helperText={touched.patientHospitalId && errors.patientHospitalId}
+                    fullWidth
+                    margin="normal"
+                    required
+                />
 
                 <Typography variant="h6" color="primary.dark" gutterBottom>
                     Personal Details
@@ -264,25 +279,9 @@ const RegisterPatientForm: React.FC<Props> = ({
                                 id="national_id"
                                 label="National ID"
                                 name="nationalId"
-                                type="number"
                                 value={values.nationalId}
                                 onChange={handleChange}
                                 fullWidth
-                            />
-                        </Grid>
-                        <Grid size={{ xs: 12, sm: 12 }}>
-                            <TextField
-                                id="patient_hospital_id"
-                                label="Patient Hospital ID"
-                                name="patientHospitalId"
-                                type="number"
-                                value={values.patientHospitalId}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                error={touched.patientHospitalId && !!errors.patientHospitalId}
-                                helperText={touched.patientHospitalId && errors.patientHospitalId}
-                                fullWidth
-                                required
                             />
                         </Grid>
                     </Grid>
@@ -318,7 +317,6 @@ const RegisterPatientForm: React.FC<Props> = ({
                             id="phone1"
                             label="Phone #1"
                             name="phone1"
-                            type="number"
                             value={values.phone1}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -333,7 +331,6 @@ const RegisterPatientForm: React.FC<Props> = ({
                             id="phone2"
                             label="Phone #2"
                             name="phone2"
-                            type="number"
                             value={values.phone2}
                             onChange={handleChange}
                             onBlur={handleBlur}

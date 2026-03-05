@@ -9,11 +9,12 @@ describe('Patient Journey (Real DB)', () => {
     hospital: hospitalName,
     nationalId: timestamp % 1000000000,
     hospitalId: hospitalId,
+    patientHospitalId: '0234',
     yob: '1985',
-    month: '10',
+    month: '08',
     day: '20',
-    phone: '123456789',
-    phone2: '987654321',
+    phone: '003456789',
+    phone2: '007654321',
     address: '123 E2E Street'
   };
 
@@ -67,7 +68,7 @@ describe('Patient Journey (Real DB)', () => {
     cy.get('#day_of_birth').type(testPatient.day);
 
     cy.get('#national_id').type(testPatient.nationalId.toString());
-    cy.get('#patient_hospital_id').type(testPatient.hospitalId.toString());
+    cy.get('#patient_hospital_id').type(testPatient.patientHospitalId);
 
     cy.get('input[value="Male"]').check();
 
@@ -106,6 +107,7 @@ describe('Patient Journey (Real DB)', () => {
     cy.contains(testPatient.middleName).should('be.visible');
     cy.contains(testPatient.lastName).should('be.visible');
     cy.contains(testPatient.nationalId.toString()).should('be.visible');
+    cy.contains(testPatient.patientHospitalId).should('be.visible');
     cy.contains(testPatient.address).should('be.visible');
     cy.contains(testPatient.phone).should('be.visible');
     cy.contains(testPatient.phone2).should('be.visible');
@@ -155,7 +157,7 @@ describe('Patient Journey (Real DB)', () => {
     cy.get('#day_of_birth').type(testPatient.day);
 
     cy.get('#national_id').type(testPatient.nationalId.toString());
-    cy.get('#patient_hospital_id').type(testPatient.hospitalId.toString());
+    cy.get('#patient_hospital_id').type(testPatient.patientHospitalId);
 
     cy.get('input[value="Male"]').check();
 
@@ -192,6 +194,7 @@ describe('Patient Journey (Real DB)', () => {
     cy.contains(testPatient.firstName).should('be.visible');
     cy.contains(testPatient.lastName).should('be.visible');
     cy.contains(testPatient.nationalId.toString()).should('be.visible');
+    cy.contains(testPatient.patientHospitalId).should('be.visible');
     cy.contains(testPatient.address).should('be.visible');
     cy.contains(testPatient.phone).should('be.visible');
   });
