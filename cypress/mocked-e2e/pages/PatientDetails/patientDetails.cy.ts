@@ -81,7 +81,7 @@ describe('Patient Details Page', () => {
 
     it('should return to directory on back', () => {
         // Back arrow
-        cy.get('main > div > div > button > svg').first().click();
+        cy.get('[data-testid="back-button"]').click();
 
         cy.url().should('include', '/patients');
         cy.url().should('not.include', '/101');

@@ -50,18 +50,47 @@ const PatientDetails: React.FC = () => {
       }}
     >
       <Notifications />
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
-        <IconButton
-          edge="start"
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        mb: 2,
+        gap: 2,
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton
+            edge="start"
+            data-testid="back-button"
+            onClick={() => {
+              navigate(urls.patients());
+            }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography variant="h5" component="h1" fontWeight={700}>
+            Patient Details
+          </Typography>
+        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+          size="medium"
+          startIcon={<AddCircleIcon />}
           onClick={() => {
-            navigate(urls.patients());
+            if (hospitalID && patientID) {
+              navigate(urls.addEpisode(hospitalID, patientID));
+            }
+          }}
+          sx={{
+            borderRadius: isDesktop ? '28px' : '8px',
+            px: 3,
+            whiteSpace: 'nowrap',
+            minWidth: 'fit-content'
           }}
         >
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography variant="h5" component="h1" fontWeight={700}>
-          Patient Details
-        </Typography>
+          Add episode
+        </Button>
       </Box>
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
@@ -95,43 +124,6 @@ const PatientDetails: React.FC = () => {
         )}
       </Paper>
 
-      <Box
-        sx={{
-          position: isDesktop ? 'static' : 'fixed',
-          bottom: isDesktop ? 'auto' : 0,
-          left: isDesktop ? 'auto' : 0,
-          right: isDesktop ? 'auto' : 0,
-          p: isDesktop ? 0 : 2,
-          bgcolor: isDesktop ? 'transparent' : 'background.paper',
-          borderTop: isDesktop ? 'none' : 1,
-          borderColor: 'divider',
-          zIndex: 1000,
-          display: 'flex',
-          justifyContent: isDesktop ? 'flex-end' : 'stretch'
-        }}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={isLoading}
-          fullWidth={!isDesktop}
-          size="large"
-          startIcon={<AddCircleIcon />}
-          onClick={() => {
-            if (hospitalID && patientID) {
-              navigate(urls.addEpisode(hospitalID, patientID));
-            }
-          }}
-          sx={{
-            borderRadius: isDesktop ? '28px' : '8px',
-            px: isDesktop ? 3 : 2,
-            py: 1.5,
-            boxShadow: isDesktop ? 3 : 'none',
-          }}
-        >
-          Add episode
-        </Button>
-      </Box>
     </Container>
   );
 };

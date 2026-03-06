@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Container,
-  IconButton,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -34,6 +33,12 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
   const [page, setPage] = useState(1);
   const limit = 25;
   const offset = (page - 1) * limit;
+  const sortingLabels: Record<SortingOptionsType, string> = {
+    full_name: 'Name A-Z',
+    '-full_name': 'Name Z-A',
+    created_at: 'Oldest to newest',
+    '-created_at': 'Newest to oldest',
+  };
 
   const PaginationControls: React.FC<{
     page: number;
@@ -160,7 +165,14 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         alignItems: 'center',
         justifyContent: 'space-between',
         mb: 2,
-        px: isDesktop ? 0 : 2
+        position: 'sticky',
+        top: 0,
+        bgcolor: 'background.paper',
+        zIndex: 1100,
+        py: 2,
+        mx: -2,
+        px: 2,
+        gap: 2,
       }}>
         <Select
           id="center"
@@ -170,7 +182,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             setHospitalId(event.target.value as number);
           }}
           size="small"
-          sx={{ minWidth: 200 }}
+          sx={{ minWidth: 200, flexShrink: 0 }}
         >
           {filterOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -178,9 +190,33 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             </MenuItem>
           ))}
         </Select>
-        <IconButton onClick={() => setShowSortingOptions(!showSortingOptions)} data-testid="sort-icon">
-          <SortIcon />
-        </IconButton>
+
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ justifyContent: 'flex-end', flexGrow: 1 }}>
+          <Button
+            onClick={() => setShowSortingOptions(!showSortingOptions)}
+            data-testid="sort-icon"
+            endIcon={<SortIcon />}
+            sx={{ textTransform: 'none', color: 'text.primary', whiteSpace: 'nowrap' }}
+          >
+            {sortingLabels[sortingOption]}
+          </Button>
+          <Button
+            id="add_patient"
+            variant="contained"
+            color="primary"
+            size="medium"
+            startIcon={<AddCircleIcon />}
+            onClick={() => navigate(urls.registerPatient())}
+            sx={{
+              borderRadius: isDesktop ? '28px' : '8px',
+              px: 3,
+              whiteSpace: 'nowrap',
+              minWidth: 'fit-content'
+            }}
+          >
+            Add Patient
+          </Button>
+        </Stack>
       </Box>
 
       {patients && (
@@ -203,40 +239,6 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           ))}
         </Stack>
       )}
-
-      <Box
-        sx={{
-          position: isDesktop ? 'static' : 'fixed',
-          bottom: isDesktop ? 'auto' : 0,
-          left: isDesktop ? 'auto' : 0,
-          right: isDesktop ? 'auto' : 0,
-          p: isDesktop ? 0 : 2,
-          bgcolor: isDesktop ? 'transparent' : 'background.paper',
-          borderTop: isDesktop ? 'none' : 1,
-          borderColor: 'divider',
-          zIndex: 1000,
-          display: 'flex',
-          justifyContent: isDesktop ? 'flex-end' : 'stretch'
-        }}
-      >
-        <Button
-          id="add_patient"
-          variant="contained"
-          color="primary"
-          fullWidth={!isDesktop}
-          size="large"
-          startIcon={<AddCircleIcon />}
-          onClick={() => navigate(urls.registerPatient())}
-          sx={{
-            borderRadius: isDesktop ? '28px' : '8px',
-            px: isDesktop ? 3 : 2,
-            py: 1.5,
-            boxShadow: isDesktop ? 3 : 'none',
-          }}
-        >
-          Add Patient
-        </Button>
-      </Box>
 
       {showSortingOptions && (
         <SortingOptions
