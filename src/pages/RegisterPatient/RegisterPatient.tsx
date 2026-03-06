@@ -101,7 +101,7 @@ const RegisterPatient: React.FC = () => {
           size="large"
           startIcon={<AddCircleIcon />}
           sx={{
-            borderRadius: isDesktop ? '28px' : '8px',
+            borderRadius: 1,
             px: isDesktop ? 3 : 2,
             py: 1.5,
             boxShadow: isDesktop ? 3 : 'none',

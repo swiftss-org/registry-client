@@ -12,11 +12,13 @@ export const AppWrapper = styled.div<{ isDesktop: boolean }>`
 
 export const TopBar = styled.div`
   align-items: center;
-  border-bottom: 1px black solid;
+  border-bottom: 1px solid #e0e0e0;
   color: black;
   display: flex;
   flex-direction: row;
   font-weight: 700;
+  height: 64px;
+  padding: 0 16px;
   position: sticky;
   width: 100%;
 `;
