@@ -83,7 +83,7 @@ const PatientDetails: React.FC = () => {
             }
           }}
           sx={{
-            borderRadius: isDesktop ? '28px' : '8px',
+            borderRadius: 1,
             px: 3,
             whiteSpace: 'nowrap',
             minWidth: 'fit-content'

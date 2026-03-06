@@ -58,14 +58,9 @@ export const Header = styled.header`
   grid-area: header;
   width: 100%;
   z-index: 120;
-  & > div > div:nth-of-type(2) {
-    display: flex;
-    flex: 1;
-    justify-content: flex-end;
-  }
-
   & > div {
     border-bottom: none;
+    padding: 0 16px;
   }
 `;
 

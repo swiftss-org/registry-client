@@ -26,13 +26,13 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
 
   const { level } = useUserType();
 
-   const handleSearchTerm = useMemo(
-      () =>
-        debounce((term: string) => {
-          setSearchTerm(term);
-        }, 200),
-      []
-    );
+  const handleSearchTerm = useMemo(
+    () =>
+      debounce((term: string) => {
+        setSearchTerm(term);
+      }, 200),
+    []
+  );
 
   return (
     <MainContainer {...responsiveProps} isDesktop={isDesktop}>
@@ -47,12 +47,16 @@ const Layout: React.FC<Props> = ({ component: Component }) => {
           >
             <MenuIcon />
           </IconButton>
-          {location.pathname === '/patients' && (
-            <SearchField
-              placeholder={'Search by name, gender, patient ID...'}
-              onSearch={handleSearchTerm}
-            />
-          )}
+          <div css={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            {location.pathname === '/patients' && (
+              <SearchField
+                placeholder={'Search by name, gender, patient ID...'}
+                onSearch={handleSearchTerm}
+              />
+            )}
+          </div>
+          {/* Spacer to balance the Menu button width and ensure SearchField is centered */}
+          <div style={{ width: '48px' }} />
         </TopBar>
       </Header>
       <SideNav>

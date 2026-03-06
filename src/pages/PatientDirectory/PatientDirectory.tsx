@@ -208,7 +208,7 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             startIcon={<AddCircleIcon />}
             onClick={() => navigate(urls.registerPatient())}
             sx={{
-              borderRadius: isDesktop ? '28px' : '8px',
+              borderRadius: 1,
               px: 3,
               whiteSpace: 'nowrap',
               minWidth: 'fit-content'

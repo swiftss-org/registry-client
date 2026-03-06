@@ -276,7 +276,7 @@ const Drawer: React.FC<Props> = (props) => {
           overflow: 'hidden',
           borderRight: `1px solid ${theme.palette.grey[200]}`,
           position: isSmallDesktop ? 'absolute' : 'relative',
-          zIndex: 100,
+          zIndex: 1500,
           backgroundColor: 'white',
         },
       }}
