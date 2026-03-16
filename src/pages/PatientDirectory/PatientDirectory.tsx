@@ -54,7 +54,8 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            my: 2,
+            mt: 2,
+            mb: 0,
           }}
         >
           <Typography variant="body2" color="text.secondary">
@@ -75,7 +76,8 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
           justifyContent: 'center',
           alignItems: 'center',
           gap: 2,
-          my: 2,
+          mt: 2,
+          mb: 0,
         }}
       >
         {totalPages > 1 && (
@@ -161,10 +163,9 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
       </Typography>
 
       <Box sx={{
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        mb: 2,
+        mb: 0,
         position: 'sticky',
         top: 0,
         bgcolor: 'background.paper',
@@ -174,59 +175,62 @@ const PatientDirectory: React.FC<{ searchTerm?: string }> = ({ searchTerm }) => 
         px: 2,
         gap: 2,
       }}>
-        <Select
-          id="center"
-          value={selectedOption ?? ''}
-          onChange={(event: SelectChangeEvent<number>) => {
-            setSelectedOption(event.target.value as number);
-            setHospitalId(event.target.value as number);
-          }}
-          size="small"
-          sx={{ minWidth: 200, flexShrink: 0 }}
-        >
-          {filterOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
+        <Box sx={{display: 'flex'}}>
+            <Select
+              id="center"
+              value={selectedOption ?? ''}
+              onChange={(event: SelectChangeEvent<number>) => {
+                setSelectedOption(event.target.value as number);
+                setHospitalId(event.target.value as number);
+              }}
+              size="small"
+              sx={{ minWidth: 200, flexShrink: 0 }}
+            >
+              {filterOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
 
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ justifyContent: 'flex-end', flexGrow: 1 }}>
-          <Button
-            onClick={() => setShowSortingOptions(!showSortingOptions)}
-            data-testid="sort-icon"
-            endIcon={<SortIcon />}
-            sx={{ textTransform: 'none', color: 'text.primary', whiteSpace: 'nowrap' }}
-          >
-            {sortingLabels[sortingOption]}
-          </Button>
-          <Button
-            id="add_patient"
-            variant="contained"
-            color="primary"
-            size="medium"
-            startIcon={<AddCircleIcon />}
-            onClick={() => navigate(urls.registerPatient())}
-            sx={{
-              borderRadius: 1,
-              px: 3,
-              whiteSpace: 'nowrap',
-              minWidth: 'fit-content'
-            }}
-          >
-            Add Patient
-          </Button>
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ justifyContent: 'flex-end', flexGrow: 1 }}>
+              <Button
+                onClick={() => setShowSortingOptions(!showSortingOptions)}
+                data-testid="sort-icon"
+                endIcon={<SortIcon />}
+                sx={{ textTransform: 'none', color: 'text.primary', whiteSpace: 'nowrap' }}
+              >
+                {sortingLabels[sortingOption]}
+              </Button>
+              <Button
+                id="add_patient"
+                variant="contained"
+                color="primary"
+                size="medium"
+                startIcon={<AddCircleIcon />}
+                onClick={() => navigate(urls.registerPatient())}
+                sx={{
+                  borderRadius: 1,
+                  px: 3,
+                  whiteSpace: 'nowrap',
+                  minWidth: 'fit-content'
+                }}
+              >
+                Add Patient
+              </Button>
+            </Stack>
+        </Box>
+        <Stack sx={{mb: 0}}>
+            {patients && (
+              <PaginationControls
+                page={page}
+                total={patients.count}
+                limit={limit}
+                onPageChange={(newPage) => setPage(newPage)}
+              />
+            )}
         </Stack>
       </Box>
-
-      {patients && (
-        <PaginationControls
-          page={page}
-          total={patients.count}
-          limit={limit}
-          onPageChange={(newPage) => setPage(newPage)}
-        />
-      )}
 
       {patients && (
         <Stack spacing={1} sx={{
