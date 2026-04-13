@@ -53,6 +53,13 @@ const EpisodeDetails: React.FC = () => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const sortedFollowUps = followUps
+    ? [...followUps].sort(
+        (a, b) =>
+          new Date(a.date).getTime() - new Date(b.date).getTime()
+      )
+    : [];
+	
   return (
     <Container
       maxWidth="md"
@@ -142,7 +149,7 @@ const EpisodeDetails: React.FC = () => {
           </Accordion>
 
           {/* Existing FollowUps */}
-          {followUps?.map((followUp, index) => (
+          {sortedFollowUps.map((followUp, index) => (
             <Accordion
               key={`follow_up_${index}`}
               expanded={expanded === `follow_up_${index}`}
