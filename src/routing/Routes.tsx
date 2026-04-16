@@ -67,7 +67,7 @@ const router = createBrowserRouter([
   },
   {
     path: urls.nationalKPIs(),
-    element: <NationalLeadRoute><NationalKPIs /></NationalLeadRoute>,
+    element: <NationalLeadRoute><Layout component={NationalKPIs} /></NationalLeadRoute>,
   },
   {
     path: urls.landingPage(),
