@@ -55,7 +55,7 @@ describe('National KPIs Page', () => {
 
     describe('Happy Path', () => {
         it('should display KPI table with correct headers', () => {
-            cy.contains('National KPIs').should('be.visible');
+            cy.get('main').contains('National KPIs').should('be.visible');
 
             const headers = [
                 'Hospital', 'Total', 'Past Year', 'Past Month', 'Past Week',
@@ -185,7 +185,7 @@ describe('National KPIs Page', () => {
             // Based on code reading, it likely renders partial data or nothing special for error if not handled.
             // If hooks handles error, it might return undefined data.
             // Let's assume it doesn't crash.
-            cy.contains('National KPIs').should('be.visible');
+            cy.get('main').contains('National KPIs').should('be.visible');
         });
 
         it('should handle network errors', () => {
@@ -197,7 +197,7 @@ describe('National KPIs Page', () => {
             cy.wait('@getStatsNetworkError');
 
             // Should not crash
-            cy.contains('National KPIs').should('be.visible');
+            cy.get('main').contains('National KPIs').should('be.visible');
         });
     });
 
