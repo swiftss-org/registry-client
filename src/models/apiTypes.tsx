@@ -70,6 +70,9 @@ export type EpisodesAPI = {
   comments?: string;
   anaesthetic_type: string;
   surgeons: SurgeonsAPI[];
+  primary_surgeon?: SurgeonsAPI;
+  secondary_surgeon?: SurgeonsAPI;
+  tertiary_surgeon?: SurgeonsAPI;
 };
 
 export interface EpisodeStatsRow {
@@ -177,6 +180,9 @@ export type RegisterEpisodePayload = {
   comments?: string | null;
   anaesthetic_type: string;
   surgeon_ids: number[];
+  primary_surgeon_id?: number;
+  secondary_surgeon_id?: number;
+  tertiary_surgeon_id?: number;
 };
 
 export interface HospitalsResponse extends PaginationResponse, PaginationParams {

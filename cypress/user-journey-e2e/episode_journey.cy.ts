@@ -118,9 +118,8 @@ describe('Episode Journey (Real DB)', () => {
         cy.selectMuiOption('#antibiotic_used', episodeData.antibiotic_used);
         cy.get('#_24hrs_post_op_iv').check();
 
-        cy.selectMuiOption('#surgeon-selector-0', 'Test Surgeon');
-        cy.get('#AddIcon').click();
-        cy.selectMuiOption('#surgeon-selector-1', 'Admin Ad');
+        cy.selectMuiOption('#primary_surgeon', 'Test Surgeon');
+        cy.selectMuiOption('#secondary_surgeon', 'Admin Ad');
 
         cy.get('#comments').type(episodeData.comments);
 
@@ -299,7 +298,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.selectMuiOption('#diathermy_used', 'No');
         cy.selectMuiOption('#antibiotic_used', 'No');
 
-        cy.selectMuiOption('#surgeon-selector-0', 'Min Surgeon');
+        cy.selectMuiOption('#primary_surgeon', 'Min Surgeon');
 
         // Submit Episode
         cy.contains('button', 'Save Episode').should('not.be.disabled').click();

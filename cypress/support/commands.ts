@@ -27,7 +27,7 @@
 
 // MUI Dropdown Option Selector
 Cypress.Commands.add('selectMuiOption', (selector, optionText) => {
-    cy.get(selector).click();
+    cy.get(selector).scrollIntoView().click({ force: true });
     cy.get('[role="listbox"]').contains(optionText).click();
     cy.get('.MuiPopover-root').should('not.exist'); // The "Secret Sauce"
 });

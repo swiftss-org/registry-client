@@ -243,8 +243,14 @@ export const useRegisterEpisode = (
         diathermy_used: params?.diathermyUsed?.label === 'Yes',
         antibiotic_used: params?.antibioticUsed?.label === 'Yes',
         antibiotic_type: params?.antibioticType,
-        surgeon_ids:
-          params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
+        surgeon_ids: [
+          params?.primarySurgeon?.value,
+          params?.secondarySurgeon?.value,
+          params?.tertiarySurgeon?.value,
+        ].filter((id) => id && id !== -1) as number[],
+        primary_surgeon_id: params?.primarySurgeon?.value !== -1 ? params?.primarySurgeon?.value : undefined,
+        secondary_surgeon_id: params?.secondarySurgeon?.value !== -1 ? params?.secondarySurgeon?.value : undefined,
+        tertiary_surgeon_id: params?.tertiarySurgeon?.value !== -1 ? params?.tertiarySurgeon?.value : undefined,
         ...(params?.comments?.trim() ? { comments: params.comments.trim() } : {}),
         mesh_type: params?.meshType?.label,
         episode_type: params?.episodeType.label,
