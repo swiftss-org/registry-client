@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -47,7 +44,6 @@ type Props = {
   onDirtyChange?: (isDirty: boolean) => void;
 };
 
-export const EMPTY_ARRAY = [{}];
 
 const PROPHYLACTIC_OPTIONS = [
   { label: 'IV at start / before surgery', value: 'IV at start / before surgery' },
@@ -195,7 +191,7 @@ const RegisterEpisodeForm: React.FC<Props> = ({
       newErrors.antibioticUsed = errorMessage;
       newErrors.antibioticType = errorMessage;
     }
-    if (!values.primarySurgeon || values.primarySurgeon.value < 0) newErrors.primarySurgeon = 'Primary Surgeon field is required';
+    if (!values.primarySurgeon || values.primarySurgeon.value < 0) newErrors.primarySurgeon = 'Main Operating Surgeon field is required';
 
     const selectedSurgeonIds = [
       values.primarySurgeon.value,

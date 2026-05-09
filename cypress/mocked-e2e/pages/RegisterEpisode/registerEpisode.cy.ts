@@ -255,7 +255,7 @@ describe('Register Episode Page', () => {
             cy.contains('Prophylactic antibiotics field is required').should('exist');
         });
 
-        it('should validate Surgeon is required', () => {
+        it('should validate Main Operating Surgeon is required', () => {
             cy.selectMuiOption('#episode_type', 'Femoral Mesh Hernia Repair');
             cy.get('#surgery_date').type('2023-11-20');
             cy.selectMuiOption('#cepod', 'Emergency');
@@ -271,13 +271,9 @@ describe('Register Episode Page', () => {
             cy.get('#_24hrs_post_op_iv').check();
             cy.get('#comments').type('Successfull surgery');
 
-            cy.get('#primary_surgeon').click();
-            cy.get('body').click();
-            cy.get('.MuiPopover-root').should('not.exist');
-
             cy.contains('button', 'Save Episode').click();
 
-            cy.contains('Primary Surgeon field is required').should('exist');
+            cy.contains('Main Operating Surgeon field is required').should('exist');
         });
 
         it('should validate all field before submitting the form', () => {
@@ -298,7 +294,7 @@ describe('Register Episode Page', () => {
             cy.contains('Anaesthetic Type field is required').should('exist');
             cy.contains('Diathermy Used field is required').should('exist');
             cy.contains('Prophylactic antibiotics field is required').should('exist');
-            cy.contains('Primary Surgeon field is required').should('exist');
+            cy.contains('Main Operating Surgeon field is required').should('exist');
         });
     });
 
