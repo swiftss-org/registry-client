@@ -191,16 +191,20 @@ const RegisterEpisodeForm: React.FC<Props> = ({
       newErrors.antibioticUsed = errorMessage;
       newErrors.antibioticType = errorMessage;
     }
-    if (!values.primarySurgeon || values.primarySurgeon.value < 0) newErrors.primarySurgeon = 'Main Operating Surgeon field is required';
+    if (!values.primarySurgeon || values.primarySurgeon.value < 0) {
+      newErrors.primarySurgeon = 'Main Operating Surgeon field is required';
+    }
 
-    const selectedSurgeonIds = [
-      values.primarySurgeon.value,
-      values.secondarySurgeon.value,
-      values.tertiarySurgeon.value,
-    ].filter((id) => id !== -1);
+    if (values.secondarySurgeon.value !== -1 && values.secondarySurgeon.value === values.primarySurgeon.value) {
+      newErrors.secondarySurgeon = 'Cannot be the same as main operating surgeon';
+    }
 
-    if (new Set(selectedSurgeonIds).size !== selectedSurgeonIds.length) {
-      newErrors.primarySurgeon = 'Duplicate surgeons are not allowed';
+    if (values.tertiarySurgeon.value !== -1) {
+      if (values.tertiarySurgeon.value === values.primarySurgeon.value) {
+        newErrors.tertiarySurgeon = 'Cannot be the same as main operating surgeon';
+      } else if (values.tertiarySurgeon.value === values.secondarySurgeon.value) {
+        newErrors.tertiarySurgeon = 'Cannot be the same as assisting surgeon, if supervising and assisting please record as supervising';
+      }
     }
 
     return newErrors;
@@ -748,12 +752,12 @@ const RegisterEpisodeForm: React.FC<Props> = ({
               id="surgeon-tertiary"
               error={touched.tertiarySurgeon && !!errors.tertiarySurgeon}
             >
-              <InputLabel>Scrubbed Supervising Surgeon</InputLabel>
+              <InputLabel>Supervising Surgeon if present / applicable</InputLabel>
               <Select
                 id="tertiary_surgeon"
                 name="tertiarySurgeon"
                 value={values.tertiarySurgeon.value === -1 ? '' : values.tertiarySurgeon.value}
-                label="Scrubbed Supervising Surgeon"
+                label="Supervising Surgeon if present / applicable"
                 onChange={(e: SelectChangeEvent<number>) => {
                   const selectedOption = surgeonOptions.find(
                     (option) => option.value === Number(e.target.value)
