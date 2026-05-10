@@ -199,8 +199,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#follow-up-date').type(followUpData.date);
 
         // Select attendees (usually defaults to current user, but good to check)
-        cy.contains('Add Surgeon').click();
-        cy.selectMuiOption('#surgeon-0', 'Test Surgeon');
+        cy.selectMuiOption('#primary_attendee', 'Test Surgeon');
 
         cy.selectMuiOption('#pain_severity-select', followUpData.painSeverity);
         cy.selectMuiOption('#mesh_awareness-select', followUpData.meshAwareness);
@@ -310,7 +309,7 @@ describe('Episode Journey (Real DB)', () => {
 
         cy.get('#discharge_date').type(minDischargeDate);
         cy.selectMuiOption('#aware_of_mesh-select', 'No');
-        cy.contains('None').click();
+        cy.get('#infection-none').check();
 
         // Submit Discharge
         cy.contains('button', 'Save Discharge').should('not.be.disabled').click();
@@ -322,8 +321,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains('button', 'Add Follow Up').click();
 
         cy.get('#follow-up-date').type(minFollowUpDate);
-        cy.contains('Add Surgeon').click();
-        cy.selectMuiOption('#surgeon-0', 'Min Surgeon');
+        cy.selectMuiOption('#primary_attendee', 'Min Surgeon');
 
         cy.selectMuiOption('#pain_severity-select', 'Minimal');
         cy.selectMuiOption('#mesh_awareness-select', 'Yes');

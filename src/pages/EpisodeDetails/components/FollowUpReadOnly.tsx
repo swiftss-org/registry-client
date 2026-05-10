@@ -39,15 +39,39 @@ const FollowUpReadOnly: FC<{
 
       <SectionTitle title="Attendees" />
       <Grid container spacing={2}>
-        {followUp.attendees.map((attendee, index) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`attendee_${index}`}>
-            <DetailItem 
-              id={`surgeon_${index}`}
-              label="Surgeon" 
-              value={`${attendee.user.first_name} ${attendee.user.last_name}`} 
-            />
-          </Grid>
-        ))}
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <DetailItem
+            id="primary_attendee"
+            label="Main Attendee"
+            value={
+              followUp.primary_attendee
+                ? `${followUp.primary_attendee.user.first_name} ${followUp.primary_attendee.user.last_name}`
+                : 'Not recorded'
+            }
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <DetailItem
+            id="secondary_attendee"
+            label="Assistant 1"
+            value={
+              followUp.secondary_attendee
+                ? `${followUp.secondary_attendee.user.first_name} ${followUp.secondary_attendee.user.last_name}`
+                : 'None'
+            }
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <DetailItem
+            id="tertiary_attendee"
+            label="Assistant 2"
+            value={
+              followUp.tertiary_attendee
+                ? `${followUp.tertiary_attendee.user.first_name} ${followUp.tertiary_attendee.user.last_name}`
+                : 'None'
+            }
+          />
+        </Grid>
       </Grid>
 
       {followUp.surgery_comments_box && (

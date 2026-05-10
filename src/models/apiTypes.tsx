@@ -100,6 +100,9 @@ export type FollowUpAPI = {
   pain_severity: string;
   date: string;
   attendees: SurgeonsAPI[];
+  primary_attendee?: SurgeonsAPI;
+  secondary_attendee?: SurgeonsAPI;
+  tertiary_attendee?: SurgeonsAPI;
   mesh_awareness: boolean;
   seroma: boolean;
   infection: boolean;
@@ -113,6 +116,9 @@ export type FollowUpPayload = {
   pain_severity: string;
   date: string;
   attendee_ids: number[];
+  primary_attendee_id?: number;
+  secondary_attendee_id?: number;
+  tertiary_attendee_id?: number;
   mesh_awareness: boolean;
   seroma: boolean;
   infection: boolean;
@@ -123,10 +129,10 @@ export type FollowUpPayload = {
 export type FollowUpForm = {
   pain_severity: SelectOption;
   date: string;
-  attendees: {
-    label: string;
-    value: number;
-  }[];
+  attendees: SelectOption[];
+  primaryAttendee?: SelectOption;
+  secondaryAttendee?: SelectOption;
+  tertiaryAttendee?: SelectOption;
   mesh_awareness: SelectOption;
   seroma: SelectOption;
   infection: SelectOption;
