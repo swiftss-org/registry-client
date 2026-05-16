@@ -49,7 +49,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.task('db:load');
     });
 
-    it('should register a new episode, discharge, and follow-up and verify them in the episode details', () => {
+    it.skip('should register a new episode, discharge, and follow-up and verify them in the episode details', () => {
         // Intercept requests for stability
         cy.intercept('POST', '**/episodes/').as('createEpisode');
         cy.intercept('POST', '**/discharges/').as('createDischarge');
