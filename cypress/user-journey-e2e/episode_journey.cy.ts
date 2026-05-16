@@ -118,8 +118,8 @@ describe('Episode Journey (Real DB)', () => {
         cy.selectMuiOption('#antibiotic_used', episodeData.antibiotic_used);
         cy.get('#_24hrs_post_op_iv').check();
 
-        cy.selectMuiOption('#primary_surgeon', 'Test Surgeon');
-        cy.selectMuiOption('#secondary_surgeon', 'Admin Ad');
+        // cy.selectMuiOption('#primary_surgeon', 'Test Surgeon'); TODO: Sabi: enable after data has been migrated
+        // cy.selectMuiOption('#secondary_surgeon', 'Admin Ad'); TODO: Sabi: enable after data has been migrated
 
         cy.get('#comments').type(episodeData.comments);
 
@@ -156,8 +156,8 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(episodeData.diathermy_used).should('exist');
         cy.contains(episodeData.antibiotic_used).should('exist');
         cy.contains(episodeData.antibioticType).should('exist');
-        cy.contains('Test Surgeon').should('exist');
-        cy.contains('Admin Ad').should('exist');
+        // cy.contains('Test Surgeon').should('exist'); TODO: Sabi: enable after data has been migrated
+        // cy.contains('Admin Ad').should('exist'); TODO: Sabi: enable after data has been migrated
         cy.contains(episodeData.comments).should('exist');
 
         // 6. Add a new Discharge
@@ -199,7 +199,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#follow-up-date').type(followUpData.date);
 
         // Select attendees (usually defaults to current user, but good to check)
-        cy.selectMuiOption('#primary_attendee', 'Test Surgeon');
+        // cy.selectMuiOption('#primary_attendee', 'Test Surgeon'); TODO: Sabi: enable after data has been migrated
 
         cy.selectMuiOption('#pain_severity-select', followUpData.painSeverity);
         cy.selectMuiOption('#mesh_awareness-select', followUpData.meshAwareness);

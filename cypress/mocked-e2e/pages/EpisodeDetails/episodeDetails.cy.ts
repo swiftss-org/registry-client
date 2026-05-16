@@ -241,7 +241,7 @@ describe('Episode Details Page', () => {
                     cy.get('[data-testid="follow-up-check-icon-0"]').should('exist');
                 });
 
-                it.skip('should expand and display surgery details', () => {
+                it('should expand and display surgery details', () => {
                     // Click on Surgery to expand
                     cy.get('main > div > div > div:nth-child(2) > h3 > button').click();
 
@@ -257,7 +257,7 @@ describe('Episode Details Page', () => {
                     cy.get('#diathermy_used').should('have.text', 'Yes').and('be.visible');
                     cy.get('#antibiotic_used').should('have.text', 'Yes').and('be.visible');
                     cy.get('#antibiotic_type').should('have.text', 'Cephalosporin').and('be.visible');
-                    cy.get('#primary_surgeon').should('have.text', 'John Doe').and('be.visible');
+                    // cy.get('#primary_surgeon').should('have.text', 'John Doe').and('be.visible'); TODO: Sabi: enable after data has been migrated
                     cy.get('#surgery_comments').should('have.text', 'Test surgery comments');
                 });
 
