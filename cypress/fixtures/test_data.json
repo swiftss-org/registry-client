@@ -217,7 +217,8 @@
       "comments": "",
       "surgeons": [
         1
-      ]
+      ],
+      "primary_surgeon": 1
     }
   },
   {
@@ -242,7 +243,8 @@
       "comments": "",
       "surgeons": [
         1
-      ]
+      ],
+      "primary_surgeon": 1
     }
   },
   {
@@ -267,7 +269,8 @@
       "comments": "",
       "surgeons": [
         1
-      ]
+      ],
+      "primary_surgeon": 1
     }
   },
   {
@@ -292,7 +295,8 @@
       "comments": "",
       "surgeons": [
         1
-      ]
+      ],
+      "primary_surgeon": 1
     }
   },
   {
@@ -317,7 +321,8 @@
       "comments": "",
       "surgeons": [
         1
-      ]
+      ],
+      "primary_surgeon": 1
     }
   },
   {
@@ -342,7 +347,8 @@
       "comments": "",
       "surgeons": [
         1
-      ]
+      ],
+      "primary_surgeon": 1
     }
   },
   {
@@ -367,7 +373,8 @@
       "comments": "fxfcddsg",
       "surgeons": [
         1
-      ]
+      ],
+      "primary_surgeon": 1
     }
   },
   {
@@ -486,7 +493,8 @@
       "surgery_comments_box": "",
       "attendees": [
         1
-      ]
+      ],
+      "primary_attendee": 1
     }
   },
   {
@@ -507,7 +515,8 @@
       "surgery_comments_box": "yes",
       "attendees": [
         1
-      ]
+      ],
+      "primary_attendee": 1
     }
   },
   {

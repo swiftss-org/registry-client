@@ -49,7 +49,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.task('db:load');
     });
 
-    it.skip('should register a new episode, discharge, and follow-up and verify them in the episode details', () => {
+    it('should register a new episode, discharge, and follow-up and verify them in the episode details', () => {
         // Intercept requests for stability
         cy.intercept('POST', '**/episodes/').as('createEpisode');
         cy.intercept('POST', '**/discharges/').as('createDischarge');
@@ -118,8 +118,8 @@ describe('Episode Journey (Real DB)', () => {
         cy.selectMuiOption('#antibiotic_used', episodeData.antibiotic_used);
         cy.get('#_24hrs_post_op_iv').check();
 
-        // cy.selectMuiOption('#primary_surgeon', 'Test Surgeon'); TODO: Sabi: enable after data has been migrated
-        // cy.selectMuiOption('#secondary_surgeon', 'Admin Ad'); TODO: Sabi: enable after data has been migrated
+        cy.selectMuiOption('#primary_surgeon', 'Test Surgeon');
+        cy.selectMuiOption('#secondary_surgeon', 'Admin Ad');
 
         cy.get('#comments').type(episodeData.comments);
 
@@ -156,8 +156,8 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains(episodeData.diathermy_used).should('exist');
         cy.contains(episodeData.antibiotic_used).should('exist');
         cy.contains(episodeData.antibioticType).should('exist');
-        // cy.contains('Test Surgeon').should('exist'); TODO: Sabi: enable after data has been migrated
-        // cy.contains('Admin Ad').should('exist'); TODO: Sabi: enable after data has been migrated
+        cy.contains('Test Surgeon').should('exist');
+        cy.contains('Admin Ad').should('exist');
         cy.contains(episodeData.comments).should('exist');
 
         // 6. Add a new Discharge
@@ -199,7 +199,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#follow-up-date').type(followUpData.date);
 
         // Select attendees (usually defaults to current user, but good to check)
-        // cy.selectMuiOption('#primary_attendee', 'Test Surgeon'); TODO: Sabi: enable after data has been migrated
+        cy.selectMuiOption('#primary_attendee', 'Test Surgeon');
 
         cy.selectMuiOption('#pain_severity-select', followUpData.painSeverity);
         cy.selectMuiOption('#mesh_awareness-select', followUpData.meshAwareness);
@@ -282,7 +282,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('input[type="date"]').type(minEpisodeDate);
 
         // Use General Hospital to trigger mapping creation (matching the working test pattern)
-        // cy.selectMuiOption('#hospital', 'General Hospital');
+        cy.selectMuiOption('#hospital', 'General Hospital');
         // cy.get('#patient_hospital_id').should('be.visible').type(`${timestamp}`);
 
         cy.selectMuiOption('#episode_type', 'Inguinal Mesh Hernia Repair');
