@@ -87,7 +87,7 @@ jobs:
           CI: false
 
       - name: Run Mocked E2E Tests
-        run: cypress run --spec "cypress/mocked-e2e/**/*.cy.ts"
+        run: yarn cy:run:mocked
         env:
           CYPRESS_BASE_URL: http://localhost:3000
 
@@ -192,7 +192,7 @@ jobs:
           CI: false
 
       - name: Run Real DB E2E Tests
-        run: cypress run --spec "cypress/user-journey-e2e/**/*.cy.ts"
+        run: yarn cy:run:e2e
         env:
           CYPRESS_BASE_URL: http://localhost:3000
           CYPRESS_API_URL: http://localhost:5000
