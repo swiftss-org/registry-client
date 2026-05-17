@@ -1,6 +1,8 @@
 
 describe('National KPIs Page', () => {
     beforeEach(() => {
+        cy.clearLocalStorage();
+        cy.clearCookies();
         // Mock token and user data
         cy.window().then((win) => {
             win.localStorage.setItem('token-registry', 'fake-token');

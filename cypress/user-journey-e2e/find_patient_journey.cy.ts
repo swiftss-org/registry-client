@@ -74,10 +74,8 @@ describe('Find Patient Journey (Real DB)', () => {
         cy.get('[data-testid="sort-icon"]').click();
         cy.contains('Oldest to newest').click();
 
-        // Wait for re-sort
-        cy.wait(1000);
-
-        cy.contains(nameA).then(($pA: any) => {
+        // Wait for re-sort by confirming the first patient is visible
+        cy.contains(nameA).should('be.visible').then(($pA: any) => {
             cy.contains(nameB).then(($pB: any) => {
                 const paOffset = $pA.offset();
                 const pbOffset = $pB.offset();

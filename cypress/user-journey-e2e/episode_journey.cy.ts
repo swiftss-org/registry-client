@@ -181,8 +181,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains('[data-testid="notification-alert"]', 'Discharge has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
-        cy.wait(1000);
-        cy.contains(episodeData.date).click();
+        cy.contains(episodeData.date).should('be.visible').click();
         // Open Discharge accordion
         cy.get('[data-testid="discharge-summary"]').click();
 
@@ -221,8 +220,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains('[data-testid="notification-alert"]', 'Follow up has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
-        cy.wait(1000);
-        cy.contains(episodeData.date).click();
+        cy.contains(episodeData.date).should('be.visible').click();
         // Open Follow-Up accordion
         cy.get('[data-testid="follow-up-summary-0"]').click();
 
@@ -302,6 +300,7 @@ describe('Episode Journey (Real DB)', () => {
         // Submit Episode
         cy.contains('button', 'Save Episode').should('not.be.disabled').click();
         cy.wait('@createEpisode').its('response.statusCode').should('eq', 201);
+        cy.contains('[data-testid="notification-alert"]', 'Episode has been successfully saved').should('be.visible');
 
         // Add a new Discharge (MINIMAL)
         cy.contains(minEpisodeDate).click();
@@ -314,10 +313,10 @@ describe('Episode Journey (Real DB)', () => {
         // Submit Discharge
         cy.contains('button', 'Save Discharge').should('not.be.disabled').click();
         cy.wait('@createDischarge').its('response.statusCode').should('eq', 201);
+        cy.contains('[data-testid="notification-alert"]', 'Discharge has been successfully saved').should('be.visible');
 
         // Add a new Follow Up (MINIMAL)
-        cy.wait(1000);
-        cy.contains(minEpisodeDate).click();
+        cy.contains(minEpisodeDate).should('be.visible').click();
         cy.contains('button', 'Add Follow Up').click();
 
         cy.get('#follow-up-date').type(minFollowUpDate);
@@ -334,10 +333,10 @@ describe('Episode Journey (Real DB)', () => {
         // Submit Follow Up
         cy.contains('button', 'Save Follow Up').should('not.be.disabled').click();
         cy.wait('@createFollowUp').its('response.statusCode').should('eq', 201);
+        cy.contains('[data-testid="notification-alert"]', 'Follow up has been successfully saved').should('be.visible');
 
         // Verify minimal details
-        cy.wait(1000);
-        cy.contains(minEpisodeDate).click();
+        cy.contains(minEpisodeDate).should('be.visible').click();
         cy.get('[data-testid="surgery-summary"]').click();
         cy.contains('Min Surgeon').should('exist');
         cy.get('[data-testid="discharge-summary"]').click();
