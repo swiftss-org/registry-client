@@ -118,9 +118,8 @@ describe('Episode Journey (Real DB)', () => {
         cy.selectMuiOption('#antibiotic_used', episodeData.antibiotic_used);
         cy.get('#_24hrs_post_op_iv').check();
 
-        cy.selectMuiOption('#surgeon-selector-0', 'Test Surgeon');
-        cy.get('#AddIcon').click();
-        cy.selectMuiOption('#surgeon-selector-1', 'Admin Ad');
+        cy.selectMuiOption('#primary_surgeon', 'Test Surgeon');
+        cy.selectMuiOption('#secondary_surgeon', 'Admin Ad');
 
         cy.get('#comments').type(episodeData.comments);
 
@@ -182,8 +181,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains('[data-testid="notification-alert"]', 'Discharge has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
-        cy.wait(1000);
-        cy.contains(episodeData.date).click();
+        cy.contains(episodeData.date).should('be.visible').click();
         // Open Discharge accordion
         cy.get('[data-testid="discharge-summary"]').click();
 
@@ -200,8 +198,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('#follow-up-date').type(followUpData.date);
 
         // Select attendees (usually defaults to current user, but good to check)
-        cy.contains('Add Surgeon').click();
-        cy.selectMuiOption('#surgeon-0', 'Test Surgeon');
+        cy.selectMuiOption('#primary_attendee', 'Test Surgeon');
 
         cy.selectMuiOption('#pain_severity-select', followUpData.painSeverity);
         cy.selectMuiOption('#mesh_awareness-select', followUpData.meshAwareness);
@@ -223,8 +220,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.contains('[data-testid="notification-alert"]', 'Follow up has been successfully saved').should('be.visible');
 
         // Click on the episode to go to its details
-        cy.wait(1000);
-        cy.contains(episodeData.date).click();
+        cy.contains(episodeData.date).should('be.visible').click();
         // Open Follow-Up accordion
         cy.get('[data-testid="follow-up-summary-0"]').click();
 
@@ -284,7 +280,7 @@ describe('Episode Journey (Real DB)', () => {
         cy.get('input[type="date"]').type(minEpisodeDate);
 
         // Use General Hospital to trigger mapping creation (matching the working test pattern)
-        // cy.selectMuiOption('#hospital', 'General Hospital');
+        cy.selectMuiOption('#hospital', 'General Hospital');
         // cy.get('#patient_hospital_id').should('be.visible').type(`${timestamp}`);
 
         cy.selectMuiOption('#episode_type', 'Inguinal Mesh Hernia Repair');
@@ -299,11 +295,12 @@ describe('Episode Journey (Real DB)', () => {
         cy.selectMuiOption('#diathermy_used', 'No');
         cy.selectMuiOption('#antibiotic_used', 'No');
 
-        cy.selectMuiOption('#surgeon-selector-0', 'Min Surgeon');
+        cy.selectMuiOption('#primary_surgeon', 'Min Surgeon');
 
         // Submit Episode
         cy.contains('button', 'Save Episode').should('not.be.disabled').click();
         cy.wait('@createEpisode').its('response.statusCode').should('eq', 201);
+        cy.contains('[data-testid="notification-alert"]', 'Episode has been successfully saved').should('be.visible');
 
         // Add a new Discharge (MINIMAL)
         cy.contains(minEpisodeDate).click();
@@ -311,20 +308,19 @@ describe('Episode Journey (Real DB)', () => {
 
         cy.get('#discharge_date').type(minDischargeDate);
         cy.selectMuiOption('#aware_of_mesh-select', 'No');
-        cy.contains('None').click();
+        cy.get('#infection-none').check();
 
         // Submit Discharge
         cy.contains('button', 'Save Discharge').should('not.be.disabled').click();
         cy.wait('@createDischarge').its('response.statusCode').should('eq', 201);
+        cy.contains('[data-testid="notification-alert"]', 'Discharge has been successfully saved').should('be.visible');
 
         // Add a new Follow Up (MINIMAL)
-        cy.wait(1000);
-        cy.contains(minEpisodeDate).click();
+        cy.contains(minEpisodeDate).should('be.visible').click();
         cy.contains('button', 'Add Follow Up').click();
 
         cy.get('#follow-up-date').type(minFollowUpDate);
-        cy.contains('Add Surgeon').click();
-        cy.selectMuiOption('#surgeon-0', 'Min Surgeon');
+        cy.selectMuiOption('#primary_attendee', 'Min Surgeon');
 
         cy.selectMuiOption('#pain_severity-select', 'Minimal');
         cy.selectMuiOption('#mesh_awareness-select', 'Yes');
@@ -337,10 +333,10 @@ describe('Episode Journey (Real DB)', () => {
         // Submit Follow Up
         cy.contains('button', 'Save Follow Up').should('not.be.disabled').click();
         cy.wait('@createFollowUp').its('response.statusCode').should('eq', 201);
+        cy.contains('[data-testid="notification-alert"]', 'Follow up has been successfully saved').should('be.visible');
 
         // Verify minimal details
-        cy.wait(1000);
-        cy.contains(minEpisodeDate).click();
+        cy.contains(minEpisodeDate).should('be.visible').click();
         cy.get('[data-testid="surgery-summary"]').click();
         cy.contains('Min Surgeon').should('exist');
         cy.get('[data-testid="discharge-summary"]').click();

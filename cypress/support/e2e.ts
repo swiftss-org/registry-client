@@ -16,3 +16,11 @@
 // Import commands.js using ES2015 syntax:
 import './commands';
 
+// Hide webpack overlay if it exists to prevent it from covering elements during tests
+Cypress.on('window:load', (win) => {
+    const style = win.document.createElement('style');
+    style.innerHTML = '#webpack-dev-server-client-overlay { display: none !important; }';
+    win.document.head.appendChild(style);
+});
+
+

@@ -51,11 +51,17 @@ yarn cy:open
 
 **Run tests in headless mode**
 ```bash
-yarn test:e2e
-```
-or
-```bash
+# Run the entire suite sequentially (default)
 yarn cy:run
+
+# Run only mocked specs (120 tests, fast, no DB required)
+yarn cy:run:mocked
+
+# Run only real-DB user-journey specs (6 tests, requires API & DB)
+yarn cy:run:e2e
+
+# Run mocked and real-DB suites in parallel locally (mirrors CI split)
+yarn cy:run:parallel
 ```
 
 

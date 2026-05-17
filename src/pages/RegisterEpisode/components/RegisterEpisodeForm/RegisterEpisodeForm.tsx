@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -47,7 +44,6 @@ type Props = {
   onDirtyChange?: (isDirty: boolean) => void;
 };
 
-export const EMPTY_ARRAY = [{}];
 
 const PROPHYLACTIC_OPTIONS = [
   { label: 'IV at start / before surgery', value: 'IV at start / before surgery' },
@@ -73,6 +69,9 @@ const initialValues = {
   diathermyUsed: { value: -1, label: '' },
   antibioticUsed: { value: -1, label: '' },
   antibioticType: [] as string[],
+  primarySurgeon: { value: -1, label: '' },
+  secondarySurgeon: { value: -1, label: '' },
+  tertiarySurgeon: { value: -1, label: '' },
   comments: '',
 };
 
@@ -109,19 +108,24 @@ const RegisterEpisodeForm: React.FC<Props> = ({
     ...initialValues,
     hospital: defaultHospital,
   });
-  const [surgeonsList, setSurgeonsList] = useState<Array<{ value: number; label: string }>>([
-    { value: -1, label: '' },
-  ]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
+  const getAvailableSurgeons = (currentFieldValue: number) => {
+    const selectedIds = [
+      values.primarySurgeon.value,
+      values.secondarySurgeon.value,
+      values.tertiarySurgeon.value,
+    ].filter((id) => id !== -1 && id !== currentFieldValue);
+
+    return surgeonOptions.filter((option) => !selectedIds.includes(option.value));
+  };
+
   useEffect(() => {
     const isDirty =
-      JSON.stringify(values) !== JSON.stringify({ ...initialValues, hospital: defaultHospital }) ||
-      surgeonsList.length > 1 ||
-      surgeonsList[0].value !== -1;
+      JSON.stringify(values) !== JSON.stringify({ ...initialValues, hospital: defaultHospital });
     onDirtyChange?.(isDirty);
-  }, [values, surgeonsList, onDirtyChange, defaultHospital]);
+  }, [values, onDirtyChange, defaultHospital]);
 
   useEffect(() => {
     if (values.hospital.value !== -1) {
@@ -187,7 +191,21 @@ const RegisterEpisodeForm: React.FC<Props> = ({
       newErrors.antibioticUsed = errorMessage;
       newErrors.antibioticType = errorMessage;
     }
-    if (surgeonsList.length === 0 || surgeonsList[0].value < 0) newErrors['surgeons[0]'] = 'Surgeon field is required';
+    if (!values.primarySurgeon || values.primarySurgeon.value < 0) {
+      newErrors.primarySurgeon = 'Main Operating Surgeon field is required';
+    }
+
+    if (values.secondarySurgeon.value !== -1 && values.secondarySurgeon.value === values.primarySurgeon.value) {
+      newErrors.secondarySurgeon = 'Cannot be the same as main operating surgeon';
+    }
+
+    if (values.tertiarySurgeon.value !== -1) {
+      if (values.tertiarySurgeon.value === values.primarySurgeon.value) {
+        newErrors.tertiarySurgeon = 'Cannot be the same as main operating surgeon';
+      } else if (values.tertiarySurgeon.value === values.secondarySurgeon.value) {
+        newErrors.tertiarySurgeon = 'Cannot be the same as assisting surgeon, if supervising and assisting please record as supervising';
+      }
+    }
 
     return newErrors;
   };
@@ -214,7 +232,6 @@ const RegisterEpisodeForm: React.FC<Props> = ({
         patientHospitalId: values.patientHospitalId,
         antibioticType:
           values.antibioticType.length > 0 ? values.antibioticType.join(',') : 'none',
-        surgeons: surgeonsList.filter((s) => s.value >= 0),
       } as RegisterEpisodeFormType);
     } else {
       setErrors(newErrors);
@@ -222,30 +239,9 @@ const RegisterEpisodeForm: React.FC<Props> = ({
       Object.keys(values).forEach((key) => {
         allTouched[key] = true;
       });
-      surgeonsList.forEach((__unused, index) => {
-        allTouched[`surgeons[${index}]`] = true;
-      });
       setTouched(allTouched);
 
       scrollToError(newErrors);
-    }
-  };
-
-  const addSurgeon = () => {
-    setSurgeonsList([...surgeonsList, { value: -1, label: '' }]);
-  };
-
-  const removeSurgeon = (index: number) => {
-    const newList = surgeonsList.filter((__unused, i) => i !== index);
-    setSurgeonsList(newList);
-  };
-
-  const updateSurgeon = (index: number, surgeon: { value: number; label: string }) => {
-    const newList = [...surgeonsList];
-    newList[index] = surgeon;
-    setSurgeonsList(newList);
-    if (errors[`surgeons[${index}]`]) {
-      setErrors({ ...errors, [`surgeons[${index}]`]: '' });
     }
   };
 
@@ -678,53 +674,116 @@ const RegisterEpisodeForm: React.FC<Props> = ({
 
         <Box sx={{ mb: 3 }}>
           <Typography variant="subtitle1" gutterBottom>
-            Surgeon(s)
+            Surgeons
           </Typography>
-          {surgeonsList.map((surgeon, index) => (
-            <Box key={index} sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'flex-start' }}>
-              <FormControl
-                fullWidth
-                id={`surgeon-selector-${index}`}
-                error={touched[`surgeons[${index}]`] && !!errors[`surgeons[${index}]`]}
-                required={index === 0}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <FormControl
+              fullWidth
+              id="surgeon-primary"
+              error={touched.primarySurgeon && !!errors.primarySurgeon}
+              required
+            >
+              <InputLabel>Main Operating Surgeon</InputLabel>
+              <Select
+                id="primary_surgeon"
+                name="primarySurgeon"
+                value={values.primarySurgeon.value === -1 ? '' : values.primarySurgeon.value}
+                label="Main Operating Surgeon"
+                onChange={(e: SelectChangeEvent<number>) => {
+                  const selectedOption = surgeonOptions.find(
+                    (option) => option.value === Number(e.target.value)
+                  );
+                  if (selectedOption) {
+                    handleSelectChange('primarySurgeon', selectedOption);
+                  }
+                }}
+                onBlur={() => handleSelectBlur('primarySurgeon')}
               >
-                <InputLabel>Surgeon</InputLabel>
-                <Select
-                  id={`surgeon-${index}`}
-                  name={`surgeons[${index}]`}
-                  value={surgeon.value === -1 ? '' : surgeon.value}
-                  label="Surgeon"
-                  onChange={(e: SelectChangeEvent<number>) => {
-                    const selectedOption = surgeonOptions.find(
-                      (option) => option.value === Number(e.target.value)
-                    );
-                    if (selectedOption) {
-                      updateSurgeon(index, selectedOption);
-                    }
-                  }}
-                  onBlur={() => handleSelectBlur(`surgeons[${index}]`)}
-                >
-                  {surgeonOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>
-                  {touched[`surgeons[${index}]`] && errors[`surgeons[${index}]`]}
-                </FormHelperText>
-              </FormControl>
-              {index === 0 ? (
-                <IconButton id="AddIcon" onClick={addSurgeon} color="primary" sx={{ mt: 1 }}>
-                  <AddIcon />
-                </IconButton>
-              ) : (
-                <IconButton onClick={() => removeSurgeon(index)} color="error" sx={{ mt: 1 }}>
-                  <DeleteIcon />
-                </IconButton>
-              )}
-            </Box>
-          ))}
+                {getAvailableSurgeons(values.primarySurgeon.value).map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>
+                {touched.primarySurgeon && errors.primarySurgeon}
+              </FormHelperText>
+            </FormControl>
+
+            <FormControl
+              fullWidth
+              id="surgeon-secondary"
+              error={touched.secondarySurgeon && !!errors.secondarySurgeon}
+            >
+              <InputLabel>Secondary / Assisting Surgeon</InputLabel>
+              <Select
+                id="secondary_surgeon"
+                name="secondarySurgeon"
+                value={values.secondarySurgeon.value === -1 ? '' : values.secondarySurgeon.value}
+                label="Secondary / Assisting Surgeon"
+                onChange={(e: SelectChangeEvent<number>) => {
+                  const selectedOption = surgeonOptions.find(
+                    (option) => option.value === Number(e.target.value)
+                  );
+                  if (selectedOption) {
+                    handleSelectChange('secondarySurgeon', selectedOption);
+                  } else {
+                    handleSelectChange('secondarySurgeon', { value: -1, label: '' });
+                  }
+                }}
+                onBlur={() => handleSelectBlur('secondarySurgeon')}
+              >
+                <MenuItem value={-1}>
+                  <em>None</em>
+                </MenuItem>
+                {getAvailableSurgeons(values.secondarySurgeon.value).map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>
+                {touched.secondarySurgeon && errors.secondarySurgeon}
+              </FormHelperText>
+            </FormControl>
+
+            <FormControl
+              fullWidth
+              id="surgeon-tertiary"
+              error={touched.tertiarySurgeon && !!errors.tertiarySurgeon}
+            >
+              <InputLabel>Supervising Surgeon if present / applicable</InputLabel>
+              <Select
+                id="tertiary_surgeon"
+                name="tertiarySurgeon"
+                value={values.tertiarySurgeon.value === -1 ? '' : values.tertiarySurgeon.value}
+                label="Supervising Surgeon if present / applicable"
+                onChange={(e: SelectChangeEvent<number>) => {
+                  const selectedOption = surgeonOptions.find(
+                    (option) => option.value === Number(e.target.value)
+                  );
+                  if (selectedOption) {
+                    handleSelectChange('tertiarySurgeon', selectedOption);
+                  } else {
+                    handleSelectChange('tertiarySurgeon', { value: -1, label: '' });
+                  }
+                }}
+                onBlur={() => handleSelectBlur('tertiarySurgeon')}
+              >
+                <MenuItem value={-1}>
+                  <em>None</em>
+                </MenuItem>
+                {getAvailableSurgeons(values.tertiarySurgeon.value).map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>
+                {touched.tertiarySurgeon && errors.tertiarySurgeon}
+              </FormHelperText>
+            </FormControl>
+          </Box>
         </Box>
 
         <TextField

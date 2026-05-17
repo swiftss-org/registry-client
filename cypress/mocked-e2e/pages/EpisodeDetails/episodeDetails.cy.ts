@@ -158,17 +158,15 @@ describe('Episode Details Page', () => {
                             antibiotic_type: 'Cephalosporin',
                             comments: 'Test surgery comments',
                             anaesthetic_type: 'General',
-                            surgeons: [
-                                {
-                                    id: 1,
-                                    user: {
-                                        email: 'surgeon@example.com',
-                                        first_name: 'John',
-                                        last_name: 'Doe'
-                                    },
-                                    level: 'Consultant'
-                                }
-                            ]
+                            primary_surgeon: {
+                                id: 1,
+                                user: {
+                                    email: 'surgeon@example.com',
+                                    first_name: 'John',
+                                    last_name: 'Doe'
+                                },
+                                level: 'Consultant'
+                            }
                         }
                     }).as('getEpisode');
 
@@ -259,7 +257,7 @@ describe('Episode Details Page', () => {
                     cy.get('#diathermy_used').should('have.text', 'Yes').and('be.visible');
                     cy.get('#antibiotic_used').should('have.text', 'Yes').and('be.visible');
                     cy.get('#antibiotic_type').should('have.text', 'Cephalosporin').and('be.visible');
-                    cy.get('#surgeon_0').should('have.text', 'John Doe').and('be.visible');
+                    cy.get('#primary_surgeon').should('have.text', 'John Doe');
                     cy.get('#surgery_comments').should('have.text', 'Test surgery comments');
                 });
 
@@ -332,7 +330,7 @@ describe('Episode Details Page', () => {
                     cy.get('#recurrence').should('have.text', 'Yes').and('be.visible');
                     cy.get('#further_surgery_need').should('have.text', 'Yes').and('be.visible');
                     cy.contains('Patient recovering well').scrollIntoView().click().should('be.visible');
-                    cy.get('#surgeon_0').should('have.text', 'John Doe');
+                    cy.get('#primary_surgeon').should('have.text', 'John Doe');
                     cy.get('#follow_up_comments').should('have.text', 'Patient recovering well').and('be.visible');
 
                 });
@@ -469,8 +467,7 @@ describe('Episode Details Page', () => {
                 cy.get('#follow-up-date').type('2023-02-15');
 
                 // Add Surgeon
-                cy.contains('Add Surgeon').click();
-                cy.selectMuiOption('#surgeon-0', 'John Doe');
+                cy.selectMuiOption('#primary_attendee', 'John Doe');
 
                 cy.selectMuiOption('#pain_severity-select', 'No Pain');
                 cy.selectMuiOption('#mesh_awareness-select', 'Yes');
@@ -600,11 +597,11 @@ describe('Episode Details Page', () => {
                 cy.contains('Follow up date is required. Please select a date.').should('exist');
             });
 
-            it('should validate Surgeon is required', () => {
+            it('should validate Main Attendee is required', () => {
                 cy.contains('Add Follow Up').parents('.MuiAccordion-root').within(() => {
                     cy.contains('button', 'Save Follow Up').click();
                 });
-                cy.contains('Surgeon is required.').should('exist');
+                cy.contains('Main Attendee is required.').should('exist');
             });
 
             it('should validate Pain Severity is required', () => {
@@ -656,7 +653,7 @@ describe('Episode Details Page', () => {
                     cy.contains('button', 'Save Follow Up').click();
 
                     cy.contains('Follow up date is required. Please select a date.').should('exist');
-                    cy.contains('Surgeon is required.').should('exist');
+                    cy.contains('Main Attendee is required.').should('exist');
                     cy.contains('Pain severity is required.').should('exist');
                     cy.contains('Mesh awareness is required.').should('exist');
                     cy.contains('Seroma is required.').should('exist');
@@ -698,26 +695,24 @@ describe('Episode Details Page', () => {
                     antibiotic_type: 'Cephalosporin',
                     comments: 'Test surgery comments',
                     anaesthetic_type: 'General',
-                    surgeons: [
-                        {
-                            id: 1,
-                            user: {
-                                email: 'surgeon1@example.com',
-                                first_name: 'John',
-                                last_name: 'Doe'
-                            },
-                            level: 'Consultant'
+                    primary_surgeon: {
+                        id: 1,
+                        user: {
+                            email: 'surgeon1@example.com',
+                            first_name: 'John',
+                            last_name: 'Doe'
                         },
-                        {
-                            id: 2,
-                            user: {
-                                email: 'surgeon2@example.com',
-                                first_name: 'Jane',
-                                last_name: 'Smith'
-                            },
-                            level: 'Registrar'
-                        }
-                    ]
+                        level: 'Consultant'
+                    },
+                    secondary_surgeon: {
+                        id: 2,
+                        user: {
+                            email: 'surgeon2@example.com',
+                            first_name: 'Jane',
+                            last_name: 'Smith'
+                        },
+                        level: 'Registrar'
+                    }
                 }
             }).as('getEpisodeMultipleSurgeons');
 
@@ -727,8 +722,8 @@ describe('Episode Details Page', () => {
             cy.get('main > div > div > div:nth-child(2) > h3 > button').click();
             cy.contains('Test surgery comments').scrollIntoView().click().should('be.visible');
 
-            cy.get('#surgeon_0').should('have.text', 'John Doe').should('be.visible');
-            cy.get('#surgeon_1').should('have.text', 'Jane Smith').should('be.visible');
+            cy.get('#primary_surgeon').should('have.text', 'John Doe').should('be.visible');
+            cy.get('#secondary_surgeon').should('have.text', 'Jane Smith').should('be.visible');
         });
 
         it('should handle missing optional fields gracefully', () => {
@@ -750,7 +745,7 @@ describe('Episode Details Page', () => {
                     antibiotic_type: '',
                     comments: '',
                     anaesthetic_type: 'General',
-                    surgeons: []
+                    primary_surgeon: null
                 }
             }).as('getEpisodeMinimal');
 
@@ -762,7 +757,9 @@ describe('Episode Details Page', () => {
             cy.get('main > div > div > div:nth-child(2) > h3 > button').click(); // Open Surgery section
             cy.get('#antibiotic_used').should('have.text', 'No');
             cy.get('#antibiotic_type').should('have.text', '—');
-            cy.get('#surgeon_0').should('not.exist');
+            cy.get('#primary_surgeon').should('have.text', 'Not recorded');
+            cy.get('#secondary_surgeon').should('have.text', 'None');
+            cy.get('#tertiary_surgeon').should('have.text', 'None');
         });
     });
 
@@ -778,7 +775,7 @@ describe('Episode Details Page', () => {
                     id: 888,
                     episode_type: 'Primary Inguinal',
                     surgery_date: '2023-01-15',
-                    surgeons: [],
+                    primary_surgeon: null,
                     diathermy_used: false,
                     antibiotic_used: false,
                 }
@@ -852,8 +849,7 @@ describe('Episode Details Page', () => {
 
             cy.contains('Add Follow Up').click();
             cy.get('#follow-up-date').type('2023-02-15');
-            cy.contains('Add Surgeon').click();
-            cy.selectMuiOption('#surgeon-0', 'John Doe');
+            cy.selectMuiOption('#primary_attendee', 'John Doe');
             cy.selectMuiOption('#pain_severity-select', 'No Pain');
             cy.selectMuiOption('#mesh_awareness-select', 'Yes');
             cy.selectMuiOption('#seroma-select', 'Yes');

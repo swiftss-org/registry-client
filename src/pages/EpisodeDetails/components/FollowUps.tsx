@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
   Box,
   Button,
@@ -13,7 +11,7 @@ import {
   Stack,
   TextareaAutosize,
   TextField,
-  IconButton,
+  Typography,
 } from '@mui/material';
 import { useFollowUp, useGetSurgeons } from 'hooks/api/patientHooks';
 import { FollowUpAPI, FollowUpForm, SelectOption } from 'models/apiTypes';
@@ -25,7 +23,10 @@ import { scrollToError } from 'utils/formUtils';
 
 interface FollowUpFormState {
   date: string;
-  attendees: number[]; // Array of surgeon IDs
+  attendees: number[]; // Legacy array for backward compatibility
+  primaryAttendee: number | '';
+  secondaryAttendee: number | '';
+  tertiaryAttendee: number | '';
   pain_severity: string;
   mesh_awareness: number | '';
   seroma: number | '';
@@ -55,6 +56,9 @@ const FollowUps: FC<{
   const [formState, setFormState] = useState<FollowUpFormState>({
     date: '',
     attendees: [],
+    primaryAttendee: '',
+    secondaryAttendee: '',
+    tertiaryAttendee: '',
     pain_severity: '',
     mesh_awareness: '',
     seroma: '',
@@ -73,6 +77,9 @@ const FollowUps: FC<{
       setFormState({
         date: followUp.date || '',
         attendees: followUp.attendees ? followUp.attendees.map((a: { id: number }) => a.id) : [],
+        primaryAttendee: followUp.primary_attendee?.id || '',
+        secondaryAttendee: followUp.secondary_attendee?.id || '',
+        tertiaryAttendee: followUp.tertiary_attendee?.id || '',
         pain_severity: followUp.pain_severity || '',
         mesh_awareness: getBooleanValue(followUp.mesh_awareness),
         seroma: getBooleanValue(followUp.seroma),
@@ -127,12 +134,31 @@ const FollowUps: FC<{
           const option = surgeonOptions.find((o: SelectOption) => o.value === id);
           return { label: option?.label || '', value: id };
         }),
+        primaryAttendee: values.primaryAttendee
+          ? surgeonOptions.find((o) => o.value === values.primaryAttendee)
+          : undefined,
+        secondaryAttendee: values.secondaryAttendee
+          ? surgeonOptions.find((o) => o.value === values.secondaryAttendee)
+          : undefined,
+        tertiaryAttendee: values.tertiaryAttendee
+          ? surgeonOptions.find((o) => o.value === values.tertiaryAttendee)
+          : undefined,
       };
 
       return followUpFormValidation(validationValues);
     },
     [surgeonOptions]
   );
+
+  const getAvailableAttendees = (currentFieldValue: number) => {
+    const selectedIds = [
+      formState.primaryAttendee,
+      formState.secondaryAttendee,
+      formState.tertiaryAttendee,
+    ].filter((id) => id !== '' && id !== -1 && id !== currentFieldValue);
+
+    return surgeonOptions.filter((option) => !selectedIds.includes(option.value));
+  };
 
   useEffect(() => {
     const validationErrors = validate(formState);
@@ -147,32 +173,14 @@ const FollowUps: FC<{
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleAttendeeChange = (index: number, value: number) => {
-    setFormState((prev) => {
-      const newAttendees = [...prev.attendees];
-      newAttendees[index] = value;
-      return { ...prev, attendees: newAttendees };
-    });
-    setTouched((prev) => ({ ...prev, attendees: true }));
-  };
-
-  const handleAddAttendee = () => {
-    setFormState((prev) => ({ ...prev, attendees: [...prev.attendees, 0] })); // 0 or empty placeholder
-  };
-
-  const handleRemoveAttendee = (index: number) => {
-    setFormState((prev) => ({
-      ...prev,
-      attendees: prev.attendees.filter((__, i) => i !== index)
-    }));
-  }
-
   const handleSubmit = () => {
     const validationErrors = validate(formState);
     setErrors(validationErrors || {});
     setTouched({
       date: true,
-      attendees: true,
+      primaryAttendee: true,
+      secondaryAttendee: true,
+      tertiaryAttendee: true,
       pain_severity: true,
       mesh_awareness: true,
       seroma: true,
@@ -201,6 +209,15 @@ const FollowUps: FC<{
             const option = surgeonOptions.find((o: SelectOption) => o.value === id);
             return { label: option?.label || '', value: id };
           }),
+        primaryAttendee: formState.primaryAttendee
+          ? surgeonOptions.find((o) => o.value === formState.primaryAttendee)
+          : undefined,
+        secondaryAttendee: formState.secondaryAttendee
+          ? surgeonOptions.find((o) => o.value === formState.secondaryAttendee)
+          : undefined,
+        tertiaryAttendee: formState.tertiaryAttendee
+          ? surgeonOptions.find((o) => o.value === formState.tertiaryAttendee)
+          : undefined,
       };
 
       mutate(payload);
@@ -235,47 +252,82 @@ const FollowUps: FC<{
         </Box>
 
         <Box>
-          {formState.attendees.map((attendeeId, index) => (
-            <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-              <Box sx={{ flexGrow: 1 }}>
-                <FormControl fullWidth>
-                  <InputLabel id={`surgeon-label-${index}`}>Surgeon</InputLabel>
-                  <Select
-                    labelId={`surgeon-label-${index}`}
-                    id={`surgeon-${index}`}
-                    name={index === 0 ? 'attendees' : undefined}
-                    value={attendeeId === 0 ? '' : attendeeId}
-                    label="Surgeon"
-                    onChange={(e) => handleAttendeeChange(index, Number(e.target.value))}
-                  >
-                    {surgeonOptions.map((option: SelectOption) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-              {index === formState.attendees.length - 1 && (
-                <IconButton onClick={handleAddAttendee} color="primary">
-                  <AddCircleOutlineIcon />
-                </IconButton>
-              )}
-              {formState.attendees.length > 0 && (
-                <IconButton onClick={() => handleRemoveAttendee(index)} color="error">
-                  <RemoveCircleOutlineIcon />
-                </IconButton>
-              )}
-            </Box>
-          ))}
-          {formState.attendees.length === 0 && (
-            <Button startIcon={<AddCircleOutlineIcon />} onClick={handleAddAttendee}>
-              Add Surgeon
-            </Button>
-          )}
-          {touched.attendees && errors.attendees && (
-            <FormHelperText error sx={{ mt: 1 }}>{errors.attendees}</FormHelperText>
-          )}
+          <Typography variant="subtitle1" gutterBottom>
+            Attendees
+          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <FormControl
+              fullWidth
+              error={touched.primaryAttendee && !!errors.primaryAttendee}
+              required={canSubmit}
+            >
+              <InputLabel>Main Attendee</InputLabel>
+              <Select
+                id="primary_attendee"
+                name="primaryAttendee"
+                value={formState.primaryAttendee === -1 || formState.primaryAttendee === '' ? '' : formState.primaryAttendee}
+                label="Main Attendee"
+                disabled={!canSubmit}
+                onChange={(e) => handleChange('primaryAttendee', Number(e.target.value))}
+                onBlur={() => handleBlur('primaryAttendee')}
+              >
+                {getAvailableAttendees(formState.primaryAttendee as number).map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{touched.primaryAttendee && errors.primaryAttendee}</FormHelperText>
+            </FormControl>
+
+            <FormControl
+              fullWidth
+              error={touched.secondaryAttendee && !!errors.secondaryAttendee}
+            >
+              <InputLabel>Assistant 1</InputLabel>
+              <Select
+                id="secondary_attendee"
+                name="secondaryAttendee"
+                value={formState.secondaryAttendee === -1 || formState.secondaryAttendee === '' ? '' : formState.secondaryAttendee}
+                label="Assistant 1"
+                disabled={!canSubmit}
+                onChange={(e) => handleChange('secondaryAttendee', Number(e.target.value))}
+                onBlur={() => handleBlur('secondaryAttendee')}
+              >
+                <MenuItem value={-1}><em>None</em></MenuItem>
+                {getAvailableAttendees(formState.secondaryAttendee as number).map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{touched.secondaryAttendee && errors.secondaryAttendee}</FormHelperText>
+            </FormControl>
+
+            <FormControl
+              fullWidth
+              error={touched.tertiaryAttendee && !!errors.tertiaryAttendee}
+            >
+              <InputLabel>Assistant 2</InputLabel>
+              <Select
+                id="tertiary_attendee"
+                name="tertiaryAttendee"
+                value={formState.tertiaryAttendee === -1 || formState.tertiaryAttendee === '' ? '' : formState.tertiaryAttendee}
+                label="Assistant 2"
+                disabled={!canSubmit}
+                onChange={(e) => handleChange('tertiaryAttendee', Number(e.target.value))}
+                onBlur={() => handleBlur('tertiaryAttendee')}
+              >
+                <MenuItem value={-1}><em>None</em></MenuItem>
+                {getAvailableAttendees(formState.tertiaryAttendee as number).map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>{touched.tertiaryAttendee && errors.tertiaryAttendee}</FormHelperText>
+            </FormControl>
+          </Box>
         </Box>
 
         <Box>

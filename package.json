@@ -55,7 +55,10 @@
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build",
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "cy:run:mocked": "cypress run --spec 'cypress/mocked-e2e/**/*.cy.ts'",
+    "cy:run:e2e": "cypress run --spec 'cypress/user-journey-e2e/**/*.cy.ts'",
+    "cy:run:parallel": "yarn cy:run:mocked & yarn cy:run:e2e & wait"
   },
   "browserslist": {
     "production": [

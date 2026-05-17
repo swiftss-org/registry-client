@@ -16,9 +16,8 @@ export type RegisterEpisodeFormType = {
   diathermyUsed: SelectOption;
   antibioticUsed: SelectOption;
   antibioticType: string;
-  surgeons: {
-    label: string;
-    value: number;
-  }[];
+  primarySurgeon: SelectOption;
+  secondarySurgeon?: SelectOption;
+  tertiarySurgeon?: SelectOption;
   comments?: string;
 };

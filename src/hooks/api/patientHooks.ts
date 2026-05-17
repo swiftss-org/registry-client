@@ -243,8 +243,14 @@ export const useRegisterEpisode = (
         diathermy_used: params?.diathermyUsed?.label === 'Yes',
         antibiotic_used: params?.antibioticUsed?.label === 'Yes',
         antibiotic_type: params?.antibioticType,
-        surgeon_ids:
-          params?.surgeons?.map((surgeon) => surgeon?.value) ?? ['1'],
+        surgeon_ids: [
+          params?.primarySurgeon?.value,
+          params?.secondarySurgeon?.value,
+          params?.tertiarySurgeon?.value,
+        ].filter((id) => id && id !== -1) as number[],
+        primary_surgeon_id: params?.primarySurgeon?.value !== -1 ? params?.primarySurgeon?.value : undefined,
+        secondary_surgeon_id: params?.secondarySurgeon?.value !== -1 ? params?.secondarySurgeon?.value : undefined,
+        tertiary_surgeon_id: params?.tertiarySurgeon?.value !== -1 ? params?.tertiarySurgeon?.value : undefined,
         ...(params?.comments?.trim() ? { comments: params.comments.trim() } : {}),
         mesh_type: params?.meshType?.label,
         episode_type: params?.episodeType.label,
@@ -357,16 +363,25 @@ export const useFollowUp = (episodeID: string) => {
       const payload = {
         episode_id: parseInt(episodeID),
         date: params?.date,
-        attendee_ids:
-          params?.attendees?.map((attendee) => attendee?.value) ?? ['1'],
+        attendee_ids: [
+          params?.primaryAttendee?.value,
+          params?.secondaryAttendee?.value,
+          params?.tertiaryAttendee?.value,
+          ...(params?.attendees?.map((attendee) => attendee?.value) || []),
+        ].filter((id) => id && id !== -1) as number[],
+        primary_attendee_id:
+          params?.primaryAttendee?.value !== -1 ? params?.primaryAttendee?.value : undefined,
+        secondary_attendee_id:
+          params?.secondaryAttendee?.value !== -1 ? params?.secondaryAttendee?.value : undefined,
+        tertiary_attendee_id:
+          params?.tertiaryAttendee?.value !== -1 ? params?.tertiaryAttendee?.value : undefined,
         mesh_awareness: params?.mesh_awareness.label === 'Yes',
         seroma: params?.seroma.label === 'Yes',
         infection: params?.infection.label === 'Yes',
         numbness: params?.numbness.label === 'Yes',
         recurrence: params?.recurrence.label === 'Yes',
         pain_severity: params?.pain_severity.label,
-        further_surgery_need:
-          params?.further_surgery_need.label === 'Yes',
+        further_surgery_need: params?.further_surgery_need.label === 'Yes',
         ...(params?.surgery_comments_box?.trim()
           ? { surgery_comments_box: params.surgery_comments_box.trim() }
           : {}),

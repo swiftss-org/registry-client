@@ -7,7 +7,13 @@ describe('Register Episode Page', () => {
 
         // Mock shared APIs
         cy.intercept('GET', '**/hospitals/**', { results: [{ id: 1, name: 'General Hospital' }, { id: 2, name: 'City Hospital' }] }).as('getHospitals');
-        cy.intercept('GET', '**/medical-personnel/**', { results: [{ id: 1, user: { first_name: 'Dr.', last_name: 'Surgeon' } }] }).as('getSurgeons');
+        cy.intercept('GET', '**/medical-personnel/**', {
+            results: [
+                { id: 1, user: { first_name: 'Dr.', last_name: 'Surgeon' } },
+                { id: 2, user: { first_name: 'Assistant', last_name: 'Surgeon' } },
+                { id: 3, user: { first_name: 'Junior', last_name: 'Surgeon' } },
+            ]
+        }).as('getSurgeons');
         cy.intercept('GET', '**/patients/101/', { id: 101, first_name: 'John', last_name: 'Doe', hospital_mappings: [{ hospital_id: 2, patient_hospital_id: 2 }] }).as('getPatient');
 
         cy.visit('/patients/1/101/add-episode');
@@ -22,38 +28,38 @@ describe('Register Episode Page', () => {
             cy.intercept('POST', '**/patient-hospital-mappings/', { statusCode: 201, body: { id: 999 } }).as('registerPatientHospitalMapping');
 
             cy.selectMuiOption('#hospital', 'General Hospital');
-            cy.contains('General Hospital').should('be.visible');
+            cy.get('#hospital').should('contain', 'General Hospital');
 
             cy.get('#patient_hospital_id').click().type('0234');
             cy.get('#patient_hospital_id').should('have.value', '0234');
 
             // Select Episode Type
             cy.selectMuiOption('#episode_type', 'Femoral Mesh Hernia Repair');
-            cy.contains('Femoral Mesh Hernia Repair').should('be.visible');
+            cy.get('#episode_type').should('contain', 'Femoral Mesh Hernia Repair');
 
             // CEPOD
             cy.selectMuiOption('#cepod', 'Emergency');
-            cy.contains('Emergency').should('be.visible');
+            cy.get('#cepod').should('contain', 'Emergency');
 
             // Side
             cy.selectMuiOption('#side', 'Right');
-            cy.contains('Right').should('be.visible');
+            cy.get('#side').should('contain', 'Right');
 
             // Occurrence
             cy.selectMuiOption('#occurence', 'Recurrent');
-            cy.contains('Recurrent').should('be.visible');
+            cy.get('#occurence').should('contain', 'Recurrent');
 
             // Type
             cy.selectMuiOption('#type', 'Indirect');
-            cy.contains('Indirect').should('be.visible');
+            cy.get('#type').should('contain', 'Indirect');
 
             // Size
             cy.selectMuiOption('#size', 'Very Large (>4 finger breadths)');
-            cy.contains('Very Large (>4 finger breadths)').should('be.visible');
+            cy.get('#size').should('contain', 'Very Large (>4 finger breadths)');
 
             // Complexity
             cy.selectMuiOption('#complexity', 'Irreducible');
-            cy.contains('Irreducible').should('be.visible');
+            cy.get('#complexity').should('contain', 'Irreducible');
 
             // Surgery Date
             cy.get('#surgery_date').type('2023-11-20');
@@ -61,26 +67,26 @@ describe('Register Episode Page', () => {
 
             // Mesh Type
             cy.selectMuiOption('#mesh_type', 'TNMHP Mesh');
-            cy.contains('TNMHP Mesh').should('be.visible');
+            cy.get('#mesh_type').should('contain', 'TNMHP Mesh');
 
             // Anaesthetic Type
             cy.selectMuiOption('#anaesthetic_type', 'Local Anaesthetic');
-            cy.contains('Local Anaesthetic').should('be.visible');
+            cy.get('#anaesthetic_type').should('contain', 'Local Anaesthetic');
 
             // Diathermy Used - Yes/No
             cy.selectMuiOption('#diathermy_used', 'Yes');
-            cy.contains('Yes').should('be.visible');
+            cy.get('#diathermy_used').should('contain', 'Yes');
 
             // Antibiotic Used - Yes/No
             cy.selectMuiOption('#antibiotic_used', 'Yes');
-            cy.contains('Yes').should('be.visible');
+            cy.get('#antibiotic_used').should('contain', 'Yes');
 
             // Selecting +24hrs Post Op IV
             cy.get('#_24hrs_post_op_iv').check();
 
             // Surgeon
-            cy.selectMuiOption('#surgeon-selector-0', 'Dr. Surgeon');
-            cy.contains('Dr. Surgeon').should('be.visible');
+            cy.selectMuiOption('#primary_surgeon', 'Dr. Surgeon');
+            cy.get('#primary_surgeon').should('contain', 'Dr. Surgeon');
 
             // Comments
             cy.get('#comments').type('Successfull surgery', { delay: 2 });
@@ -249,7 +255,7 @@ describe('Register Episode Page', () => {
             cy.contains('Prophylactic antibiotics field is required').should('exist');
         });
 
-        it('should validate Surgeon is required', () => {
+        it('should validate Main Operating Surgeon is required', () => {
             cy.selectMuiOption('#episode_type', 'Femoral Mesh Hernia Repair');
             cy.get('#surgery_date').type('2023-11-20');
             cy.selectMuiOption('#cepod', 'Emergency');
@@ -265,13 +271,9 @@ describe('Register Episode Page', () => {
             cy.get('#_24hrs_post_op_iv').check();
             cy.get('#comments').type('Successfull surgery');
 
-            cy.get('#surgeon-0').click();
-            cy.get('body').click();
-            cy.get('.MuiPopover-root').should('not.exist');
-
             cy.contains('button', 'Save Episode').click();
 
-            cy.contains('Surgeon field is required').should('exist');
+            cy.contains('Main Operating Surgeon field is required').should('exist');
         });
 
         it('should validate all field before submitting the form', () => {
@@ -292,7 +294,7 @@ describe('Register Episode Page', () => {
             cy.contains('Anaesthetic Type field is required').should('exist');
             cy.contains('Diathermy Used field is required').should('exist');
             cy.contains('Prophylactic antibiotics field is required').should('exist');
-            cy.contains('Surgeon field is required').should('exist');
+            cy.contains('Main Operating Surgeon field is required').should('exist');
         });
     });
 
@@ -336,7 +338,7 @@ describe('Register Episode Page', () => {
             cy.selectMuiOption('#anaesthetic_type', 'Local Anaesthetic');
             cy.selectMuiOption('#diathermy_used', 'Yes');
             cy.selectMuiOption('#antibiotic_used', 'No');
-            cy.selectMuiOption('#surgeon-selector-0', 'Dr. Surgeon');
+            cy.selectMuiOption('#primary_surgeon', 'Dr. Surgeon');
             cy.get('#comments').type('Successfull surgery');
 
             cy.contains('button', 'Save Episode').click();
@@ -371,7 +373,7 @@ describe('Register Episode Page', () => {
             cy.selectMuiOption('#anaesthetic_type', 'Local Anaesthetic');
             cy.selectMuiOption('#diathermy_used', 'Yes');
             cy.selectMuiOption('#antibiotic_used', 'No');
-            cy.selectMuiOption('#surgeon-selector-0', 'Dr. Surgeon');
+            cy.selectMuiOption('#primary_surgeon', 'Dr. Surgeon');
             cy.get('#comments').type('Surgery with errors');
 
             cy.contains('button', 'Save Episode').click();
@@ -399,7 +401,7 @@ describe('Register Episode Page', () => {
             cy.selectMuiOption('#anaesthetic_type', 'Local Anaesthetic');
             cy.selectMuiOption('#diathermy_used', 'Yes');
             cy.selectMuiOption('#antibiotic_used', 'No');
-            cy.selectMuiOption('#surgeon-selector-0', 'Dr. Surgeon');
+            cy.selectMuiOption('#primary_surgeon', 'Dr. Surgeon');
 
             // Enter comments with special characters
             cy.get('#comments').type('Patient had: <script>alert("test")</script> & "quoted" text');
@@ -409,6 +411,53 @@ describe('Register Episode Page', () => {
             cy.wait('@registerEpisode').then((interception) => {
                 expect(interception.request.body.comments).to.equal('Patient had: <script>alert("test")</script> & "quoted" text');
             });
+        });
+    });
+
+    describe('Surgeon Selection Filtering', () => {
+        it('should filter out already selected surgeons from other surgeon fields', () => {
+            // Select Primary Surgeon
+            cy.selectMuiOption('#primary_surgeon', 'Dr. Surgeon');
+            cy.get('#primary_surgeon').should('contain', 'Dr. Surgeon');
+
+            // Open Secondary Surgeon and check that Dr. Surgeon is not available
+            cy.get('#secondary_surgeon').click();
+            cy.get('[role="listbox"]').should('not.contain', 'Dr. Surgeon');
+            cy.get('[role="listbox"]').should('contain', 'Assistant Surgeon');
+            cy.get('[role="listbox"]').should('contain', 'Junior Surgeon');
+
+            // Select Assistant Surgeon as Secondary
+            cy.get('[role="listbox"]').contains('Assistant Surgeon').click();
+            cy.get('#secondary_surgeon').should('contain', 'Assistant Surgeon');
+
+            // Open Tertiary Surgeon and check that both Dr. Surgeon and Assistant Surgeon are not available
+            cy.get('#tertiary_surgeon').click();
+            cy.get('[role="listbox"]').should('not.contain', 'Dr. Surgeon');
+            cy.get('[role="listbox"]').should('not.contain', 'Assistant Surgeon');
+            cy.get('[role="listbox"]').should('contain', 'Junior Surgeon');
+
+            // Close the listbox
+            cy.get('body').click();
+            cy.get('.MuiPopover-root').should('not.exist');
+        });
+
+        it('should allow a surgeon to be re-selected if they are deselected from another field', () => {
+            // Select Primary and Secondary Surgeons
+            cy.selectMuiOption('#primary_surgeon', 'Dr. Surgeon');
+            cy.selectMuiOption('#secondary_surgeon', 'Assistant Surgeon');
+
+            // Deselect Secondary Surgeon
+            cy.get('#secondary_surgeon').click();
+            cy.get('[role="listbox"]').contains('None').click();
+            cy.get('.MuiPopover-root').should('not.exist');
+
+            // Now Assistant Surgeon should be available in Tertiary Surgeon
+            cy.get('#tertiary_surgeon').click();
+            cy.get('[role="listbox"]').should('contain', 'Assistant Surgeon');
+            cy.get('[role="listbox"]').should('not.contain', 'Dr. Surgeon');
+
+            // Close
+            cy.get('body').click();
         });
     });
 });

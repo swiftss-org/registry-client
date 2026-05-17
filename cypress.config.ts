@@ -7,6 +7,7 @@ export default defineConfig({
         chromeWebSecurity: false,
         allowCypressEnv: false,
         baseUrl: 'http://localhost:3000',
+        video: false,
         supportFile: 'cypress/support/e2e.ts',
         viewportWidth: 1280,
         viewportHeight: 720,
