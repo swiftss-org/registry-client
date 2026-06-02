@@ -365,16 +365,10 @@ export const useFollowUp = (episodeID: string) => {
         date: params?.date,
         attendee_ids: [
           params?.primaryAttendee?.value,
-          params?.secondaryAttendee?.value,
-          params?.tertiaryAttendee?.value,
           ...(params?.attendees?.map((attendee) => attendee?.value) || []),
         ].filter((id) => id && id !== -1) as number[],
         primary_attendee_id:
           params?.primaryAttendee?.value !== -1 ? params?.primaryAttendee?.value : undefined,
-        secondary_attendee_id:
-          params?.secondaryAttendee?.value !== -1 ? params?.secondaryAttendee?.value : undefined,
-        tertiary_attendee_id:
-          params?.tertiaryAttendee?.value !== -1 ? params?.tertiaryAttendee?.value : undefined,
         mesh_awareness: params?.mesh_awareness.label === 'Yes',
         seroma: params?.seroma.label === 'Yes',
         infection: params?.infection.label === 'Yes',
