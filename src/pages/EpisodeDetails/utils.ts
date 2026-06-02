@@ -56,19 +56,7 @@ export const followUpFormValidation = (values: FollowUpForm) => {
   }
 
   if (!values.primaryAttendee || !values.primaryAttendee.value || values.primaryAttendee.value < 0) {
-    errors.primaryAttendee = 'Main Attendee is required.';
-  }
-
-  if (values.secondaryAttendee && values.secondaryAttendee.value !== -1 && values.secondaryAttendee.value === values.primaryAttendee?.value) {
-    errors.secondaryAttendee = 'Cannot be the same as main attendee';
-  }
-
-  if (values.tertiaryAttendee && values.tertiaryAttendee.value !== -1) {
-    if (values.tertiaryAttendee.value === values.primaryAttendee?.value) {
-      errors.tertiaryAttendee = 'Cannot be the same as main attendee';
-    } else if (values.tertiaryAttendee.value === values.secondaryAttendee?.value) {
-      errors.tertiaryAttendee = 'Cannot be the same as assistant, if supervising and assisting please record as supervising';
-    }
+    errors.primaryAttendee = 'Seen By is required.';
   }
 
   if (!values.mesh_awareness && typeof values.mesh_awareness !== 'object') {

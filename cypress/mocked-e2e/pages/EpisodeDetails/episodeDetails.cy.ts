@@ -597,11 +597,11 @@ describe('Episode Details Page', () => {
                 cy.contains('Follow up date is required. Please select a date.').should('exist');
             });
 
-            it('should validate Main Attendee is required', () => {
+            it('should validate Seen By is required', () => {
                 cy.contains('Add Follow Up').parents('.MuiAccordion-root').within(() => {
                     cy.contains('button', 'Save Follow Up').click();
                 });
-                cy.contains('Main Attendee is required.').should('exist');
+                cy.contains('Seen By is required.').should('exist');
             });
 
             it('should validate Pain Severity is required', () => {
@@ -653,7 +653,7 @@ describe('Episode Details Page', () => {
                     cy.contains('button', 'Save Follow Up').click();
 
                     cy.contains('Follow up date is required. Please select a date.').should('exist');
-                    cy.contains('Main Attendee is required.').should('exist');
+                    cy.contains('Seen By is required.').should('exist');
                     cy.contains('Pain severity is required.').should('exist');
                     cy.contains('Mesh awareness is required.').should('exist');
                     cy.contains('Seroma is required.').should('exist');
