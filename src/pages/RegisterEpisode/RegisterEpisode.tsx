@@ -35,7 +35,7 @@ const RegisterEpisode: React.FC = () => {
   const { data: selectedHospital } = useGetHospital(hospitalID ?? '');
   const { data: surgeons } = useGetSurgeons({
     offset: 0,
-    limit: 100,
+    limit: 150,
   });
 
   const { mutate: registerEpisode, isPending: isSubmitLoading } = useRegisterEpisode(
