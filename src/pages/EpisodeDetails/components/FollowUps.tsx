@@ -45,7 +45,7 @@ const FollowUps: FC<{
 
   const { data: surgeons, isLoading: isSurgeonsLoading } = useGetSurgeons({
     offset: 0,
-    limit: 100,
+    limit: 150,
   });
 
   const surgeonOptions = useMemo(() => getSurgeonOptionsSorted(surgeons?.results ?? []), [surgeons]);
